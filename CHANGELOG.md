@@ -27,5 +27,4 @@ This update keeps the original demo and adds a new playable version at `outputs/
 
 ### GitHub
 
-- Version pushed to GitHub commit `8ec4f9c`.
 - GitHub Pages entry now points to the v2 demo.
