@@ -20,4 +20,4 @@ Open `index.html` in a browser, or open `outputs/ink_demo.html` directly.
 - `index.html` - entry page for local preview and GitHub Pages.
 - `outputs/ink_demo.html` - current playable demo.
 - `outputs/assets/` - image assets used by the demo.
-
+- `CHANGELOG.md` - update notes for each version.
