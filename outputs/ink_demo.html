@@ -1,0 +1,1830 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>墨 Ink Agar Demo</title>
+  <style>
+    :root {
+      --paper: #f5f0e6;
+      --paper-2: #e0d6c6;
+      --ink: #111;
+      --muted: rgba(0,0,0,.52);
+      --panel: rgba(238,232,220,.88);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "STKaiti", "KaiTi", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+      user-select: none;
+      touch-action: none;
+    }
+    canvas { display: block; width: 100vw; height: 100vh; }
+    button {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .paper::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .38;
+      mix-blend-mode: multiply;
+      background-image:
+        radial-gradient(circle at 16% 20%, rgba(0,0,0,.08), transparent 18%),
+        radial-gradient(circle at 86% 18%, rgba(0,0,0,.055), transparent 16%),
+        radial-gradient(circle at 74% 86%, rgba(0,0,0,.075), transparent 18%),
+        repeating-linear-gradient(90deg, rgba(91,72,45,.03) 0 1px, transparent 1px 8px),
+        repeating-linear-gradient(0deg, rgba(91,72,45,.022) 0 1px, transparent 1px 7px);
+    }
+    #game {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+    .screen {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      background: var(--paper);
+    }
+    .title-stack {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      justify-items: center;
+      gap: 22px;
+      padding: 36px;
+      text-align: center;
+    }
+    .title-mark {
+      font-size: clamp(108px, 18vw, 190px);
+      font-weight: 900;
+      line-height: .86;
+      letter-spacing: 0;
+    }
+    .title-sub {
+      margin-top: -14px;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 24px);
+      letter-spacing: 5px;
+    }
+    .menu {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .menu button {
+      min-width: 180px;
+      padding: 8px 18px;
+      font-size: clamp(26px, 3.3vw, 42px);
+      letter-spacing: 3px;
+      border-bottom: 2px solid transparent;
+    }
+    .menu button:hover { border-bottom-color: var(--ink); }
+    .hint {
+      max-width: 620px;
+      color: rgba(0,0,0,.48);
+      font-size: 14px;
+      line-height: 1.8;
+      letter-spacing: 1px;
+    }
+    #hud {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .topbar {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      display: grid;
+      grid-template-columns: 190px 1fr 112px 150px;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid rgba(0,0,0,.14);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 8px 28px rgba(0,0,0,.06);
+      backdrop-filter: blur(4px);
+    }
+    .metric {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+    .metric-label {
+      font-size: 12px;
+      color: rgba(0,0,0,.54);
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+    .metric-value {
+      font-size: 18px;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bar {
+      height: 11px;
+      overflow: hidden;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.14);
+      background: rgba(0,0,0,.08);
+    }
+    .bar-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: #111;
+      transition: width .15s linear;
+    }
+    .timer {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 4px;
+    }
+    .action-row {
+      position: absolute;
+      right: 28px;
+      bottom: 26px;
+      display: flex;
+      gap: 12px;
+      pointer-events: auto;
+    }
+    .action {
+      width: 88px;
+      height: 88px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: rgba(238,232,220,.72);
+      font-size: 18px;
+      font-weight: 900;
+      position: relative;
+    }
+    .action small {
+      display: block;
+      margin-top: 2px;
+      color: rgba(0,0,0,.48);
+      font: 10px Consolas, monospace;
+      text-align: center;
+    }
+    .action.disabled { opacity: .38; }
+    .joystick-ghost {
+      position: absolute;
+      left: 30px;
+      bottom: 30px;
+      width: 138px;
+      height: 138px;
+      border: 2px solid rgba(255,255,255,.74);
+      border-radius: 50%;
+      opacity: .8;
+    }
+    .joystick-ghost::after {
+      content: "";
+      position: absolute;
+      inset: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.44);
+    }
+    #toast {
+      display: none;
+      position: fixed;
+      left: 50%;
+      bottom: 132px;
+      z-index: 40;
+      transform: translateX(-50%);
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(17,17,17,.78);
+      color: var(--paper);
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+    #dead, #ending { display: none; }
+    .result {
+      position: relative;
+      z-index: 2;
+      width: min(920px, 88vw);
+      display: grid;
+      justify-items: center;
+      gap: 20px;
+      text-align: center;
+    }
+    .result-title {
+      font-size: clamp(58px, 8vw, 112px);
+      line-height: .95;
+      font-weight: 900;
+      letter-spacing: 8px;
+    }
+    .result-stats {
+      color: rgba(0,0,0,.56);
+      font-size: clamp(16px, 2vw, 22px);
+      letter-spacing: 2px;
+    }
+    .result-actions {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .ink-button {
+      min-width: 132px;
+      padding: 11px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,.22);
+      background: rgba(17,17,17,.9);
+      color: var(--paper);
+      font-size: 18px;
+      letter-spacing: 3px;
+    }
+    .ink-button.secondary {
+      background: rgba(238,232,220,.66);
+      color: var(--ink);
+    }
+    .art-frame {
+      width: min(760px, 82vw);
+      aspect-ratio: 16 / 9;
+      border: 4px solid var(--ink);
+      background: rgba(255,255,255,.16);
+    }
+    #endingArt { width: 100%; height: 100%; }
+    @media (max-width: 820px) {
+      .topbar {
+        grid-template-columns: 1fr 1fr;
+        left: 12px;
+        right: 12px;
+        gap: 8px;
+      }
+      .timer { grid-column: 1 / -1; grid-row: 1; font-size: 24px; }
+      .metric-value { font-size: 15px; }
+      .metric-label { font-size: 10px; }
+      .action-row { right: 16px; bottom: 18px; }
+      .action { width: 72px; height: 72px; font-size: 15px; }
+      .joystick-ghost { left: 18px; bottom: 18px; width: 116px; height: 116px; }
+      .joystick-ghost::after { inset: 32px; }
+    }
+  </style>
+</head>
+<body class="paper">
+  <canvas id="game"></canvas>
+
+  <section id="title" class="screen paper">
+    <div class="title-stack">
+      <div class="title-mark">墨</div>
+      <div class="title-sub">单机水墨 Agar Demo</div>
+      <div class="menu">
+        <button id="startBtn" type="button">START</button>
+        <button id="albumBtn" type="button">ALBUM</button>
+        <button id="configBtn" type="button">CONFIG</button>
+      </div>
+      <div class="hint">纯大小吞噬：大墨团吃小墨团。吃悬浮墨粒成长，避开更大的 NPC。荷叶像刺球，小的时候可藏在下面，大了之后可吃周围荷花。</div>
+    </div>
+  </section>
+
+  <div id="hud">
+    <div class="topbar">
+      <div class="metric">
+        <div class="metric-label">墨团</div>
+        <div class="metric-value" id="sizeText">体积 12</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">墨量</div>
+        <div class="bar"><div class="bar-fill" id="inkFill"></div></div>
+      </div>
+      <div class="timer" id="timerText">05:00</div>
+      <div class="metric">
+        <div class="metric-label">战绩</div>
+        <div class="metric-value" id="scoreText">吞噬 0</div>
+      </div>
+    </div>
+    <div class="joystick-ghost"></div>
+    <div class="action-row">
+      <button id="spurtBtn" class="action" type="button"><span>喷墨<small>Shift</small></span></button>
+    </div>
+  </div>
+
+  <section id="dead" class="screen paper">
+    <div class="result">
+      <div class="result-title">墨 散</div>
+      <div class="result-stats" id="deadStats"></div>
+      <div class="result-actions">
+        <button id="restartBtn" class="ink-button" type="button">再来一局</button>
+        <button id="deadHomeBtn" class="ink-button secondary" type="button">主界面</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="ending" class="screen paper">
+    <div class="result">
+      <div class="result-title">时尽墨止</div>
+      <div class="art-frame"><canvas id="endingArt"></canvas></div>
+      <div class="result-stats" id="endingStats"></div>
+      <div class="result-actions">
+        <button id="saveBtn" class="ink-button" type="button">保存画作</button>
+        <button id="convertBtn" class="ink-button" type="button">转化图片</button>
+        <button id="nextBtn" class="ink-button secondary" type="button">下一局</button>
+        <button id="homeBtn" class="ink-button secondary" type="button">主界面</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast"></div>
+
+  <script>
+    "use strict";
+
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const endingArt = document.getElementById("endingArt");
+    const endingCtx = endingArt.getContext("2d");
+    const lotusLeafImg = new Image();
+    const lotusFlowerImg = new Image();
+    const shrimpImg = new Image();
+    const loachImg = new Image();
+    lotusLeafImg.src = "assets/lotus_leaf_opaque.png";
+    lotusFlowerImg.src = "assets/lotus_flower_opaque.png";
+    shrimpImg.src = "assets/shrimp_cut.png";
+    loachImg.src = "assets/loach_cut.png";
+
+    const WORLD_W = 3400;
+    const WORLD_H = 3400;
+    const ROUND_MS = 5 * 60 * 1000;
+    const START_RADIUS = 18;
+    const MAX_RADIUS = 170;
+    const FOOD_TARGET = 760;
+    const NPC_COUNT = 15;
+    const LOTUS_LEAF_COUNT = 8;
+    const LOTUS_FLOWER_MAX_PER_LEAF = 3;
+    const LOTUS_LEAF_MAX = 16;
+
+    let W = 0, H = 0, dpr = 1;
+    let state = "title";
+    let lastTime = performance.now();
+    let roundStart = 0;
+    let camera = { x: 0, y: 0, scale: 1 };
+    let player = null;
+    let foods = [];
+    let npcs = [];
+    let leaves = [];
+    let flowers = [];
+    let splashes = [];
+    let motes = [];
+    let brushMarks = [];
+    let spurtResidues = [];
+    let path = [];
+    let biteMarks = [];
+    let artElements = [];
+    let nextLeafId = 1;
+    let mouse = { x: innerWidth / 2, y: innerHeight / 2 };
+    let keys = new Set();
+    let score = 0;
+    let spurtCd = 0;
+    let spurtBoost = 0;
+    let foodTick = 0;
+    const sedimentCanvas = document.createElement("canvas");
+    const sedimentCtx = sedimentCanvas.getContext("2d");
+    const paintingCanvas = document.createElement("canvas");
+    const paintingCtx = paintingCanvas.getContext("2d");
+    const revealCanvas = document.createElement("canvas");
+    const revealCtx = revealCanvas.getContext("2d");
+    const PAINT_SCALE = .45;
+    const referencePaintingImg = new Image();
+    referencePaintingImg.src = "assets/ink_reference_painting.png";
+    referencePaintingImg.onload = () => {
+      if (paintingCanvas.width && paintingCanvas.height) drawPaintingSource();
+    };
+
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const radiusToMass = r => r * r;
+    const massToRadius = m => Math.sqrt(Math.max(4, m));
+
+    function resize() {
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      W = innerWidth;
+      H = innerHeight;
+      canvas.width = Math.floor(W * dpr);
+      canvas.height = Math.floor(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      sedimentCanvas.width = canvas.width;
+      sedimentCanvas.height = canvas.height;
+      sedimentCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function setupWorldPainting() {
+      const pw = Math.floor(WORLD_W * PAINT_SCALE);
+      const ph = Math.floor(WORLD_H * PAINT_SCALE);
+      paintingCanvas.width = pw;
+      paintingCanvas.height = ph;
+      revealCanvas.width = pw;
+      revealCanvas.height = ph;
+      paintingCtx.setTransform(1, 0, 0, 1, 0, 0);
+      revealCtx.setTransform(1, 0, 0, 1, 0, 0);
+      revealCtx.clearRect(0, 0, pw, ph);
+      drawPaintingSource();
+    }
+
+    function drawPaintingSource() {
+      const pw = paintingCanvas.width;
+      const ph = paintingCanvas.height;
+      if (!pw || !ph) return;
+      paintingCtx.clearRect(0, 0, pw, ph);
+      paintingCtx.fillStyle = "#f5f0e6";
+      paintingCtx.fillRect(0, 0, pw, ph);
+      if (referencePaintingImg.complete && referencePaintingImg.naturalWidth > 0) {
+        drawReferencePainting(paintingCtx, pw, ph);
+      } else {
+        drawGeneratedLandscape(paintingCtx, pw, ph);
+      }
+    }
+
+    function drawReferencePainting(t, w, h) {
+      const iw = referencePaintingImg.naturalWidth;
+      const ih = referencePaintingImg.naturalHeight;
+      const scale = Math.max(w / iw, h / ih);
+      const sw = w / scale;
+      const sh = h / scale;
+      const sx = (iw - sw) * .5;
+      const sy = (ih - sh) * .5;
+      t.save();
+      t.imageSmoothingEnabled = true;
+      t.imageSmoothingQuality = "high";
+      t.drawImage(referencePaintingImg, sx, sy, sw, sh, 0, 0, w, h);
+      t.globalCompositeOperation = "multiply";
+      t.fillStyle = "rgba(245,240,230,.08)";
+      t.fillRect(0, 0, w, h);
+      t.restore();
+    }
+
+    function drawGeneratedLandscape(t, w, h) {
+      t.save();
+      t.globalCompositeOperation = "multiply";
+      for (let band = 0; band < 4; band++) {
+        const yBase = h * (.22 + band * .18);
+        const amp = h * (.08 + band * .025);
+        t.beginPath();
+        t.moveTo(0, yBase + amp);
+        for (let i = 0; i <= 16; i++) {
+          const x = i / 16 * w;
+          const y = yBase - Math.abs(Math.sin(i * 1.73 + band * 2.1)) * amp - Math.sin(i * .71) * amp * .22;
+          t.lineTo(x, y);
+        }
+        t.lineTo(w, h);
+        t.lineTo(0, h);
+        const g = t.createLinearGradient(0, yBase - amp, 0, yBase + amp * 3.4);
+        g.addColorStop(0, `rgba(26,26,26,${.18 - band * .025})`);
+        g.addColorStop(.55, `rgba(26,26,26,${.07 - band * .01})`);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        t.fillStyle = g;
+        t.fill();
+      }
+      for (let i = 0; i < 38; i++) {
+        const x = (Math.sin(i * 12.989) * 43758.5453 % 1 + 1) % 1 * w;
+        const y = h * (.18 + ((Math.sin(i * 7.31) * 9182.1 % 1 + 1) % 1) * .68);
+        const r = w * (.035 + ((Math.sin(i * 3.7) * 613.2 % 1 + 1) % 1) * .08);
+        const g = t.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, "rgba(26,26,26,.07)");
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        t.fillStyle = g;
+        t.fillRect(x - r, y - r, r * 2, r * 2);
+      }
+      t.strokeStyle = "rgba(26,26,26,.15)";
+      t.lineCap = "round";
+      for (let i = 0; i < 28; i++) {
+        const y = h * (.58 + i * .012);
+        t.lineWidth = Math.max(1, h * .0014);
+        t.beginPath();
+        t.moveTo(w * .08, y);
+        t.bezierCurveTo(w * .3, y + Math.sin(i) * 8, w * .58, y - Math.cos(i * .7) * 10, w * .92, y + Math.sin(i * 1.3) * 7);
+        t.stroke();
+      }
+      t.strokeStyle = "rgba(26,26,26,.26)";
+      for (let i = 0; i < 16; i++) {
+        const x = w * (.08 + i * .055);
+        const y = h * (.78 + Math.sin(i) * .04);
+        t.lineWidth = Math.max(1, h * .002);
+        t.beginPath();
+        t.moveTo(x, y);
+        t.bezierCurveTo(x - 8, y - h * .08, x + 14, y - h * .16, x + 4, y - h * .25);
+        t.stroke();
+      }
+      t.restore();
+    }
+
+    function worldToScreen(x, y) {
+      return { x: (x - camera.x) * camera.scale, y: (y - camera.y) * camera.scale };
+    }
+    function screenToWorld(x, y) {
+      return { x: camera.x + x / camera.scale, y: camera.y + y / camera.scale };
+    }
+
+    function randomPoint(minDistance = 0) {
+      let p;
+      do {
+        p = { x: rand(80, WORLD_W - 80), y: rand(80, WORLD_H - 80) };
+      } while (player && minDistance > 0 && distance(p, player) < minDistance);
+      return p;
+    }
+
+    function createPlayer() {
+      player = {
+        x: WORLD_W / 2,
+        y: WORLD_H / 2,
+        vx: 0,
+        vy: 0,
+        r: START_RADIUS,
+        displayR: START_RADIUS,
+        mass: radiusToMass(START_RADIUS),
+        invincible: 0,
+        recoilX: 0,
+        recoilY: 0
+      };
+    }
+
+    function createFood() {
+      const p = randomPoint(0);
+      const shapes = ["circle", "square", "triangle", "pentagon"];
+      return {
+        x: p.x,
+        y: p.y,
+        r: rand(3, 7),
+        shape: shapes[Math.floor(rand(0, shapes.length))],
+        rot: rand(0, Math.PI * 2),
+        spin: rand(-.45, .45),
+        alpha: rand(.42, .78),
+        wobble: rand(0, Math.PI * 2)
+      };
+    }
+
+    function spawnFoods(n) {
+      for (let i = 0; i < n; i++) foods.push(createFood());
+    }
+
+    function createNpc() {
+      const p = randomPoint(520);
+      const roll = Math.random();
+      let r = rand(14, 38);
+      if (roll > .78) r = rand(42, 72);
+      if (roll > .93) r = rand(78, 118);
+      return {
+        x: p.x,
+        y: p.y,
+        vx: rand(-20, 20),
+        vy: rand(-20, 20),
+        r,
+        displayR: r,
+        mass: radiusToMass(r),
+        targetX: p.x,
+        targetY: p.y,
+        think: rand(.2, 1.4),
+        dead: false,
+        respawn: 0,
+        phase: rand(0, Math.PI * 2)
+      };
+    }
+
+    function createLotusLeaf(x, y, r) {
+      const p = x === undefined ? randomPoint(700) : { x, y };
+      return {
+        id: nextLeafId++,
+        x: clamp(p.x, 90, WORLD_W - 90),
+        y: clamp(p.y, 90, WORLD_H - 90),
+        r: r || rand(62, 104),
+        rot: rand(0, Math.PI * 2),
+        phase: rand(0, Math.PI * 2),
+        age: 0,
+        flowerTimer: rand(5, 28),
+        sproutTimer: rand(50, 95)
+      };
+    }
+
+    function leafFlowers(leaf) {
+      return flowers.filter(f => f.leafId === leaf.id);
+    }
+
+    function spawnFlowerForLeaf(leaf) {
+      if (leafFlowers(leaf).length >= LOTUS_FLOWER_MAX_PER_LEAF) return false;
+      const a = rand(0, Math.PI * 2);
+      const rr = rand(leaf.r * .86, leaf.r * 1.45);
+      flowers.push({
+        x: clamp(leaf.x + Math.cos(a) * rr, 60, WORLD_W - 60),
+        y: clamp(leaf.y + Math.sin(a) * rr, 60, WORLD_H - 60),
+        r: leaf.r * rand(.17, .24),
+        leafId: leaf.id,
+        leafR: leaf.r,
+        phase: rand(0, Math.PI * 2),
+        eaten: false,
+        respawn: 0,
+        age: 0
+      });
+      return true;
+    }
+
+    function spawnLeaves() {
+      leaves = [];
+      flowers = [];
+      nextLeafId = 1;
+      for (let i = 0; i < LOTUS_LEAF_COUNT; i++) {
+        const leaf = createLotusLeaf();
+        leaves.push(leaf);
+        const startFlowers = Math.floor(rand(0, LOTUS_FLOWER_MAX_PER_LEAF + 1));
+        for (let k = 0; k < startFlowers; k++) spawnFlowerForLeaf(leaf);
+      }
+    }
+
+    function resetWorld() {
+      createPlayer();
+      foods = [];
+      npcs = [];
+      leaves = [];
+      flowers = [];
+      splashes = [];
+      motes = [];
+      brushMarks = [];
+      spurtResidues = [];
+      path = [];
+      biteMarks = [];
+      artElements = [];
+      score = 0;
+      spurtCd = 0;
+      spurtBoost = 0;
+      foodTick = 0;
+      sedimentCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      sedimentCtx.clearRect(0, 0, W, H);
+      setupWorldPainting();
+      spawnFoods(FOOD_TARGET);
+      for (let i = 0; i < NPC_COUNT; i++) npcs.push(createNpc());
+      spawnLeaves();
+      camera = { x: 0, y: 0, scale: 1 };
+      updateCamera(true);
+    }
+
+    function startGame() {
+      resetWorld();
+      state = "play";
+      roundStart = performance.now();
+      document.getElementById("title").style.display = "none";
+      document.getElementById("dead").style.display = "none";
+      document.getElementById("ending").style.display = "none";
+      document.getElementById("hud").style.display = "block";
+      updateHud(ROUND_MS);
+    }
+
+    function updateCamera(immediate) {
+      if (!player) return;
+      const targetScale = clamp(1.12 - (player.r - START_RADIUS) / 220, .52, 1.12);
+      camera.scale = immediate ? targetScale : lerp(camera.scale, targetScale, .045);
+      const tx = clamp(player.x - W / camera.scale / 2, 0, WORLD_W - W / camera.scale);
+      const ty = clamp(player.y - H / camera.scale / 2, 0, WORLD_H - H / camera.scale);
+      camera.x = immediate ? tx : lerp(camera.x, tx, .08);
+      camera.y = immediate ? ty : lerp(camera.y, ty, .08);
+    }
+
+    function moveSpeed(r) {
+      const t = clamp((r - START_RADIUS) / (MAX_RADIUS - START_RADIUS), 0, 1);
+      return 235 * (1 - t * .38);
+    }
+
+    function updatePlayer(dt) {
+      const target = screenToWorld(mouse.x, mouse.y);
+      let dx = target.x - player.x;
+      let dy = target.y - player.y;
+      const len = Math.hypot(dx, dy) || 1;
+      dx /= len; dy /= len;
+      if (keys.has("a") || keys.has("ArrowLeft")) dx -= 1;
+      if (keys.has("d") || keys.has("ArrowRight")) dx += 1;
+      if (keys.has("w") || keys.has("ArrowUp")) dy -= 1;
+      if (keys.has("s") || keys.has("ArrowDown")) dy += 1;
+      const dl = Math.hypot(dx, dy) || 1;
+      dx /= dl; dy /= dl;
+      const boost = spurtBoost > 0 ? 1 + .28 * spurtBoost * spurtBoost : 1;
+      const speed = moveSpeed(player.r) * boost;
+      const prevX = player.x;
+      const prevY = player.y;
+      player.vx = lerp(player.vx, dx * speed + player.recoilX, .065);
+      player.vy = lerp(player.vy, dy * speed + player.recoilY, .065);
+      player.recoilX *= Math.pow(.18, dt);
+      player.recoilY *= Math.pow(.18, dt);
+      player.x = clamp(player.x + player.vx * dt, player.r, WORLD_W - player.r);
+      player.y = clamp(player.y + player.vy * dt, player.r, WORLD_H - player.r);
+      player.r = massToRadius(player.mass);
+      player.displayR = lerp(player.displayR, player.r, .13);
+      player.invincible = Math.max(0, player.invincible - dt);
+      spurtCd = Math.max(0, spurtCd - dt);
+      spurtBoost = Math.max(0, spurtBoost - dt);
+      if (Math.hypot(player.vx, player.vy) > 20 && Math.random() < .22) {
+        addSplash(player.x - player.vx * .035, player.y - player.vy * .035, rand(player.r * .08, player.r * .18), .045, 0);
+      }
+      addBrushTrail(dt, prevX, prevY);
+      addInkAura(dt);
+      addPathLandscape(dt);
+      if (performance.now() % 120 < 17) {
+        path.push({ x: player.x, y: player.y, r: player.r });
+        if (path.length > 1600) path.shift();
+      }
+    }
+
+    function npcSpeed(npc) {
+      return moveSpeed(npc.r) * .74;
+    }
+
+    function updateNpc(npc, dt) {
+      if (npc.dead) {
+        npc.respawn -= dt;
+        if (npc.respawn <= 0) Object.assign(npc, createNpc());
+        return;
+      }
+      npc.phase += dt;
+      npc.displayR = lerp(npc.displayR, npc.r, .08);
+      npc.think -= dt;
+      const dPlayer = distance(npc, player);
+      let tx = 0, ty = 0, hasIntent = false;
+      if (player.r > npc.r * 1.12 && dPlayer < 360 + player.r) {
+        tx = npc.x - player.x; ty = npc.y - player.y; hasIntent = true;
+      } else if (npc.r > player.r * 1.18 && dPlayer < 260) {
+        tx = player.x - npc.x; ty = player.y - npc.y; hasIntent = true;
+      } else if (npc.think <= 0) {
+        npc.think = rand(.6, 2.2);
+        if (foods.length > 0 && Math.random() < .72) {
+          const f = foods[Math.floor(rand(0, foods.length))];
+          npc.targetX = f.x; npc.targetY = f.y;
+        } else {
+          npc.targetX = clamp(npc.x + rand(-420, 420), npc.r, WORLD_W - npc.r);
+          npc.targetY = clamp(npc.y + rand(-420, 420), npc.r, WORLD_H - npc.r);
+        }
+      }
+      if (!hasIntent) {
+        tx = npc.targetX - npc.x; ty = npc.targetY - npc.y; hasIntent = true;
+      }
+      const l = Math.hypot(tx, ty) || 1;
+      npc.vx = lerp(npc.vx, tx / l * npcSpeed(npc), .035);
+      npc.vy = lerp(npc.vy, ty / l * npcSpeed(npc), .035);
+      npc.vx *= .986; npc.vy *= .986;
+      npc.x = clamp(npc.x + npc.vx * dt, npc.r, WORLD_W - npc.r);
+      npc.y = clamp(npc.y + npc.vy * dt, npc.r, WORLD_H - npc.r);
+      for (let i = foods.length - 1; i >= 0; i--) {
+        const f = foods[i];
+        if (distance(npc, f) < npc.r + f.r) {
+          npc.mass += f.r * f.r * .18;
+          npc.r = massToRadius(npc.mass);
+          foods.splice(i, 1);
+        }
+      }
+    }
+
+    function addSplash(x, y, r, alpha, count) {
+      splashes.push({ x, y, r, alpha, life: 1 });
+      for (let i = 0; i < count; i++) {
+        const a = rand(0, Math.PI * 2);
+        const s = rand(24, 120);
+        motes.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: rand(1.4, Math.max(2, r * .16)), alpha: rand(.14, .42), life: rand(.35, 1.1) });
+      }
+    }
+
+    function addBrushTrail(dt, prevX, prevY) {
+      const speed = Math.hypot(player.vx, player.vy);
+      if (speed < 34 || !Number.isFinite(speed)) return;
+      const dir = Math.atan2(player.vy, player.vx);
+      const large = clamp((player.r - 42) / 110, 0, 1);
+      const moved = Math.hypot(player.x - prevX, player.y - prevY);
+      const spurtInk = spurtBoost > 0 ? 1 + spurtBoost * 2.8 : 1;
+      const spacing = lerp(18, 34, large);
+      const amount = clamp(moved / spacing, .18 + large * .38, 2.8 + large * 1.4) * spurtInk;
+      let count = Math.floor(amount);
+      if (Math.random() < amount - count) count++;
+      count = Math.min(count, spurtBoost > 0 ? 12 : 7);
+      for (let i = 0; i < count; i++) {
+        const t = count <= 1 ? rand(.15, .85) : (i + rand(.18, .82)) / count;
+        const baseX = lerp(prevX, player.x, t);
+        const baseY = lerp(prevY, player.y, t);
+        const side = rand(-player.r * lerp(.38, .74, large), player.r * lerp(.38, .74, large));
+        const behind = rand(player.r * .2, player.r * lerp(.9, 1.65, large));
+        const x = baseX - Math.cos(dir) * behind + Math.cos(dir + Math.PI / 2) * side;
+        const y = baseY - Math.sin(dir) * behind + Math.sin(dir + Math.PI / 2) * side;
+        brushMarks.push({
+          x, y,
+          vx: rand(-12, 12) - Math.cos(dir) * rand(4, 18),
+          vy: rand(-12, 12) - Math.sin(dir) * rand(4, 18),
+          r: rand(player.r * lerp(.18, .3, large), player.r * (spurtBoost > 0 ? lerp(.78, 1.08, large) : lerp(.56, .92, large))),
+          stretch: rand(1.45, spurtBoost > 0 ? lerp(4.8, 6.1, large) : lerp(3.8, 5.4, large)),
+          angle: dir + rand(-.7, .7),
+          alpha: rand(.18 + large * .06, spurtBoost > 0 ? .56 + large * .12 : .4 + large * .1),
+          gray: rand(0, 54),
+          age: 0,
+          seed: rand(0, 9999),
+          life: 1,
+          dist: 0,
+          distLife: rand(380, 560),
+          fadePow: lerp(1.08, 1.85, large),
+          grow: rand(lerp(.32, .1, large), lerp(.62, .22, large))
+        });
+      }
+      if (brushMarks.length > 900) brushMarks.splice(0, brushMarks.length - 900);
+    }
+
+    function addInkAura(dt) {
+      const large = clamp((player.r - 42) / 110, 0, 1);
+      const spurtInk = spurtBoost > 0 ? 1 + spurtBoost * 3.2 : 1;
+      const amount = clamp(player.r / 70, .45, 2.2) * dt * lerp(22, 14, large) * spurtInk;
+      let count = Math.floor(amount);
+      if (Math.random() < amount - count) count++;
+      count = Math.min(count, spurtBoost > 0 ? 10 : 4);
+      const motion = Math.atan2(player.vy || 1, player.vx || 1);
+      for (let i = 0; i < count; i++) {
+        const a = rand(0, Math.PI * 2);
+        const edge = rand(player.r * .82, player.r * (spurtBoost > 0 ? lerp(1.95, 2.35, large) : lerp(1.55, 2.05, large)));
+        brushMarks.push({
+          x: player.x + Math.cos(a) * edge,
+          y: player.y + Math.sin(a) * edge,
+          vx: Math.cos(a) * rand(8, spurtBoost > 0 ? 48 : 26) + Math.cos(motion) * rand(-10, 16),
+          vy: Math.sin(a) * rand(8, spurtBoost > 0 ? 48 : 26) + Math.sin(motion) * rand(-10, 16),
+          r: rand(player.r * lerp(.12, .18, large), player.r * (spurtBoost > 0 ? lerp(.48, .72, large) : lerp(.36, .56, large))),
+          stretch: rand(1.2, spurtBoost > 0 ? 3.4 : 2.8),
+          angle: a + rand(-.8, .8),
+          alpha: rand(.22, spurtBoost > 0 ? .58 : .42),
+          gray: rand(0, 36),
+          age: 0,
+          seed: rand(0, 9999),
+          life: 1,
+          dist: 0,
+          distLife: rand(260, 430),
+          fadePow: lerp(1.12, 2.05, large),
+          grow: rand(lerp(.28, .12, large), lerp(.56, .24, large))
+        });
+      }
+      if (brushMarks.length > 900) brushMarks.splice(0, brushMarks.length - 900);
+    }
+
+    function addPathLandscape(dt) {
+      const speed = Math.hypot(player.vx, player.vy);
+      if (speed < 18) return;
+      const dir = Math.atan2(player.vy, player.vx);
+      const large = clamp((player.r - 42) / 120, 0, 1);
+      const brushR = clamp(player.r * lerp(.58, .42, large), 20, 76);
+      const tail = clamp(player.r * lerp(.42, .72, large), 18, 96);
+      const steps = 3;
+      for (let i = 0; i < steps; i++) {
+        const k = i / (steps - 1 || 1);
+        const x = player.x - Math.cos(dir) * tail * k;
+        const y = player.y - Math.sin(dir) * tail * k;
+        revealAt(x, y, brushR * lerp(1, .55, k), .105 * lerp(1, .55, k));
+      }
+    }
+
+    function revealAt(x, y, radius, alpha = .35) {
+      const rx = x * PAINT_SCALE;
+      const ry = y * PAINT_SCALE;
+      const rr = radius * PAINT_SCALE;
+      const g = revealCtx.createRadialGradient(rx, ry, 0, rx, ry, rr);
+      g.addColorStop(0, `rgba(255,255,255,${alpha})`);
+      g.addColorStop(.55, `rgba(255,255,255,${alpha * .45})`);
+      g.addColorStop(1, "rgba(255,255,255,0)");
+      revealCtx.save();
+      revealCtx.globalCompositeOperation = "lighter";
+      revealCtx.fillStyle = g;
+      revealCtx.fillRect(rx - rr, ry - rr, rr * 2, rr * 2);
+      revealCtx.restore();
+    }
+
+    function addSpurtResidue(x, y, dirX, dirY, radius) {
+      spurtResidues.push({
+        x, y, dirX, dirY,
+        radius,
+        delay: .55,
+        age: 0,
+        duration: 3.4,
+        next: .08,
+        remaining: Math.floor(rand(20, 34))
+      });
+      for (let i = 0; i < 34; i++) {
+        const a = Math.atan2(dirY, dirX) + Math.PI + rand(-1.65, 1.65);
+        const d = Math.pow(Math.random(), .62) * radius * rand(.35, 1.25);
+        brushMarks.push({
+          x: x + Math.cos(a) * d,
+          y: y + Math.sin(a) * d,
+          vx: Math.cos(a) * rand(14, 70),
+          vy: Math.sin(a) * rand(14, 70),
+          r: rand(player.r * .16, player.r * .62),
+          stretch: rand(1.4, 4.8),
+          angle: a + rand(-.6, .6),
+          alpha: rand(.16, .44),
+          gray: rand(0, 28),
+          age: 0,
+          seed: rand(0, 9999),
+          life: 1,
+          dist: 0,
+          distLife: rand(230, 520),
+          fadePow: rand(1.05, 1.6),
+          grow: rand(.16, .34)
+        });
+      }
+      if (brushMarks.length > 900) brushMarks.splice(0, brushMarks.length - 900);
+    }
+
+    function updateSpurtResidues(dt) {
+      for (let i = spurtResidues.length - 1; i >= 0; i--) {
+        const pool = spurtResidues[i];
+        pool.age += dt;
+        if (pool.age < pool.delay) continue;
+        pool.next -= dt;
+        while (pool.next <= 0 && pool.remaining > 0) {
+          pool.next += rand(.07, .18);
+          pool.remaining--;
+          const a = Math.atan2(pool.dirY, pool.dirX) + Math.PI + rand(-1.35, 1.35);
+          const d = Math.pow(Math.random(), .58) * pool.radius;
+          foods.push({
+            x: clamp(pool.x + Math.cos(a) * d + rand(-16, 16), 20, WORLD_W - 20),
+            y: clamp(pool.y + Math.sin(a) * d + rand(-16, 16), 20, WORLD_H - 20),
+            r: rand(3.2, 8.4),
+            shape: Math.random() < .78 ? "circle" : ["square", "triangle", "pentagon"][Math.floor(rand(0, 3))],
+            rot: rand(0, Math.PI * 2),
+            spin: rand(-.45, .45),
+            alpha: rand(.38, .82),
+            wobble: rand(0, 8),
+            spurtLife: rand(10, 18)
+          });
+        }
+        if (pool.age > pool.delay + pool.duration || pool.remaining <= 0) spurtResidues.splice(i, 1);
+      }
+    }
+
+    function eatNpc(npc) {
+      const gain = npc.mass * .62;
+      player.mass += gain;
+      player.r = massToRadius(player.mass);
+      score++;
+      npc.dead = true;
+      npc.respawn = rand(9, 18);
+      addSplash(npc.x, npc.y, npc.r * 1.7, .32, 16);
+      spawnArtElements(npc.x, npc.y, npc.r);
+      revealAt(npc.x, npc.y, npc.r * 4.2 + 120, .68);
+    }
+
+    function eatNpcByNpc(big, small) {
+      big.mass += small.mass * .45;
+      big.r = massToRadius(big.mass);
+      small.dead = true;
+      small.respawn = rand(10, 20);
+      addSplash(small.x, small.y, small.r * 1.25, .18, 7);
+    }
+
+    function spawnArtElements(x, y, sourceR) {
+      const count = Math.floor(rand(2, 4));
+      for (let i = 0; i < count; i++) {
+        const a = rand(0, Math.PI * 2);
+        const d = rand(sourceR * 1.2, sourceR * 3.2 + 100);
+        revealAt(clamp(x + Math.cos(a) * d, 90, WORLD_W - 90), clamp(y + Math.sin(a) * d, 90, WORLD_H - 90), rand(sourceR * 1.6, sourceR * 3.3 + 70), .2);
+      }
+    }
+
+    function die() {
+      if (state !== "play") return;
+      state = "dead";
+      document.getElementById("hud").style.display = "none";
+      document.getElementById("dead").style.display = "grid";
+      const elapsed = Math.floor((performance.now() - roundStart) / 1000);
+      document.getElementById("deadStats").textContent = `吞噬 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
+    }
+
+    function handleCollisions() {
+      for (let i = foods.length - 1; i >= 0; i--) {
+        const f = foods[i];
+        if (distance(player, f) < player.r + f.r) {
+          player.mass += f.r * f.r * .42;
+          addSplash(f.x, f.y, f.r * 1.5, .18, 3);
+          foods.splice(i, 1);
+        }
+      }
+      for (const flower of flowers) {
+        if (flower.eaten) continue;
+        const canEat = player.r > flower.leafR;
+        if (canEat && distance(player, flower) < player.r + flower.r) {
+          flower.eaten = true;
+          flower.respawn = 38;
+          player.mass += flower.r * flower.r * 1.5;
+          addSplash(flower.x, flower.y, flower.r * 2.1, .18, 8);
+        }
+      }
+      for (const leaf of leaves) {
+        const d = distance(player, leaf);
+        if (d < player.r + leaf.r * .72) {
+          if (player.r < leaf.r * .82) {
+            // 小球钻到荷叶下面：不碰撞，只降低视觉层级。
+          } else {
+            // 大球走在荷叶上方：同样不碰撞，可从中间穿过。
+          }
+        }
+      }
+      for (const npc of npcs) {
+        if (npc.dead) continue;
+        const d = distance(player, npc);
+        if (player.r > npc.r * 1.04 && d < player.r - npc.r * .32) {
+          eatNpc(npc);
+        } else if (npc.r > player.r * 1.04 && d < npc.r - player.r * .32) {
+          die();
+        }
+      }
+      handleNpcCollisions();
+    }
+
+    function handleNpcCollisions() {
+      for (let i = 0; i < npcs.length; i++) {
+        const a = npcs[i];
+        if (a.dead) continue;
+        for (let j = i + 1; j < npcs.length; j++) {
+          const b = npcs[j];
+          if (b.dead) continue;
+          const d = distance(a, b);
+          if (a.r > b.r * 1.06 && d < a.r - b.r * .32) {
+            eatNpcByNpc(a, b);
+          } else if (b.r > a.r * 1.06 && d < b.r - a.r * .32) {
+            eatNpcByNpc(b, a);
+          }
+        }
+      }
+    }
+
+    function updateLotus(dt) {
+      for (const leaf of leaves) {
+        leaf.phase += dt;
+        leaf.age += dt;
+        leaf.flowerTimer -= dt;
+        leaf.sproutTimer -= dt;
+        if (leaf.flowerTimer <= 0) {
+          spawnFlowerForLeaf(leaf);
+          leaf.flowerTimer = rand(16, 36);
+        }
+        const ownFlowers = leafFlowers(leaf);
+        const oldestFlower = ownFlowers
+          .filter(f => !f.eaten)
+          .sort((a, b) => b.age - a.age)[0];
+        const canSprout = leaves.length < LOTUS_LEAF_MAX && ownFlowers.length > 0 && (leaf.r > 92 || (oldestFlower && oldestFlower.age > 42));
+        if (canSprout && leaf.sproutTimer <= 0) {
+          const spent = oldestFlower || ownFlowers[0];
+          flowers = flowers.filter(f => f !== spent);
+          const a = rand(0, Math.PI * 2);
+          const rr = rand(leaf.r * 1.75, leaf.r * 2.45);
+          const child = createLotusLeaf(leaf.x + Math.cos(a) * rr, leaf.y + Math.sin(a) * rr, rand(46, Math.max(58, leaf.r * .68)));
+          leaves.push(child);
+          leaf.sproutTimer = rand(55, 100);
+        }
+      }
+      for (const flower of flowers) {
+        flower.phase += dt;
+        if (flower.eaten) {
+          flower.respawn -= dt;
+          if (flower.respawn <= 0) {
+            flower.eaten = false;
+            flower.age = 0;
+          }
+        } else {
+          flower.age += dt;
+        }
+      }
+    }
+
+    function triggerSpurt() {
+      if (state !== "play" || spurtCd > 0) return;
+      spurtCd = 5;
+      spurtBoost = 1;
+      player.mass *= .9;
+      player.r = massToRadius(player.mass);
+      const target = screenToWorld(mouse.x, mouse.y);
+      let forwardX = target.x - player.x;
+      let forwardY = target.y - player.y;
+      const l = Math.hypot(forwardX, forwardY) || 1;
+      forwardX /= l; forwardY /= l;
+      const sprayX = -forwardX;
+      const sprayY = -forwardY;
+      player.recoilX += forwardX * 170;
+      player.recoilY += forwardY * 170;
+      const residueX = player.x + sprayX * player.r * .95;
+      const residueY = player.y + sprayY * player.r * .95;
+      addSpurtResidue(residueX, residueY, forwardX, forwardY, player.r * 3.6 + 140);
+      addSplash(residueX, residueY, player.r * 1.8, .32, 24);
+    }
+
+    function update(dt) {
+      if (state !== "play") return;
+      updatePlayer(dt);
+      for (const npc of npcs) updateNpc(npc, dt);
+      for (let i = foods.length - 1; i >= 0; i--) {
+        const f = foods[i];
+        f.wobble += dt * 3;
+        f.rot += f.spin * dt;
+        if (f.spurtLife !== undefined) {
+          f.spurtLife -= dt;
+          f.alpha = clamp(f.spurtLife / 9, 0, .86);
+          if (f.spurtLife <= 0) foods.splice(i, 1);
+        }
+      }
+      updateLotus(dt);
+      updateSpurtResidues(dt);
+      for (const s of splashes) s.life -= dt * .09;
+      splashes = splashes.filter(s => s.life > 0);
+      for (const m of motes) {
+        m.x += m.vx * dt; m.y += m.vy * dt;
+        m.vx *= .985; m.vy *= .985;
+        m.life -= dt;
+      }
+      motes = motes.filter(m => m.life > 0);
+      for (const b of brushMarks) {
+        b.x += b.vx * dt;
+        b.y += b.vy * dt;
+        b.vx *= Math.pow(.55, dt);
+        b.vy *= Math.pow(.55, dt);
+        b.age = (b.age || 0) + dt;
+        b.r += dt * (b.r * (b.grow ?? .22) + 2.6);
+        b.dist = (b.dist || 0) + Math.hypot(player.vx, player.vy) * dt;
+        const remain = clamp(1 - b.dist / (b.distLife || 280), 0, 1);
+        b.life = Math.pow(remain, b.fadePow || 1.35);
+      }
+      brushMarks = brushMarks.filter(b => b.life > 0);
+      handleCollisions();
+      updateCamera(false);
+      foodTick += dt;
+      if (foodTick > .08 && foods.length < FOOD_TARGET) {
+        foodTick = 0;
+        spawnFoods(2);
+      }
+      const remain = ROUND_MS - (performance.now() - roundStart);
+      if (remain <= 0) finish();
+      updateHud(remain);
+    }
+
+    function updateHud(remain) {
+      const sec = Math.max(0, Math.ceil(remain / 1000));
+      document.getElementById("timerText").textContent = `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`;
+      document.getElementById("sizeText").textContent = `体积 ${Math.floor(player.displayR)}`;
+      document.getElementById("scoreText").textContent = `吞噬 ${score}`;
+      document.getElementById("inkFill").style.width = `${clamp(player.r / MAX_RADIUS * 100, 3, 100)}%`;
+      document.getElementById("spurtBtn").classList.toggle("disabled", spurtCd > 0);
+    }
+
+    function drawPaper() {
+      ctx.fillStyle = "#f5f0e6";
+      ctx.fillRect(0, 0, W, H);
+      ctx.save();
+      ctx.globalAlpha = .55;
+      for (let i = 0; i < 560; i++) {
+        ctx.fillStyle = `rgba(65,52,35,${(i % 9) * .003 + .015})`;
+        ctx.fillRect((i * 91.7) % W, (i * 47.31) % H, 1, 1);
+      }
+      const wash = ctx.createRadialGradient(W * .54, H * .36, 40, W * .54, H * .36, Math.max(W, H) * .7);
+      wash.addColorStop(0, "rgba(0,0,0,.055)");
+      wash.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = wash;
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+    }
+
+    function drawWorld() {
+      const a = worldToScreen(0, 0);
+      const b = worldToScreen(WORLD_W, WORLD_H);
+      ctx.save();
+      ctx.strokeStyle = "rgba(0,0,0,.085)";
+      ctx.lineWidth = 1;
+      const step = 120 * camera.scale;
+      const startX = a.x % step;
+      const startY = a.y % step;
+      for (let x = startX; x < W; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = startY; y < H; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      ctx.strokeStyle = "rgba(0,0,0,.45)";
+      ctx.lineWidth = Math.max(2, 4 * camera.scale);
+      ctx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
+      ctx.restore();
+    }
+
+    function drawPaintingLayer(target = ctx, map = worldToScreen, scaleForWorld = camera.scale, useViewportMask = true) {
+      if (!paintingCanvas.width || !revealCanvas.width) return;
+      const origin = map(0, 0);
+      const ww = WORLD_W * scaleForWorld;
+      const wh = WORLD_H * scaleForWorld;
+      target.save();
+      target.globalCompositeOperation = "multiply";
+      target.globalAlpha = .2;
+      target.filter = "blur(3px)";
+      target.drawImage(paintingCanvas, origin.x, origin.y, ww, wh);
+      target.filter = "none";
+      target.restore();
+
+      if (!useViewportMask) return;
+      sedimentCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      sedimentCtx.clearRect(0, 0, W, H);
+      sedimentCtx.save();
+      sedimentCtx.globalAlpha = .92;
+      sedimentCtx.drawImage(paintingCanvas, origin.x, origin.y, ww, wh);
+      sedimentCtx.globalCompositeOperation = "destination-in";
+      const sx = camera.x * PAINT_SCALE;
+      const sy = camera.y * PAINT_SCALE;
+      const sw = W / camera.scale * PAINT_SCALE;
+      const sh = H / camera.scale * PAINT_SCALE;
+      sedimentCtx.drawImage(revealCanvas, sx, sy, sw, sh, 0, 0, W, H);
+      sedimentCtx.restore();
+      target.save();
+      target.globalCompositeOperation = "multiply";
+      target.drawImage(sedimentCanvas, 0, 0, W, H);
+      target.restore();
+    }
+
+    function drawSplashLayer() {
+      ctx.save();
+      ctx.globalCompositeOperation = "multiply";
+      for (const b of brushMarks) {
+        const p = worldToScreen(b.x, b.y);
+        const r = b.r * camera.scale;
+        if (p.x < -r * 4 || p.x > W + r * 4 || p.y < -r * 4 || p.y > H + r * 4) continue;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(b.angle);
+        const a = b.alpha * Math.max(0, b.life);
+        const ageSpread = clamp((b.age || 0) / 1.8, 0, 1);
+        const grainCount = Math.floor(clamp(r * b.stretch * .48, 32, 104));
+        for (let i = 0; i < grainCount; i++) {
+          const n = Math.sin((b.seed || 1) * 12.9898 + i * 78.233) * 43758.5453;
+          const q = n - Math.floor(n);
+          const n2 = Math.sin((b.seed || 1) * 4.31 + i * 19.17) * 9173.19;
+          const q2 = n2 - Math.floor(n2);
+          const along = (q - .5) * r * b.stretch * lerp(.55, 1.25, ageSpread);
+          const across = (q2 - .5) * r * lerp(.22, .78, ageSpread);
+          const fuzz = r * lerp(.08, .28, ageSpread);
+          const gx = along + Math.sin(i * 1.7 + b.age) * fuzz;
+          const gy = across + Math.cos(i * 2.1 + b.age) * fuzz;
+          const gr = clamp(r * lerp(.04, .115, q) * lerp(.68, 1.05, ageSpread), .8, 5.4);
+          const ink = a * lerp(.82, .18, ageSpread) * lerp(.75, 1.08, q2);
+          if (ink <= .005) continue;
+          const g = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr);
+          g.addColorStop(0, `rgba(26,26,26,${ink})`);
+          g.addColorStop(.56, `rgba(26,26,26,${ink * .34})`);
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(gx - gr, gy - gr, gr * 2, gr * 2);
+          if (q > .78) {
+            ctx.fillStyle = `rgba(26,26,26,${ink * .16})`;
+            ctx.fillRect(gx + gr * .35, gy - gr * .2, Math.max(1, gr * .16), Math.max(1, gr * .16));
+          }
+        }
+        ctx.restore();
+      }
+      ctx.restore();
+      for (const s of splashes) {
+        const p = worldToScreen(s.x, s.y);
+        const r = s.r * camera.scale;
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+        g.addColorStop(0, `rgba(26,26,26,${s.alpha * s.life})`);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
+      }
+      for (const m of motes) {
+        const p = worldToScreen(m.x, m.y);
+        const r = m.r * camera.scale * 2.2;
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+        g.addColorStop(0, `rgba(26,26,26,${m.alpha * Math.max(0, m.life)})`);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
+      }
+    }
+
+    function polygon(ctx, sides, radius) {
+      ctx.beginPath();
+      for (let i = 0; i < sides; i++) {
+        const a = -Math.PI / 2 + i / sides * Math.PI * 2;
+        const x = Math.cos(a) * radius;
+        const y = Math.sin(a) * radius;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+    }
+
+    function drawFood(f) {
+      const p = worldToScreen(f.x, f.y);
+      const r = (f.r + Math.sin(f.wobble) * .25) * camera.scale;
+      if (p.x < -20 || p.x > W + 20 || p.y < -20 || p.y > H + 20) return;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(f.rot);
+      ctx.fillStyle = `rgba(0,0,0,${f.alpha})`;
+      if (f.shape === "circle") {
+        ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      } else if (f.shape === "square") {
+        ctx.fillRect(-r * .76, -r * .76, r * 1.52, r * 1.52);
+      } else if (f.shape === "triangle") {
+        polygon(ctx, 3, r); ctx.fill();
+      } else {
+        polygon(ctx, 5, r); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawInkBall(x, y, r, alpha, label) {
+      const g = ctx.createRadialGradient(x - r * .26, y - r * .28, 0, x, y, r * 1.03);
+      g.addColorStop(0, `rgba(0,0,0,${alpha})`);
+      g.addColorStop(.7, `rgba(0,0,0,${alpha})`);
+      g.addColorStop(1, `rgba(0,0,0,${alpha * .38})`);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      if (label && r > 13) {
+        ctx.fillStyle = "rgba(255,255,255,.82)";
+        ctx.font = `${clamp(r * .38, 11, 30)}px KaiTi, STKaiti, serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(label, x, y + 1);
+      }
+    }
+
+    function drawPlayerInkBody(x, y, r) {
+      ctx.save();
+      ctx.globalCompositeOperation = "multiply";
+      const t = performance.now() * .001;
+      const large = clamp((r / camera.scale - 42) / 110, 0, 1);
+      const pieces = Math.floor(lerp(24, 34, large));
+      for (let i = 0; i < pieces; i++) {
+        const a = i / pieces * Math.PI * 2 + Math.sin(t * 1.25 + i) * lerp(.055, .13, large);
+        const rr = r * (lerp(.91, .98, large) + lerp(.12, .22, large) * Math.sin(i * 2.31 + t));
+        const px = x + Math.cos(a) * rr;
+        const py = y + Math.sin(a) * rr;
+        const spotR = r * (lerp(.11, .18, large) + lerp(.09, .16, large) * ((i * 37) % 11) / 10);
+        const g = ctx.createRadialGradient(px, py, 0, px, py, spotR * 2.2);
+        g.addColorStop(0, `rgba(0,0,0,${lerp(.32, .46, large)})`);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(a + Math.sin(t + i) * .25);
+        ctx.scale(lerp(1, 1.85, large), 1);
+        ctx.beginPath(); ctx.arc(0, 0, spotR * 2.2, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+      drawInkBall(x, y, r, .98, "墨");
+    }
+
+    function drawNpc(npc) {
+      if (npc.dead) return;
+      const p = worldToScreen(npc.x, npc.y);
+      const r = npc.displayR * camera.scale;
+      if (p.x < -r - 50 || p.x > W + r + 50 || p.y < -r - 50 || p.y > H + r + 50) return;
+      drawInkBall(p.x, p.y, r, .82, "");
+    }
+
+    function drawPlayer() {
+      if (!player) return;
+      const p = worldToScreen(player.x, player.y);
+      const r = player.displayR * camera.scale;
+      ctx.save();
+      drawPlayerInkBody(p.x, p.y, r);
+      ctx.restore();
+    }
+
+    function drawLotusLeaf(leaf) {
+      const p = worldToScreen(leaf.x, leaf.y);
+      const r = leaf.r * camera.scale;
+      if (p.x < -r * 2 || p.x > W + r * 2 || p.y < -r * 2 || p.y > H + r * 2) return;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(leaf.rot + Math.sin(leaf.phase) * .025);
+      ctx.globalAlpha = 1;
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.clip();
+      if (lotusLeafImg.complete && lotusLeafImg.naturalWidth > 0) {
+        ctx.drawImage(lotusLeafImg, -r, -r, r * 2, r * 2);
+      } else {
+        const g = ctx.createRadialGradient(-r * .18, -r * .2, 0, 0, 0, r);
+        g.addColorStop(0, "rgba(0,0,0,.16)");
+        g.addColorStop(.58, "rgba(0,0,0,.34)");
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(-r, -r, r * 2, r * 2);
+      }
+      ctx.restore();
+    }
+
+    function drawFlower(flower) {
+      if (flower.eaten) return;
+      const p = worldToScreen(flower.x, flower.y);
+      const r = flower.r * camera.scale;
+      if (p.x < -30 || p.x > W + 30 || p.y < -30 || p.y > H + 30) return;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(Math.sin(flower.phase) * .05);
+      ctx.globalAlpha = 1;
+      if (lotusFlowerImg.complete && lotusFlowerImg.naturalWidth > 0) {
+        ctx.drawImage(lotusFlowerImg, -r * 1.55, -r * 1.55, r * 3.1, r * 3.1);
+      } else {
+        for (let i = 0; i < 6; i++) {
+          const a = i / 6 * Math.PI * 2;
+          ctx.fillStyle = i % 2 ? "rgba(0,0,0,.48)" : "rgba(110,55,70,.28)";
+          ctx.beginPath();
+          ctx.ellipse(Math.cos(a) * r * .34, Math.sin(a) * r * .34, r * .24, r * .54, a, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+
+    function drawFishArt(target, x, y, r, rot, alpha) {
+      target.save();
+      target.translate(x, y);
+      target.rotate(rot);
+      target.globalAlpha *= alpha;
+      target.strokeStyle = "rgba(0,0,0,.74)";
+      target.fillStyle = "rgba(0,0,0,.2)";
+      target.lineCap = "round";
+      target.lineJoin = "round";
+      target.lineWidth = Math.max(1.2, r * .14);
+      target.beginPath();
+      target.moveTo(-r * 1.35, 0);
+      target.bezierCurveTo(-r * .55, -r * .42, r * .55, -r * .42, r * 1.2, 0);
+      target.bezierCurveTo(r * .45, r * .36, -r * .55, r * .36, -r * 1.35, 0);
+      target.stroke();
+      target.beginPath();
+      target.moveTo(-r * 1.25, 0);
+      target.lineTo(-r * 1.9, -r * .45);
+      target.moveTo(-r * 1.25, 0);
+      target.lineTo(-r * 1.9, r * .45);
+      target.stroke();
+      target.lineWidth = Math.max(1, r * .06);
+      for (let i = 0; i < 3; i++) {
+        const xx = -r * .35 + i * r * .33;
+        target.beginPath();
+        target.moveTo(xx, -r * .2);
+        target.quadraticCurveTo(xx + r * .18, 0, xx, r * .22);
+        target.stroke();
+      }
+      target.restore();
+    }
+
+    function drawLotusArt(target, x, y, r, rot, alpha) {
+      target.save();
+      target.translate(x, y);
+      target.rotate(rot);
+      target.globalAlpha *= alpha;
+      if (lotusFlowerImg.complete && lotusFlowerImg.naturalWidth > 0) {
+        target.drawImage(lotusFlowerImg, -r * 1.55, -r * 1.55, r * 3.1, r * 3.1);
+      } else {
+        target.fillStyle = "rgba(120,45,70,.28)";
+        for (let i = 0; i < 8; i++) {
+          const a = i / 8 * Math.PI * 2;
+          target.beginPath();
+          target.ellipse(Math.cos(a) * r * .25, Math.sin(a) * r * .25, r * .24, r * .58, a, 0, Math.PI * 2);
+          target.fill();
+        }
+      }
+      target.restore();
+    }
+
+    function drawCreatureImageArt(target, image, x, y, r, rot, alpha, aspect = 2.2) {
+      target.save();
+      target.translate(x, y);
+      target.rotate(rot);
+      target.globalAlpha *= alpha;
+      target.globalCompositeOperation = "multiply";
+      if (image.complete && image.naturalWidth > 0) {
+        const w = r * aspect;
+        const h = r;
+        target.drawImage(image, -w * .5, -h * .5, w, h);
+      } else {
+        drawFishArt(target, 0, 0, r * .48, 0, alpha);
+      }
+      target.restore();
+    }
+
+    function drawMountainArt(target, x, y, r, rot, alpha, seed) {
+      target.save();
+      target.translate(x, y);
+      target.rotate(rot);
+      target.globalAlpha *= alpha;
+      target.globalCompositeOperation = "multiply";
+      const peaks = 5;
+      target.beginPath();
+      target.moveTo(-r * 1.55, r * .55);
+      for (let i = 0; i < peaks; i++) {
+        const t = i / (peaks - 1);
+        const px = lerp(-r * 1.45, r * 1.45, t);
+        const py = -r * (.28 + .55 * Math.abs(Math.sin(seed + i * 1.7)));
+        target.lineTo(px, py);
+      }
+      target.lineTo(r * 1.58, r * .58);
+      const g = target.createLinearGradient(0, -r, 0, r * .7);
+      g.addColorStop(0, "rgba(26,26,26,.45)");
+      g.addColorStop(.55, "rgba(26,26,26,.16)");
+      g.addColorStop(1, "rgba(0,0,0,0)");
+      target.fillStyle = g;
+      target.fill();
+      target.strokeStyle = "rgba(26,26,26,.28)";
+      target.lineWidth = Math.max(1, r * .025);
+      for (let i = 0; i < 4; i++) {
+        const px = rand(-r, r);
+        target.beginPath();
+        target.moveTo(px, -r * .35);
+        target.bezierCurveTo(px - r * .2, 0, px + r * .18, r * .18, px - r * .05, r * .5);
+        target.stroke();
+      }
+      target.restore();
+    }
+
+    function drawMistArt(target, x, y, r, rot, alpha, seed) {
+      target.save();
+      target.translate(x, y);
+      target.rotate(rot);
+      target.globalCompositeOperation = "multiply";
+      for (let i = 0; i < 5; i++) {
+        const ox = Math.sin(seed + i * 2.2) * r * .8;
+        const oy = Math.cos(seed + i * 1.3) * r * .22;
+        const rr = r * (.45 + i * .08);
+        const g = target.createRadialGradient(ox, oy, 0, ox, oy, rr);
+        g.addColorStop(0, `rgba(26,26,26,${alpha * .52})`);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        target.fillStyle = g;
+        target.fillRect(ox - rr, oy - rr, rr * 2, rr * 2);
+      }
+      target.restore();
+    }
+
+    function drawRippleArt(target, x, y, r, rot, alpha, seed) {
+      target.save();
+      target.translate(x, y);
+      target.rotate(rot);
+      target.strokeStyle = `rgba(26,26,26,${alpha})`;
+      target.lineWidth = Math.max(1, r * .025);
+      target.lineCap = "round";
+      for (let i = 0; i < 4; i++) {
+        const w = r * (1 + i * .28);
+        const yy = (i - 1.5) * r * .18;
+        target.beginPath();
+        target.moveTo(-w, yy);
+        target.bezierCurveTo(-w * .35, yy + Math.sin(seed + i) * r * .18, w * .35, yy - Math.cos(seed + i) * r * .18, w, yy);
+        target.stroke();
+      }
+      target.restore();
+    }
+
+    function drawBambooArt(target, x, y, r, rot, alpha, seed) {
+      target.save();
+      target.translate(x, y);
+      target.rotate(rot - Math.PI / 2);
+      target.strokeStyle = `rgba(26,26,26,${alpha})`;
+      target.lineWidth = Math.max(1, r * .04);
+      target.lineCap = "round";
+      target.beginPath();
+      target.moveTo(0, r * .8);
+      target.bezierCurveTo(-r * .08, r * .28, r * .08, -r * .28, 0, -r * .9);
+      target.stroke();
+      for (let i = 0; i < 5; i++) {
+        const y = lerp(r * .55, -r * .65, i / 4);
+        const side = i % 2 ? -1 : 1;
+        target.beginPath();
+        target.moveTo(0, y);
+        target.quadraticCurveTo(side * r * .36, y - r * .16, side * r * .72, y - r * .08);
+        target.stroke();
+      }
+      target.restore();
+    }
+
+    function drawArtElements(target, map, scaleForRadius = 1) {
+      target.save();
+      target.globalCompositeOperation = "multiply";
+      for (const art of artElements) {
+        const p = map(art.x, art.y);
+        const r = art.r * scaleForRadius;
+        if (art.type === "mountain") drawMountainArt(target, p.x, p.y, r, art.rot, art.alpha, art.seed);
+        else if (art.type === "mist") drawMistArt(target, p.x, p.y, r, art.rot, art.alpha, art.seed);
+        else if (art.type === "ripple") drawRippleArt(target, p.x, p.y, r, art.rot, art.alpha, art.seed);
+        else if (art.type === "bamboo") drawBambooArt(target, p.x, p.y, r, art.rot, art.alpha, art.seed);
+        else if (art.type === "fish") drawCreatureImageArt(target, loachImg, p.x, p.y, r * 1.9, art.rot, art.alpha, .72);
+        else if (art.type === "shrimp") drawCreatureImageArt(target, shrimpImg, p.x, p.y, r * 2.1, art.rot, art.alpha, 2.25);
+        else if (art.type === "loach") drawCreatureImageArt(target, loachImg, p.x, p.y, r * 1.9, art.rot, art.alpha, .72);
+      }
+      target.restore();
+    }
+
+    function drawMinimap() {
+      if (!player || state !== "play") return;
+      const size = 104;
+      const x = W - size - 18;
+      const y = H - size - 124;
+      const scale = size / WORLD_W;
+      ctx.save();
+      ctx.globalAlpha = .82;
+      ctx.fillStyle = "rgba(238,232,220,.78)";
+      ctx.strokeStyle = "rgba(0,0,0,.2)";
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.roundRect(x, y, size, size, 8); ctx.fill(); ctx.stroke();
+      for (const n of npcs) {
+        if (n.dead) continue;
+        ctx.fillStyle = n.r > player.r ? "rgba(0,0,0,.58)" : "rgba(0,0,0,.25)";
+        ctx.beginPath(); ctx.arc(x + n.x * scale, y + n.y * scale, n.r > 70 ? 3 : 2, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.fillStyle = "#000";
+      ctx.beginPath(); ctx.arc(x + player.x * scale, y + player.y * scale, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+
+    function render() {
+      drawPaper();
+      if (state === "play" || state === "dead" || state === "ending") {
+        drawPaintingLayer();
+        drawWorld();
+        drawSplashLayer();
+        for (const f of foods) drawFood(f);
+        for (const leaf of leaves) if (player && player.r >= leaf.r) drawLotusLeaf(leaf);
+        for (const n of npcs) drawNpc(n);
+        drawPlayer();
+        for (const leaf of leaves) if (player && player.r < leaf.r) drawLotusLeaf(leaf);
+        for (const flower of flowers) drawFlower(flower);
+        drawMinimap();
+      }
+    }
+
+    function drawWorld() {
+      const a = worldToScreen(0, 0);
+      const b = worldToScreen(WORLD_W, WORLD_H);
+      ctx.save();
+      ctx.strokeStyle = "rgba(0,0,0,.08)";
+      ctx.lineWidth = 1;
+      const step = 120 * camera.scale;
+      const startX = a.x % step;
+      const startY = a.y % step;
+      for (let x = startX; x < W; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = startY; y < H; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      ctx.strokeStyle = "rgba(0,0,0,.42)";
+      ctx.lineWidth = Math.max(2, 4 * camera.scale);
+      ctx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
+      ctx.restore();
+    }
+
+    function finish() {
+      if (state !== "play") return;
+      const elapsed = Math.floor((performance.now() - roundStart) / 1000);
+      if (score <= 0) {
+        state = "dead";
+        document.getElementById("hud").style.display = "none";
+        document.getElementById("dead").style.display = "grid";
+        document.getElementById("deadStats").textContent = `实验失败 · 没有吞噬记录 · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
+        return;
+      }
+      state = "ending";
+      document.getElementById("hud").style.display = "none";
+      document.getElementById("ending").style.display = "grid";
+      document.getElementById("endingStats").textContent = `吞噬 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
+      drawEndingArt();
+    }
+
+    function drawEndingArt() {
+      const rect = endingArt.parentElement.getBoundingClientRect();
+      endingArt.width = Math.floor(rect.width * dpr);
+      endingArt.height = Math.floor(rect.height * dpr);
+      endingCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const w = rect.width, h = rect.height;
+      endingCtx.fillStyle = "#f5f0e6";
+      endingCtx.fillRect(0, 0, w, h);
+      endingCtx.lineCap = "round";
+      endingCtx.lineJoin = "round";
+      const sx = w / WORLD_W;
+      const sy = h / WORLD_H;
+      const rs = Math.min(sx, sy);
+      const map = (x, y) => ({ x: x * sx, y: y * sy });
+      endingCtx.save();
+      endingCtx.globalCompositeOperation = "multiply";
+      endingCtx.globalAlpha = .22;
+      endingCtx.filter = "blur(2px)";
+      endingCtx.drawImage(paintingCanvas, 0, 0, w, h);
+      endingCtx.filter = "none";
+      endingCtx.restore();
+      const tmp = document.createElement("canvas");
+      tmp.width = endingArt.width;
+      tmp.height = endingArt.height;
+      const tctx = tmp.getContext("2d");
+      tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      tctx.globalAlpha = .96;
+      tctx.drawImage(paintingCanvas, 0, 0, w, h);
+      tctx.globalCompositeOperation = "destination-in";
+      tctx.drawImage(revealCanvas, 0, 0, w, h);
+      endingCtx.save();
+      endingCtx.globalCompositeOperation = "multiply";
+      endingCtx.drawImage(tmp, 0, 0, w, h);
+      endingCtx.restore();
+      endingCtx.save();
+      endingCtx.globalCompositeOperation = "multiply";
+      for (const leaf of leaves) {
+        const p = map(leaf.x, leaf.y);
+        const r = leaf.r * rs;
+        endingCtx.save();
+        endingCtx.translate(p.x, p.y);
+        endingCtx.rotate(leaf.rot);
+        endingCtx.beginPath();
+        endingCtx.arc(0, 0, r, 0, Math.PI * 2);
+        endingCtx.clip();
+        if (lotusLeafImg.complete && lotusLeafImg.naturalWidth > 0) {
+          endingCtx.drawImage(lotusLeafImg, -r, -r, r * 2, r * 2);
+        }
+        endingCtx.restore();
+      }
+      for (const flower of flowers) {
+        if (flower.eaten) continue;
+        const p = map(flower.x, flower.y);
+        drawLotusArt(endingCtx, p.x, p.y, flower.r * rs, Math.sin(flower.phase) * .05, 1);
+      }
+      drawArtElements(endingCtx, map, rs);
+      endingCtx.restore();
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById("toast");
+      toast.textContent = text;
+      toast.style.display = "block";
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.style.display = "none", 1500);
+    }
+
+    function goHome() {
+      state = "title";
+      document.getElementById("hud").style.display = "none";
+      document.getElementById("dead").style.display = "none";
+      document.getElementById("ending").style.display = "none";
+      document.getElementById("title").style.display = "grid";
+    }
+
+    function loop(now) {
+      const dt = Math.min(.05, (now - lastTime) / 1000);
+      lastTime = now;
+      update(dt);
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    addEventListener("resize", resize);
+    addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    addEventListener("touchstart", e => { if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; } }, { passive: false });
+    addEventListener("touchmove", e => {
+      e.preventDefault();
+      if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
+    }, { passive: false });
+    addEventListener("keydown", e => {
+      keys.add(e.key);
+      keys.add(e.key.toLowerCase());
+      if (e.key === "Shift") { e.preventDefault(); triggerSpurt(); }
+    });
+    addEventListener("keyup", e => { keys.delete(e.key); keys.delete(e.key.toLowerCase()); });
+
+    document.getElementById("startBtn").onclick = startGame;
+    document.getElementById("restartBtn").onclick = startGame;
+    document.getElementById("nextBtn").onclick = startGame;
+    document.getElementById("spurtBtn").onclick = triggerSpurt;
+    document.getElementById("deadHomeBtn").onclick = goHome;
+    document.getElementById("homeBtn").onclick = goHome;
+    document.getElementById("albumBtn").onclick = () => showToast("Album：下一版接入结局画存档");
+    document.getElementById("configBtn").onclick = () => showToast("Config：下一版开放食物/NPC/荷叶参数");
+    document.getElementById("saveBtn").onclick = () => {
+      const a = document.createElement("a");
+      a.download = `ink_painting_${Date.now()}.png`;
+      a.href = endingArt.toDataURL("image/png");
+      a.click();
+    };
+    document.getElementById("convertBtn").onclick = async () => {
+      const payload = {
+        image: endingArt.toDataURL("image/png"),
+        path: path.map(p => ({ x: Math.round(p.x), y: Math.round(p.y), r: Math.round(p.r) })),
+        artElements: artElements.map(e => ({ type: e.type, x: Math.round(e.x), y: Math.round(e.y), r: Math.round(e.r), rot: Number(e.rot.toFixed(3)) })),
+        prompt: "Chinese ink landscape painting, xuan paper, misty mountains, water ripples, bamboo, elegant brushwork, monochrome ink wash"
+      };
+      window.lastStableDiffusionPayload = payload;
+      showToast("已准备转化数据：window.lastStableDiffusionPayload。接入本地 Stable Diffusion 后可直接 POST。");
+    };
+
+    resize();
+    resetWorld();
+    render();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
