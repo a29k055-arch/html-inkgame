@@ -6,6 +6,10 @@ Single-player ink-style agar game prototype.
 
 Open `index.html` in a browser, or open `outputs/ink_demo.html` directly.
 
+GitHub Pages:
+
+https://a29k055-arch.github.io/html-inkgame/
+
 ## Current Prototype
 
 - Ink-themed single-player swallowing gameplay.

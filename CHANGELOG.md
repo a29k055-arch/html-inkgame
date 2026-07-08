@@ -28,3 +28,4 @@ This update keeps the original demo and adds a new playable version at `outputs/
 ### GitHub
 
 - GitHub Pages entry now points to the v2 demo.
+- Added a GitHub Pages deployment workflow.
