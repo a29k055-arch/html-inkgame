@@ -64,10 +64,18 @@
     #interlude {
       display: none;
       z-index: 30;
-      background: #050505;
+      background: transparent;
       color: rgba(245,240,230,.92);
+      pointer-events: none;
+    }
+    #transitionCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
     }
     .interlude-text {
+      display: none;
       font-size: clamp(34px, 6vw, 72px);
       font-weight: 700;
       letter-spacing: .35em;
@@ -75,6 +83,11 @@
       font-family: "Yu Mincho", "Hiragino Mincho ProN", "MS Mincho", "STKaiti", serif;
       opacity: 0;
       animation: interludeInk 3s ease-in-out both;
+    }
+    #title.fading {
+      opacity: 0;
+      transition: opacity .7s ease;
+      pointer-events: none;
     }
     @keyframes interludeInk {
       0% { opacity: 0; filter: blur(10px); transform: scale(.96); }
@@ -313,6 +326,7 @@
   <canvas id="game"></canvas>
 
   <section id="interlude" class="screen">
+    <canvas id="transitionCanvas"></canvas>
     <div class="interlude-text">幕間映像</div>
   </section>
 
@@ -383,6 +397,8 @@
 
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
+    const transitionCanvas = document.getElementById("transitionCanvas");
+    const transitionCtx = transitionCanvas.getContext("2d");
     const endingArt = document.getElementById("endingArt");
     const endingCtx = endingArt.getContext("2d");
     const lotusLeafImg = new Image();
@@ -406,6 +422,20 @@
     const LOTUS_LEAF_COUNT = 8;
     const LOTUS_FLOWER_MAX_PER_LEAF = 3;
     const LOTUS_LEAF_MAX = 16;
+    const DROP_MATTE_SRCS = [
+      "assets/ink-mattes/drops/drop-01.mov",
+      "assets/ink-mattes/drops/drop-02.mov",
+      "assets/ink-mattes/drops/drop-03.mov",
+      "assets/ink-mattes/drops/drop-04.mov",
+      "assets/ink-mattes/drops/drop-05.mov"
+    ];
+    const TRANSITION_MATTE_SRCS = [
+      "assets/ink-mattes/transitions/transition-v1-01.mov",
+      "assets/ink-mattes/transitions/transition-v1-02.mov",
+      "assets/ink-mattes/transitions/transition-v1-03.mov",
+      "assets/ink-mattes/transitions/transition-v2-01.mov",
+      "assets/ink-mattes/transitions/transition-v2-02.mov"
+    ];
 
     let W = 0, H = 0, dpr = 1;
     let state = "title";
@@ -434,12 +464,18 @@
     let spurtCd = 0;
     let spurtBoost = 0;
     let foodTick = 0;
+    let activeDropMattes = [];
+    let transitionMatte = null;
+    let transitionFallback = false;
+    let transitionTitleHidden = false;
     const sedimentCanvas = document.createElement("canvas");
     const sedimentCtx = sedimentCanvas.getContext("2d");
     const paintingCanvas = document.createElement("canvas");
     const paintingCtx = paintingCanvas.getContext("2d");
     const revealCanvas = document.createElement("canvas");
     const revealCtx = revealCanvas.getContext("2d");
+    const matteCanvas = document.createElement("canvas");
+    const matteCtx = matteCanvas.getContext("2d", { willReadFrequently: true });
     const PAINT_SCALE = .45;
     const referencePaintingImg = new Image();
     referencePaintingImg.src = "assets/ink_reference_painting.png";
@@ -453,6 +489,42 @@
     const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
     const radiusToMass = r => r * r;
     const massToRadius = m => Math.sqrt(Math.max(4, m));
+    const pick = list => list[Math.floor(Math.random() * list.length)];
+
+    function createMatteVideo(src) {
+      const video = document.createElement("video");
+      video.src = src;
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = "auto";
+      return video;
+    }
+
+    function drawDarknessMask(video, target, x, y, w, h, alpha = 1) {
+      const mw = 256;
+      const mh = Math.max(144, Math.round(mw * h / Math.max(1, w)));
+      matteCanvas.width = mw;
+      matteCanvas.height = mh;
+      matteCtx.clearRect(0, 0, mw, mh);
+      try {
+        matteCtx.drawImage(video, 0, 0, mw, mh);
+        const frame = matteCtx.getImageData(0, 0, mw, mh);
+        const data = frame.data;
+        for (let i = 0; i < data.length; i += 4) {
+          const luma = data[i] * .299 + data[i + 1] * .587 + data[i + 2] * .114;
+          const mask = clamp((245 - luma) / 205, 0, 1);
+          data[i] = 255;
+          data[i + 1] = 255;
+          data[i + 2] = 255;
+          data[i + 3] = Math.round(255 * mask * alpha);
+        }
+        matteCtx.putImageData(frame, 0, 0);
+        target.drawImage(matteCanvas, x, y, w, h);
+        return true;
+      } catch {
+        return false;
+      }
+    }
 
     function resize() {
       dpr = Math.min(devicePixelRatio || 1, 2);
@@ -461,6 +533,9 @@
       canvas.width = Math.floor(W * dpr);
       canvas.height = Math.floor(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      transitionCanvas.width = canvas.width;
+      transitionCanvas.height = canvas.height;
+      transitionCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       sedimentCanvas.width = canvas.width;
       sedimentCanvas.height = canvas.height;
       sedimentCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -704,6 +779,7 @@
       spurtCd = 0;
       spurtBoost = 0;
       foodTick = 0;
+      activeDropMattes = [];
       sedimentCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       sedimentCtx.clearRect(0, 0, W, H);
       setupWorldPainting();
@@ -717,9 +793,19 @@
     }
 
     function startGame() {
+      resetWorld();
       state = "interlude";
       interludeTimer = INTERLUDE_MS;
-      document.getElementById("title").style.display = "none";
+      transitionTitleHidden = false;
+      transitionFallback = false;
+      transitionMatte = createMatteVideo(pick(TRANSITION_MATTE_SRCS));
+      transitionMatte.loop = false;
+      transitionMatte.onended = () => beginPlay();
+      transitionMatte.onerror = () => { transitionFallback = true; };
+      transitionMatte.play().catch(() => { transitionFallback = true; });
+      const title = document.getElementById("title");
+      title.style.display = "grid";
+      title.classList.add("fading");
       document.getElementById("dead").style.display = "none";
       document.getElementById("ending").style.display = "none";
       document.getElementById("hud").style.display = "none";
@@ -727,10 +813,12 @@
     }
 
     function beginPlay() {
-      resetWorld();
+      if (state === "play") return;
       state = "play";
       roundStart = performance.now();
-      document.getElementById("title").style.display = "none";
+      const title = document.getElementById("title");
+      title.classList.remove("fading");
+      title.style.display = "none";
       document.getElementById("interlude").style.display = "none";
       document.getElementById("dead").style.display = "none";
       document.getElementById("ending").style.display = "none";
@@ -957,6 +1045,51 @@
       revealCtx.restore();
     }
 
+    function addDropMatteReveal(x, y, radius) {
+      const video = createMatteVideo(pick(DROP_MATTE_SRCS));
+      const matte = {
+        video,
+        x,
+        y,
+        radius,
+        age: 0,
+        fallback: false,
+        ready: false
+      };
+      video.oncanplay = () => { matte.ready = true; };
+      video.onended = () => { matte.done = true; };
+      video.onerror = () => { matte.fallback = true; };
+      video.play().catch(() => { matte.fallback = true; });
+      activeDropMattes.push(matte);
+      if (activeDropMattes.length > 12) activeDropMattes.shift();
+    }
+
+    function updateDropMattes(dt) {
+      for (const matte of activeDropMattes) {
+        matte.age += dt;
+        if (matte.fallback) {
+          revealAt(matte.x, matte.y, matte.radius * 1.05, .42);
+          matte.done = true;
+          continue;
+        }
+        if (!matte.ready || matte.video.readyState < 2) continue;
+        const rr = matte.radius * PAINT_SCALE;
+        const rx = matte.x * PAINT_SCALE - rr;
+        const ry = matte.y * PAINT_SCALE - rr;
+        revealCtx.save();
+        revealCtx.globalCompositeOperation = "lighter";
+        revealCtx.globalAlpha = .72;
+        const ok = drawDarknessMask(matte.video, revealCtx, rx, ry, rr * 2, rr * 2, .72);
+        revealCtx.restore();
+        if (!ok) {
+          matte.fallback = true;
+        } else if (matte.video.ended || matte.age > 3.2) {
+          matte.done = true;
+        }
+      }
+      activeDropMattes = activeDropMattes.filter(matte => !matte.done);
+    }
+
     function obscureAt(x, y, radius, alpha = .24) {
       const rx = x * PAINT_SCALE;
       const ry = y * PAINT_SCALE;
@@ -1070,7 +1203,7 @@
       npc.respawn = rand(9, 18);
       addSplash(npc.x, npc.y, npc.r * 1.7, .32, 16);
       spawnArtElements(npc.x, npc.y, npc.r);
-      revealAt(npc.x, npc.y, npc.r * 4.2 + 120, .68);
+      addDropMatteReveal(npc.x, npc.y, npc.r * 4.2 + 120);
     }
 
     function eatNpcByNpc(big, small) {
@@ -1220,6 +1353,10 @@
     function update(dt) {
       if (state === "interlude") {
         interludeTimer -= dt * 1000;
+        if (!transitionTitleHidden && interludeTimer < INTERLUDE_MS - 720) {
+          transitionTitleHidden = true;
+          document.getElementById("title").style.display = "none";
+        }
         if (interludeTimer <= 0) beginPlay();
         return;
       }
@@ -1238,6 +1375,7 @@
       }
       updateLotus(dt);
       updateSpurtResidues(dt);
+      updateDropMattes(dt);
       for (const s of splashes) s.life -= dt * .09;
       splashes = splashes.filter(s => s.life > 0);
       for (const m of motes) {
@@ -1758,7 +1896,7 @@
 
     function render() {
       drawPaper();
-      if (state === "play" || state === "dead" || state === "ending") {
+      if (state === "play" || state === "dead" || state === "ending" || state === "interlude") {
         drawPaintingLayer();
         drawWorld();
         drawSplashLayer();
@@ -1770,6 +1908,25 @@
         for (const flower of flowers) drawFlower(flower);
         drawMinimap();
       }
+      if (state === "interlude") drawTransitionOverlay();
+    }
+
+    function drawTransitionOverlay() {
+      transitionCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      transitionCtx.clearRect(0, 0, W, H);
+      transitionCtx.save();
+      transitionCtx.fillStyle = "#f5f0e6";
+      transitionCtx.fillRect(0, 0, W, H);
+      const progress = clamp(1 - interludeTimer / INTERLUDE_MS, 0, 1);
+      if (!transitionFallback && transitionMatte && transitionMatte.readyState >= 2) {
+        transitionCtx.globalCompositeOperation = "destination-out";
+        drawDarknessMask(transitionMatte, transitionCtx, 0, 0, W, H, 1);
+      } else {
+        transitionCtx.globalCompositeOperation = "destination-out";
+        transitionCtx.globalAlpha = progress;
+        transitionCtx.fillRect(0, 0, W, H);
+      }
+      transitionCtx.restore();
     }
 
     function drawWorld() {

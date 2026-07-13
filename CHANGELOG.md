@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-07-14 - Ink Matte Overlay Assets
+
+This update connects the external ink matte overlay assets to the current v2 demo.
+
+### Added
+
+- Added five ink drop matte videos from the `Drops` asset folder.
+- Added five ink transition matte videos from `Transitions/Version 1` and `Transitions/Version 2`.
+- Added random drop matte reveal animation when the player swallows an NPC ink body.
+- Added random transition matte animation after pressing `START`.
+
+### Changed
+
+- The start sequence now fades the title UI and uses an ink matte overlay before entering gameplay.
+- NPC swallow reveal is no longer only a circular reveal; it now uses animated ink matte masks when supported by the browser.
+- Added fallback behavior so gameplay still works if a `.mov` matte video cannot be decoded.
+
 ## 2026-07-08 - v2 Objective Reveal Mode
 
 This update keeps the original demo and adds a new playable version at `outputs/ink_demo_v2.html`.
