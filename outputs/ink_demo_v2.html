@@ -84,11 +84,6 @@
       opacity: 0;
       animation: interludeInk 3s ease-in-out both;
     }
-    #title.fading {
-      opacity: 0;
-      transition: opacity .7s ease;
-      pointer-events: none;
-    }
     @keyframes interludeInk {
       0% { opacity: 0; filter: blur(10px); transform: scale(.96); }
       30% { opacity: 1; filter: blur(0); transform: scale(1); }
@@ -135,6 +130,10 @@
       font-size: 14px;
       line-height: 1.8;
       letter-spacing: 1px;
+    }
+    .title-sub,
+    .hint {
+      display: none;
     }
     #hud {
       display: none;
@@ -333,21 +332,19 @@
   <section id="title" class="screen paper">
     <div class="title-stack">
       <div class="title-mark">墨</div>
-      <div class="title-sub">单机水墨 Agar Demo</div>
       <div class="menu">
-        <button id="startBtn" type="button">START</button>
-        <button id="albumBtn" type="button">ALBUM</button>
-        <button id="configBtn" type="button">CONFIG</button>
+        <button id="startBtn" type="button">スタート</button>
+        <button id="albumBtn" type="button">アルバム</button>
+        <button id="configBtn" type="button">設定</button>
       </div>
-      <div class="hint">纯大小吞噬：大墨团吃小墨团。吃悬浮墨粒成长，避开更大的 NPC。荷叶像刺球，小的时候可藏在下面，大了之后可吃周围荷花。</div>
     </div>
   </section>
 
   <div id="hud">
     <div class="topbar">
       <div class="metric">
-        <div class="metric-label">墨团</div>
-        <div class="metric-value" id="sizeText">体积 12</div>
+        <div class="metric-label"></div>
+        <div class="metric-value" id="sizeText">大きさ 12</div>
       </div>
       <div class="metric">
         <div class="metric-label">墨量</div>
@@ -355,37 +352,37 @@
       </div>
       <div class="timer" id="timerText">05:00</div>
       <div class="metric">
-        <div class="metric-label">战绩</div>
-        <div class="metric-value" id="scoreText">吞噬 0</div>
+        <div class="metric-label"></div>
+        <div class="metric-value" id="scoreText">吸収 0</div>
       </div>
     </div>
     <div class="joystick-ghost"></div>
     <div class="action-row">
-      <button id="spurtBtn" class="action" type="button"><span>喷墨<small>Shift</small></span></button>
+      <button id="spurtBtn" class="action" type="button"><span>墨噴射<small>Shift</small></span></button>
     </div>
   </div>
 
   <section id="dead" class="screen paper">
     <div class="result">
-      <div class="result-title">墨 散</div>
+      <div class="result-title">Game Over</div>
       <div class="result-stats" id="deadStats"></div>
       <div class="result-actions">
-        <button id="restartBtn" class="ink-button" type="button">再来一局</button>
-        <button id="deadHomeBtn" class="ink-button secondary" type="button">主界面</button>
+        <button id="restartBtn" class="ink-button" type="button">もう一度</button>
+        <button id="deadHomeBtn" class="ink-button secondary" type="button">ホーム</button>
       </div>
     </div>
   </section>
 
   <section id="ending" class="screen paper">
     <div class="result">
-      <div class="result-title">时尽墨止</div>
+      <div class="result-title">完成</div>
       <div class="art-frame"><canvas id="endingArt"></canvas></div>
       <div class="result-stats" id="endingStats"></div>
       <div class="result-actions">
-        <button id="saveBtn" class="ink-button" type="button">保存画作</button>
-        <button id="convertBtn" class="ink-button" type="button">转化图片</button>
-        <button id="nextBtn" class="ink-button secondary" type="button">下一局</button>
-        <button id="homeBtn" class="ink-button secondary" type="button">主界面</button>
+        <button id="saveBtn" class="ink-button" type="button">保存</button>
+        <button id="convertBtn" class="ink-button" type="button">画像変換</button>
+        <button id="nextBtn" class="ink-button secondary" type="button">次へ</button>
+        <button id="homeBtn" class="ink-button secondary" type="button">ホーム</button>
       </div>
     </div>
   </section>
@@ -467,7 +464,6 @@
     let activeDropMattes = [];
     let transitionMatte = null;
     let transitionFallback = false;
-    let transitionTitleHidden = false;
     const sedimentCanvas = document.createElement("canvas");
     const sedimentCtx = sedimentCanvas.getContext("2d");
     const paintingCanvas = document.createElement("canvas");
@@ -507,7 +503,14 @@
       matteCanvas.height = mh;
       matteCtx.clearRect(0, 0, mw, mh);
       try {
-        matteCtx.drawImage(video, 0, 0, mw, mh);
+        const vw = video.videoWidth || mw;
+        const vh = video.videoHeight || mh;
+        const scale = Math.max(mw / vw, mh / vh);
+        const sw = mw / scale;
+        const sh = mh / scale;
+        const sx = (vw - sw) * .5;
+        const sy = (vh - sh) * .5;
+        matteCtx.drawImage(video, sx, sy, sw, sh, 0, 0, mw, mh);
         const frame = matteCtx.getImageData(0, 0, mw, mh);
         const data = frame.data;
         for (let i = 0; i < data.length; i += 4) {
@@ -796,7 +799,6 @@
       resetWorld();
       state = "interlude";
       interludeTimer = INTERLUDE_MS;
-      transitionTitleHidden = false;
       transitionFallback = false;
       transitionMatte = createMatteVideo(pick(TRANSITION_MATTE_SRCS));
       transitionMatte.loop = false;
@@ -804,8 +806,7 @@
       transitionMatte.onerror = () => { transitionFallback = true; };
       transitionMatte.play().catch(() => { transitionFallback = true; });
       const title = document.getElementById("title");
-      title.style.display = "grid";
-      title.classList.add("fading");
+      title.style.display = "none";
       document.getElementById("dead").style.display = "none";
       document.getElementById("ending").style.display = "none";
       document.getElementById("hud").style.display = "none";
@@ -817,7 +818,6 @@
       state = "play";
       roundStart = performance.now();
       const title = document.getElementById("title");
-      title.classList.remove("fading");
       title.style.display = "none";
       document.getElementById("interlude").style.display = "none";
       document.getElementById("dead").style.display = "none";
@@ -1019,7 +1019,9 @@
       if (speed < 18) return;
       const dir = Math.atan2(player.vy, player.vx);
       const large = clamp((player.r - 42) / 120, 0, 1);
-      const brushR = clamp(player.r * lerp(.78, .64, large), 24, 112);
+      const speedRatio = clamp(speed / Math.max(1, moveSpeed(player.r) * 1.08), 0, 1);
+      const pressure = lerp(1.32, .78, speedRatio);
+      const brushR = clamp(player.r * lerp(.78, .64, large) * pressure, 24, 124);
       const tail = clamp(player.r * lerp(.5, .82, large), 22, 128);
       const steps = 4;
       for (let i = 0; i < steps; i++) {
@@ -1074,12 +1076,18 @@
         }
         if (!matte.ready || matte.video.readyState < 2) continue;
         const rr = matte.radius * PAINT_SCALE;
-        const rx = matte.x * PAINT_SCALE - rr;
-        const ry = matte.y * PAINT_SCALE - rr;
+        const videoAspect = matte.video.videoWidth && matte.video.videoHeight
+          ? matte.video.videoWidth / matte.video.videoHeight
+          : 1.45;
+        const aspect = clamp(videoAspect, 1.18, 1.58);
+        const rw = rr * 2 * aspect;
+        const rh = rr * 2;
+        const rx = matte.x * PAINT_SCALE - rw * .5;
+        const ry = matte.y * PAINT_SCALE - rh * .5;
         revealCtx.save();
         revealCtx.globalCompositeOperation = "lighter";
         revealCtx.globalAlpha = .72;
-        const ok = drawDarknessMask(matte.video, revealCtx, rx, ry, rr * 2, rr * 2, .72);
+        const ok = drawDarknessMask(matte.video, revealCtx, rx, ry, rw, rh, .72);
         revealCtx.restore();
         if (!ok) {
           matte.fallback = true;
@@ -1229,7 +1237,7 @@
       document.getElementById("hud").style.display = "none";
       document.getElementById("dead").style.display = "grid";
       const elapsed = Math.floor((performance.now() - roundStart) / 1000);
-      document.getElementById("deadStats").textContent = `吞噬 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
+      document.getElementById("deadStats").textContent = `吸収 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
     }
 
     function handleCollisions() {
@@ -1353,10 +1361,6 @@
     function update(dt) {
       if (state === "interlude") {
         interludeTimer -= dt * 1000;
-        if (!transitionTitleHidden && interludeTimer < INTERLUDE_MS - 720) {
-          transitionTitleHidden = true;
-          document.getElementById("title").style.display = "none";
-        }
         if (interludeTimer <= 0) beginPlay();
         return;
       }
@@ -1415,11 +1419,11 @@
     function updateHud(elapsedMs) {
       const sec = Math.max(0, Math.floor(elapsedMs / 1000));
       document.getElementById("timerText").textContent = `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`;
-      document.getElementById("sizeText").textContent = `体积 ${Math.floor(player.displayR)}`;
-      document.getElementById("scoreText").textContent = `吞噬 ${score}`;
+      document.getElementById("sizeText").textContent = `大きさ ${Math.floor(player.displayR)}`;
+      document.getElementById("scoreText").textContent = `吸収 ${score}`;
       document.getElementById("inkFill").style.width = `${clamp(player.r / MAX_RADIUS * 100, 3, 100)}%`;
-      document.getElementById("sizeText").textContent = `体积 ${Math.floor(player.displayR)}`;
-      document.getElementById("scoreText").textContent = `吞噬 ${score} · 显影 ${Math.floor(revealCoverage * 100)}%`;
+      document.getElementById("sizeText").textContent = `大きさ ${Math.floor(player.displayR)}`;
+      document.getElementById("scoreText").textContent = `吸収 ${score} · 作画 ${Math.floor(revealCoverage * 100)}%`;
       document.getElementById("spurtBtn").classList.toggle("disabled", spurtCd > 0);
     }
 
@@ -1915,8 +1919,7 @@
       transitionCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       transitionCtx.clearRect(0, 0, W, H);
       transitionCtx.save();
-      transitionCtx.fillStyle = "#f5f0e6";
-      transitionCtx.fillRect(0, 0, W, H);
+      drawTitleSnapshot(transitionCtx);
       const progress = clamp(1 - interludeTimer / INTERLUDE_MS, 0, 1);
       if (!transitionFallback && transitionMatte && transitionMatte.readyState >= 2) {
         transitionCtx.globalCompositeOperation = "destination-out";
@@ -1927,6 +1930,37 @@
         transitionCtx.fillRect(0, 0, W, H);
       }
       transitionCtx.restore();
+    }
+
+    function drawTitleSnapshot(target) {
+      target.save();
+      target.fillStyle = "#f5f0e6";
+      target.fillRect(0, 0, W, H);
+      target.globalAlpha = .38;
+      target.globalCompositeOperation = "multiply";
+      const g1 = target.createRadialGradient(W * .16, H * .2, 0, W * .16, H * .2, Math.max(W, H) * .32);
+      g1.addColorStop(0, "rgba(0,0,0,.08)");
+      g1.addColorStop(1, "rgba(0,0,0,0)");
+      target.fillStyle = g1;
+      target.fillRect(0, 0, W, H);
+      const g2 = target.createRadialGradient(W * .74, H * .86, 0, W * .74, H * .86, Math.max(W, H) * .34);
+      g2.addColorStop(0, "rgba(0,0,0,.075)");
+      g2.addColorStop(1, "rgba(0,0,0,0)");
+      target.fillStyle = g2;
+      target.fillRect(0, 0, W, H);
+      target.globalCompositeOperation = "source-over";
+      target.globalAlpha = 1;
+      target.fillStyle = "#111";
+      target.textAlign = "center";
+      target.textBaseline = "middle";
+      target.font = `900 ${clamp(W * .16, 108, 190)}px STKaiti, KaiTi, serif`;
+      target.fillText("墨", W / 2, H * .33);
+      target.font = `${clamp(W * .026, 26, 42)}px STKaiti, KaiTi, serif`;
+      const labels = ["スタート", "アルバム", "設定"];
+      for (let i = 0; i < labels.length; i++) {
+        target.fillText(labels[i], W / 2, H * .57 + i * clamp(H * .065, 42, 58));
+      }
+      target.restore();
     }
 
     function drawWorld() {
@@ -1953,14 +1987,14 @@
         state = "dead";
         document.getElementById("hud").style.display = "none";
         document.getElementById("dead").style.display = "grid";
-        document.getElementById("deadStats").textContent = `实验失败 · 没有吞噬记录 · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
+        document.getElementById("deadStats").textContent = `失敗 · 吸収記録なし · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
         return;
       }
       state = "ending";
       document.getElementById("hud").style.display = "none";
       document.getElementById("ending").style.display = "grid";
-      document.getElementById("endingStats").textContent = `吞噬 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
-      document.getElementById("endingStats").textContent = `完成 ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")} · 吞噬 ${score} · 显影 ${Math.floor(revealCoverage * 100)}%`;
+      document.getElementById("endingStats").textContent = `吸収 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
+      document.getElementById("endingStats").textContent = `完成 ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")} · 吸収 ${score} · 作画 ${Math.floor(revealCoverage * 100)}%`;
       drawEndingArt();
     }
 
@@ -2068,8 +2102,8 @@
     document.getElementById("spurtBtn").onclick = triggerSpurt;
     document.getElementById("deadHomeBtn").onclick = goHome;
     document.getElementById("homeBtn").onclick = goHome;
-    document.getElementById("albumBtn").onclick = () => showToast("Album：下一版接入结局画存档");
-    document.getElementById("configBtn").onclick = () => showToast("Config：下一版开放食物/NPC/荷叶参数");
+    document.getElementById("albumBtn").onclick = () => showToast("アルバム：次の版で保存機能を追加予定");
+    document.getElementById("configBtn").onclick = () => showToast("設定：次の版で調整項目を追加予定");
     document.getElementById("saveBtn").onclick = () => {
       const a = document.createElement("a");
       a.download = `ink_painting_${Date.now()}.png`;
@@ -2084,7 +2118,7 @@
         prompt: "Chinese ink landscape painting, xuan paper, misty mountains, water ripples, bamboo, elegant brushwork, monochrome ink wash"
       };
       window.lastStableDiffusionPayload = payload;
-      showToast("已准备转化数据：window.lastStableDiffusionPayload。接入本地 Stable Diffusion 后可直接 POST。");
+      showToast("変換データを準備しました");
     };
 
     resize();

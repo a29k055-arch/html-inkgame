@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-14 - UI Language and Matte Behavior Tuning
+
+### Changed
+
+- Simplified the title screen by removing the subtitle and gameplay description text.
+- Changed the title menu, HUD, action button, result buttons, and status text to Japanese UI wording.
+- Changed the start transition so the title screen stays as a static layer while the ink matte reveals the gameplay layer underneath.
+- Adjusted ink drop reveal mattes to keep a horizontal aspect ratio instead of stretching into a vertical oval.
+- Adjusted the painting trail width so slower movement creates a thicker brush trace and faster movement creates a thinner trace.
+- Changed the failure title to `Game Over`.
+
 ## 2026-07-14 - Ink Matte Overlay Assets
 
 This update connects the external ink matte overlay assets to the current v2 demo.
