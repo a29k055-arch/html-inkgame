@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-15 - Reveal Loop and Artwork Ending Tuning
+
+### Changed
+
+- Restored NPC-to-NPC swallowing while adding NPC avoidance steering so they are less likely to collide directly.
+- Changed repeated swallow reveals in already-painted areas to reveal from the map edges inward, creating a shrinking-frame style compensation.
+- Lowered the victory reveal requirement from 80% to 75%.
+- Changed the ending screen to show the original reference painting by default, preserving image aspect ratio with cropping instead of stretching.
+- Repurposed the ending `画像変換` button into `筆跡`, toggling between the clean artwork and the painted trail version.
+
 ## 2026-07-15 - Growth Balance and Ending Detail Tuning
 
 ### Added

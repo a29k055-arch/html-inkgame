@@ -380,7 +380,7 @@
       <div class="result-stats" id="endingStats"></div>
       <div class="result-actions">
         <button id="saveBtn" class="ink-button" type="button">保存</button>
-        <button id="convertBtn" class="ink-button" type="button">画像変換</button>
+        <button id="convertBtn" class="ink-button" type="button">筆跡</button>
         <button id="detailBtn" class="ink-button secondary" type="button">作品詳細</button>
         <button id="nextBtn" class="ink-button secondary" type="button">次へ</button>
         <button id="homeBtn" class="ink-button secondary" type="button">ホーム</button>
@@ -412,7 +412,7 @@
     const WORLD_H = 3400;
     const ROUND_MS = 5 * 60 * 1000;
     const INTERLUDE_MS = 3000;
-    const VICTORY_REVEAL = .8;
+    const VICTORY_REVEAL = .75;
     const START_RADIUS = 18;
     const MAX_RADIUS = 170;
     const FOOD_TARGET = 760;
@@ -465,6 +465,8 @@
     let activeDropMattes = [];
     let transitionMatte = null;
     let transitionFallback = false;
+    let edgeRevealInset = 0;
+    let endingTraceMode = false;
     const sedimentCanvas = document.createElement("canvas");
     const sedimentCtx = sedimentCanvas.getContext("2d");
     const paintingCanvas = document.createElement("canvas");
@@ -802,6 +804,8 @@
       spurtBoost = 0;
       foodTick = 0;
       activeDropMattes = [];
+      edgeRevealInset = 0;
+      endingTraceMode = false;
       sedimentCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       sedimentCtx.clearRect(0, 0, W, H);
       setupWorldPainting();
@@ -933,6 +937,20 @@
       if (!hasIntent) {
         tx = npc.targetX - npc.x; ty = npc.targetY - npc.y; hasIntent = true;
       }
+      let avoidX = 0, avoidY = 0;
+      for (const other of npcs) {
+        if (other === npc || other.dead) continue;
+        const d = distance(npc, other);
+        if (d <= 1) continue;
+        const danger = npc.r + other.r + 180;
+        if (d > danger) continue;
+        const away = (danger - d) / danger;
+        const risk = other.r > npc.r * 1.06 ? 2.8 : .9;
+        avoidX += (npc.x - other.x) / d * away * risk;
+        avoidY += (npc.y - other.y) / d * away * risk;
+      }
+      tx += avoidX * 360;
+      ty += avoidY * 360;
       const l = Math.hypot(tx, ty) || 1;
       npc.vx = lerp(npc.vx, tx / l * npcSpeed(npc), .035);
       npc.vy = lerp(npc.vy, ty / l * npcSpeed(npc), .035);
@@ -1065,6 +1083,50 @@
       revealCtx.fillStyle = g;
       revealCtx.fillRect(rx - rr, ry - rr, rr * 2, rr * 2);
       revealCtx.restore();
+    }
+
+    function revealAlphaAt(x, y) {
+      if (!revealCanvas.width || !revealCanvas.height) return 0;
+      const px = clamp(Math.floor(x * PAINT_SCALE), 0, revealCanvas.width - 1);
+      const py = clamp(Math.floor(y * PAINT_SCALE), 0, revealCanvas.height - 1);
+      return revealCtx.getImageData(px, py, 1, 1).data[3] / 255;
+    }
+
+    function isAreaMostlyRevealed(x, y, radius) {
+      const samples = [
+        [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1],
+        [.7, .7], [-.7, .7], [.7, -.7], [-.7, -.7]
+      ];
+      let total = 0;
+      for (const [sx, sy] of samples) {
+        total += revealAlphaAt(x + sx * radius * .45, y + sy * radius * .45);
+      }
+      return total / samples.length > .42;
+    }
+
+    function revealEdgeBand(fromInset, toInset, alpha = .42) {
+      const a = fromInset * PAINT_SCALE;
+      const b = toInset * PAINT_SCALE;
+      const pw = revealCanvas.width;
+      const ph = revealCanvas.height;
+      const bw = Math.max(1, b - a);
+      revealCtx.save();
+      revealCtx.globalCompositeOperation = "lighter";
+      revealCtx.fillStyle = `rgba(255,255,255,${alpha})`;
+      revealCtx.fillRect(a, a, pw - a * 2, bw);
+      revealCtx.fillRect(a, ph - b, pw - a * 2, bw);
+      revealCtx.fillRect(a, a + bw, bw, Math.max(0, ph - b * 2));
+      revealCtx.fillRect(pw - b, a + bw, bw, Math.max(0, ph - b * 2));
+      revealCtx.restore();
+    }
+
+    function revealFromEdgesByArea(area) {
+      const maxInset = Math.min(WORLD_W, WORLD_H) * .5;
+      const perimeter = Math.max(1, 2 * ((WORLD_W - edgeRevealInset * 2) + (WORLD_H - edgeRevealInset * 2)));
+      const thickness = clamp(area / perimeter, 8, 72);
+      const nextInset = clamp(edgeRevealInset + thickness, 0, maxInset);
+      revealEdgeBand(edgeRevealInset, nextInset, .38);
+      edgeRevealInset = nextInset;
     }
 
     function addDropMatteReveal(x, y, radius) {
@@ -1224,6 +1286,8 @@
 
     function eatNpc(npc) {
       const gain = npc.mass * .62;
+      const revealRadius = npc.r * 4.2 + 120;
+      const wasRevealed = isAreaMostlyRevealed(npc.x, npc.y, revealRadius * .42);
       player.mass += gain;
       player.r = massToRadius(player.mass);
       score++;
@@ -1231,7 +1295,8 @@
       npc.respawn = rand(9, 18);
       addSplash(npc.x, npc.y, npc.r * 1.7, .32, 16);
       spawnArtElements(npc.x, npc.y, npc.r);
-      addDropMatteReveal(npc.x, npc.y, npc.r * 4.2 + 120);
+      if (wasRevealed) revealFromEdgesByArea(Math.PI * revealRadius * revealRadius * .46);
+      addDropMatteReveal(npc.x, npc.y, revealRadius);
     }
 
     function eatNpcByNpc(big, small) {
@@ -1295,7 +1360,7 @@
           die();
         }
       }
-      // NPCs no longer swallow each other; this keeps the field stable for solo play.
+      handleNpcCollisions();
     }
 
     function handleNpcCollisions() {
@@ -2007,18 +2072,60 @@
         return;
       }
       state = "ending";
+      endingTraceMode = false;
       document.getElementById("hud").style.display = "none";
       document.getElementById("ending").style.display = "grid";
+      document.getElementById("convertBtn").textContent = "筆跡";
       document.getElementById("endingStats").textContent = `完成 ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")} · 吸収 ${score} · 作画 ${Math.floor(revealCoverage * 100)}%`;
       drawEndingArt();
     }
 
     function drawEndingArt() {
+      if (endingTraceMode) {
+        drawEndingTraceArt();
+      } else {
+        drawEndingOriginalArt();
+      }
+    }
+
+    function setupEndingCanvas() {
       const rect = endingArt.parentElement.getBoundingClientRect();
       endingArt.width = Math.floor(rect.width * dpr);
       endingArt.height = Math.floor(rect.height * dpr);
       endingCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const w = rect.width, h = rect.height;
+      return { w: rect.width, h: rect.height };
+    }
+
+    function drawImageCover(target, source, w, h) {
+      const iw = source.naturalWidth || source.width;
+      const ih = source.naturalHeight || source.height;
+      if (!iw || !ih) return false;
+      const scale = Math.max(w / iw, h / ih);
+      const sw = w / scale;
+      const sh = h / scale;
+      const sx = (iw - sw) * .5;
+      const sy = (ih - sh) * .5;
+      target.imageSmoothingEnabled = true;
+      target.imageSmoothingQuality = "high";
+      target.drawImage(source, sx, sy, sw, sh, 0, 0, w, h);
+      return true;
+    }
+
+    function drawEndingOriginalArt() {
+      const { w, h } = setupEndingCanvas();
+      endingCtx.fillStyle = "#f5f0e6";
+      endingCtx.fillRect(0, 0, w, h);
+      endingCtx.save();
+      endingCtx.globalCompositeOperation = "multiply";
+      const source = referencePaintingImg.complete && referencePaintingImg.naturalWidth > 0 ? referencePaintingImg : paintingCanvas;
+      if (!drawImageCover(endingCtx, source, w, h)) {
+        endingCtx.drawImage(paintingCanvas, 0, 0, w, h);
+      }
+      endingCtx.restore();
+    }
+
+    function drawEndingTraceArt() {
+      const { w, h } = setupEndingCanvas();
       endingCtx.fillStyle = "#f5f0e6";
       endingCtx.fillRect(0, 0, w, h);
       endingCtx.lineCap = "round";
@@ -2126,15 +2233,10 @@
       a.href = endingArt.toDataURL("image/png");
       a.click();
     };
-    document.getElementById("convertBtn").onclick = async () => {
-      const payload = {
-        image: endingArt.toDataURL("image/png"),
-        path: path.map(p => ({ x: Math.round(p.x), y: Math.round(p.y), r: Math.round(p.r) })),
-        artElements: artElements.map(e => ({ type: e.type, x: Math.round(e.x), y: Math.round(e.y), r: Math.round(e.r), rot: Number(e.rot.toFixed(3)) })),
-        prompt: "Chinese ink landscape painting, xuan paper, misty mountains, water ripples, bamboo, elegant brushwork, monochrome ink wash"
-      };
-      window.lastStableDiffusionPayload = payload;
-      showToast("変換データを準備しました");
+    document.getElementById("convertBtn").onclick = () => {
+      endingTraceMode = !endingTraceMode;
+      document.getElementById("convertBtn").textContent = endingTraceMode ? "戻る" : "筆跡";
+      drawEndingArt();
     };
 
     resize();
