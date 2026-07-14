@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-15 - HUD Progress and NPC Density Tuning
+
+### Changed
+
+- Reworked the HUD so the painting progress (`作画`) uses the center progress bar.
+- Moved elapsed time to the far right and absorption count (`吸収`) to its left.
+- Removed the ink amount bar from the main HUD.
+- Increased NPC count from 15 to 23.
+- Adjusted NPC spawn distribution so more NPCs appear across the whole map, including edges and corners.
+- Increased reveal trail width scaling for larger player size, making painting completion faster as the player grows.
+
 ## 2026-07-14 - UI Language and Matte Behavior Tuning
 
 ### Changed

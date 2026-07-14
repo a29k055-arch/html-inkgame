@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -148,7 +148,7 @@
       left: 16px;
       right: 16px;
       display: grid;
-      grid-template-columns: 190px 1fr 112px 150px;
+      grid-template-columns: 170px 1fr 150px 112px;
       gap: 12px;
       align-items: center;
       padding: 10px 12px;
@@ -326,7 +326,7 @@
 
   <section id="interlude" class="screen">
     <canvas id="transitionCanvas"></canvas>
-    <div class="interlude-text">幕間映像</div>
+    <div class="interlude-text">骞曢枔鏄犲儚</div>
   </section>
 
   <section id="title" class="screen paper">
@@ -347,14 +347,14 @@
         <div class="metric-value" id="sizeText">大きさ 12</div>
       </div>
       <div class="metric">
-        <div class="metric-label">墨量</div>
+        <div class="metric-label" id="progressLabel">作画 0%</div>
         <div class="bar"><div class="bar-fill" id="inkFill"></div></div>
       </div>
-      <div class="timer" id="timerText">05:00</div>
       <div class="metric">
         <div class="metric-label"></div>
         <div class="metric-value" id="scoreText">吸収 0</div>
       </div>
+      <div class="timer" id="timerText">00:00</div>
     </div>
     <div class="joystick-ghost"></div>
     <div class="action-row">
@@ -415,7 +415,7 @@
     const START_RADIUS = 18;
     const MAX_RADIUS = 170;
     const FOOD_TARGET = 760;
-    const NPC_COUNT = 15;
+    const NPC_COUNT = 23;
     const LOTUS_LEAF_COUNT = 8;
     const LOTUS_FLOWER_MAX_PER_LEAF = 3;
     const LOTUS_LEAF_MAX = 16;
@@ -659,6 +659,24 @@
       return p;
     }
 
+    function randomNpcPoint() {
+      let p;
+      for (let tries = 0; tries < 30; tries++) {
+        if (Math.random() < .42) {
+          const side = Math.floor(rand(0, 4));
+          const margin = rand(90, 520);
+          p = {
+            x: side === 0 ? margin : side === 1 ? WORLD_W - margin : rand(90, WORLD_W - 90),
+            y: side === 2 ? margin : side === 3 ? WORLD_H - margin : rand(90, WORLD_H - 90)
+          };
+        } else {
+          p = randomPoint(0);
+        }
+        if (!player || distance(p, player) > 300) return p;
+      }
+      return randomPoint(0);
+    }
+
     function createPlayer() {
       player = {
         x: WORLD_W / 2,
@@ -694,7 +712,7 @@
     }
 
     function createNpc() {
-      const p = randomPoint(520);
+      const p = randomNpcPoint();
       const roll = Math.random();
       let r = rand(14, 38);
       if (roll > .78) r = rand(42, 72);
@@ -1020,8 +1038,9 @@
       const dir = Math.atan2(player.vy, player.vx);
       const large = clamp((player.r - 42) / 120, 0, 1);
       const speedRatio = clamp(speed / Math.max(1, moveSpeed(player.r) * 1.08), 0, 1);
-      const pressure = lerp(1.32, .78, speedRatio);
-      const brushR = clamp(player.r * lerp(.78, .64, large) * pressure, 24, 124);
+      const pressure = lerp(1.38, .82, speedRatio);
+      const sizeSpread = lerp(.9, 1.28, large);
+      const brushR = clamp(player.r * lerp(.82, .72, large) * pressure * sizeSpread, 26, 154);
       const tail = clamp(player.r * lerp(.5, .82, large), 22, 128);
       const steps = 4;
       for (let i = 0; i < steps; i++) {
@@ -1262,11 +1281,8 @@
       for (const leaf of leaves) {
         const d = distance(player, leaf);
         if (d < player.r + leaf.r * .72) {
-          if (player.r < leaf.r * .82) {
-            // 小球钻到荷叶下面：不碰撞，只降低视觉层级。
-          } else {
-            // 大球走在荷叶上方：同样不碰撞，可从中间穿过。
-          }
+          // Lotus leaves are visual cover / terrain markers in this prototype.
+          // Layering is handled in render(), so collision does not block movement.
         }
       }
       for (const npc of npcs) {
@@ -1421,9 +1437,8 @@
       document.getElementById("timerText").textContent = `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`;
       document.getElementById("sizeText").textContent = `大きさ ${Math.floor(player.displayR)}`;
       document.getElementById("scoreText").textContent = `吸収 ${score}`;
-      document.getElementById("inkFill").style.width = `${clamp(player.r / MAX_RADIUS * 100, 3, 100)}%`;
-      document.getElementById("sizeText").textContent = `大きさ ${Math.floor(player.displayR)}`;
-      document.getElementById("scoreText").textContent = `吸収 ${score} · 作画 ${Math.floor(revealCoverage * 100)}%`;
+      document.getElementById("progressLabel").textContent = `作画 ${Math.floor(revealCoverage * 100)}%`;
+      document.getElementById("inkFill").style.width = `${clamp(revealCoverage * 100, 3, 100)}%`;
       document.getElementById("spurtBtn").classList.toggle("disabled", spurtCd > 0);
     }
 
@@ -1993,7 +2008,6 @@
       state = "ending";
       document.getElementById("hud").style.display = "none";
       document.getElementById("ending").style.display = "grid";
-      document.getElementById("endingStats").textContent = `吸収 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
       document.getElementById("endingStats").textContent = `完成 ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")} · 吸収 ${score} · 作画 ${Math.floor(revealCoverage * 100)}%`;
       drawEndingArt();
     }
@@ -2128,3 +2142,4 @@
   </script>
 </body>
 </html>
+
