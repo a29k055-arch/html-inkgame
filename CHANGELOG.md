@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-15 - Growth Balance and Ending Detail Tuning
+
+### Added
+
+- Added a placeholder ending button for future artwork details (`作品詳細`).
+
+### Changed
+
+- Disabled NPC-to-NPC swallowing so NPC count stays stable during solo play.
+- Doubled the player's growth from floating ink particles.
+- Increased the player's painting reveal trail width by roughly one third across all sizes.
+- Reduced heavy brush-particle spawning and per-mark grain density to improve runtime smoothness while keeping the wider ink trail.
+- Confirmed the ending screen still displays the completed background painting.
+
 ## 2026-07-15 - HUD Progress and NPC Density Tuning
 
 ### Changed

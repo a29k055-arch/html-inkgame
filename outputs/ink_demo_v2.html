@@ -381,6 +381,7 @@
       <div class="result-actions">
         <button id="saveBtn" class="ink-button" type="button">保存</button>
         <button id="convertBtn" class="ink-button" type="button">画像変換</button>
+        <button id="detailBtn" class="ink-button secondary" type="button">作品詳細</button>
         <button id="nextBtn" class="ink-button secondary" type="button">次へ</button>
         <button id="homeBtn" class="ink-button secondary" type="button">ホーム</button>
       </div>
@@ -965,11 +966,11 @@
       const large = clamp((player.r - 42) / 110, 0, 1);
       const moved = Math.hypot(player.x - prevX, player.y - prevY);
       const spurtInk = spurtBoost > 0 ? 1 + spurtBoost * 2.8 : 1;
-      const spacing = lerp(18, 34, large);
-      const amount = clamp(moved / spacing, .18 + large * .38, 2.8 + large * 1.4) * spurtInk;
+      const spacing = lerp(24, 42, large);
+      const amount = clamp(moved / spacing, .12 + large * .22, 1.8 + large * .8) * spurtInk;
       let count = Math.floor(amount);
       if (Math.random() < amount - count) count++;
-      count = Math.min(count, spurtBoost > 0 ? 12 : 7);
+      count = Math.min(count, spurtBoost > 0 ? 8 : 4);
       for (let i = 0; i < count; i++) {
         const t = count <= 1 ? rand(.15, .85) : (i + rand(.18, .82)) / count;
         const baseX = lerp(prevX, player.x, t);
@@ -996,16 +997,16 @@
           grow: rand(lerp(.32, .1, large), lerp(.62, .22, large))
         });
       }
-      if (brushMarks.length > 900) brushMarks.splice(0, brushMarks.length - 900);
+      if (brushMarks.length > 620) brushMarks.splice(0, brushMarks.length - 620);
     }
 
     function addInkAura(dt) {
       const large = clamp((player.r - 42) / 110, 0, 1);
       const spurtInk = spurtBoost > 0 ? 1 + spurtBoost * 3.2 : 1;
-      const amount = clamp(player.r / 70, .45, 2.2) * dt * lerp(22, 14, large) * spurtInk;
+      const amount = clamp(player.r / 80, .28, 1.5) * dt * lerp(14, 9, large) * spurtInk;
       let count = Math.floor(amount);
       if (Math.random() < amount - count) count++;
-      count = Math.min(count, spurtBoost > 0 ? 10 : 4);
+      count = Math.min(count, spurtBoost > 0 ? 6 : 2);
       const motion = Math.atan2(player.vy || 1, player.vx || 1);
       for (let i = 0; i < count; i++) {
         const a = rand(0, Math.PI * 2);
@@ -1029,7 +1030,7 @@
           grow: rand(lerp(.28, .12, large), lerp(.56, .24, large))
         });
       }
-      if (brushMarks.length > 900) brushMarks.splice(0, brushMarks.length - 900);
+      if (brushMarks.length > 620) brushMarks.splice(0, brushMarks.length - 620);
     }
 
     function addPathLandscape(dt) {
@@ -1040,7 +1041,7 @@
       const speedRatio = clamp(speed / Math.max(1, moveSpeed(player.r) * 1.08), 0, 1);
       const pressure = lerp(1.38, .82, speedRatio);
       const sizeSpread = lerp(.9, 1.28, large);
-      const brushR = clamp(player.r * lerp(.82, .72, large) * pressure * sizeSpread, 26, 154);
+      const brushR = clamp(player.r * lerp(.82, .72, large) * pressure * sizeSpread * 1.33, 34, 205);
       const tail = clamp(player.r * lerp(.5, .82, large), 22, 128);
       const steps = 4;
       for (let i = 0; i < steps; i++) {
@@ -1169,7 +1170,7 @@
         next: .08,
         remaining: Math.floor(rand(20, 34))
       });
-      for (let i = 0; i < 34; i++) {
+      for (let i = 0; i < 22; i++) {
         const a = Math.atan2(dirY, dirX) + Math.PI + rand(-1.65, 1.65);
         const d = Math.pow(Math.random(), .62) * radius * rand(.35, 1.25);
         brushMarks.push({
@@ -1191,7 +1192,7 @@
           grow: rand(.16, .34)
         });
       }
-      if (brushMarks.length > 900) brushMarks.splice(0, brushMarks.length - 900);
+      if (brushMarks.length > 620) brushMarks.splice(0, brushMarks.length - 620);
     }
 
     function updateSpurtResidues(dt) {
@@ -1263,7 +1264,7 @@
       for (let i = foods.length - 1; i >= 0; i--) {
         const f = foods[i];
         if (distance(player, f) < player.r + f.r) {
-          player.mass += f.r * f.r * .42;
+          player.mass += f.r * f.r * .84;
           addSplash(f.x, f.y, f.r * 1.5, .18, 3);
           foods.splice(i, 1);
         }
@@ -1294,7 +1295,7 @@
           die();
         }
       }
-      handleNpcCollisions();
+      // NPCs no longer swallow each other; this keeps the field stable for solo play.
     }
 
     function handleNpcCollisions() {
@@ -1528,7 +1529,7 @@
         ctx.rotate(b.angle);
         const a = b.alpha * Math.max(0, b.life);
         const ageSpread = clamp((b.age || 0) / 1.8, 0, 1);
-        const grainCount = Math.floor(clamp(r * b.stretch * .48, 32, 104));
+        const grainCount = Math.floor(clamp(r * b.stretch * .32, 18, 66));
         for (let i = 0; i < grainCount; i++) {
           const n = Math.sin((b.seed || 1) * 12.9898 + i * 78.233) * 43758.5453;
           const q = n - Math.floor(n);
@@ -2116,6 +2117,7 @@
     document.getElementById("spurtBtn").onclick = triggerSpurt;
     document.getElementById("deadHomeBtn").onclick = goHome;
     document.getElementById("homeBtn").onclick = goHome;
+    document.getElementById("detailBtn").onclick = () => showToast("作品詳細は今後追加予定です");
     document.getElementById("albumBtn").onclick = () => showToast("アルバム：次の版で保存機能を追加予定");
     document.getElementById("configBtn").onclick = () => showToast("設定：次の版で調整項目を追加予定");
     document.getElementById("saveBtn").onclick = () => {
