@@ -2144,9 +2144,9 @@
       if (!player || state !== "play") return;
       const mobileView = controlMode === "mobile";
       const portraitMobile = mobileView && H > W;
-      const size = mobileView ? 76 : 104;
-      const x = W - size - (mobileView ? 10 : 18);
-      const y = portraitMobile ? 48 : H - size - (mobileView ? 92 : 124);
+      const size = mobileView ? 68 : 92;
+      const x = W - size - (mobileView ? 10 : 16);
+      const y = mobileView ? (portraitMobile ? 72 : 48) : 66;
       const scale = size / WORLD_W;
       ctx.save();
       ctx.globalAlpha = .82;
@@ -2494,6 +2494,11 @@
     addEventListener("keyup", e => { keys.delete(e.key); keys.delete(e.key.toLowerCase()); });
 
     const joystickEl = document.querySelector(".joystick-ghost");
+    document.getElementById("spurtBtn").addEventListener("pointerdown", e => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerSpurt();
+    }, { passive: false });
     addEventListener("pointerdown", e => {
       if (startJoystick(e)) {
         try { joystickEl.setPointerCapture(e.pointerId); } catch {}

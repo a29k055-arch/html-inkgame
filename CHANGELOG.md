@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-16 - Minimap and Mobile Boost Touch Fix
+
+### Changed
+
+- Moved the minimap to the upper-right area below the HUD on both PC and mobile layouts.
+- Added direct pointer handling for the boost button so mobile players can boost while holding the joystick.
+
 ## 2026-07-16 - Mobile HUD and Joystick Refinement
 
 ### Changed
