@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-16 - Mobile HUD and Joystick Refinement
+
+### Changed
+
+- Replaced the pause label with a CSS-drawn pause icon to avoid font fallback issues.
+- Reduced the height and text size of the top HUD on desktop and mobile.
+- Changed mobile joystick behavior so it defaults to the lower-left but appears at the player's touch point during play.
+- Moved the minimap away from the boost button on mobile portrait screens.
+- Increased mobile camera zoom-out by roughly 20% and synced canvas sizing with the visual viewport to reduce mobile stretching.
+- Changed the player label from `墨` to `ボク`.
+- Softened edge reveal compensation with scattered brush-like reveal marks instead of visible stepped bands.
+
 ## 2026-07-15 - Control Mode, Pause UI, and Performance Tuning
 
 ### Added
