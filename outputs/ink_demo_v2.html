@@ -142,10 +142,28 @@
       z-index: 10;
       pointer-events: none;
     }
-    .topbar {
+    .pause-button {
       position: absolute;
       top: 14px;
       left: 16px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      pointer-events: auto;
+      border: 1px solid rgba(0,0,0,.18);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+      backdrop-filter: blur(4px);
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .topbar {
+      position: absolute;
+      top: 14px;
+      left: 72px;
       right: 16px;
       display: grid;
       grid-template-columns: 170px 1fr 150px 112px;
@@ -232,14 +250,71 @@
       height: 138px;
       border: 2px solid rgba(255,255,255,.74);
       border-radius: 50%;
+      display: none;
       opacity: .8;
+      pointer-events: auto;
+      touch-action: none;
     }
     .joystick-ghost::after {
       content: "";
       position: absolute;
-      inset: 38px;
+      left: calc(50% + var(--stick-x, 0px));
+      top: calc(50% + var(--stick-y, 0px));
+      width: 62px;
+      height: 62px;
+      transform: translate(-50%, -50%);
       border-radius: 50%;
       background: rgba(255,255,255,.44);
+    }
+    body.control-mobile .joystick-ghost { display: block; }
+    #pauseScreen {
+      display: none;
+      z-index: 35;
+      background: rgba(245,240,230,.82);
+      backdrop-filter: blur(8px);
+    }
+    .pause-panel {
+      position: relative;
+      z-index: 2;
+      width: min(520px, 88vw);
+      display: grid;
+      gap: 22px;
+      justify-items: center;
+      padding: 34px;
+      border: 1px solid rgba(0,0,0,.18);
+      border-radius: 8px;
+      background: rgba(245,240,230,.88);
+      box-shadow: 0 18px 60px rgba(0,0,0,.12);
+    }
+    .pause-title {
+      font-size: clamp(42px, 7vw, 76px);
+      font-weight: 900;
+      letter-spacing: 6px;
+    }
+    .mode-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+    .mode-toggle button {
+      padding: 10px 14px;
+      border: 1px solid rgba(0,0,0,.22);
+      border-radius: 8px;
+      background: rgba(238,232,220,.72);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+    .mode-toggle button.active {
+      background: rgba(17,17,17,.9);
+      color: var(--paper);
+    }
+    .pause-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     #toast {
       display: none;
@@ -305,19 +380,49 @@
     }
     #endingArt { width: 100%; height: 100%; }
     @media (max-width: 820px) {
-      .topbar {
-        grid-template-columns: 1fr 1fr;
-        left: 12px;
-        right: 12px;
-        gap: 8px;
+      .pause-button {
+        top: 10px;
+        left: 10px;
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
       }
-      .timer { grid-column: 1 / -1; grid-row: 1; font-size: 24px; }
+      .topbar {
+        grid-template-columns: 80px 1fr 72px 58px;
+        left: 54px;
+        right: 10px;
+        top: 10px;
+        gap: 8px;
+        padding: 7px 8px;
+      }
+      .timer { font-size: 20px; letter-spacing: 2px; }
       .metric-value { font-size: 15px; }
       .metric-label { font-size: 10px; }
       .action-row { right: 16px; bottom: 18px; }
       .action { width: 72px; height: 72px; font-size: 15px; }
       .joystick-ghost { left: 18px; bottom: 18px; width: 116px; height: 116px; }
-      .joystick-ghost::after { inset: 32px; }
+      .joystick-ghost::after { width: 52px; height: 52px; }
+    }
+    @media (orientation: portrait) and (max-width: 820px) {
+      .topbar {
+        grid-template-columns: 1fr 1fr;
+        right: 8px;
+        gap: 6px;
+      }
+      .topbar .metric:first-child { display: none; }
+      .topbar .metric:nth-child(2) { grid-column: 1 / -1; }
+      .timer { grid-column: 2; font-size: 18px; letter-spacing: 1px; text-align: right; }
+      .metric-value { font-size: 13px; }
+      .metric-label { font-size: 9px; }
+      .bar { height: 8px; }
+      .action { width: 64px; height: 64px; font-size: 14px; }
+      .joystick-ghost {
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        width: 118px;
+        height: 118px;
+      }
     }
   </style>
 </head>
@@ -341,6 +446,7 @@
   </section>
 
   <div id="hud">
+    <button id="pauseBtn" class="pause-button" type="button" aria-label="pause">Ⅱ</button>
     <div class="topbar">
       <div class="metric">
         <div class="metric-label"></div>
@@ -358,9 +464,23 @@
     </div>
     <div class="joystick-ghost"></div>
     <div class="action-row">
-      <button id="spurtBtn" class="action" type="button"><span>墨噴射<small>Shift</small></span></button>
+      <button id="spurtBtn" class="action" type="button"><span>加速<small>Shift</small></span></button>
     </div>
   </div>
+
+  <section id="pauseScreen" class="screen paper">
+    <div class="pause-panel">
+      <div class="pause-title">一時停止</div>
+      <div class="mode-toggle">
+        <button id="pcModeBtn" type="button">PC</button>
+        <button id="mobileModeBtn" type="button">モバイル</button>
+      </div>
+      <div class="pause-actions">
+        <button id="resumeBtn" class="ink-button" type="button">ゲームに戻る</button>
+        <button id="pauseHomeBtn" class="ink-button secondary" type="button">ホーム</button>
+      </div>
+    </div>
+  </section>
 
   <section id="dead" class="screen paper">
     <div class="result">
@@ -458,6 +578,8 @@
     let nextLeafId = 1;
     let mouse = { x: innerWidth / 2, y: innerHeight / 2 };
     let keys = new Set();
+    let controlMode = matchMedia("(pointer: coarse)").matches ? "mobile" : "pc";
+    let joystick = { active: false, id: null, x: 0, y: 0, baseX: 0, baseY: 0, dx: 0, dy: 0 };
     let score = 0;
     let spurtCd = 0;
     let spurtBoost = 0;
@@ -819,6 +941,7 @@
     }
 
     function startGame() {
+      resetJoystick();
       resetWorld();
       state = "interlude";
       interludeTimer = INTERLUDE_MS;
@@ -845,13 +968,17 @@
       document.getElementById("interlude").style.display = "none";
       document.getElementById("dead").style.display = "none";
       document.getElementById("ending").style.display = "none";
+      document.getElementById("pauseScreen").style.display = "none";
       document.getElementById("hud").style.display = "block";
+      applyControlMode();
       updateHud(0);
     }
 
     function updateCamera(immediate) {
       if (!player) return;
-      const targetScale = clamp(1.12 - (player.r - START_RADIUS) / 220, .52, 1.12);
+      const portraitMobile = controlMode === "mobile" && H > W;
+      const viewBoost = portraitMobile ? .82 : 1;
+      const targetScale = clamp((1.12 - (player.r - START_RADIUS) / 220) * viewBoost, portraitMobile ? .42 : .52, 1.12);
       camera.scale = immediate ? targetScale : lerp(camera.scale, targetScale, .045);
       const tx = clamp(player.x - W / camera.scale / 2, 0, WORLD_W - W / camera.scale);
       const ty = clamp(player.y - H / camera.scale / 2, 0, WORLD_H - H / camera.scale);
@@ -864,18 +991,35 @@
       return 235 * (1 - t * .38);
     }
 
-    function updatePlayer(dt) {
-      const target = screenToWorld(mouse.x, mouse.y);
-      let dx = target.x - player.x;
-      let dy = target.y - player.y;
-      const len = Math.hypot(dx, dy) || 1;
-      dx /= len; dy /= len;
+    function directionalKeyVector() {
+      let dx = 0, dy = 0;
       if (keys.has("a") || keys.has("ArrowLeft")) dx -= 1;
       if (keys.has("d") || keys.has("ArrowRight")) dx += 1;
       if (keys.has("w") || keys.has("ArrowUp")) dy -= 1;
       if (keys.has("s") || keys.has("ArrowDown")) dy += 1;
-      const dl = Math.hypot(dx, dy) || 1;
-      dx /= dl; dy /= dl;
+      const len = Math.hypot(dx, dy);
+      return len > 0 ? { active: true, x: dx / len, y: dy / len } : { active: false, x: 0, y: 0 };
+    }
+
+    function currentInputVector() {
+      const key = directionalKeyVector();
+      if (key.active) return key;
+      if (controlMode === "mobile" && joystick.active) {
+        const len = Math.hypot(joystick.dx, joystick.dy);
+        if (len > .08) return { active: true, x: joystick.dx / len, y: joystick.dy / len };
+      }
+      if (controlMode === "mobile") return { active: false, x: 0, y: 0 };
+      const target = screenToWorld(mouse.x, mouse.y);
+      let dx = target.x - player.x;
+      let dy = target.y - player.y;
+      const len = Math.hypot(dx, dy) || 1;
+      return { active: len > 8, x: dx / len, y: dy / len };
+    }
+
+    function updatePlayer(dt) {
+      const input = currentInputVector();
+      const dx = input.x;
+      const dy = input.y;
       const boost = spurtBoost > 0 ? 1 + .28 * spurtBoost * spurtBoost : 1;
       const speed = moveSpeed(player.r) * boost;
       const prevX = player.x;
@@ -975,6 +1119,8 @@
         const s = rand(24, 120);
         motes.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: rand(1.4, Math.max(2, r * .16)), alpha: rand(.14, .42), life: rand(.35, 1.1) });
       }
+      if (splashes.length > 90) splashes.splice(0, splashes.length - 90);
+      if (motes.length > 360) motes.splice(0, motes.length - 360);
     }
 
     function addBrushTrail(dt, prevX, prevY) {
@@ -1015,13 +1161,13 @@
           grow: rand(lerp(.32, .1, large), lerp(.62, .22, large))
         });
       }
-      if (brushMarks.length > 620) brushMarks.splice(0, brushMarks.length - 620);
+      if (brushMarks.length > 500) brushMarks.splice(0, brushMarks.length - 500);
     }
 
     function addInkAura(dt) {
       const large = clamp((player.r - 42) / 110, 0, 1);
       const spurtInk = spurtBoost > 0 ? 1 + spurtBoost * 3.2 : 1;
-      const amount = clamp(player.r / 80, .28, 1.5) * dt * lerp(14, 9, large) * spurtInk;
+      const amount = clamp(player.r / 86, .22, 1.25) * dt * lerp(12, 7, large) * spurtInk;
       let count = Math.floor(amount);
       if (Math.random() < amount - count) count++;
       count = Math.min(count, spurtBoost > 0 ? 6 : 2);
@@ -1048,7 +1194,7 @@
           grow: rand(lerp(.28, .12, large), lerp(.56, .24, large))
         });
       }
-      if (brushMarks.length > 620) brushMarks.splice(0, brushMarks.length - 620);
+      if (brushMarks.length > 500) brushMarks.splice(0, brushMarks.length - 500);
     }
 
     function addPathLandscape(dt) {
@@ -1112,12 +1258,40 @@
       const bw = Math.max(1, b - a);
       revealCtx.save();
       revealCtx.globalCompositeOperation = "lighter";
-      revealCtx.fillStyle = `rgba(255,255,255,${alpha})`;
-      revealCtx.fillRect(a, a, pw - a * 2, bw);
-      revealCtx.fillRect(a, ph - b, pw - a * 2, bw);
-      revealCtx.fillRect(a, a + bw, bw, Math.max(0, ph - b * 2));
-      revealCtx.fillRect(pw - b, a + bw, bw, Math.max(0, ph - b * 2));
+      const feather = Math.max(10, bw * .55);
+      const top = revealCtx.createLinearGradient(0, a, 0, b + feather);
+      top.addColorStop(0, `rgba(255,255,255,${alpha * .35})`);
+      top.addColorStop(.38, `rgba(255,255,255,${alpha})`);
+      top.addColorStop(1, "rgba(255,255,255,0)");
+      revealCtx.fillStyle = top;
+      revealCtx.fillRect(a, a, pw - a * 2, bw + feather);
+      const bottom = revealCtx.createLinearGradient(0, ph - a, 0, ph - b - feather);
+      bottom.addColorStop(0, `rgba(255,255,255,${alpha * .35})`);
+      bottom.addColorStop(.38, `rgba(255,255,255,${alpha})`);
+      bottom.addColorStop(1, "rgba(255,255,255,0)");
+      revealCtx.fillStyle = bottom;
+      revealCtx.fillRect(a, ph - b - feather, pw - a * 2, bw + feather);
+      const left = revealCtx.createLinearGradient(a, 0, b + feather, 0);
+      left.addColorStop(0, `rgba(255,255,255,${alpha * .35})`);
+      left.addColorStop(.38, `rgba(255,255,255,${alpha})`);
+      left.addColorStop(1, "rgba(255,255,255,0)");
+      revealCtx.fillStyle = left;
+      revealCtx.fillRect(a, a, bw + feather, ph - a * 2);
+      const right = revealCtx.createLinearGradient(pw - a, 0, pw - b - feather, 0);
+      right.addColorStop(0, `rgba(255,255,255,${alpha * .35})`);
+      right.addColorStop(.38, `rgba(255,255,255,${alpha})`);
+      right.addColorStop(1, "rgba(255,255,255,0)");
+      revealCtx.fillStyle = right;
+      revealCtx.fillRect(pw - b - feather, a, bw + feather, ph - a * 2);
       revealCtx.restore();
+      const worldInset = toInset;
+      const dots = Math.floor(clamp((toInset - fromInset) * .32, 6, 24));
+      for (let i = 0; i < dots; i++) {
+        const side = Math.floor(rand(0, 4));
+        const x = side === 0 ? rand(worldInset, WORLD_W - worldInset) : side === 1 ? rand(worldInset, WORLD_W - worldInset) : side === 2 ? worldInset : WORLD_W - worldInset;
+        const y = side === 0 ? worldInset : side === 1 ? WORLD_H - worldInset : rand(worldInset, WORLD_H - worldInset);
+        revealAt(x + rand(-18, 18), y + rand(-18, 18), rand(18, 42), alpha * .12);
+      }
     }
 
     function revealFromEdgesByArea(area) {
@@ -1254,7 +1428,7 @@
           grow: rand(.16, .34)
         });
       }
-      if (brushMarks.length > 620) brushMarks.splice(0, brushMarks.length - 620);
+      if (brushMarks.length > 500) brushMarks.splice(0, brushMarks.length - 500);
     }
 
     function updateSpurtResidues(dt) {
@@ -1425,9 +1599,9 @@
       spurtBoost = 1;
       player.mass *= .9;
       player.r = massToRadius(player.mass);
-      const target = screenToWorld(mouse.x, mouse.y);
-      let forwardX = target.x - player.x;
-      let forwardY = target.y - player.y;
+      const input = currentInputVector();
+      let forwardX = input.active ? input.x : (player.vx || 1);
+      let forwardY = input.active ? input.y : (player.vy || 0);
       const l = Math.hypot(forwardX, forwardY) || 1;
       forwardX /= l; forwardY /= l;
       const sprayX = -forwardX;
@@ -1446,6 +1620,7 @@
         if (interludeTimer <= 0) beginPlay();
         return;
       }
+      if (state === "pause") return;
       if (state !== "play") return;
       updatePlayer(dt);
       for (const npc of npcs) updateNpc(npc, dt);
@@ -1588,13 +1763,14 @@
       for (const b of brushMarks) {
         const p = worldToScreen(b.x, b.y);
         const r = b.r * camera.scale;
-        if (p.x < -r * 4 || p.x > W + r * 4 || p.y < -r * 4 || p.y > H + r * 4) continue;
+        if (r < .7 || p.x < -r * 4 || p.x > W + r * 4 || p.y < -r * 4 || p.y > H + r * 4) continue;
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(b.angle);
         const a = b.alpha * Math.max(0, b.life);
         const ageSpread = clamp((b.age || 0) / 1.8, 0, 1);
-        const grainCount = Math.floor(clamp(r * b.stretch * .32, 18, 66));
+        const heavyScale = player && player.r > 110 ? .72 : 1;
+        const grainCount = Math.floor(clamp(r * b.stretch * .24 * heavyScale, 12, player && player.r > 110 ? 38 : 52));
         for (let i = 0; i < grainCount; i++) {
           const n = Math.sin((b.seed || 1) * 12.9898 + i * 78.233) * 43758.5453;
           const q = n - Math.floor(n);
@@ -1625,6 +1801,7 @@
       for (const s of splashes) {
         const p = worldToScreen(s.x, s.y);
         const r = s.r * camera.scale;
+        if (p.x < -r || p.x > W + r || p.y < -r || p.y > H + r) continue;
         const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
         g.addColorStop(0, `rgba(26,26,26,${s.alpha * s.life})`);
         g.addColorStop(1, "rgba(0,0,0,0)");
@@ -1634,6 +1811,7 @@
       for (const m of motes) {
         const p = worldToScreen(m.x, m.y);
         const r = m.r * camera.scale * 2.2;
+        if (r < .7 || p.x < -r || p.x > W + r || p.y < -r || p.y > H + r) continue;
         const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
         g.addColorStop(0, `rgba(26,26,26,${m.alpha * Math.max(0, m.life)})`);
         g.addColorStop(1, "rgba(0,0,0,0)");
@@ -1981,7 +2159,7 @@
 
     function render() {
       drawPaper();
-      if (state === "play" || state === "dead" || state === "ending" || state === "interlude") {
+      if (state === "play" || state === "pause" || state === "dead" || state === "ending" || state === "interlude") {
         drawPaintingLayer();
         drawWorld();
         drawSplashLayer();
@@ -2187,13 +2365,72 @@
       showToast.timer = setTimeout(() => toast.style.display = "none", 1500);
     }
 
+    function applyControlMode() {
+      document.body.classList.toggle("control-mobile", controlMode === "mobile");
+      document.getElementById("pcModeBtn").classList.toggle("active", controlMode === "pc");
+      document.getElementById("mobileModeBtn").classList.toggle("active", controlMode === "mobile");
+      if (controlMode !== "mobile") resetJoystick();
+      updateCamera(true);
+    }
+
+    function setControlMode(mode) {
+      controlMode = mode;
+      applyControlMode();
+    }
+
+    function pauseGame() {
+      if (state !== "play") return;
+      state = "pause";
+      document.getElementById("pauseScreen").style.display = "grid";
+      applyControlMode();
+    }
+
+    function resumeGame() {
+      if (state !== "pause") return;
+      state = "play";
+      document.getElementById("pauseScreen").style.display = "none";
+      lastTime = performance.now();
+    }
+
     function goHome() {
+      resetJoystick();
       state = "title";
       document.getElementById("hud").style.display = "none";
       document.getElementById("interlude").style.display = "none";
       document.getElementById("dead").style.display = "none";
       document.getElementById("ending").style.display = "none";
+      document.getElementById("pauseScreen").style.display = "none";
       document.getElementById("title").style.display = "grid";
+    }
+
+    function resetJoystick() {
+      joystick.active = false;
+      joystick.id = null;
+      joystick.dx = 0;
+      joystick.dy = 0;
+      const el = document.querySelector(".joystick-ghost");
+      if (el) {
+        el.style.setProperty("--stick-x", "0px");
+        el.style.setProperty("--stick-y", "0px");
+      }
+    }
+
+    function updateJoystickFromPointer(e) {
+      const el = document.querySelector(".joystick-ghost");
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const max = rect.width * .32;
+      const rawX = e.clientX - cx;
+      const rawY = e.clientY - cy;
+      const len = Math.hypot(rawX, rawY);
+      const scale = len > max ? max / len : 1;
+      const sx = rawX * scale;
+      const sy = rawY * scale;
+      joystick.dx = sx / max;
+      joystick.dy = sy / max;
+      el.style.setProperty("--stick-x", `${sx}px`);
+      el.style.setProperty("--stick-y", `${sy}px`);
     }
 
     function loop(now) {
@@ -2206,22 +2443,50 @@
 
     addEventListener("resize", resize);
     addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-    addEventListener("touchstart", e => { if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; } }, { passive: false });
+    addEventListener("touchstart", e => { if (controlMode === "pc" && e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; } }, { passive: false });
     addEventListener("touchmove", e => {
       e.preventDefault();
-      if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
+      if (controlMode === "pc" && e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
     }, { passive: false });
     addEventListener("keydown", e => {
       keys.add(e.key);
       keys.add(e.key.toLowerCase());
+      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "w", "a", "s", "d", "W", "A", "S", "D"].includes(e.key)) e.preventDefault();
       if (e.key === "Shift") { e.preventDefault(); triggerSpurt(); }
+      if (e.key === "Escape") { e.preventDefault(); state === "pause" ? resumeGame() : pauseGame(); }
     });
     addEventListener("keyup", e => { keys.delete(e.key); keys.delete(e.key.toLowerCase()); });
+
+    const joystickEl = document.querySelector(".joystick-ghost");
+    joystickEl.addEventListener("pointerdown", e => {
+      if (controlMode !== "mobile") return;
+      e.preventDefault();
+      joystick.active = true;
+      joystick.id = e.pointerId;
+      joystickEl.setPointerCapture(e.pointerId);
+      updateJoystickFromPointer(e);
+    });
+    joystickEl.addEventListener("pointermove", e => {
+      if (!joystick.active || joystick.id !== e.pointerId) return;
+      e.preventDefault();
+      updateJoystickFromPointer(e);
+    });
+    joystickEl.addEventListener("pointerup", e => {
+      if (joystick.id === e.pointerId) resetJoystick();
+    });
+    joystickEl.addEventListener("pointercancel", e => {
+      if (joystick.id === e.pointerId) resetJoystick();
+    });
 
     document.getElementById("startBtn").onclick = startGame;
     document.getElementById("restartBtn").onclick = startGame;
     document.getElementById("nextBtn").onclick = startGame;
     document.getElementById("spurtBtn").onclick = triggerSpurt;
+    document.getElementById("pauseBtn").onclick = pauseGame;
+    document.getElementById("resumeBtn").onclick = resumeGame;
+    document.getElementById("pauseHomeBtn").onclick = goHome;
+    document.getElementById("pcModeBtn").onclick = () => setControlMode("pc");
+    document.getElementById("mobileModeBtn").onclick = () => setControlMode("mobile");
     document.getElementById("deadHomeBtn").onclick = goHome;
     document.getElementById("homeBtn").onclick = goHome;
     document.getElementById("detailBtn").onclick = () => showToast("作品詳細は今後追加予定です");
@@ -2241,6 +2506,7 @@
 
     resize();
     resetWorld();
+    applyControlMode();
     render();
     requestAnimationFrame(loop);
   </script>

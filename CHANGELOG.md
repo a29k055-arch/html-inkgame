@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-07-15 - Control Mode, Pause UI, and Performance Tuning
+
+### Added
+
+- Added an in-game pause button and pause menu with resume, home, and PC/mobile control mode switching.
+- Added a functional mobile joystick that appears only in mobile control mode.
+
+### Changed
+
+- Keyboard direction input now overrides mouse steering while WASD or arrow keys are pressed.
+- Changed the action button label from `墨噴射` to `加速`.
+- Adjusted mobile HUD layout for landscape and portrait screens, with a wider portrait camera view.
+- Softened edge-reveal compensation with feathered ink edges instead of hard rectangular bands.
+- Reduced late-game ink particle load by lowering brush mark caps, mote caps, and per-mark grain density.
+
 ## 2026-07-15 - Reveal Loop and Artwork Ending Tuning
 
 ### Changed
