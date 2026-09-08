@@ -443,7 +443,14 @@
         height: 104px;
       }
     }
+    @media (max-height: 650px) {
+      #ending, #dead { overflow: auto; place-items: start center; padding: 18px 0; touch-action: pan-y; }
+      #ending .result, #dead .result { margin: auto; }
+      #ending .result, #dead .result, #ending .result *, #dead .result * { touch-action: pan-y; }
+    }
   </style>
+  <link rel="stylesheet" href="ui/boku-gallery.css">
+  <link rel="stylesheet" href="ui/boku-exhibition.css">
 </head>
 <body class="paper">
   <canvas id="game"></canvas>
@@ -2257,6 +2264,7 @@
         return;
       }
       state = "ending";
+      document.dispatchEvent(new Event("boku:round-complete"));
       endingTraceMode = false;
       document.getElementById("hud").style.display = "none";
       document.getElementById("ending").style.display = "grid";
@@ -2481,6 +2489,7 @@
     addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
     addEventListener("touchstart", e => { if (controlMode === "pc" && e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; } }, { passive: false });
     addEventListener("touchmove", e => {
+      if (e.target.closest("#pauseScreen, #ending, #dead")) return;
       e.preventDefault();
       if (controlMode === "pc" && e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
     }, { passive: false });
@@ -2548,6 +2557,8 @@
     render();
     requestAnimationFrame(loop);
   </script>
+  <script src="ui/boku-gallery.js"></script>
+  <script src="ui/boku-exhibition.js"></script>
 </body>
 </html>
 

@@ -1,0 +1,24 @@
+/* Temporary exhibition UI: remove this file and exhibition.js to remove QR access. */
+.boku-qr { margin: 0; text-align: center; }
+.boku-qr img { display: block; width: 100%; height: auto; background: white; border-radius: 4px; }
+.boku-qr figcaption { margin-top: 8px; font-size: 12px; letter-spacing: .08em; color: rgba(0,0,0,.64); }
+#boku-game-qr { display: none; position: absolute; width: 112px; pointer-events: none; }
+@media (min-width: 821px) and (hover: hover) and (pointer: fine) {
+  #boku-game-qr:not([hidden]) { display: block; }
+}
+#pauseScreen.boku-exhibition-pause { overflow: auto; overscroll-behavior: contain; touch-action: pan-y; padding: 18px 0; }
+.boku-pause-stack { position: relative; z-index: 2; display: grid; justify-items: center; gap: 20px; margin: auto; }
+.boku-pause-stack, .boku-pause-stack * { touch-action: pan-y; }
+#boku-pause-qr { width: 180px; }
+@media (max-height: 650px) {
+  .boku-pause-stack { gap: 14px; }
+  .boku-pause-stack .pause-panel { gap: 14px; padding: 20px; }
+  .boku-pause-stack .pause-title { font-size: 40px; }
+  #boku-pause-qr { width: 148px; }
+}
+@media (max-height: 500px) {
+  .boku-pause-stack .pause-panel { padding: 12px; gap: 8px; }
+  .boku-pause-stack .pause-title { font-size: 30px; }
+  .boku-pause-stack .mode-toggle button { padding: 7px 12px; font-size: 15px; }
+  .boku-pause-stack .ink-button { padding: 8px 14px; font-size: 15px; }
+}

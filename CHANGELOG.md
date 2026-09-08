@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-09-09 - Exhibition QR Access and Artwork Album
+
+### Added
+
+- Added QR code access for exhibition / demo use using the user-supplied local QR image, with no external QR service.
+- Desktop gameplay now displays a QR code below the pause control; mobile gameplay keeps it hidden during active play.
+- The pause screen now displays a larger, centered QR code below the panel on both desktop and mobile, hiding the gameplay QR.
+- Added 11 user-supplied artworks, enlarged image previews for unlocked artwork, and an empty artwork-description area for future content.
+- Added browser-local collection records: the first artwork is available initially and each successful round unlocks one more; failed rounds do not unlock artwork.
+
+### Changed
+
+- Replaced the Album placeholder with a Galgame-inspired gallery and a responsive CSS Grid masonry/Pinterest-like presentation preserving artwork proportions.
+- Added strongly blurred locked artwork, a subtle hover zoom with a dark gradient glass overlay, and Japanese `未解放` status; locked artwork cannot open in the preview.
+- Improved responsive behavior for Album and QR-code UI, including touch scrolling, portrait/landscape layouts, native-dialog focus handling, and Escape / close controls.
+- Made the existing ending and failure screens scrollable on short viewports so their navigation remains reachable.
+- Kept exhibition QR code UI in independent files and preserved existing game balance, backgrounds, and victory conditions.
+
 ## 2026-07-16 - Minimap and Mobile Boost Touch Fix
 
 ### Changed
