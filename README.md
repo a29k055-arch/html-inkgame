@@ -3,7 +3,7 @@
 墨の流れ、滲み、紙に浮かぶ絵を、ブラウザーで体験する視覚表現の試作です。
 
 - [視覚効果・水墨表現](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
-- [新版試作](https://a29k055-arch.github.io/html-inkgame/prototypes/ink/)
+- [代替リンク](https://a29k055-arch.github.io/html-inkgame/prototypes/ink/)
 - [表現と技術・操作方法](prototypes/ink/README.md)
 
 WebGL2の流体計算で墨の密度と速度を運び、柔らかな縁と尾を描きます。インタラクティブ墨では白い画布への描画と水墨画の変形を、宣紙表現では原画が少しずつ現れる様子を楽しめます。
