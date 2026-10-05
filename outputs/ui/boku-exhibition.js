@@ -8,12 +8,12 @@
     figure.id = id; figure.className = "boku-qr";
     const img = new Image();
     img.src = "assets/exhibition/qr-code.jpg";
-    img.alt = "スマートフォンで読み取ってプレイ";
+    img.alt = "用手机扫描即可游玩";
     img.width = 256; img.height = 256;
     figure.append(img);
     if (caption) {
       const text = document.createElement("figcaption");
-      text.textContent = "スキャンしてプレイ";
+      text.textContent = "扫码游玩";
       figure.append(text);
     }
     return figure;

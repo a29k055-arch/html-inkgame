@@ -1,9 +1,9 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>墨 Ink Agar Demo</title>
+  <title>墨 · 旧版游戏</title>
   <style>
     :root {
       --paper: #f5f0e6;
@@ -457,26 +457,26 @@
 
   <section id="interlude" class="screen">
     <canvas id="transitionCanvas"></canvas>
-    <div class="interlude-text">骞曢枔鏄犲儚</div>
+    <div class="interlude-text">墨入画间</div>
   </section>
 
   <section id="title" class="screen paper">
     <div class="title-stack">
       <div class="title-mark">墨</div>
       <div class="menu">
-        <button id="startBtn" type="button">スタート</button>
-        <button id="albumBtn" type="button">アルバム</button>
-        <button id="configBtn" type="button">設定</button>
+        <button id="startBtn" type="button">开始</button>
+        <button id="albumBtn" type="button">相册</button>
+        <button id="configBtn" type="button">设置</button>
       </div>
     </div>
   </section>
 
   <div id="hud">
-    <button id="pauseBtn" class="pause-button" type="button" aria-label="pause"></button>
+    <button id="pauseBtn" class="pause-button" type="button" aria-label="暂停"></button>
     <div class="topbar">
       <div class="metric">
         <div class="metric-label"></div>
-        <div class="metric-value" id="sizeText">大きさ 12</div>
+        <div class="metric-value" id="sizeText">体型 12</div>
       </div>
       <div class="metric">
         <div class="metric-label" id="progressLabel">作画 0%</div>
@@ -484,7 +484,7 @@
       </div>
       <div class="metric">
         <div class="metric-label"></div>
-        <div class="metric-value" id="scoreText">吸収 0</div>
+        <div class="metric-value" id="scoreText">吞噬 0</div>
       </div>
       <div class="timer" id="timerText">00:00</div>
     </div>
@@ -496,25 +496,25 @@
 
   <section id="pauseScreen" class="screen paper">
     <div class="pause-panel">
-      <div class="pause-title">一時停止</div>
+      <div class="pause-title">暂停</div>
       <div class="mode-toggle">
-        <button id="pcModeBtn" type="button">PC</button>
-        <button id="mobileModeBtn" type="button">モバイル</button>
+        <button id="pcModeBtn" type="button">电脑</button>
+        <button id="mobileModeBtn" type="button">手机</button>
       </div>
       <div class="pause-actions">
-        <button id="resumeBtn" class="ink-button" type="button">ゲームに戻る</button>
-        <button id="pauseHomeBtn" class="ink-button secondary" type="button">ホーム</button>
+        <button id="resumeBtn" class="ink-button" type="button">继续游戏</button>
+        <button id="pauseHomeBtn" class="ink-button secondary" type="button">首页</button>
       </div>
     </div>
   </section>
 
   <section id="dead" class="screen paper">
     <div class="result">
-      <div class="result-title">Game Over</div>
+      <div class="result-title">墨散了</div>
       <div class="result-stats" id="deadStats"></div>
       <div class="result-actions">
-        <button id="restartBtn" class="ink-button" type="button">もう一度</button>
-        <button id="deadHomeBtn" class="ink-button secondary" type="button">ホーム</button>
+        <button id="restartBtn" class="ink-button" type="button">再来一次</button>
+        <button id="deadHomeBtn" class="ink-button secondary" type="button">首页</button>
       </div>
     </div>
   </section>
@@ -526,10 +526,10 @@
       <div class="result-stats" id="endingStats"></div>
       <div class="result-actions">
         <button id="saveBtn" class="ink-button" type="button">保存</button>
-        <button id="convertBtn" class="ink-button" type="button">筆跡</button>
-        <button id="detailBtn" class="ink-button secondary" type="button">作品詳細</button>
-        <button id="nextBtn" class="ink-button secondary" type="button">次へ</button>
-        <button id="homeBtn" class="ink-button secondary" type="button">ホーム</button>
+        <button id="convertBtn" class="ink-button" type="button">笔迹</button>
+        <button id="detailBtn" class="ink-button secondary" type="button">作品详情</button>
+        <button id="nextBtn" class="ink-button secondary" type="button">下一局</button>
+        <button id="homeBtn" class="ink-button secondary" type="button">首页</button>
       </div>
     </div>
   </section>
@@ -1508,7 +1508,7 @@
       document.getElementById("hud").style.display = "none";
       document.getElementById("dead").style.display = "grid";
       const elapsed = Math.floor((performance.now() - roundStart) / 1000);
-      document.getElementById("deadStats").textContent = `吸収 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
+      document.getElementById("deadStats").textContent = `吞噬 ${score} · 墨量 ${Math.floor(player.r)} · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
     }
 
     function handleCollisions() {
@@ -1688,8 +1688,8 @@
     function updateHud(elapsedMs) {
       const sec = Math.max(0, Math.floor(elapsedMs / 1000));
       document.getElementById("timerText").textContent = `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`;
-      document.getElementById("sizeText").textContent = `大きさ ${Math.floor(player.displayR)}`;
-      document.getElementById("scoreText").textContent = `吸収 ${score}`;
+      document.getElementById("sizeText").textContent = `体型 ${Math.floor(player.displayR)}`;
+      document.getElementById("scoreText").textContent = `吞噬 ${score}`;
       document.getElementById("progressLabel").textContent = `作画 ${Math.floor(revealCoverage * 100)}%`;
       document.getElementById("inkFill").style.width = `${clamp(revealCoverage * 100, 3, 100)}%`;
       document.getElementById("spurtBtn").classList.toggle("disabled", spurtCd > 0);
@@ -1904,7 +1904,7 @@
         ctx.restore();
       }
       ctx.restore();
-      drawInkBall(x, y, r, .98, "ボク");
+      drawInkBall(x, y, r, .98, "墨");
     }
 
     function drawNpc(npc) {
@@ -2229,7 +2229,7 @@
       target.font = `900 ${clamp(W * .16, 108, 190)}px STKaiti, KaiTi, serif`;
       target.fillText("墨", W / 2, H * .33);
       target.font = `${clamp(W * .026, 26, 42)}px STKaiti, KaiTi, serif`;
-      const labels = ["スタート", "アルバム", "設定"];
+      const labels = ["开始", "相册", "设置"];
       for (let i = 0; i < labels.length; i++) {
         target.fillText(labels[i], W / 2, H * .57 + i * clamp(H * .065, 42, 58));
       }
@@ -2260,7 +2260,7 @@
         state = "dead";
         document.getElementById("hud").style.display = "none";
         document.getElementById("dead").style.display = "grid";
-        document.getElementById("deadStats").textContent = `失敗 · 吸収記録なし · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
+        document.getElementById("deadStats").textContent = `失败 · 暂无吞噬记录 · ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}`;
         return;
       }
       state = "ending";
@@ -2268,8 +2268,8 @@
       endingTraceMode = false;
       document.getElementById("hud").style.display = "none";
       document.getElementById("ending").style.display = "grid";
-      document.getElementById("convertBtn").textContent = "筆跡";
-      document.getElementById("endingStats").textContent = `完成 ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")} · 吸収 ${score} · 作画 ${Math.floor(revealCoverage * 100)}%`;
+      document.getElementById("convertBtn").textContent = "笔迹";
+      document.getElementById("endingStats").textContent = `完成 ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")} · 吞噬 ${score} · 作画 ${Math.floor(revealCoverage * 100)}%`;
       drawEndingArt();
     }
 
@@ -2536,9 +2536,9 @@
     document.getElementById("mobileModeBtn").onclick = () => setControlMode("mobile");
     document.getElementById("deadHomeBtn").onclick = goHome;
     document.getElementById("homeBtn").onclick = goHome;
-    document.getElementById("detailBtn").onclick = () => showToast("作品詳細は今後追加予定です");
-    document.getElementById("albumBtn").onclick = () => showToast("アルバム：次の版で保存機能を追加予定");
-    document.getElementById("configBtn").onclick = () => showToast("設定：次の版で調整項目を追加予定");
+    document.getElementById("detailBtn").onclick = () => showToast("作品详情将在后续加入");
+    document.getElementById("albumBtn").onclick = () => showToast("相册：保存功能将在后续加入");
+    document.getElementById("configBtn").onclick = () => showToast("设置：设置选项将在后续加入");
     document.getElementById("saveBtn").onclick = () => {
       const a = document.createElement("a");
       a.download = `ink_painting_${Date.now()}.png`;
@@ -2547,7 +2547,7 @@
     };
     document.getElementById("convertBtn").onclick = () => {
       endingTraceMode = !endingTraceMode;
-      document.getElementById("convertBtn").textContent = endingTraceMode ? "戻る" : "筆跡";
+      document.getElementById("convertBtn").textContent = endingTraceMode ? "返回" : "笔迹";
       drawEndingArt();
     };
 

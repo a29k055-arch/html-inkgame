@@ -1,3 +1,16 @@
+# 墨 — BOKU —
+
+2026-10-06：基于用户认可的第四轮流动形态，新增清晰墨芯、主体/尾迹同比例缩放、柔和互动与中日对照界面。旧可玩游戏仍为默认入口；本页是独立视觉试作，尚未实现完整砚/宣纸循环。
+
+**视觉效果 / 水墨表現：[打开独立视觉预览](https://a29k055-arch.github.io/html-inkgame/visual-effects/)**
+
+- 新版试作： [Ink Studies](prototypes/ink/README.md)（墨体、互动水墨、原画显影）。
+- 本地启动：双击 prototypes/ink/START_PREVIEW.cmd，打开 http://127.0.0.1:8765/prototypes/ink/ 。
+- 重构路线：[REFACTOR_PLAN.md](REFACTOR_PLAN.md)；验证：[VALIDATION.md](prototypes/ink/VALIDATION.md)。
+- 当前本地文件夹为解压副本，没有 Git 元数据；从第五轮起，用户已授权同步到 GitHub。通过现有GitHub Desktop仓库提交与同步，原main历史及素材保留。正式仓库位于 C:/Users/Nine/Documents/GitHub/html-inkgame/。
+
+以下为保留的旧版说明。
+
 # Ink Game Demo
 
 Single-player ink-style agar game prototype.

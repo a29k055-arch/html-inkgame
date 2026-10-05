@@ -91,11 +91,11 @@
   const gallery = document.createElement("dialog");
   gallery.className = "boku-gallery"; gallery.id = "boku-gallery";
   gallery.setAttribute("aria-labelledby", "boku-gallery-title");
-  gallery.innerHTML = `<div class="boku-gallery-inner"><header class="boku-gallery-header"><h1 id="boku-gallery-title">アルバム</h1><button class="ink-button secondary" id="boku-gallery-back" type="button">ホーム</button></header><p class="boku-gallery-note" id="boku-gallery-note"></p><div class="boku-gallery-grid"></div></div>`;
+  gallery.innerHTML = `<div class="boku-gallery-inner"><header class="boku-gallery-header"><h1 id="boku-gallery-title">相册</h1><button class="ink-button secondary" id="boku-gallery-back" type="button">首页</button></header><p class="boku-gallery-note" id="boku-gallery-note"></p><div class="boku-gallery-grid"></div></div>`;
   const lightbox = document.createElement("dialog");
   lightbox.className = "boku-lightbox"; lightbox.id = "boku-lightbox";
   lightbox.setAttribute("aria-labelledby", "boku-preview-title");
-  lightbox.innerHTML = `<header class="boku-preview-header"><span class="boku-preview-title" id="boku-preview-title"></span><button type="button" class="boku-preview-close" aria-label="閉じる">× 閉じる</button></header><div class="boku-preview-layout"><img class="boku-preview-image" alt=""><aside class="boku-art-description" aria-label="作品紹介"></aside></div>`;
+  lightbox.innerHTML = `<header class="boku-preview-header"><span class="boku-preview-title" id="boku-preview-title"></span><button type="button" class="boku-preview-close" aria-label="关闭">× 关闭</button></header><div class="boku-preview-layout"><img class="boku-preview-image" alt=""><aside class="boku-art-description" aria-label="作品介绍"></aside></div>`;
   document.body.append(gallery, lightbox);
   const grid = gallery.querySelector(".boku-gallery-grid");
   let lastColumns = 0;
@@ -120,23 +120,23 @@
       const isUnlocked = unlocked.has(art.id);
       const button = document.createElement("button");
       button.type = "button"; button.className = "boku-art"; button.dataset.artwork = art.id;
-      button.setAttribute("aria-label", `${art.label}${isUnlocked ? "を開く" : "：未解放"}`);
+      button.setAttribute("aria-label", `${art.label}${isUnlocked ? "，点击查看" : "：未解锁"}`);
       button.setAttribute("aria-disabled", String(!isUnlocked));
       const frame = document.createElement("span"); frame.className = "boku-art-image";
       const img = new Image(); img.src = art.src; img.alt = ""; img.loading = "lazy"; img.decoding = "async";
       img.width = art.width; img.height = art.height; frame.append(img);
       if (!isUnlocked) {
-        const lock = document.createElement("span"); lock.className = "boku-art-lock"; lock.textContent = "未解放"; frame.append(lock);
+        const lock = document.createElement("span"); lock.className = "boku-art-lock"; lock.textContent = "未解锁"; frame.append(lock);
       }
       const label = document.createElement("span"); label.className = "boku-art-label";
-      label.textContent = `${art.label}${isUnlocked ? "" : " · 未解放"}`;
+      label.textContent = `${art.label}${isUnlocked ? "" : " · 未解锁"}`;
       button.append(frame, label);
       button.addEventListener("click", () => openArtwork(art, button));
       const col = heights.indexOf(Math.min(...heights));
       columns[col].append(button);
       heights[col] += art.height / art.width + .22;
     }
-    gallery.querySelector("#boku-gallery-note").textContent = `収集 ${unlocked.size} / ${artworks.length} · クリアするたびに作品を1枚解放します。${storageAvailable ? "" : " この環境では収集記録を保存できません。"}`;
+    gallery.querySelector("#boku-gallery-note").textContent = `收藏 ${unlocked.size} / ${artworks.length} · 每次通关解锁一幅作品。${storageAvailable ? "" : " 当前环境无法保存收藏记录。"}`;
   };
   document.getElementById("albumBtn").onclick = () => { render(); gallery.showModal(); };
   gallery.querySelector("#boku-gallery-back").onclick = () => gallery.close();

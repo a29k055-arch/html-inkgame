@@ -1,5 +1,75 @@
 # Changelog
 
+## 2026-10-06 - Visible Core, Scaled Wake and Bilingual Visual Preview
+
+### Added
+
+- Added a dedicated /visual-effects/ page for GitHub Pages, reusing the independent study modules while preserving the existing game entry.
+- Added simultaneous Chinese/Japanese labels, instructions, controls and accessibility text, plus a size slider for direct comparison.
+
+### Changed
+
+- Strengthened the advected primary ink reservoir to keep the controlled location readable.
+- Unified seed, feed, core, flow-envelope, containment and splash dimensions under the same entity radius; smaller entities now have smaller wakes and diffusion extents.
+- Reduced interactive painting input force to one quarter, clamped force to 85, narrowed its influence radius to .035, reduced automatic stir and vorticity; retained the approved density-body style.
+- Fixed paper mode resizing after a hidden canvas had zero bounds, including compact touch viewports.
+- User authorized GitHub publication from this round. Base main commit: 1bb02502f68b6fd99e28338ef183825711054443. Only project sources/docs and the new visual route are included; no user video or local test outputs.
+
+### Validation
+
+- Edge desktop, mobile portrait/landscape and 320x568 touch emulation: input, bilingual text, size, paper reveal/reset, quality and rotation checked.
+- Core alpha 251/255 at both tested sizes. Tripling radius increased visible ink area from 73 to 525 sampled pixels.
+- Remote tracked baseline matches all 43 files in the supplied ZIP; original history/assets are preserved.
+
+
+## 2026-10-06 - Simulated Density Body (Alternative Study)
+
+### Changed
+
+- Replaced the active geometric silhouette and radial core with an advected GPU density body. New material.js drives existing velocity-field transport, density-aware movement and localized cohesion forces before pressure projection.
+- Added mode-specific optical-density/edge rendering; Interactive Painting retains its previous display path and starting composition.
+- Paper Reveal uses the same simulated ink. Kept idle/reset safeguards; movement click no longer automatically triggers an explosion.
+- Previous contour implementation remains available in source/history for comparison. The candidate is a 2D ink-in-water study, not a free-surface liquid or surface-tension solver.
+- Desktop and mobile-size regressions passed; actual embedded-browser frame rate still varies. Local-only, pending visual acceptance.
+
+
+## 2026-10-06 - Direction-Driven Ink Core (Third Study)
+
+### Changed
+
+- Coupled the main ink reservoir and skin to speed-dependent stretch, lateral acceleration, turn lag and damped recovery; removed the round stationary core and fixed radial spokes.
+- Added the same moving, deformable ink body to Paper Reveal. The pointer now steers ink rather than depositing an independent circular brush at every input point.
+- Increased paper ink deposition to make the existing original-art reveal visible behind the moving body. No deposition occurs before the first input or after reset.
+- Preserved the current Interactive Painting solver and composition, following the user's positive feedback on that study.
+- Kept Chinese UI and local-only delivery.
+
+
+## 2026-10-06 - Elastic Membranes and Chinese UI (Second Study)
+
+### Changed
+
+- Replaced repeated sine ribbons with an elastic, damped contour and three asymmetric, advected translucent membranes; added turn-driven shedding and irregular splash fragments.
+- Added bounded MacCormack density correction to retain thin fluid details and increased the high-quality grid to 448; cached shader bindings and decoupled simulation from display with intermediate advection prediction.
+- Fixed hover interaction so movement without a pressed pointer really pushes existing ink.
+- Converted the active prototype, default legacy entry, Gallery, QR captions, pause controls and accessibility text to Chinese following the user's updated preference. Legacy gameplay mechanics and supplied assets are preserved.
+- Local-only iteration. Visual similarity remains under review; high-quality performance varies, especially during concurrent browser use.
+
+
+## 2026-10-06 - Independent Ink Visual Studies
+
+### Added
+
+- Added modular Player Ink, Interactive Painting, and Paper Reveal studies under prototypes/ink/.
+- Added WebGL2 float fluid advection, pressure projection, vorticity confinement, deformable membranes and branching ribbons.
+- Added artwork-driven reveal masks, weighted completion, mouse/keyboard/multi-pointer input, quality settings, and local preview launcher.
+- Added repository audit, phase plan and measured validation with explicit video-reference gaps.
+
+### Preserved
+
+- Kept the legacy game entry, Gallery, QR UI and all supplied assets unchanged.
+- Local-only delivery as requested; no Git initialization, commit or push. This extracted folder has no .git metadata.
+
+
 ## 2026-09-09 - Exhibition QR Access and Artwork Album
 
 ### Added
