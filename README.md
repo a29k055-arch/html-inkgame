@@ -1,15 +1,14 @@
-# 墨 — BOKU —
+# 墨水視覚効果制作
 
-2026-10-06：基于用户认可的第四轮流动形态，新增清晰墨芯、主体/尾迹同比例缩放、柔和互动与中日对照界面。旧可玩游戏仍为默认入口；本页是独立视觉试作，尚未实现完整砚/宣纸循环。
+墨の流れ、滲み、紙に浮かぶ絵を、ブラウザーで体験する視覚表現の試作です。
 
-**视觉效果 / 水墨表現：[打开独立视觉预览](https://a29k055-arch.github.io/html-inkgame/visual-effects/)**
+- [視覚効果・水墨表現](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
+- [新版試作](https://a29k055-arch.github.io/html-inkgame/prototypes/ink/)
+- [表現と技術・操作方法](prototypes/ink/README.md)
 
-- 新版试作： [Ink Studies](prototypes/ink/README.md)（墨体、互动水墨、原画显影）。
-- 本地启动：双击 prototypes/ink/START_PREVIEW.cmd，打开 http://127.0.0.1:8765/prototypes/ink/ 。
-- 重构路线：[REFACTOR_PLAN.md](REFACTOR_PLAN.md)；验证：[VALIDATION.md](prototypes/ink/VALIDATION.md)。
-- 当前本地文件夹为解压副本，没有 Git 元数据；从第五轮起，用户已授权同步到 GitHub。通过现有GitHub Desktop仓库提交与同步，原main历史及素材保留。正式仓库位于 C:/Users/Nine/Documents/GitHub/html-inkgame/。
+WebGL2の流体計算で墨の密度と速度を運び、柔らかな縁と尾を描きます。インタラクティブ墨では白い画布への描画と水墨画の変形を、宣紙表現では原画が少しずつ現れる様子を楽しめます。
 
-以下为保留的旧版说明。
+---
 
 # Ink Game Demo
 
