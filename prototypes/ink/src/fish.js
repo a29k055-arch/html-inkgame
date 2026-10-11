@@ -1,9 +1,22 @@
 import {MaterialInk} from './material.js';
 
-// Same controller, size envelope and advected wake; only the visible reservoir changes.
+// One travelling spine drives both the painted silhouette and the advected ink reservoir.
 export class FishInk extends MaterialInk {
- constructor(fluid,canvas){super(fluid,canvas);this.heading=0;this.phase=0;}
- reset(){super.reset();this.heading=0;this.phase=0;}
- seed(entity){const f=this.fluid,r=this.radius(entity),c=Math.cos(this.heading),s=Math.sin(this.heading);for(let i=0;i<8;i++){const x=(.35-i*.18)*r;f.inject({x:entity.x+x*c/f.aspect,y:entity.y+x*s,radius:r*(i<4?.22:.14),intensity:.55});}this.seeded=true;}
- update(entity,dt){const speed=Math.hypot(entity.vx*this.fluid.aspect,entity.vy);if(speed>.015){const target=Math.atan2(entity.vy,entity.vx*this.fluid.aspect),delta=Math.atan2(Math.sin(target-this.heading),Math.cos(target-this.heading));this.heading+=delta*(1-Math.exp(-dt*9));}this.phase+=dt*(3.4+Math.min(speed,.9)*9);super.update(entity,dt);this.fluid.fish={heading:this.heading,phase:this.phase,speed};}
+ constructor(fluid,canvas){super(fluid,canvas);this.heading=0;this.phase=0;this.activity=0;this.turn=0;}
+ reset(){super.reset();this.heading=0;this.phase=0;this.activity=0;this.turn=0;}
+ seed(){this.seeded=true;}
+ update(entity,dt){
+  const f=this.fluid,r=this.radius(entity),speed=Math.hypot(entity.vx*f.aspect,entity.vy);
+  let angularRate=0;
+  if(speed>.012){const target=Math.atan2(entity.vy,entity.vx*f.aspect),delta=Math.atan2(Math.sin(target-this.heading),Math.cos(target-this.heading));const change=delta*(1-Math.exp(-dt*6));this.heading+=change;angularRate=change/Math.max(dt,.001);}
+  this.activity+=(Math.min(speed/.65,1)-this.activity)*(1-Math.exp(-dt*3.8));
+  this.turn+=(Math.max(-.75,Math.min(.75,angularRate*.16))-this.turn)*(1-Math.exp(-dt*5));
+  this.phase+=dt*(1.7+this.activity*6.5);this.time+=dt;
+  f.core={point:[entity.x,1-entity.y],radius:r,speed};
+  f.fish={heading:this.heading,phase:this.phase,speed,activity:this.activity,turn:this.turn,flow:[entity.vx,-entity.vy]};
+  f.pass('material',f.v.write,{field:f.d.read,velocity:f.v.read,point:f.core.point,force:[entity.vx*f.w,-entity.vy*f.h],radius:r*1.8,dt,time:this.time});f.v.swap();
+  f.pass('fishFeed',f.d.write,{field:f.d.read,...f.fishUniforms(),dt});f.d.swap();
+  f.pass('contain',f.d.write,{field:f.d.read,point:f.core.point,force:[entity.vx,-entity.vy],radius:r*1.2,dt});f.d.swap();
+  this.seeded=true;
+ }
 }
