@@ -3,6 +3,7 @@
 墨の流れ、滲み、紙に浮かぶ絵を、ブラウザーで体験する視覚表現の試作です。
 
 - [視覚効果・水墨表現](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
+- [水墨の魚・展示ビュー](https://a29k055-arch.github.io/html-inkgame/visual-effects/?mode=player&form=fish&view=display)
 - [代替リンク](https://a29k055-arch.github.io/html-inkgame/prototypes/ink/)
 - [表現と技術・操作方法](prototypes/ink/README.md)
 
