@@ -14,7 +14,7 @@ export class FishInk extends MaterialInk {
   this.phase+=dt*(1.7+this.activity*6.5);this.time+=dt;
   f.core={point:[entity.x,1-entity.y],radius:r,speed};
   f.fish={heading:this.heading,phase:this.phase,speed,activity:this.activity,turn:this.turn,flow:[entity.vx,-entity.vy]};
-  f.pass('material',f.v.write,{field:f.d.read,velocity:f.v.read,point:f.core.point,force:[entity.vx*f.w,-entity.vy*f.h],radius:r*1.8,dt,time:this.time});f.v.swap();
+  f.pass('fishGuide',f.v.write,{field:f.d.read,velocity:f.v.read,...f.fishUniforms(),dt});f.v.swap();
   f.pass('fishFeed',f.d.write,{field:f.d.read,...f.fishUniforms(),dt});f.d.swap();
   f.pass('contain',f.d.write,{field:f.d.read,point:f.core.point,force:[entity.vx,-entity.vy],radius:r*1.2,dt});f.d.swap();
   this.seeded=true;

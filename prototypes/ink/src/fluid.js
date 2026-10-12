@@ -13,13 +13,13 @@ float cross2(vec2 a,vec2 b){return a.x*b.y-a.y*b.x;}
 float triangleInk(vec2 p,vec2 a,vec2 b,vec2 c){float signD=sign(cross2(b-a,c-a));float d=min(min(signD*cross2(b-a,p-a)/length(b-a),signD*cross2(c-b,p-b)/length(c-b)),signD*cross2(a-c,p-c)/length(a-c));return smoothstep(-.025,.018,d);}
 
 // Local centreline: head leads, the wave grows downstream, and turning bends the whole animal.
-float fishSpine(float x){float t=clamp((.85-x)/2.3,0.,1.65);return (.035+.34*fishActivity)*pow(t,1.55)*sin(fishPhase-t*4.7)+fishTurn*t*t*1.02;}
-vec2 fishLocal(vec2 coord){vec2 delta=coord-point;delta.x*=aspect;vec2 p=vec2(dot(delta,fishDirection),dot(delta,vec2(-fishDirection.y,fishDirection.x)))/radius;p.x/=1.+fishActivity*.10;p.y-=fishSpine(p.x);return p;}
+float fishSpine(float x){float t=clamp((.85-x)/2.3,0.,1.65);return (.035+.66*fishActivity)*pow(t,1.55)*sin(fishPhase-t*4.7)+fishTurn*t*t*1.02;}
+vec2 fishLocal(vec2 coord){vec2 delta=coord-point;delta.x*=aspect;vec2 p=vec2(dot(delta,fishDirection),dot(delta,vec2(-fishDirection.y,fishDirection.x)))/radius;p.x/=1.55+fishActivity*.12;p.y-=fishSpine(p.x);return p;}
 float fishTailLeaf(vec2 p,float side,float span){
  float u=(-p.x-1.25)/span,clamped=clamp(u,0.,1.);
  float envelope=pow(max(0.,sin(clamped*3.14159)),.78);
- float fan=.07+(side>.0?1.04:.89)*sin(clamped*2.52);
- float ribbon=(side>.0?.35:.30)*envelope*(1.-clamped*.16);
+ float fan=.07+(side>.0?.70:.61)*sin(clamped*2.52);
+ float ribbon=(side>.0?.26:.23)*envelope*(1.-clamped*.16);
  float flutter=sin(fishPhase-clamped*3.8-side*.35)*(.025+.095*fishActivity)*clamped;
  float rough=(noise(p*27.+vec2(9.,21.))-.5)*.04;
  float leaf=1.-smoothstep(ribbon-.018,ribbon+.027,abs(p.y-side*fan-flutter)+rough);
@@ -28,7 +28,7 @@ float fishTailLeaf(vec2 p,float side,float span){
 vec3 fishMasks(vec2 p){
  float grain=noise(p*23.+vec2(13.,7.));float rough=(grain-.5)*.038;
  float t=clamp((.86-p.x)/2.26,0.,1.);
- float width=.065+.35*pow(max(0.,sin(t*3.14159)),.70);width*=1.-smoothstep(.55,.99,t)*.48;
+ float width=.055+.285*pow(max(0.,sin(t*3.14159)),.70);width*=1.-smoothstep(.55,.99,t)*.48;
  float head=ellipseInk(p,vec2(.48,0.),vec2(.47,.30),rough);
  float torso=(1.-smoothstep(width-.023,width+.027,abs(p.y)+rough))*(1.-smoothstep(.55,.82,p.x))*smoothstep(-1.47,-1.32,p.x);
  float body=max(head,torso);
@@ -42,8 +42,13 @@ vec3 fishMasks(vec2 p){
 vec4 sampleLinear(sampler2D s,vec2 p){vec2 z=clamp(p,texel*.5,1.-texel*.5)/texel-.5;vec2 i=floor(z),f=fract(z);vec2 q=(i+.5)*texel;return mix(mix(texture(s,q),texture(s,q+vec2(texel.x,0.)),f.x),mix(texture(s,q+vec2(0.,texel.y)),texture(s,q+texel),f.x),f.y);}
 `;
 const shaders={
- fishFeed:`vec4 old=texture(field,uv);vec2 p=fishLocal(uv);if(length(p)<4.5){vec3 masks=fishMasks(p);float cover=max(masks.x,max(masks.y*.62,masks.z*.42));float near=exp(-dot(p/vec2(1.7,.92),p/vec2(1.7,.92))*.6);
- old.z*=exp(-dt*(1.-cover)*near*(5.+(1.-fishActivity)*8.));float target=(1.2+.45*noise(p*8.+vec2(fishPhase*.14,11.)))*cover;old.z=mix(old.z,target,cover*(1.-exp(-dt*11.)));}o=old;`,
+ fishGuide:`vec2 v=texture(velocity,uv).xy;vec2 p=fishLocal(uv);if(length(p)<4.7){float t=clamp((.85-p.x)/2.3,0.,1.65);float waveVelocity=(.035+.66*fishActivity)*pow(t,1.55)*cos(fishPhase-t*4.7)*(1.7+fishActivity*6.5);
+ vec2 normal=vec2(-fishDirection.y/aspect,fishDirection.x);vec2 follow=(fishFlow+normal*radius*clamp(waveVelocity,-2.,2.))*vec2(1./texel.x,1./texel.y);
+ float wet=smoothstep(.025,.5,texture(field,uv).z),band=exp(-p.y*p.y/.65)*smoothstep(-3.4,-2.8,p.x)*(1.-smoothstep(.8,1.3,p.x));
+ vec2 inward=-normal*p.y*radius*vec2(1./texel.x,1./texel.y)*7.;v+=((follow-v)*3.5+inward)*dt*wet*band;}
+ o=vec4(clamp(v,vec2(-650.),vec2(650.)),0.,1.);`,
+ fishFeed:`vec4 old=texture(field,uv);vec2 p=fishLocal(uv);if(length(p)<4.5){vec3 masks=fishMasks(p);float cover=max(masks.x,max(masks.y*.62,masks.z*.42));float near=(1.-smoothstep(3.4,4.4,abs(p.x)))*(1.-smoothstep(1.5,2.4,abs(p.y)));
+ old.z*=exp(-dt*(1.-cover)*near*(9.+(1.-fishActivity)*12.));float pigment=noise(p*8.+vec2(fishPhase*.14,11.));float target=(2.8+.85*pigment)*masks.x+(.48+.40*pigment)*masks.y+(.25+.22*pigment)*masks.z;old.z=mix(old.z,target,cover*(1.-exp(-dt*9.)));}o=old;`,
  deform:`vec2 old=sampleLinear(field,uv-dt*texture(velocity,uv).xy*texel).xy;
  vec2 v=texture(velocity,uv).xy*texel;float speed=length(v);v*=.035/max(.035,speed);
  float irregular=.65+.22*noise(uv*9.+vec2(time*.017,-time*.013))+.13*noise(uv*23.+vec2(-time*.023,time*.011));
@@ -83,21 +88,8 @@ const shaders={
  display:`vec2 renderUV=clamp(uv-texture(velocity,uv).xy*texel*dt,texel*.5,1.-texel*.5);float d=max(0.,sampleLinear(field,renderUV).z);vec2 e=texel*1.3;float edge=abs(sampleLinear(field,uv+vec2(e.x,0.)).z-sampleLinear(field,uv-vec2(e.x,0.)).z)+abs(sampleLinear(field,uv+vec2(0.,e.y)).z-sampleLinear(field,uv-vec2(0.,e.y)).z);float grain=hash(gl_FragCoord.xy);float a=1.-exp(-d*1.15);a=clamp(a+edge*.17,0.,.97);a*=.94+grain*.06;float tone=.075+exp(-d*2.)*.14;
  if(amount>.5){float film=smoothstep(.025,.17,d);float rim=exp(-pow((d-.48)*2.8,2.))*edge*.6;a=clamp((1.-exp(-d*1.65))*film+rim,0.,.985);tone=.045+exp(-d*2.5)*.14;
  vec2 q=uv-point;q.x*=aspect;float rough=.97+.06*noise(uv*173.);float halo=(1.-fishActive)*exp(-pow((length(q)-radius*.35*rough)/max(radius*.055,.0001),2.))*.20*smoothstep(.18,.65,coreSpeed);tone=mix(tone,.66,halo);a=max(a,halo*.5);}
- if(fishActive>.5){vec2 p=fishLocal(uv);
- if(length(p)<4.5){vec2 relative=texture(velocity,uv).xy*texel-fishFlow;float drift=clamp(dot(relative,vec2(-fishDirection.y,fishDirection.x))*.02/max(radius,.001),-.045,.045);p.y+=drift*fishActivity;
- vec3 masks=fishMasks(p);float body=masks.x,tail=masks.y,fins=masks.z;
- float grain=noise(p*35.+vec2(3.,17.)),wash=noise(p*7.+vec2(fishPhase*.12,9.));
- float rays=.5+.5*sin(atan(p.y,(-p.x-1.12))*43.+noise(p*13.)*.6);
- float dry=smoothstep(.14,.50,grain);float tailAlpha=tail*(.30+.38*wash)*mix(.52,1.,dry)*(.80+.20*rays);
- float fishAlpha=max(body*.95,max(tailAlpha,fins*(.30+.18*wash)));
- // White brush gaps and dilute belly, rather than a flat solid icon.
- float belly=exp(-pow((p.y-.12)/.19,2.))*.20*(1.-smoothstep(-.95,.55,p.x));
- float stripe=exp(-pow((p.y+.18+.035*sin(p.x*3.))/ .022,2.))*smoothstep(-1.1,-.2,p.x)*(1.-smoothstep(.38,.68,p.x));
- float inkTone=.035+.11*wash+.08*grain+belly+.33*stripe;
- inkTone=mix(inkTone,.045+exp(-d*1.7)*.18,.35);
- float eye=1.-smoothstep(.022,.042,length(p-vec2(.67,-.12)));inkTone=mix(inkTone,.40,eye*.7);
- float near=exp(-dot(p/vec2(1.9,1.15),p/vec2(1.9,1.15))*.7);a*=1.-near*(.96-.14*fishActivity);
- float finalAlpha=fishAlpha+a*(1.-fishAlpha);tone=(inkTone*fishAlpha+tone*a*(1.-fishAlpha))/max(finalAlpha,.0001);a=finalAlpha;}}
+ // Fish uses the same advected density optics as ink; no opaque fish silhouette is composited.
+ if(fishActive>.5){vec2 p=fishLocal(uv);float eye=1.-smoothstep(.016,.032,length(p-vec2(.67,-.12)));tone=mix(tone,.25,eye*.32*smoothstep(.6,1.5,d));}
  if(backgroundActive>.5){vec2 offset=sampleLinear(deformation,uv).xy;vec2 imageUV=(uv+offset-.5)/imageScale+.5;
  float inside=step(0.,imageUV.x)*step(imageUV.x,1.)*step(0.,imageUV.y)*step(imageUV.y,1.);vec3 col=texture(imageTexture,clamp(imageUV,0.,1.)).rgb;
  float darkness=(1.-dot(col,vec3(.299,.587,.114)))*inside;float inkAlpha=clamp(darkness,0.,1.);vec3 paperTone=vec3(.10,.105,.09);o=vec4(mix(paperTone,vec3(tone),a),inkAlpha+a*(1.-inkAlpha));}
