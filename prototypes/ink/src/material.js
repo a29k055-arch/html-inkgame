@@ -1,11 +1,20 @@
 // The primary ink reservoir and its wake share one size, one velocity field and one density field.
 export class MaterialInk {
- constructor(fluid,canvas){this.fluid=fluid;this.canvas=canvas;this.time=0;this.seeded=false;this.nextFeed=0;canvas.hidden=true;}
+ constructor(fluid,canvas){this.fluid=fluid;this.canvas=canvas;this.time=0;this.seeded=false;this.nextFeed=0;this.coreScale=.48;this.collisionScale=1;canvas.hidden=true;}
  resize(){this.reset();}
- reset(){this.seeded=false;this.nextFeed=0;this.canvas.getContext('2d').clearRect(0,0,this.canvas.width,this.canvas.height);}
+ reset(){this.seeded=false;this.nextFeed=0;this.coreScale=.48;this.collisionScale=1;this.canvas.getContext('2d').clearRect(0,0,this.canvas.width,this.canvas.height);}
  radius(entity){return entity.radius*Math.min(1,this.fluid.aspect);}
  seed(entity){const f=this.fluid,r=this.radius(entity);for(let i=0;i<21;i++){const a=i*2.399963,dist=r*(.12+Math.sqrt(i/21)*.32);f.inject({x:entity.x+Math.cos(a)*dist/f.aspect,y:entity.y+Math.sin(a)*dist,vx:Math.sin(a)*r*330,vy:Math.cos(a)*r*330,radius:r*(.12+(i%4)*.025),intensity:.8+(i%5)*.16});}this.seeded=true;}
- update(entity,dt){this.canvas.hidden=true;this.time+=dt;const f=this.fluid,r=this.radius(entity);if(!this.seeded)this.seed(entity);f.core={point:[entity.x,1-entity.y],radius:r,speed:Math.hypot(entity.vx,entity.vy)};
+ update(entity,dt){this.canvas.hidden=true;this.time+=dt;const f=this.fluid,r=this.radius(entity);if(!this.seeded)this.seed(entity);
+  const speed=Math.hypot(entity.vx*f.aspect,entity.vy);
+  const targetScale=.48-.32*Math.tanh(speed/.28);
+  this.coreScale+=(targetScale-this.coreScale)*(1-Math.exp(-dt*(targetScale<this.coreScale?12:3)));
+  const speedFraction=Math.min(1,Math.max(0,(speed-.08)/.72));
+  const compression=speedFraction*speedFraction*(3-2*speedFraction);
+  const targetCollisionScale=1-.12*compression;
+  this.collisionScale+=(targetCollisionScale-this.collisionScale)*(1-Math.exp(-dt*5));
+  const collisionBaseRadius=r*.48;
+  f.core={collisionBaseRadius,collisionRadius:collisionBaseRadius*Math.max(.88,this.collisionScale),collisionPoint:[entity.x,1-entity.y],point:[entity.x,1-entity.y],radius:r,interactionRadius:r*this.coreScale,speed};
   f.pass('material',f.v.write,{field:f.d.read,velocity:f.v.read,point:[entity.x,1-entity.y],force:[entity.vx*f.w,-entity.vy*f.h],radius:r*1.4,dt,time:this.time});f.v.swap();
   // Dense, continually advected core makes the controlled position readable without a fixed painted circle.
   f.inject({x:entity.x,y:entity.y,vx:0,vy:0,radius:r*.32,intensity:dt*18});
