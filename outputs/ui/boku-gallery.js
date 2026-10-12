@@ -1,7 +1,7 @@
 (() => {
   "use strict";
   // User-supplied artwork. IDs are stable across future reordering; no invented attribution.
-  const artworks = [
+  let artworks = [
   {
     "id": "ink-13",
     "label": "作品 01",
@@ -80,11 +80,13 @@
     "height": 1269
   }
 ];
+  const options = window.BokuGalleryConfig || {};
+  if (options.artworks) artworks = options.artworks;
   const storageKey = "boku.album.unlocked.v1";
   let unlocked = new Set([artworks[0].id]);
   let storageAvailable = true;
   try {
-    const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    const saved = options.persistence ? [...options.persistence.unlockedIds()] : JSON.parse(localStorage.getItem(storageKey) || "[]");
     if (Array.isArray(saved)) for (const id of saved) if (artworks.some(a => a.id === id)) unlocked.add(id);
   } catch { storageAvailable = false; }
 
@@ -101,14 +103,16 @@
   let lastColumns = 0;
   let opener = null;
   const openArtwork = (art, button) => {
-    if (!unlocked.has(art.id)) return;
+    if (!unlocked.has(art.id) && !options.allowOriginal) return;
     opener = button;
     lightbox.querySelector(".boku-preview-title").textContent = art.label;
     const img = lightbox.querySelector("img");
     img.src = art.src; img.alt = art.label;
     lightbox.showModal();
+    options.onPreview?.(art, lightbox);
   };
   const render = () => {
+    if(options.persistence){unlocked=options.persistence.unlockedIds();storageAvailable=options.persistence.available();}
     const count = innerWidth <= 440 ? 1 : innerWidth <= 820 ? 2 : innerWidth <= 1100 ? 3 : 4;
     lastColumns = count;
     grid.replaceChildren();
@@ -120,23 +124,24 @@
       const isUnlocked = unlocked.has(art.id);
       const button = document.createElement("button");
       button.type = "button"; button.className = "boku-art"; button.dataset.artwork = art.id;
-      button.setAttribute("aria-label", `${art.label}${isUnlocked ? "，点击查看" : "：未解锁"}`);
-      button.setAttribute("aria-disabled", String(!isUnlocked));
+      button.dataset.locked = String(!isUnlocked);
+      button.setAttribute("aria-label", `${art.label}${options.language === "ja" ? (isUnlocked ? "、作品を見る" : "、原画を見る・未解放") : (isUnlocked ? "，点击查看" : "：未解锁")}`);
+      button.setAttribute("aria-disabled", String(!isUnlocked && !options.allowOriginal));
       const frame = document.createElement("span"); frame.className = "boku-art-image";
       const img = new Image(); img.src = art.src; img.alt = ""; img.loading = "lazy"; img.decoding = "async";
       img.width = art.width; img.height = art.height; frame.append(img);
       if (!isUnlocked) {
-        const lock = document.createElement("span"); lock.className = "boku-art-lock"; lock.textContent = "未解锁"; frame.append(lock);
+        const lock = document.createElement("span"); lock.className = "boku-art-lock"; lock.textContent = options.language === "ja" ? "未解放" : "未解锁"; frame.append(lock);
       }
       const label = document.createElement("span"); label.className = "boku-art-label";
-      label.textContent = `${art.label}${isUnlocked ? "" : " · 未解锁"}`;
+      label.textContent = `${art.label}${isUnlocked ? "" : options.language === "ja" ? " · 未解放" : " · 未解锁"}`;
       button.append(frame, label);
       button.addEventListener("click", () => openArtwork(art, button));
       const col = heights.indexOf(Math.min(...heights));
       columns[col].append(button);
       heights[col] += art.height / art.width + .22;
     }
-    gallery.querySelector("#boku-gallery-note").textContent = `收藏 ${unlocked.size} / ${artworks.length} · 每次通关解锁一幅作品。${storageAvailable ? "" : " 当前环境无法保存收藏记录。"}`;
+    gallery.querySelector("#boku-gallery-note").textContent = `${options.language === "ja" ? "収蔵" : "收藏"} ${unlocked.size} / ${artworks.length}${options.note || " · 每次通关解锁一幅作品。"}${storageAvailable ? "" : (options.language === "ja" ? " この環境では解放記録を保存できません。" : " 当前环境无法保存收藏记录。")}`;
   };
   document.getElementById("albumBtn").onclick = () => { render(); gallery.showModal(); };
   gallery.querySelector("#boku-gallery-back").onclick = () => gallery.close();
@@ -158,11 +163,14 @@
     const count = innerWidth <= 440 ? 1 : innerWidth <= 820 ? 2 : innerWidth <= 1100 ? 3 : 4;
     if (gallery.open && count !== lastColumns) render();
   });
+  window.BokuGallery = { artworks, unlockedIds: () => options.persistence ? options.persistence.unlockedIds() : new Set(unlocked), open: () => { render(); gallery.showModal(); }, setLabels() { gallery.querySelector("h1").textContent = "ギャラリー"; gallery.querySelector("#boku-gallery-back").textContent = "ホーム"; lightbox.querySelector("button").textContent = "× 閉じる"; } };
   // One event per successful round; no changes to movement, balance, backgrounds or victory conditions.
   document.addEventListener("boku:round-complete", () => {
+    if(options.persistence){const id=options.persistence.unlockNext();if(id)document.dispatchEvent(new CustomEvent("boku:artwork-unlocked",{detail:id}));return;}
     const next = artworks.find(art => !unlocked.has(art.id));
     if (!next) return;
     unlocked.add(next.id);
+    document.dispatchEvent(new CustomEvent("boku:artwork-unlocked", { detail: next.id }));
     try { localStorage.setItem(storageKey, JSON.stringify([...unlocked])); }
     catch { storageAvailable = false; }
   });

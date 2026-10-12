@@ -1,5 +1,60 @@
 # 墨—BOKU— Project Handoff
 
+## 2026-10-13 — 原画首页 / 正后方拖尾 / 大画地图与集中存档 [CURRENT]
+
+**本轮最新用户明确授权测试、更新文档、commit并push当前分支。下面旧节“不push”仅是历史。此节覆盖旧的鼠标直接涂画、每局基础墨与携墨倍率、圆形小地图、共用NPC流体等实现说明。**
+
+- **Current state / Architecture**：首页 `HomeArtwork` 只读取一幅原画，局部1.1px以内波纹重采样；游戏画布在首页CSS隐藏且返回时清空。清单/解锁策略独立，首页没有游戏对象、绘画层或GPU流体引用；静态时不反复重画。保留前轮墨迹DOM菜单与标题。
+- **Player / NPC**：共用 `prototypes/ink/src/material.js` 和 `fluid.js`，正式游戏与visual-effects自动同步。后方两段补墨合并进contain密度pass，降低横向涡量，主体附近携带、后尾轻缓反向输运，横向阻尼/中心线回收、窄横向包络、后方渐淡。静止维持稳定墨球。跳过零速度inject的无用velocity复制；鱼模块原涡量保留。NPC仍8张缓存Canvas，增加静态浓淡/颗粒/微小边缘羽化，不引入流体或拖尾；玩家模拟唯一实体接口不变。
+- **Drawing [IMPLEMENTED]**：`PaperWorld` 世界坐标、统一移动与朝向、墨消费和弹丸；`PaperMap extends PaperReveal` 复用source/mask/原画灰度权重/原图destination-in技术，镜头绘制，不画画框。作品按比例放大，第一幅4240×1800；竖幅长边可达约6700。source/mask长边上限1536/768，避免竖画分配巨大全图密度场。移动扫过与真实玩家流体一起显影；Shift/触屏吐墨4墨，冷却.35秒、初速620、衰减、寿命1.8秒，弹丸显影不写玩家物理。研墨Shift仍墨技，无加速。
+- **Wallet / Persistence [IMPLEMENTED]**：`src/data/save.js` 管 `boku.save.v1`；saveVersion、inkAmount、unlockedArtworks、settings、progress（结算次数/收入/支出/每作品最高完成度/40条结算收据）。首次迁移旧settings/album，不删除旧版记录。新存档一次110基础墨；后续绘制只用钱包，研墨结算入账一次；不再乘.03或开画补基础墨。移动按距离消费，Shift单独消费，禁止透支，最后不足一段消费也按比例用完。每200ms合并写，pagehide flush，设置/结算/吐墨即写；正常刷新/退出保留，异常终止最多200ms窗口。高于当前版本存档不覆盖、提示会话回退。图片继续IndexedDB Best/History5。
+- **Unlock / Reset [IMPLEMENTED]**：根游戏给旧Gallery注入persistence适配器，旧页继续旧逻辑。完成75%解锁下一幅，Gallery/绘制选择/背景池读同一个Set；没有额外解锁则默认作品。设置Reset确认对话框后清墨/额外解锁/进度/图片，保留纯设置，背景固定作品回默认。epoch防旧结果异步回写，IndexedDB generation防复活。第一幅作为默认起点保留。跨标签storage事件同步元数据；同源多标签同时消费不提供事务锁，推荐单标签游玩。
+- **UI**：战斗/绘制HUD都统一半透明圆角矩形；小地图为一个圆角容器，无重复内框，绘制可看整个画作/视口/玩家。操作提示及选画可用墨量同步；首页水墨菜单保持原样。
+- **Validation**：四组模型测试通过；五视口流程、原画前后像素、轻波纹、战斗结算、世界移动/镜头、Shift弹丸/扣墨、刷新/完成度/解锁/PNG、Reset取消/确认/清图片；真实CDP双指纸面摇杆+吐墨；实际mask达到75%触发收画解锁；关闭持久浏览器并重开余额/解锁/图片相同；竖幅画作及旋转、最后.001墨消费检查。方向GPU测试主后方墨迹超过两侧合计，静止中心有墨；0/80 NPC玩家像素和material调用相同。最终独立高画质32/80 NPC各10秒约60fps、12 FBO；20次进入/退出无WebGL上下文警告。后方/两侧合计墨迹积分约64/29倍（向右/向下固定轨迹）。详见本地work验证JSON和截图（不发布）。
+- **Pending / Known limits**：未收画的实时蒙版/位置与未结算战斗不支持断点续玩，钱包和已收画进度/Best/History持久化；灰度mask需后续专用mask；大图三分钟覆盖范围、吐墨成本、AI难度与收益需人工完整局调优。真机Safari/Android与长局/电池未验证，无账号/多人后端。拖尾数值测试是方向证据，不代替用户最终视觉验收。
+- **Preserved / Cancelled**：旧 `outputs/ink_demo_v2.html` 与素材SHA256一致；未恢复旧战斗擦画、自由加速、三选一升级、鱼主体。正式README原视觉介绍与旧版内容完整保留，新版说明前置，增加独立旧版/视觉测试/视觉README/技术入口。
+- **Git checkpoint**：正式仓库 `C:/Users/Nine/Documents/GitHub/html-inkgame`，开始main干净，origin/main和HEAD为8f92488ad1ef36b51289dd8f15b363701eafaafd；D盘为包含前两轮开发的维护副本。测试后白名单同步正式仓库，正常commit/push；最终SHA见Git log及本地work/publication-receipt.json，不自引用SHA。无force push/remote变更，不提交work及用户资料。
+
+**Next**：完整人工试玩研墨→画中移动→完成收藏，优先调大图视野/显影成本/覆盖速度与尾迹手感；再做真机性能、专用作品mask与中途画作续玩。
+
+
+
+## 2026-10-13 — 战斗大地图与主角/NPC彻底分离 [CURRENT]
+
+本轮用户重点修正战斗模式：完整高级水墨只给主角；NPC用轻量旧墨球，绝不向主角流体写入；恢复大型方形地图；取消加速，Shift只用道具；深化AI与HUD。**本轮仅本地，不commit/push**。此节优先于下面上一轮“共用多实体密度场”“Shift疾走”等历史实现记录。
+
+- **Audit / Provenance**：重读交接、CHANGELOG、新版源码；通过GitHub连接读取当前main的 `outputs/ink_demo_v2.html` 和 `prototypes/ink/src/material.js`，并在Edge实际打开用户提供的 `visual-effects/?mode=player&form=ink`。MaterialInk与远端只差文件末尾空行，算法未改。旧版代码与本地旧版同样仅末尾空行差异。原始审计副本见 `work/combat-baseline/`；不覆盖前轮本地修改。
+- **Player Visual [IMPLEMENTED]**：`src/ink/game-renderer.js` 仅创建一个主角 InkFluid + MaterialInk，沿用已发布的主体、输运、形变、墨迹、散墨和画质。改为视口范围模拟，避免3400全图稀释主角分辨率；镜头移动/缩放只通过新增可选 `InkFluid.reproject()` 搬运已有场，不加入力。原视觉页不调用此方法，其默认效果保持不变。主角重生时立即定位镜头。碰撞仍以稳定世界半径判定，不拿远尾或镜头比例判吞噬。
+- **NPC Visual / Isolation [IMPLEMENTED]**：`src/ink/npc-painter.js` 从旧版 `drawInkBall` 的径向渐变生成8张小Canvas缓存，加静态细粒纸墨纹理；普通圆形主体、不形变、不拖尾、不持续流体。NPC绘制器没有流体引用，`GameRenderer.step(dt,player,started)` 接口不再接受NPC。原上一轮NPC inject/material/contain全部移除；模型不导入视觉模块，也不会用流场给玩家加速度。NPC道具短波只是Canvas视觉，玩法洗墨只改质量，不写速度/推力/流体。测试同一主角轨迹，0与80 NPC下画面哈希都为164962785、主角material调用均55次；像素级一致，不仅代码审查声称独立。
+- **Map / Legacy Reuse [IMPLEMENTED]**：恢复3400×3400、初始半径18、资源目标760、每秒25补充。`src/game/legacy-foundation.js` 复用旧 randomPoint、42%边缘 randomNpcPoint、3–7墨点半径/四种形状/质量r²、235→约146移速曲线和PC/Mobile平滑镜头；保留覆盖吞噬阈值及AI互吞机制。NPC默认32，初始体型按旧14–38 / 42–72 / 78–118分布，全图分布不绕玩家。初始清水圆覆盖整张方图，后期缩至650；出生/补资源适配安全范围。战斗无原画、Reveal Mask、擦画或完成度，Paper模块只在描く路径创建。
+- **Shift / Items [IMPLEMENTED]**：新版战斗移除boost方法、boost/cooldown字段、加速质量损失、加速按钮与E替代键。Shift只调用 `useSkill`，触屏按当前大槽同一个接口；按住不自动连耗，备用自动补位。空手Shift不改速度/质量。为满足“Shift不提高速度”，退役速度型疾墨，五种技能为溌墨/濃墨/水遁/墨障/吸墨：前方洗墨、临时增体减速、双向吞噬免疫、抵挡一次致命吞噬、扩资源吸附。配置集中；无加速隐藏在道具中。历史旧版与独立视觉实验的旧Shift动作未改，不把它们当新版战斗入口。
+- **AI [IMPLEMENTED]**：`src/game/ai.js` 七种内部profile：aggressive/conservative/flee/opportunist/expert/balanced/novice；角色各自反应间隔、风险、感知、追击/资源/道具权重和熟练度有所不同。同时评估主角与其他AI的体积、威胁、追击速度差/时间收益、前方截击、目标逃离、资源风险、道具空位、地图边缘和清水；追不上的目标会放弃；逃跑比较多条路线；复用旧避让的风险权重。AI按局势用墨障/水遁/濃墨等，不随机每帧乱用。UI仅显示名字，不显示性格标签。五分钟无玩家参与的模型模拟一轮33次NPC互吞，性格行为分布不同（随机局证据，不保证每局次数）。
+- **HUD [IMPLEMENTED]**：`src/ui/battle-hud.js` 独立更新墨量/体积、排名、圆形小地图/视窗/道具亮点、当前大槽＋备用小槽、有效技能剩余秒数、清水/死亡状态。HUD改为分散的半透明纸片、柔和不规则圆角、细线暂停图形、淡纸与阴影；倒计时中置，手机竖屏分层，横屏压缩。暂停和结算对话框圆角/纸感同步。墨技与摇杆双指归属明确。
+- **Validation**：`node tests/game-rules.mjs`、`node tests/combat-ai.mjs`、`node tests/combat-ecology.mjs`；完整300秒模型、微小重生、死亡墨量、时间/排名结算、AI互吞/路线/资源/道具、不加速与队列通过。Edge1440×900、390×844、844×390、320×568、568×320：首页→战斗→结算→描く→记录、暂停、resize、画质/背景，无脚本/资源错误；触摸事件摇杆＋第二指道具通过。0/80 NPC流体像素一致。默认32和80 NPC高画质各10秒本机短测約60fps、12 FBO，不能冒充手机或长局性能认证。连续20次进入/退出无WebGL上下文数量警告，资源释放检查通过。记录 `work/combat-validation.json`、`work/combat-isolation.json`、`work/combat-performance.json` 与 `work/combat-*.png`。
+- **Extra / Preserved**：继续完善原五分钟争墨→时间/排名纳墨→三分钟宣纸→Gallery闭环；新增溌墨、NPC情境用道具、有效技能UI、长局生态测试、主角重生镜头即时定位、资源碰撞平方距离优化。纸面Shift不会误启动绘画。首页、背景清单、IndexedDB Best/History、旧版、相册原收藏、视觉实验与原素材保留。
+- **Known / Pending**：AI性格明显区别已有模型证据，仍需人工完整对战评估难度与追逐手感；NPC不做主角视觉是明确决定。镜头重投影属二维采样，快速缩放/长拖尾仍需用户视觉验收；真机Safari/Android、长时GPU、电池、作品专用Mask与竖屏作画视野待下一轮。没有音效/多人服务。
+- **Git**：当前D盘工作副本仍无.git，status/remote/log/HEAD均失败；未初始化仓库、未改正式clone。只读远端main仍为8f92488ad1ef36b51289dd8f15b363701eafaafd。上一轮未提交代码原样作为本轮基线保护；只在当前工作区编辑，无commit/push。
+
+**Next**：先人工完整试玩32 AI争墨局，按体验调分布、收益、追击放弃和技能；再做实际手机双指/帧率与长时间循环，随后专用画作Mask/镜头。不恢复自由加速或NPC主角流体。
+
+## 2026-10-13 — 新首页与单机新版闭环 [CURRENT]
+
+本轮最新用户授权：推进新首页与后续正式玩法，在当前工作区开发和测试，**不 commit/push**。此前发布授权不适用于本轮。以下旧节中的路径、语言与阶段状态均为历史；当前实现以本节和源码为准。
+
+- **Current State / Implemented**：根 `index.html` 已改为真实新版游戏入口。居中书法「墨」＋「墨を磨る」「描く」「ギャラリー」「設定」四个 DOM 按钮；指针/焦点/上下键选择加深墨迹。Loading、三档画质、操作方式、背景策略和本地设置已接入。新入口采用日语，与2026-10-12实际视觉页一致；旧版文案未重写。
+- **References**：图 A 原样复制至 `assets/home/menu-reference.png`，仅由 CSS 裁切视窗显示书法标题；菜单字样、交互及 SVG 墨迹按钮独立实现。图 B 参考整体位置、比例、纸色、边缘浓墨和中央留白，不作为带菜单的整张背景。当前画作使用现有荷花和山水素材，不宣称已提取竹影背景。
+- **Architecture**：`src/data/` 管作品/背景/记录；`src/game/` 管统一实体、AI、规则和配置；`src/ink/game-renderer.js` 适配既有 InkFluid/MaterialInk/PaperReveal；`src/ui/` 管输入、样式、相册记录。无框架迁移或新增运行时依赖。成熟 `material.js` 主体、输运、拖尾、散墨及碰撞半径继续复用；不接入鱼。AI以同一密度场降低成本，`localEntities` 将力与消散局限于附近，避免远处墨被玩家带走。原视觉页默认关闭此选项，保持原路径。
+- **Homepage Backgrounds**：`src/data/backgrounds.js` 的独立清单关联稳定 artworkId，UI 无背景素材路径。素材放 `assets/home/backgrounds/` 后加一条配置即可；固定/随机/35秒轮换/仅解锁作品已可用。Gallery 已解锁作品可设固定背景，设置刷新持久化。图片 decode 后替换，异步代次防止旧加载覆盖新选择；失败保留当前背景。GPU 变形场提供鼠标/手指互动，等比 cover；纵向作品可能裁切。
+- **墨を磨る**：5分钟、公共墨点、15个AI与五种内部性格、统一Entity/Controller、吞噬、微小重生（半径8）、短时保护、独立累计墨量、可配置死亡墨量保留65%、提前结束按时间比例结算、完整局排名倍率、清水缩圈衰减、小地图与墨技亮点、随机五种墨技和两槽队列、疾走、暂停。所有关键平衡集中在 `src/game/config.js`。鼠标/WASD/箭头，Shift疾走、E墨技，触屏摇杆＋第二指动作。相反按键抵消不回落鼠标，pointerId明确归属，失焦/隐藏自动暂停。计时以前台有效时间推进，低帧率不延长局长，暂停不累计。
+- **描く**：可直接从首页进入，不要求先争墨；选择已解锁作品，基础墨110＋携入墨×.03，3分钟上限，流体经过处显露原画，停留晕染，墨量消耗与完成度，辅助下图、提前收画、结果PNG下载。原画比例保留，操作前完成度为0；resize/画质切换保留累计显影。当前mask仍由原画灰度推导，未伪称已有作品专用 Ink Mask。
+- **Gallery**：沿用 `outputs/ui/boku-gallery.js/.css`、11幅原素材、稳定ID和 `boku.album.unlocked.v1`，不迁移/清空旧收藏。新版适配器添加 Original / Best / History；原画可查看，未解锁图不能作画或设背景。默认展示 Best，最近5次结果和最高完成度PNG Blob存 IndexedDB `boku.paintings.v1`，不用localStorage存图片。每次达到配置完成阈值75%解锁下一作品（是新版收藏阈值，**无旧版最大体型通关条件**）；低完成结果也保存。存储不可用时退回会话并明确提示。
+- **Validation**：Edge本机1440×900、390×844、844×390、320×568、568×320：菜单与两入口、暂停计时、显影/收画/相册Best、旋转、背景与画质，无脚本/资源错误。CDP真实触摸事件验证摇杆＋第二指疾走、触屏显影；不是手机真机测试。规则单测和完整300秒模型模拟通过；未宣称完整5分钟人工试玩。IndexedDB刷新、最佳值不被低分覆盖、History上限5、存储被禁回退通过。三画质/resize FBO计数12；连续20次进入/退出释放GPU上下文，无上下文数量警告；独立视觉页与旧版入口冒烟通过。短时本机约60fps；不代表Android/iOS或长时GPU表现。证据见 `work/new-game-validation.json`、`work/home-*.png`、`work/stone-*.png`、`work/paper-new-*.png`；脚本在本地work，不纳入发布。
+- **Known Issues / Pending**：作品专用mask/纸色和手机竖屏画作视野；多实体合并的密度尚非独立自由表面液体，靠近时视觉墨可交融但吞噬只认稳定半径；AI竞争/技能/收益数值需人工长局调优；新首页未使用参考B的竹林原画；音效、真机Safari/WebGL兼容、长时负载待后续。IndexedDB与收藏本机本源，无云同步；尚无多人服务器。
+- **Cancelled / Preserved**：旧版“最大体型＋75%通关”、三选一技能、鱼虾装饰不恢复。`outputs/ink_demo_v2.html`、旧相册/二维码、鱼视觉页和所有原画保留；二维码目前只在旧版中，不将展览临时二维码强塞新版。原视觉模块只有可选局部实体/cover背景与可传作品地址的兼容扩展，默认路径保留。
+- **Git Checkpoint**：工作目录 `D:/ink_game_codex/html-inkgame-main/` 仍无 `.git`，四项Git审计命令无法获得本地branch/remote/log/HEAD；没有初始化新仓库。2026-10-13只读GitHub连接确认远端main=`8f92488ad1ef36b51289dd8f15b363701eafaafd`。未同步远端、未写正式clone、未commit/push；正式clone受当前读取权限限制。本轮前主要替换文件快照在 `work/home-baseline/`，未删除用户资料。未来推送必须重新授权并核对正式仓库差异。
+
+**Next**：先实际试玩五分钟争墨→三分钟宣纸，调玩家主体可读性、AI密度与收益，再制作作品专用mask和竖屏画作镜头；随后真机双指/Safari/长时性能，再扩展内容。新首页布局以本轮参考图优先于最早总提示词的不对称建议。
+
 ## 2026-10-06 — 第五轮：认可流体风格并授权发布 [CURRENT]
 
 用户认可第四轮墨体风格，要求保留；强化主体小墨球的可见度，所有尾迹/扩散随主体尺寸变动；互动水墨降低灵敏度/力量/作用范围。宣纸只做必要微调。界面最新要求为**中文和日文同时显示**，替代此前仅中文偏好。从本轮起用户明确授权更新GitHub并提供独立“视觉效果”链接。

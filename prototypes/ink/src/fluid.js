@@ -5,7 +5,7 @@ const common=`#version 300 es
 precision highp float; in vec2 uv; out vec4 o;
 uniform sampler2D field, velocity, pressure, curl, predictor, reverse;
 uniform sampler2D imageTexture, deformation;
-uniform vec2 texel, point, force, imageScale, fishDirection, fishFlow, renderTexel; uniform float interactionRadius, sizeBoundary, dt, decay, radius, amount, aspect, time, backgroundActive, coreSpeed, fishActive, fishPhase, fishSpeed, fishActivity, fishTurn;
+uniform vec2 texel, point, force, imageScale, fishDirection, fishFlow, renderTexel; uniform float interactionRadius, sizeBoundary, localEntities, dt, decay, radius, amount, aspect, time, backgroundActive, coreSpeed, fishActive, fishPhase, fishSpeed, fishActivity, fishTurn;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}
 float ellipseInk(vec2 p,vec2 center,vec2 size,float rough){return 1.-smoothstep(.92,1.06,length((p-center)/size)+rough);}
@@ -29,6 +29,8 @@ vec3 fishMasks(vec2 p){
 vec4 sampleLinear(sampler2D s,vec2 p){vec2 z=clamp(p,texel*.5,1.-texel*.5)/texel-.5;vec2 i=floor(z),f=fract(z);vec2 q=(i+.5)*texel;return mix(mix(texture(s,q),texture(s,q+vec2(texel.x,0.)),f.x),mix(texture(s,q+vec2(0.,texel.y)),texture(s,q+texel),f.x),f.y);}
 `;
 const shaders={
+ // Camera-only coordinate reprojection. It introduces no new velocity or actor forces.
+ reproject:`vec2 q=uv*imageScale+point;float inside=step(0.,q.x)*step(q.x,1.)*step(0.,q.y)*step(q.y,1.);vec4 value=sampleLinear(field,q)*inside;value.xy*=amount;o=value;`,
  fishGuide:`vec2 v=texture(velocity,uv).xy;vec2 p=fishLocal(uv);float t=clamp((.65-p.x)/3.2,0.,1.4);
  vec2 normal=vec2(-fishDirection.y/aspect,fishDirection.x);float wave=(.035+.42*fishActivity)*t*t*cos(fishPhase-t*4.2)*(1.7+fishActivity*6.5);
  float wet=smoothstep(.025,.5,texture(field,uv).z),band=exp(-p.y*p.y/1.7)*smoothstep(-3.5,-2.7,p.x)*(1.-smoothstep(.3,1.,p.x));
@@ -50,10 +52,19 @@ const shaders={
  vec2 direction=vec2(force.x*aspect,force.y);float speed=length(direction);direction=normalize(direction+vec2(.00001,0.));
  float along=dot(delta,direction),side=abs(dot(delta,vec2(-direction.y,direction.x)));
  float tail=radius*(2.8+min(speed,1.)*4.);
- float lateral=smoothstep(radius*1.6,radius*2.7,side);
+ float activity=smoothstep(.03,.32,speed);
+ float rearDistance=max(0.,-along)/max(radius,.0001);
+ float width=radius*mix(1.55,.52+min(rearDistance,5.)*.10,activity);
+ float lateral=smoothstep(width,width*1.55,side);
  float front=smoothstep(radius*1.7,radius*2.8,along);
  float rear=smoothstep(tail,tail*1.4,-along);
- ink.z*=exp(-dt*(lateral+front+rear)*2.4);o=ink;`,
+ float wakeFade=activity*smoothstep(radius*.4,radius*3.,-along)*2.2;
+ float localWeight=localEntities>.5?1.-smoothstep(radius*5.,radius*8.,length(delta)):1.;ink.z*=exp(-dt*(lateral*mix(2.4,6.,activity)+front*3.+rear*2.4+wakeFade)*localWeight);
+ // Two rear pigment lobes share this density pass: no per-frame extra velocity splats.
+ float wander=sin(time*3.1)*radius*.055*activity;
+ float a=along+radius*.38,b=along+radius*.86;
+ ink.z+=dt*activity*(8.*exp(-(a*a+pow(side-wander,2.))/max(pow(radius*.17,2.),.000001))+5.*exp(-(b*b+pow(side+wander,2.))/max(pow(radius*.145,2.),.000001)));
+ o=ink;`,
  material:`
  vec2 v=texture(velocity,uv).xy;
  float d=max(0.,texture(field,uv).z);
@@ -61,12 +72,23 @@ const shaders={
  float distanceToInk=length(delta);
  float envelope=exp(-dot(delta,delta)/max(radius*radius,.0001));
  float wet=smoothstep(.025,.45,d);
- vec2 carry=force;
- vec2 spring=vec2(delta.x/aspect,delta.y)*vec2(1./texel.x,1./texel.y)*12.;
+ vec2 motion=force*texel;motion.x*=aspect;
+ float activity=smoothstep(.03,.32,length(motion));
+ vec2 direction=normalize(motion+vec2(.00001,0.)),normal=vec2(-direction.y,direction.x);
+ float along=dot(-delta,direction),side=dot(-delta,normal);
+ float core=exp(-dot(delta,delta)/max(radius*radius*.35,.00001));
+ // Body transports itself; its wake drifts behind instead of catching up on both flanks.
+ vec2 carry=force*mix(1.,mix(-.12,.96,core),activity);
+ vec2 spring=vec2(delta.x/aspect,delta.y)*vec2(1./texel.x,1./texel.y)*mix(12.,3.,activity);
  vec2 tangent=vec2(-delta.y,delta.x/aspect)*vec2(1./texel.x,1./texel.y);
- float swirl=sin(time*1.7+distanceToInk*45.)*1.8;
- vec2 acceleration=(carry-v)*5.5+spring+tangent*swirl;
- v+=acceleration*dt*wet*mix(.30,1.,envelope);
+ float swirl=sin(time*1.7+distanceToInk*45.)*mix(.65,.10,activity)*envelope;
+ vec2 acceleration=(carry-v)*mix(5.5,3.,activity)+spring+tangent*swirl;
+ vec2 metricV=v*texel;metricV.x*=aspect;
+ // Cross-axis damping and a mild centreline return act on wet ink only.
+ float crossSpeed=dot(metricV,normal);
+ vec2 centreForce=normal*(-crossSpeed*7.-side*5.)*activity;
+ acceleration+=vec2(centreForce.x/aspect,centreForce.y)/texel;
+ v+=acceleration*dt*wet*(localEntities>.5?mix(.30,1.,envelope)*(1.-smoothstep(radius*3.,radius*7.,distanceToInk)):mix(.30,1.,envelope));
  o=vec4(clamp(v,vec2(-650.),vec2(650.)),0.,1.);`,
  advect:`vec2 v=texture(velocity,uv).xy;vec2 back=uv-dt*v*texel;o=sampleLinear(field,back)*exp(-decay*dt);`,
  correct:`vec2 back=clamp(uv-dt*texture(velocity,uv).xy*texel,texel*.5,1.-texel*.5);vec2 base=(floor(back/texel-.5)+.5)*texel;vec4 a=texture(field,base),b=texture(field,base+vec2(texel.x,0.)),c=texture(field,base+vec2(0.,texel.y)),d=texture(field,base+texel);vec4 lo=min(min(a,b),min(c,d)),hi=max(max(a,b),max(c,d));vec4 value=texture(predictor,uv)+.5*(texture(field,uv)-texture(reverse,uv));o=clamp(value,lo,hi)*exp(-decay*dt);`,
@@ -112,12 +134,13 @@ export class InkFluid {
  resize(){const r=this.canvas.getBoundingClientRect(),q=QUALITY[this.quality],scale=Math.min(q.renderScale,q.maxWidth/Math.max(2,r.width),q.maxHeight/Math.max(2,r.height));this.canvas.width=Math.max(2,Math.round(r.width*scale));this.canvas.height=Math.max(2,Math.round(r.height*scale));this.aspect=Math.max(.1,r.width/Math.max(2,r.height));const n=q.grid;this.w=Math.round(n*Math.sqrt(this.aspect));this.h=Math.round(n/Math.sqrt(this.aspect));this.releaseTargets();this.v=this.pair();this.d=this.pair();this.p=this.pair();this.div=this.target();this.c=this.target();this.dAhead=this.target();this.dBack=this.target();this.warp=this.pair();this.clear();}
  releaseTargets(){for(const t of this.targets){this.gl.deleteTexture(t.t);this.gl.deleteFramebuffer(t.f);}this.targets=[];}
  clear(){this.core=null;this.fish=null;const g=this.gl;g.clearColor(0,0,0,0);for(const t of this.targets){g.bindFramebuffer(g.FRAMEBUFFER,t.f);g.clear(g.COLOR_BUFFER_BIT);}g.bindFramebuffer(g.FRAMEBUFFER,null);g.clear(g.COLOR_BUFFER_BIT);}
- pass(name,target,params={}){const g=this.gl,p=this.programs[name];g.useProgram(p);g.bindVertexArray(this.vao);g.bindBuffer(g.ARRAY_BUFFER,this.buffer);g.bindFramebuffer(g.FRAMEBUFFER,target?.f||null);g.viewport(0,0,target?this.w:this.canvas.width,target?this.h:this.canvas.height);params={texel:[1/this.w,1/this.h],aspect:this.aspect,...params};let unit=0;for(const [key,val] of Object.entries(params)){const cache=this.uniforms[name];if(!(key in cache))cache[key]=g.getUniformLocation(p,key);const loc=cache[key];if(loc===null)continue;if(val?.t){g.activeTexture(g.TEXTURE0+unit);g.bindTexture(g.TEXTURE_2D,val.t);g.uniform1i(loc,unit++);}else if(Array.isArray(val))g.uniform2f(loc,...val);else g.uniform1f(loc,val);}g.drawArrays(g.TRIANGLE_STRIP,0,4);}
- inject({x,y,vx=0,vy=0,radius=INK.radius,intensity=.6}){const point=[x,1-y];this.pass('splat',this.v.write,{field:this.v.read,point,force:[vx,-vy],radius:radius*radius,amount:0});this.v.swap();this.pass('splat',this.d.write,{field:this.d.read,point,force:[0,0],radius:radius*radius,amount:intensity});this.d.swap();}
+ pass(name,target,params={}){const g=this.gl,p=this.programs[name];g.useProgram(p);g.bindVertexArray(this.vao);g.bindBuffer(g.ARRAY_BUFFER,this.buffer);g.bindFramebuffer(g.FRAMEBUFFER,target?.f||null);g.viewport(0,0,target?this.w:this.canvas.width,target?this.h:this.canvas.height);params={texel:[1/this.w,1/this.h],aspect:this.aspect,localEntities:this.localEntities?1:0,...params};let unit=0;for(const [key,val] of Object.entries(params)){const cache=this.uniforms[name];if(!(key in cache))cache[key]=g.getUniformLocation(p,key);const loc=cache[key];if(loc===null)continue;if(val?.t){g.activeTexture(g.TEXTURE0+unit);g.bindTexture(g.TEXTURE_2D,val.t);g.uniform1i(loc,unit++);}else if(Array.isArray(val))g.uniform2f(loc,...val);else g.uniform1f(loc,val);}g.drawArrays(g.TRIANGLE_STRIP,0,4);}
+ inject({x,y,vx=0,vy=0,radius=INK.radius,intensity=.6}){const point=[x,1-y];if(vx||vy){this.pass('splat',this.v.write,{field:this.v.read,point,force:[vx,-vy],radius:radius*radius,amount:0});this.v.swap();}this.pass('splat',this.d.write,{field:this.d.read,point,force:[0,0],radius:radius*radius,amount:intensity});this.d.swap();}
  stir({x,y,vx,vy,radius=.075}){const scale=QUALITY[this.quality].grid/448;vx*=scale;vy*=scale;this.pass('splat',this.v.write,{field:this.v.read,point:[x,1-y],force:[vx,-vy],radius:radius*radius,amount:0});this.v.swap();}
- step(dt){dt=Math.min(dt,1/30);this.pass('curl',this.c,{velocity:this.v.read});this.pass('confine',this.v.write,{velocity:this.v.read,curl:this.c,dt,amount:INK.vorticity*(this.materialMode?1:.32)});this.v.swap();this.pass('divergence',this.div,{velocity:this.v.read});for(let i=0;i<QUALITY[this.quality].iterations;i++){this.pass('jacobi',this.p.write,{pressure:this.p.read,field:this.div});this.p.swap();}this.pass('gradient',this.v.write,{velocity:this.v.read,pressure:this.p.read});this.v.swap();this.pass('advect',this.v.write,{field:this.v.read,velocity:this.v.read,dt,decay:INK.velocityDecay});this.v.swap();this.pass('advect',this.dAhead,{field:this.d.read,velocity:this.v.read,dt,decay:0});this.pass('advect',this.dBack,{field:this.dAhead,velocity:this.v.read,dt:-dt,decay:0});this.pass('correct',this.d.write,{field:this.d.read,velocity:this.v.read,predictor:this.dAhead,reverse:this.dBack,dt,decay:INK.densityDecay});this.d.swap();if(this.backgroundMode){this.elapsed=(this.elapsed||0)+dt;this.pass('deform',this.warp.write,{field:this.warp.read,velocity:this.v.read,dt,time:this.elapsed});this.warp.swap();}}
+ step(dt){dt=Math.min(dt,1/30);this.pass('curl',this.c,{velocity:this.v.read});this.pass('confine',this.v.write,{velocity:this.v.read,curl:this.c,dt,amount:INK.vorticity*(this.materialMode?(this.fish?1:.22):.32)});this.v.swap();this.pass('divergence',this.div,{velocity:this.v.read});for(let i=0;i<QUALITY[this.quality].iterations;i++){this.pass('jacobi',this.p.write,{pressure:this.p.read,field:this.div});this.p.swap();}this.pass('gradient',this.v.write,{velocity:this.v.read,pressure:this.p.read});this.v.swap();this.pass('advect',this.v.write,{field:this.v.read,velocity:this.v.read,dt,decay:INK.velocityDecay});this.v.swap();this.pass('advect',this.dAhead,{field:this.d.read,velocity:this.v.read,dt,decay:0});this.pass('advect',this.dBack,{field:this.dAhead,velocity:this.v.read,dt:-dt,decay:0});this.pass('correct',this.d.write,{field:this.d.read,velocity:this.v.read,predictor:this.dAhead,reverse:this.dBack,dt,decay:INK.densityDecay});this.d.swap();if(this.backgroundMode){this.elapsed=(this.elapsed||0)+dt;this.pass('deform',this.warp.write,{field:this.warp.read,velocity:this.v.read,dt,time:this.elapsed});this.warp.swap();}}
+ reproject(scale,offset){for(const pair of [this.v,this.d,this.p]){this.pass('reproject',pair.write,{field:pair.read,imageScale:[scale,scale],point:offset,amount:pair===this.v?1/scale:1});pair.swap();}}
  setBackground(image){const g=this.gl;if(this.imageTexture)g.deleteTexture(this.imageTexture.t);const t=g.createTexture();g.bindTexture(g.TEXTURE_2D,t);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_MIN_FILTER,g.LINEAR);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_MAG_FILTER,g.LINEAR);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_WRAP_S,g.CLAMP_TO_EDGE);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_WRAP_T,g.CLAMP_TO_EDGE);g.pixelStorei(g.UNPACK_FLIP_Y_WEBGL,true);g.texImage2D(g.TEXTURE_2D,0,g.RGBA,g.RGBA,g.UNSIGNED_BYTE,image);g.pixelStorei(g.UNPACK_FLIP_Y_WEBGL,false);this.imageTexture={t};this.imageAspect=image.naturalWidth/image.naturalHeight;}
  fishUniforms(){return {point:this.core?.point||[.5,.5],radius:this.core?.radius||.05,fishActive:this.fish?1:0,fishDirection:[Math.cos(this.fish?.heading||0),-Math.sin(this.fish?.heading||0)],fishPhase:this.fish?.phase||0,fishSpeed:this.fish?.speed||0,fishActivity:this.fish?.activity||0,fishTurn:this.fish?.turn||0,fishFlow:this.fish?.flow||[0,0]};}
- draw(prediction=0){const imageScale=this.aspect>this.imageAspect?[.9*this.imageAspect/this.aspect,.9]:[.9,.9*this.aspect/this.imageAspect];this.pass('display',null,{field:this.d.read,velocity:this.v.read,dt:prediction,amount:this.materialMode?1:0,sizeBoundary:this.sizeBoundary&&!this.fish?1:0,renderTexel:[1/this.canvas.width,1/this.canvas.height],point:this.core?.point||[.5,.5],radius:this.core?.radius||.05,coreSpeed:this.core?.speed||0,interactionRadius:this.core?.collisionRadius||0,backgroundActive:this.backgroundMode?1:0,...this.fishUniforms(),imageTexture:this.imageTexture||this.d.read,deformation:this.warp.read,imageScale});}
+ draw(prediction=0){const imageScale=this.imageFit==='cover'?(this.aspect>this.imageAspect?[1,this.aspect/this.imageAspect]:[this.imageAspect/this.aspect,1]):this.aspect>this.imageAspect?[.9*this.imageAspect/this.aspect,.9]:[.9,.9*this.aspect/this.imageAspect];this.pass('display',null,{field:this.d.read,velocity:this.v.read,dt:prediction,amount:this.materialMode?1:0,sizeBoundary:this.sizeBoundary&&!this.fish?1:0,renderTexel:[1/this.canvas.width,1/this.canvas.height],point:this.core?.point||[.5,.5],radius:this.core?.radius||.05,coreSpeed:this.core?.speed||0,interactionRadius:this.core?.collisionRadius||0,backgroundActive:this.backgroundMode?1:0,...this.fishUniforms(),imageTexture:this.imageTexture||this.d.read,deformation:this.warp.read,imageScale});}
  dispose(){this.releaseTargets();if(this.imageTexture)this.gl.deleteTexture(this.imageTexture.t);for(const p of Object.values(this.programs))this.gl.deleteProgram(p);this.gl.deleteBuffer(this.buffer);this.gl.deleteVertexArray(this.vao);}
 }

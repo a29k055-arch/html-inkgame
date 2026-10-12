@@ -2,27 +2,44 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>墨 · 旧版ゲーム</title>
-  <meta http-equiv="refresh" content="0; url=outputs/ink_demo_v2.html">
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: #f5f0e6;
-      color: #1a1a1a;
-      font-family: "Segoe UI", system-ui, sans-serif;
-    }
-
-    a {
-      color: inherit;
-      font-size: 20px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>墨—BOKU—</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="outputs/ui/boku-gallery.css">
+  <link rel="stylesheet" href="src/ui/game.css">
 </head>
 <body>
-  <a href="outputs/ink_demo_v2.html">旧版ゲームを遊ぶ</a>
+  <main id="stage" aria-label="墨—BOKU—">
+    <canvas id="world" aria-label="硯と宣紙"></canvas>
+    <canvas id="homeFluid" aria-hidden="true"></canvas>
+    <div id="homeWash" aria-hidden="true"></div>
+    <section id="home" aria-label="メインメニュー">
+      <h1 class="title-mark" aria-label="墨"><img src="assets/home/menu-reference.png" alt="" draggable="false"></h1>
+      <nav class="menu" aria-label="遊び方を選ぶ">
+        <button id="grindBtn" class="brush selected" data-mode="inkstone">墨を磨る</button>
+        <button id="drawBtn" class="brush" data-mode="paper">描く</button>
+        <button id="albumBtn" class="brush">ギャラリー</button>
+        <button id="settingsBtn" class="brush">設定</button>
+      </nav>
+    </section>
+    <div id="homeFoot"><span id="backgroundCaption"></span><button id="nextBackground" aria-label="次の背景">景を変える</button></div>
+    <section id="hud" hidden>
+      <header class="hud-top"><button id="pauseBtn" aria-label="一時停止"></button><span id="modeLabel"></span><strong id="timer" aria-label="残り時間">5:00</strong><span id="inkMetric"></span><span id="rankMetric"></span></header>
+      <div id="mapWrap"><canvas id="minimap" width="128" height="128" aria-label="小地図"></canvas><small>硯</small></div>
+      <p id="battleStatus" role="status"></p>
+      <p id="playHint"></p>
+      <div id="joystick" aria-label="移動"><i></i></div>
+      <div class="actions"><span id="effectStatus"></span><button id="skillBtn" aria-label="現在の墨技を使う"><span class="skill-name">墨技</span><small>Shift</small></button><span id="reserveSlot"><small>次の墨技</small><span>—</span></span><button id="guideBtn" hidden>下絵</button></div>
+    </section>
+    <p id="notice" role="status" aria-live="polite" hidden></p>
+    <section id="loading" class="overlay"><div class="panel loading-panel"><span class="loading-ink">墨</span><p id="loadingText">墨を整えています</p><progress id="loadProgress" max="3" value="0"></progress></div></section>
+  </main>
+  <dialog id="settings"><div class="panel"><h2>設定</h2><label>画質<select id="quality"><option value="high">高画質</option><option value="balanced">バランス</option><option value="performance">省電力</option></select></label><label>操作<select id="controls"><option value="auto">自動</option><option value="pc">マウス・キーボード</option><option value="mobile">タッチ</option></select></label><label>背景<select id="backgroundPolicy"><option value="fixed">固定</option><option value="random">ランダム</option><option value="rotate">輪替わり</option><option value="unlocked">解放した作品</option></select></label><p class="muted">WASD / 矢印：移動 · Shift：研墨では墨技・描くでは吐墨<br>タッチ：左のスティックと右の墨技 · Esc：一時停止</p><button id="resetData" class="ink-button secondary">データをリセット</button><button id="closeSettings" class="ink-button">戻る</button></div></dialog>
+  <dialog id="resetConfirm"><div class="panel"><h2>保存データをリセットしますか？</h2><p>保存した墨、解放した作品、完成度と画像の記録を削除します。画質・操作設定は残ります。</p><button id="cancelReset" class="ink-button">戻る</button><button id="confirmReset" class="ink-button secondary">リセットする</button></div></dialog>
+  <dialog id="pause"><div class="panel"><h2>ひと休み</h2><button id="resumeBtn" class="ink-button">続ける</button><button id="settleBtn" class="ink-button secondary">ここまでの墨を納める</button><button id="pauseSettings" class="ink-button secondary">設定</button></div></dialog>
+  <dialog id="result"><div class="panel result-panel"><h2 id="resultTitle"></h2><img id="resultImage" alt="今回の作品" hidden><p id="resultStats"></p><p id="saveStatus" class="muted"></p><div class="result-actions"><button id="continueBtn" class="ink-button">描く</button><button id="saveBtn" class="ink-button secondary" hidden>画像を保存</button><button id="resultHome" class="ink-button secondary">ホーム</button></div></div></dialog>
+  <dialog id="artPicker"><div class="panel"><h2>描く作品</h2><p class="muted">画の中を移動して原画を描きます。保存した墨を使い、Shiftで前方へ吐墨できます。</p><div id="artChoices"></div><button id="cancelPicker" class="ink-button secondary">戻る</button></div></dialog>
+  <script type="module" src="src/app.js"></script>
+  <noscript>このゲームにはJavaScriptが必要です。</noscript>
 </body>
 </html>

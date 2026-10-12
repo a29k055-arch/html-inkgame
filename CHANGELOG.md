@@ -1,5 +1,81 @@
 # Changelog
 
+## 2026-10-13 - Pure Artwork Home, Rear Wake and Persistent Painting World
+
+### Added
+
+- Independent original-art home renderer with bounded 1.1px local ripple distortion, pointer/touch/click interaction, and idle rendering suspension. Home never imports actor/reveal/fluid fields.
+- Artwork-sized painting maps, shared mouse/WASD/mobile joystick movement, following camera, weighted original-image reveal, painting minimap, and forward Shift/touch ink projectiles.
+- Versioned centralized browser save: shared total ink, settlement receipts, earned/spent totals, artwork completion, unlocks and settings. Migrates legacy metadata, preserves legacy page saves, flushes on normal exit and rejects overspending.
+- Two-stage settings reset clears new-game ink/progress/unlocks and IndexedDB Best/History, retaining pure settings and the initial catalog artwork. Reset generation guards block stale asynchronous image writes.
+- Paper-save rule tests for migration, duplicate settlement, budgets, projectiles, cooldown, unlocks and reset.
+
+### Changed
+
+- Hidden and cleared gameplay canvas on home return; home background displays one original image independently of previous NPCs or painting frames.
+- Upgraded eight cached NPC sprites with static pigment variation, subtle irregular feathered edges and grain; still no fluid, trailing or physics coupling.
+- Shared MaterialInk/InkFluid use rear-spine emission, backward wake transport, cross-axis damping, reduced moving swirl/vorticity, narrow lateral envelope and rear density fade. Emission shares an existing density pass; zero-velocity splats skip an unnecessary velocity copy. Stationary core and separate fish vorticity preserved.
+- Rounded paper-glass HUD, item/action controls and rectangular minimaps. Home brush menu retained.
+- Replaced viewport pointer painting and disposable carried-ink scaling with world movement/reveal and real shared-wallet spending. First-save starter ink is granted once, not per painting.
+- README adds newest game access and retains original visual introduction, visual README, technical documentation and legacy game text/links.
+
+### Validation / Limits
+
+- Five Edge sizes (1440×900,390×844,844×390,320×568,568×320), real touch-event two-finger paper movement/projectile, stone settlement, drawing reveal and PNG history, refresh and closed/reopened persistent browser, cancel/confirmed reset passed.
+- Home-original comparison after battle has no large pixel differences; sub-one-color-level mean differences from browser sampling are tolerated. No script/resource errors in route tests.
+- Player field remains pixel-identical with 0/80 NPCs and constant material pass count. Directional GPU sampling verifies rear pigment exceeds both lateral regions combined for right/down movement; still core remains nonzero.
+- Reused existing combat rule/profile/full300-second ecological checks; completed-art unlock uses the real reveal mask, while deterministic completion/settlement branches are accelerated by test-only instrumentation.
+- Final standalone high-quality local32/80 NPC ten-second runs stayed around60fps,12 FBOs;20 consecutive renderer lifecycles had no WebGL-context warnings. Rear/lateral pigment ratios about64(right)/29(down) in controlled directional samples.
+- No phone hardware or prolonged GPU certification. Unfinished rounds do not resume after reload; wallet and completed records do persist. Artwork masks remain grayscale-derived, not authored per-work masks.
+- Publication uses existing clean formal main repository, explicit runtime/docs/test whitelist and normal push; no work files, profiles or screenshots staged. Existing old game source/assets remain byte-identical.
+
+
+
+## 2026-10-13 - Player-Only Fluid, Legacy World and Ink-Technique Combat
+
+### Changed
+
+- Separated approved player MaterialInk from lightweight NPC spheres. NPCs use eight cached legacy-style Canvas gradients; no NPC density, velocity, force, material pass or trail enters the player's simulation.
+- Restored legacy 3400×3400 square world, 760 four-shape ink resources, full-map/edge NPC spawn distribution and mature movement/camera foundations. Battle contains no artwork reveal/erasure.
+- Replaced whole-world fluid with full-quality player viewport simulation and camera coordinate reprojection; the reference MaterialInk algorithm remains unchanged.
+- Removed free acceleration, mass cost, boost API/button and E shortcut from the new game. Shift exclusively uses equipped ink techniques; retired speed-changing dash and added forward pigment-wash splash.
+- Expanded to32 NPCs with seven personalities, individual reaction/awareness/skill, threat-aware escape routes, prey profitability/interception/abandonment, resource/item competition, edge/water steering and situational item use.
+- Redesigned combat HUD with translucent paper islands, circular minimap, seal-like pause/item controls, current/reserve slots and effect/state feedback.
+
+### Validation
+
+- Five desktop/mobile viewports, battle-to-paper/record flow, pause, resize and quality controls passed without script/resource errors.
+- 0 vs80 NPCs produce pixel-identical player fluid and identical material pass counts; NPC visual code owns no fluid reference.
+- Shift no-speed/no-mass-cost, current/reserve item use and two-finger joystick/item passed.
+- Full300-second rule/ecology simulations: NPC mutual swallowing and distinct behavior distributions. High-quality local32/80 NPC short tests around60fps,12 FBOs; not physical-phone or long-duration certification.
+- Local-only; previous changes, legacy game, supplied assets and public visual study preserved. No commit/push.
+
+## 2026-10-13 - New Home and Playable Inkstone-to-Paper Loop
+
+### Added
+
+- Added interactive Japanese home UI with supplied calligraphy title, independent textured brush buttons, loading and keyboard/touch navigation.
+- Added replaceable background catalog, random/rotation/unlocked policies, saved background selection and fluid artwork interaction.
+- Added modular five-minute inkstone with unified entities/controllers, five AI personalities, public ink, tiny respawns, configurable death penalty, proportional early settlement, full-round rank reward and clear-water shrink.
+- Added five random ink skills, current/reserve queue, minimap item lights, pause and simultaneous mobile joystick/action input.
+- Added three-minute paper sessions using existing fluid-driven artwork reveal, guaranteed basic ink, carried ink, completion, collection and PNG download.
+- Extended existing Gallery with Original/Best/last-five History, stable legacy unlock records and IndexedDB image blobs with explicit session fallback.
+- Added centralized game balance and executable rule tests, including full 300-second model simulation.
+
+### Changed
+
+- Root entry now starts the new game. Existing v2 and visual studies remain independently accessible.
+- Reused approved MaterialInk without replacing its design; added opt-in local multi-entity forces/containment and cover backgrounds to the fluid module. Default study rendering remains unchanged.
+- PaperReveal accepts a supplied artwork URL; default source resolves relative to its module.
+- Local preview server serves SVG with the correct content type.
+
+### Validation
+
+- Edge desktop plus four mobile-size viewports: both entries, reveal, pause, results, gallery, rotate/quality/resize, no script or resource errors.
+- Touch-event joystick + second finger boost, touch reveal, Escape/cancel flow, IndexedDB persistence/best/history limits, storage-denied fallback, legacy and study smoke checks passed.
+- FBO count remains12; short local measurements near60fps, not physical-phone or long-session certification.
+- Local-only. No commit/push; extracted workspace has no Git metadata.
+
 ## 2026-10-12 - トップページに二つの紹介を掲載
 
 - トップページのREADMEに水墨視覚効果の紹介と展示・技術説明の二つの入口を追加。Ink Game Demoの説明は全文をそのまま保持し、独立した水墨READMEも維持。

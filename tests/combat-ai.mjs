@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {Inkstone,entity} from '../src/game/inkstone.js';
+import {aiController,chooseGoal,AI_PROFILES} from '../src/game/ai.js';
+import {GAME_CONFIG as C,SKILLS,dist} from '../src/game/config.js';
+const game=new Inkstone(),controller=aiController(0);
+const hunter=entity('hunter',1000,1000,65,controller),prey=entity('prey',1080,1000,20,aiController(5));
+game.entities=[game.player,hunter,prey];game.foods=[];game.items=[];
+const goal=chooseGoal(game,hunter);assert.equal(controller.intent,'hunt');assert.equal(goal.id,'prey');
+const danger=entity('danger',950,1000,110,aiController(4));game.entities.push(danger);const flee=chooseGoal(game,hunter);assert.equal(controller.intent,'flee');assert.ok(dist(flee,danger)>dist(hunter,danger));
+const resource=entity('grow',2000,1000,25,aiController(1));game.entities=[game.player,resource];game.foods=[{x:2020,y:1030,mass:40,r:4}];chooseGoal(game,resource);assert.equal(resource.controller.intent,'forage');
+const opportunist=entity('chance',2000,1000,30,aiController(3));game.entities=[game.player,opportunist];game.items=[{x:2030,y:1000,r:10}];chooseGoal(game,opportunist);assert.equal(opportunist.controller.intent,'item');
+game.entities=[game.player,hunter,prey];game.items=[];game.foods=[];danger.dead=1;hunter.x=1000;hunter.y=1000;prey.x=1010;prey.y=1000;hunter.invincible=prey.invincible=0;game.update(.001,{x:0,y:0});assert.ok(prey.dead>0);assert.ok(hunter.swallowed>0);assert.equal(game.player.swallowed,0);
+const before=game.speed(hunter);hunter.skills=[SKILLS.find(s=>s.id==='splash')];game.useSkill(hunter);assert.equal(game.speed(hunter),before);assert.ok(game.waves.length);assert.equal(hunter.skills.length,0);
+game.elapsed=250;const edge=entity('edge',3300,3300,30,aiController(4));game.entities=[game.player,edge];chooseGoal(game,edge);assert.equal(edge.controller.intent,'water');
+assert.equal(Object.keys(AI_PROFILES).length,7);
+const distribution=new Inkstone();const quadrants=new Set(distribution.entities.slice(1).map(e=>`${e.x>1700},${e.y>1700}`));assert.equal(quadrants.size,4);assert.ok(distribution.entities.slice(1).some(e=>dist(e,distribution.player)>1600));
+console.log('PASS seven profiles, pursuit, danger-aware escape, forage, item competition, NPC-to-NPC swallowing, no-speed item, water routing and whole-map distribution');
