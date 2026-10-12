@@ -1,5 +1,19 @@
 # 墨—BOKU— Project Handoff
 
+## 2026-10-13 — 仅主角视觉回退，当前浓墨转NPC [CURRENT]
+
+本轮用户拒绝3e63bd4的主角浓稠拖尾，明确要求只恢复上一版主角视觉，同时将当前算法留给NPC，测试后commit/push；禁止整体Git revert。
+
+- **Source audit**：当前3e63bd4870aea94fac0ff4a556334c36e0476ebc；上一版基础8f92488ad1ef36b51289dd8f15b363701eafaafd，主体与流体最后实际修改提交均为f8d3e2c。只取上一版MaterialInk及fluid.js的material/contain shader、material vorticity，保留新版reproject、cover与零速度注入优化等兼容/非视觉部分。主角与visual-effects同一imports，不分叉。固定轨迹历史fluid基准与当前主角GPU哈希均2061883632，逐像素一致。
+- **NPC reuse**：3e63bd4的完整fluid/material视觉源码保存在src/ink/npc-material（文件头注明来源），atlas.js运行一次私有96网格/4次压力求解，采样12张128×128动态墨体贴图并裁掉远尾；所有NPC共享、按运动朝向旋转，静止取稳定帧。生成后dispose targets/lose_context/remove canvas，运行阶段零NPC流体模拟，不能推主角或写其密度/速度。cached Promise跨renderer生命周期只生成一次。旧轻量图只在生成前或GPU不支持时回退，不把它冒充复用算法成功。
+- **Preserved**：游戏地图、AI、道具/绘制Shift分流、大画布、wallet/localStorage/IndexedDB、作品解锁/重置、首页纯原画、HUD未回退。游戏Renderer仍唯一接受player。README新版标题/入口为New Version，旧版正文及水墨介绍/README/链接保留。
+- **Tests / limitations**：历史GPU像素对照、NPC atlas实际12帧/one build/zero live simulation；0/80动画NPC的玩家像素和运算次数一致；原规则和五视口功能回归、短性能测量。见本地work/visual-rollback-validation.json与相关回归结果，未发布测试产物。真机/长局/人眼动态接受度仍需用户判断。
+- **Git**：开始正式main干净、HEAD和origin/main=3e63bd4。仅白名单视觉源码、README、CHANGELOG和交接文档提交，正常push；最终SHA以git log为准，不修改旧提交。
+
+**Next**：以上一版主角水墨作为后续优化基线；先观察动画NPC的浓淡/轮廓，再按用户反馈微调，不恢复本轮已拒绝的主角拖尾。
+
+
+
 ## 2026-10-13 — 原画首页 / 正后方拖尾 / 大画地图与集中存档 [CURRENT]
 
 **本轮最新用户明确授权测试、更新文档、commit并push当前分支。下面旧节“不push”仅是历史。此节覆盖旧的鼠标直接涂画、每局基础墨与携墨倍率、圆形小地图、共用NPC流体等实现说明。**

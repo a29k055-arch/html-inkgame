@@ -1,8 +1,8 @@
-# 墨—BOKU— 新版游戏
+# 墨—BOKU— New Version
 
-## 最新版 / 新版游戏
+## New Version
 
-- [最新版《墨—BOKU—》](https://a29k055-arch.github.io/html-inkgame/)
+- [New Version — 墨—BOKU—](https://a29k055-arch.github.io/html-inkgame/)
 - [旧版游戏（保留）](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
 - [水墨视觉效果测试](https://a29k055-arch.github.io/html-inkgame/visual-effects/?mode=player&form=ink)
 - [水墨视觉效果 README](prototypes/ink/README.md)
@@ -12,7 +12,7 @@
 - **墨を磨る**：五分钟争墨，3400×3400大地图、32个有不同性格的AI、760墨点、吞噬成长、极小重生、墨技与清水缩圈。提前纳墨按时间比例结算，完整局有排名奖励；结算所得加到总墨量。
 - **描く**：进入按原画比例放大的地图（荷花作品为4240×1800），控制玩家在画内移动，墨迹与吐墨逐渐显露原画。三分钟或墨用尽后收画。Shift向朝向吐墨，消耗4墨；移动按距离消耗保存墨。首次存档获110基础墨一次，重复开画不会补回；数据重置后墨量为0，可继续研墨。
 - PC：鼠标 / WASD / 箭头移动，Esc暂停。研墨 Shift用当前墨技，描く Shift吐墨。触屏：摇杆移动，另一根手指按右侧功能按钮；无自由加速。
-- 主角独占高级水墨；NPC用8张缓存的轻量水墨球，不产生流场。玩家后方输运、补墨与渐淡在同一套模块中实现，游戏与visual-effects同步。
+- 主角与visual-effects共享8f92488版本的高级水墨算法。3e63bd4的浓稠水墨算法保留在 `src/ink/npc-material/`，只用于一次性生成12帧紧凑NPC动画贴图：96网格、4次压力迭代、裁去长尾，随后释放GPU；所有NPC共享Canvas贴图，不影响主角流体。
 - 首页只渲染独立清单中的一幅原画。鼠标 / 点击 / 触摸产生局部轻微扰动，不接入游戏数据。菜单与背景独立；支持固定、随机、轮换、解锁作品和Gallery选背景。
 - HUD使用半透明宣纸色圆角矩形；战斗和绘制都有圆角矩形小地图。完成度达到75%解锁下一幅作品；Gallery保留Original、Best与最近5次History。
 - 设置中的「データをリセット」需要再次确认。清除总墨量、额外解锁、完成记录与绘制图片；保留画质/操作等纯设置，以及第一幅基础作品。旧版独立存档不删除。

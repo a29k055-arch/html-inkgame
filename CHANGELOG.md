@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-13 - Scoped Player Visual Rollback and Reused NPC Ink Atlas
+
+- Identified current dense/rear-wake player visual as3e63bd4 and previous visual baseline as8f92488 (last visual-code commit f8d3e2c). Restored exact previous MaterialInk, material/contain GLSL and material vorticity; retained camera reprojection, drawing, wallet, persistence, HUD and home isolation. No whole-commit revert.
+- Game and visual-effects still import the same restored player modules. Fixed-motion GPU comparison with historical baseline is pixel-identical (hash2061883632).
+- Preserved3e63bd4 fluid/material source under src/ink/npc-material. One private96-grid,4-pressure-iteration bake generates12 shared128px compact animation frames, crops long tails, then disposes all temporary GPU targets/context. Runtime NPCs only rotate/play cached ink textures; no per-NPC fluid or player-field writes. Existing light sprite is a loading/unsupported-bake fallback.
+- README new-version title, section and game link now use **New Version**. Old game and visual README/links/text preserved.
+- Validation: restored-player baseline GPU comparison, actual generated NPC atlas (one build,12 frames,zero remaining simulations), player0/80 animated-NPC pixel isolation, existing combat and paper-save checks; five-view home/drawing/Shift/wallet/reset regression and32/80 NPC short performance. Physical phones/long sessions remain unverified.
+
+
+
 ## 2026-10-13 - Pure Artwork Home, Rear Wake and Persistent Painting World
 
 ### Added
