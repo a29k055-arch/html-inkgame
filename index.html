@@ -17,29 +17,31 @@
       <h1 class="title-mark" aria-label="墨"><img src="assets/home/menu-reference.png" alt="" draggable="false"></h1>
       <nav class="menu" aria-label="遊び方を選ぶ">
         <button id="grindBtn" class="brush selected" data-mode="inkstone">墨を磨る</button>
-        <button id="drawBtn" class="brush" data-mode="paper">描く</button>
+        <button id="drawBtn" class="brush" data-mode="paper">画巻を修復</button>
         <button id="albumBtn" class="brush">ギャラリー</button>
         <button id="settingsBtn" class="brush">設定</button>
       </nav>
     </section>
     <div id="homeFoot"><span id="backgroundCaption"></span><button id="nextBackground" aria-label="次の背景">景を変える</button></div>
     <section id="hud" hidden>
-      <header class="hud-top"><button id="pauseBtn" aria-label="一時停止"></button><span id="modeLabel"></span><strong id="timer" aria-label="残り時間">5:00</strong><span id="inkMetric"></span><span id="rankMetric"></span></header>
+      <header class="hud-top"><button id="pauseBtn" aria-label="一時停止"></button><span id="modeLabel"></span><strong id="timer" aria-label="残り時間">6:00</strong><span id="inkMetric"></span><span id="rankMetric"></span></header>
       <div id="mapWrap"><canvas id="minimap" width="128" height="128" aria-label="小地図"></canvas><small>硯</small></div>
       <p id="battleStatus" role="status"></p>
-      <p id="playHint"></p>
-      <div id="joystick" aria-label="移動"><i></i></div>
+      <div id="campaignStatus" role="status"></div><div id="bossHud" hidden><span>異墨・千眼</span><progress id="bossHealth" max="1" value="1"></progress><small id="bossDetails"></small></div><p id="playHint"></p>
+      <div id="shootJoystick" aria-label="射撃の方向"><i></i><small>射撃</small></div><div id="joystick" aria-label="移動"><i></i></div>
       <div class="actions"><span id="effectStatus"></span><button id="skillBtn" aria-label="現在の墨技を使う"><span class="skill-name">墨技</span><small>Shift</small></button><span id="reserveSlot"><small>次の墨技</small><span>—</span></span><button id="guideBtn" hidden>下絵</button></div>
     </section>
-    <p id="notice" role="status" aria-live="polite" hidden></p>
+    <canvas id="travelMatte" hidden aria-hidden="true"></canvas><p id="notice" role="status" aria-live="polite" hidden></p>
     <section id="loading" class="overlay"><div class="panel loading-panel"><span class="loading-ink">墨</span><p id="loadingText">墨を整えています</p><progress id="loadProgress" max="3" value="0"></progress></div></section>
   </main>
-  <dialog id="settings"><div class="panel"><h2>設定</h2><label>画質<select id="quality"><option value="high">高画質</option><option value="balanced">バランス</option><option value="performance">省電力</option></select></label><label>操作<select id="controls"><option value="auto">自動</option><option value="pc">マウス・キーボード</option><option value="mobile">タッチ</option></select></label><label>背景<select id="backgroundPolicy"><option value="fixed">固定</option><option value="random">ランダム</option><option value="rotate">輪替わり</option><option value="unlocked">解放した作品</option></select></label><p class="muted">WASD / 矢印：移動 · Shift：研墨では墨技・描くでは吐墨<br>タッチ：左のスティックと右の墨技 · Esc：一時停止</p><button id="resetData" class="ink-button secondary">データをリセット</button><button id="closeSettings" class="ink-button">戻る</button></div></dialog>
+  <dialog id="settings"><div class="panel"><h2>設定</h2><label>画質<select id="quality"><option value="high">高画質</option><option value="balanced">バランス</option><option value="performance">省電力</option></select></label><label>操作<select id="controls"><option value="auto">自動</option><option value="pc">マウス・キーボード</option><option value="mobile">タッチ</option></select></label><label>照準アシスト<input id="aimAssist" type="checkbox" checked></label><label>背景<select id="backgroundPolicy"><option value="fixed">固定</option><option value="random">ランダム</option><option value="rotate">輪替わり</option><option value="unlocked">解放した作品</option></select></label><p class="muted">通常：墨を集める · 異界：自動射撃<br>WASD / 矢印：移動 · マウス：照準<br>タッチ：左で移動、右で照準 · Shift：墨技 · Esc：一時停止</p><button id="resetData" class="ink-button secondary">データをリセット</button><button id="closeSettings" class="ink-button">戻る</button></div></dialog>
   <dialog id="resetConfirm"><div class="panel"><h2>保存データをリセットしますか？</h2><p>保存した墨、解放した作品、完成度と画像の記録を削除します。画質・操作設定は残ります。</p><button id="cancelReset" class="ink-button">戻る</button><button id="confirmReset" class="ink-button secondary">リセットする</button></div></dialog>
-  <dialog id="pause"><div class="panel"><h2>ひと休み</h2><button id="resumeBtn" class="ink-button">続ける</button><button id="settleBtn" class="ink-button secondary">ここまでの墨を納める</button><button id="pauseSettings" class="ink-button secondary">設定</button></div></dialog>
+  <dialog id="pause"><div class="panel"><h2>ひと休み</h2><label>照準アシスト<input id="pauseAimAssist" type="checkbox" checked></label><button id="resumeBtn" class="ink-button">続ける</button><button id="settleBtn" class="ink-button secondary">ここまでの墨を納める</button><button id="pauseSettings" class="ink-button secondary">設定</button></div></dialog>
   <dialog id="result"><div class="panel result-panel"><h2 id="resultTitle"></h2><img id="resultImage" alt="今回の作品" hidden><p id="resultStats"></p><p id="saveStatus" class="muted"></p><div class="result-actions"><button id="continueBtn" class="ink-button">描く</button><button id="saveBtn" class="ink-button secondary" hidden>画像を保存</button><button id="resultHome" class="ink-button secondary">ホーム</button></div></div></dialog>
   <dialog id="artPicker"><div class="panel"><h2>描く作品</h2><p class="muted">画の中を移動して原画を描きます。保存した墨を使い、Shiftで前方へ吐墨できます。</p><div id="artChoices"></div><button id="cancelPicker" class="ink-button secondary">戻る</button></div></dialog>
   <script type="module" src="src/app.js"></script>
   <noscript>このゲームにはJavaScriptが必要です。</noscript>
+<dialog id="bossResult"><div class="panel"><span class="eyebrow">画巻の旅</span><h2 id="bossResultTitle"></h2><p id="bossResultText"></p><div id="fragmentBadges"></div><button id="bossRepair" class="ink-button" hidden>画巻を修復する</button><button id="bossContinue" class="ink-button">普通の地へ戻る</button><button id="bossFinish" class="ink-button secondary">墨を納める</button></div></dialog>
+<dialog id="restoration"><div class="repair-panel"><header><div><span class="eyebrow">失われた景色</span><h2>画巻を修復</h2></div><button id="closeRepair" class="ink-button secondary">閉じる</button></header><canvas id="repairCanvas" aria-label="画巻の断片を合わせ、紙をなぞって修復"></canvas><p data-repair-status role="status"></p><button id="freePainting" class="ink-button secondary">自由に描く</button></div></dialog>
 </body>
 </html>

@@ -29,6 +29,8 @@ vec3 fishMasks(vec2 p){
 vec4 sampleLinear(sampler2D s,vec2 p){vec2 z=clamp(p,texel*.5,1.-texel*.5)/texel-.5;vec2 i=floor(z),f=fract(z);vec2 q=(i+.5)*texel;return mix(mix(texture(s,q),texture(s,q+vec2(texel.x,0.)),f.x),mix(texture(s,q+vec2(0.,texel.y)),texture(s,q+texel),f.x),f.y);}
 `;
 const shaders={
+ homeArtwork:`vec2 offset=sampleLinear(deformation,uv).xy*.45;vec2 q=(uv+offset-.5)/imageScale+.5;o=vec4(texture(imageTexture,clamp(q,0.,1.)).rgb,1.);`,
+
  // Camera-only coordinate reprojection. It introduces no new velocity or actor forces.
  reproject:`vec2 q=uv*imageScale+point;float inside=step(0.,q.x)*step(q.x,1.)*step(0.,q.y)*step(q.y,1.);vec4 value=sampleLinear(field,q)*inside;value.xy*=amount;o=value;`,
  fishGuide:`vec2 v=texture(velocity,uv).xy;vec2 p=fishLocal(uv);float t=clamp((.65-p.x)/3.2,0.,1.4);

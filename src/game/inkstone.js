@@ -7,19 +7,20 @@ export function entity(id,x,y,r,controller){
  return {id,x,y,vx:0,vy:0,r,mass:r*r,collisionScale:1,controller,ink:0,invincible:0,dead:0,effects:{},skills:[],swallowed:0,deaths:0,aim:{x:1,y:0}};
 }
 export class Inkstone {
- constructor(onEvent=()=>{}){
+ constructor(onEvent=()=>{},options={}){
+  this.duration=options.duration||C.inkstoneDuration;this.autoFinish=options.autoFinish!==false;this.rewardMultiplier=options.rewardMultiplier||1;
   this.onEvent=onEvent;this.elapsed=0;this.finished=false;this.itemClock=C.itemSpawnInterval;this.foodClock=0;this.waves=[];
   this.center={x:C.world.width/2,y:C.world.height/2};
   this.player=entity('human',this.center.x,this.center.y,C.initialRadius,{type:'human'});this.player.invincible=C.respawnProtection;
   this.entities=[this.player];
-  for(let i=0;i<C.aiCount;i++){
+  for(let i=0;i<(options.aiCount??C.aiCount);i++){
    const point=randomNpcPoint(this.player),roll=Math.random();
    const radius=roll>.93?random(78,118):roll>.78?random(42,72):random(14,38);
-   this.entities.push(entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i)));
+   const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i));npc.appearance=i%2?'eye':'thorn';this.entities.push(npc);
   }
   this.foods=Array.from({length:C.foodTarget},()=>this.food());this.items=[];
  }
- get safeRadius(){const initial=Math.hypot(C.world.width,C.world.height)/2+30,t=clamp((this.elapsed/C.inkstoneDuration-C.waterRingStart)/(1-C.waterRingStart),0,1);return initial+(C.waterRingEndRadius-initial)*t;}
+ get safeRadius(){const initial=Math.hypot(C.world.width,C.world.height)/2+30,t=clamp((this.elapsed/this.duration-C.waterRingStart)/(1-C.waterRingStart),0,1);return initial+(C.waterRingEndRadius-initial)*t;}
  get rank(){return 1+this.entities.filter(e=>e!==this.player&&!e.dead&&e.mass>this.player.mass).length;}
  spawnPoint(clearance=0){
   let point=randomPoint(),best={...this.center},bestClearance=-Infinity;
@@ -46,7 +47,7 @@ export class Inkstone {
  kill(e,killer){
   if(e.dead||e.invincible>0||e.effects.water)return false;
   if(e.effects.shield){delete e.effects.shield;e.invincible=1.2;this.onEvent('shield',e);return false;}
-  if(killer){const gain=e.mass*C.npcGain;killer.mass=Math.min(C.maxRadius**2,killer.mass+gain);killer.r=Math.sqrt(killer.mass);killer.ink+=gain;killer.swallowed++;}
+  if(killer){const gain=e.mass*C.npcGain*this.rewardMultiplier;killer.mass=Math.min(C.maxRadius**2,killer.mass+gain);killer.r=Math.sqrt(killer.mass);killer.ink+=gain;killer.swallowed++;this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,gain,kind:'enemy'});}
   e.deaths++;e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};this.onEvent('death',e);return true;
  }
  respawn(e){
@@ -54,7 +55,7 @@ export class Inkstone {
   e.controller.goal=null;e.controller.think=0;this.onEvent('respawn',e);
  }
  update(dt,input){
-  if(this.finished)return;this.elapsed=Math.min(C.inkstoneDuration,this.elapsed+dt);
+  if(this.finished)return;this.elapsed=Math.min(this.duration,this.elapsed+dt);
   for(const e of this.entities){
    if(e.dead>0){e.dead=Math.max(0,e.dead-dt);if(!e.dead)this.respawn(e);continue;}
    e.invincible=Math.max(0,e.invincible-dt);for(const key of Object.keys(e.effects)){e.effects[key]-=dt;if(e.effects[key]<=0)delete e.effects[key];}
@@ -70,7 +71,7 @@ export class Inkstone {
    e.diluted=dist(e,this.center)>this.safeRadius;
    if(e.diluted){const lost=Math.max(0,Math.min(e.mass-C.respawnRadius**2,e.mass*C.waterDecay*dt));e.mass-=lost;e.ink=Math.max(0,e.ink-lost);}
    e.r=Math.sqrt(e.mass);
-   for(let i=this.foods.length-1;i>=0;i--){const food=this.foods[i],reach=this.radius(e)+(e.effects.absorb?55:0);const dx=e.x-food.x,dy=e.y-food.y,reachWithFood=reach+food.r;if(Math.abs(dx)<reachWithFood&&Math.abs(dy)<reachWithFood&&dx*dx+dy*dy<reachWithFood*reachWithFood){const gain=food.mass*C.foodGain;e.mass=Math.min(C.maxRadius**2,e.mass+gain);e.r=Math.sqrt(e.mass);e.ink+=gain;this.foods.splice(i,1);}}
+   for(let i=this.foods.length-1;i>=0;i--){const food=this.foods[i],reach=this.radius(e)+(e.effects.absorb?55:0);const dx=e.x-food.x,dy=e.y-food.y,reachWithFood=reach+food.r;if(Math.abs(dx)<reachWithFood&&Math.abs(dy)<reachWithFood&&dx*dx+dy*dy<reachWithFood*reachWithFood){const gain=food.mass*C.foodGain*this.rewardMultiplier;e.mass=Math.min(C.maxRadius**2,e.mass+gain);e.r=Math.sqrt(e.mass);e.ink+=gain;this.foods.splice(i,1);this.onEvent('consume',{entity:e,x:food.x,y:food.y,r:food.r,gain,kind:'food'});}}
    for(let i=this.items.length-1;i>=0;i--){if(e.skills.length<2&&dist(e,this.items[i])<this.radius(e)+10){const skill=SKILLS[Math.floor(Math.random()*SKILLS.length)];e.skills.push(skill);this.items.splice(i,1);this.onEvent('skill',{entity:e,skill});}}
   }
   // Legacy NPC mutual consumption: size advantage plus substantial coverage, never touch-to-kill.
@@ -78,7 +79,7 @@ export class Inkstone {
   this.foodClock+=dt*C.foodSpawnRate;while(this.foodClock>=1){this.foodClock--;if(this.foods.length<C.foodTarget)this.foods.push(this.food());}
   this.itemClock-=dt;if(this.itemClock<=0){this.itemClock=C.itemSpawnInterval;if(this.items.length<C.maxItems)this.items.push({...this.spawnPoint(),r:10});}
   for(const wave of this.waves)wave.age+=dt;this.waves=this.waves.filter(w=>w.age<C.skillDurations.splash);
-  if(this.elapsed>=C.inkstoneDuration)this.finish();
+  if(this.autoFinish&&this.elapsed>=this.duration)this.finish();
  }
- finish(){if(this.finished)return this.result;this.finished=true;this.result=settlement(this.player.ink,this.elapsed,this.rank);this.onEvent('finish',this.result);return this.result;}
+ finish(){if(this.finished)return this.result;this.finished=true;this.result=settlement(this.player.ink,this.elapsed,this.rank,{...C,inkstoneDuration:this.duration});this.onEvent('finish',this.result);return this.result;}
 }

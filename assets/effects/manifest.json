@@ -1,0 +1,36 @@
+[
+  {
+    "id": "drops",
+    "source": "Drops/LookAE Ink Drops (1).mov",
+    "sourceSha256": "2e368fc91411b97a228afa2835dfdf09bc480b624e8b622b16dad6a4bbed4716",
+    "codec": "H.264 High, yuv420p, opaque black-on-white",
+    "originalSize": [
+      2048,
+      1080
+    ],
+    "originalFps": "59.94",
+    "width": 160,
+    "height": 160,
+    "columns": 8,
+    "frames": 32,
+    "duration": 3.2,
+    "bytes": 44520
+  },
+  {
+    "id": "transition",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (1).mov",
+    "sourceSha256": "ec8eb6c69b29fc98cba064ce9fd2ed05643e02564d51fdae253315f80585d4f5",
+    "codec": "H.264 High, yuv420p, opaque black-on-white",
+    "originalSize": [
+      2048,
+      1080
+    ],
+    "originalFps": "59.94",
+    "width": 320,
+    "height": 169,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 81026
+  }
+]

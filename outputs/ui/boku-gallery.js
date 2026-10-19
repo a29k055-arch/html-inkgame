@@ -83,7 +83,7 @@
   const options = window.BokuGalleryConfig || {};
   if (options.artworks) artworks = options.artworks;
   const storageKey = "boku.album.unlocked.v1";
-  let unlocked = new Set([artworks[0].id]);
+  let unlocked = options.persistence ? options.persistence.unlockedIds() : new Set([artworks[0].id]);
   let storageAvailable = true;
   try {
     const saved = options.persistence ? [...options.persistence.unlockedIds()] : JSON.parse(localStorage.getItem(storageKey) || "[]");

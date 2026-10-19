@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-10-20 - HTML Ink Journey, Alien Enemies, Boss Fragments and Restoration
+
+### Added
+
+- Campaign coordinator around existing Inkstone:3400-square normal world,360s NORMAL active time, configurable100/250/450 energy and60/180/300s earliest gates, maximum3 encounters, no-encounter fallback at360s, remaining-fragment cap, protected transition/reward states and idempotent settlement.
+- Guaranteed moving/attacking spiked-eye Boss per special map, three HP/speed/rhythm tiers, pooled automatic ink projectiles, manual/assisted mouse aim, independent mobile movement/aim sticks, hit/health/death feedback,100s Boss timeout and configurable2x resource/swallow rewards. Normal map never fires. Normal arena identity, NPC ecology and resources survive map returns.
+- Actual user Drop(1)/V1 Transition(1) black-white MOV mattes converted to transparent WebP atlases (126KB total), preload/cache,80-entry pickup pool, large swallow emphasis and guaranteed opaque switch frame before reverse reveal. Build script and provenance included; original MOVs untouched.
+- Three unique persistent fragments for existing byte-identical ink-04 artwork, repeated-receipt protection, irregular shared-boundary pieces, assembly, pale scratch/reveal mask, weighted72% completion, one-time unlock/glow and Gallery Best PNG. Save schema2 migrates schema1 without removing balances/settings/collections; reset includes fragments/repair.
+- Victory offers normal-map return or settlement, plus restoration when ready. Existing free painting remains optional and cannot unlock the fragment artwork early.
+
+### Changed
+
+- NPC appearance becomes animated thorn/eye ink independent of the seven existing AI profiles. Reuses cached dense ink bodies, adds rotating/pulsing spines, blink/iris, soft short tails. Player approved MaterialInk source unchanged; NPCs never write player fields.
+- Special map parchment wash and Boss HUD/minimap distinguish encounters. Boss-only camera pairing keeps near Boss/player visible on phones; normal movement/camera/consumption remains legacy-based.
+- Home now reuses private study fluid advection/deformation with ORIGINAL RGB artwork sampling. No actor/reveal layer or black-circle overlay; paused/idle fields save work. Hidden-home resize/quality and back-forward cache re-entry handled.
+- Root Gallery features the quest artwork while preserving stable IDs, old collection, Original/Best/History and separate legacy route. README keeps New Version and all old/visual links and text.
+
+### Validation / Scope
+
+- Existing model suites plus new campaign rules: full360s normal-time ecology, gates/fallback/attempt cap, real projectile kills/attacks,2x gain, tiny respawn, aim, unique fragments, migration/reset and one-time repair.
+- Edge desktop full3Boss loop with actual mouse scratch;390×844 full3Boss with real CDP touch scratch; four phone dimensions with two-pointer ownership, independent release, aim toggle, pause clocks, early settle/refresh fragments. Normal gates are accelerated and player protection fixed for controlled-loop tests; Boss HP is not directly cleared. Damage/respawn have separate checks.
+- Fully opaque transition checks, GPU home image disturbance/color opacity, bounded80 Drops, preserved free drawing/reset/legacy Gallery, unchanged historical player GPU hash and0/80 NPC pixel isolation.32/80 NPC high-quality local ten-second runs around60fps; not physical-phone/long-session certification.
+- Bilibili search fetch failed, but real Edge loaded/played the first portion (readyState4,time5.15s) and was visually inspected. Only style guidance, not claimed full Processing-video reproduction.
+- First quest uses one Boss design with3 tiers and one supplied artwork. Partial live rounds/scratch mask do not resume; already-earned fragments do. Further authored layers, touch hardware and extended balance/performance remain future work.
+
+
+
 ## 2026-10-13 - Scoped Player Visual Rollback and Reused NPC Ink Atlas
 
 - Identified current dense/rear-wake player visual as3e63bd4 and previous visual baseline as8f92488 (last visual-code commit f8d3e2c). Restored exact previous MaterialInk, material/contain GLSL and material vorticity; retained camera reprojection, drawing, wallet, persistence, HUD and home isolation. No whole-commit revert.

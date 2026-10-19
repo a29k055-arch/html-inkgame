@@ -1,5 +1,25 @@
 # 墨—BOKU— Project Handoff
 
+## 2026-10-20 — HTML普通地图/Boss/三片修复新循环 [CURRENT]
+
+用户本轮明确：原GitHub HTML浏览器版，不是Unity；复用大地图、AI、吞噬、资源、控制和视觉，尽量完成全部任务，测试后commit/push。此节替代历史“砚→三分钟大画布”为主要循环的说明；旧自由绘制只作可选练习，不能提前解锁画卷。主角视觉仍以8f92488/f8d3e2c已认可版本为基础，不恢复被拒绝的浓稠主角拖尾。
+
+- **Audit / checkpoint**：正式main开始干净，HEAD/origin/main=2d00e1661db6c8d6d18ca662a034fbc6ff9ac4aa；根index.html为当前入口，outputs/ink_demo_v2.html为保留旧入口。D盘维护副本与Git对比，改前快照work/boss-upgrade-checkpoint，原Git提交保留。无AGENTS额外指令。旧7个profile已确认，未宣称有8类。
+- **Architecture**：src/game/campaign.js包裹原Inkstone，后者只增加duration/autoFinish/rewardMultiplier/aiCount选项（默认不改）、appearance数据和consume事件，持续复用ai.js/legacy-foundation的运动、碰撞、生成、追逃/互吞、缩圈、技能与微小重生。Campaign正常场仍3400×3400/32AI/760墨点；异界同尺寸、12AI、收益×2。普通场实例一直保留，返回不重建其生态。
+- **Timing**：CAMPAIGN_CONFIG集中360秒普通活跃时间、100/250/450能量、60/180/300最早时刻、最多3次；Boss/转场暂停普通计时。360秒无Boss且缺片才强制一次。scene normal/travel/boss/reward和finished标志防重复；单局机会不超过尚缺碎片数，三片齐全不再产生同画空奖励Boss。Boss单场100秒超时不发片；最后一次后仍可回普通地图到360秒，或提前结算/直接修复。初始能量按消费收益×.12累计，不因死亡回退；未结算墨继续可配置死亡保留65%。
+- **Boss / input**：一套水墨刺眼Boss，HP420/620/840、移速68/82/96、攻速/弹数递增；追近/摆动、扇射与环射、接触伤害、受击/瓦解。玩家仅boss场自动连射，PC鼠标自由瞄准/辅助Boss锁定，手机独立左右指针；设置/暂停开关即时保存。弹丸和敌弹有池/生命期/上限；Boss不走普通吞噬判定，必须弹丸打掉HP。角色HP归零调用原kill→极小重生，盾挡致命后保留有效HP。Shift继续原墨技，不恢复加速。Boss近处镜头平均焦点并自适应缩放；正常场仍原镜头。
+- **Art / FX**：NpcPainter复用原12帧浓墨缓存主体，alien-ink.js纯Canvas加动态不规则刺球/眼球、眨眼和短尾，与profile无依赖；Boss组合两者。campaign-painter.js管Boss/弹滴/瓦解，完全不写主角流体。玩家MaterialInk源码不改，历史GPU哈希2061883632，0/80异形NPC同轨迹玩家像素一致。DropPool80实体上限、轻小拾取与大吞噬不同大小/寿命；原成长反馈保留。
+- **Assets**：实际本地Transitions结构为Elements/Version1/Version2，无额外Versions层。选Drop(1)5.01s/V1(1)2s，并检查V2(1)2s；都是2048×1080/59.94fps H264/yuv420p黑白不透明，并非alpha视频。tools/build-ink-mattes.py离线提取luma反转alpha，32帧160Drop和36帧320×169转场为lossless WebP，总125546bytes。预加载后使用，不依赖MOV浏览器支持；转场末尾强制全遮盖、下一帧换图、反向揭示。来源sha/尺寸见assets/effects/manifest.json。用户水墨画4.png与既有outputs/assets/gallery/ink-04.png逐字节相同，2774×1275，直接复用，没改原图。
+- **Save / repair**：仍集中src/data/save.js，key boku.save.v1但saveVersion升2，迁移旧元数据不丢余额/设置/收藏。progress新增fragments、bossReceipts、restoredArtworks；击败Boss立即发第一个缺片并刷盘，与纳墨独立，重复receipt/满3片不再发。src/ui/restoration.js复用PaperReveal source/mask/灰度目标权重，3块共享锯齿边界、1.4秒归位、淡纸遮罩、鼠标/手指显影72%触发一次正式解锁和Best PNG；不在原图上涂黑。重置包含碎片/修复/图片、保留纯设置。Gallery将目标画卷前置，稳定ID和旧收藏、Original/Best/History保留；自由绘画不触发ink-04解锁。尚未修复的蒙版不续存，但已得碎片刷新/退出保留。
+- **Home**：独立HomeArtwork创建专用InkFluid，复用测试页速度/压力/advection/deform，只homeArtwork shader采样原图RGB（不只采黑度），不接触实体/画作mask/玩家场。鼠标/触摸/点击扰动，无黑粒子叠加，空闲不求解/重画；背景池策略保留。隐藏状态画质/resize暂测量尺寸再恢复，避免2px背景；BFCache返回重载已释放资源。Bilibili网页工具失败，但Edge实际播放前段5.15秒/readyState4并看截图；没完整复刻视频分层山体与鸟船。
+- **Validation**：原game-rules/combat-ai/combat-ecology/paper-save加campaign-rules通过（含完整360秒模型、Boss保底/超时、真实子弹击杀、2x、受伤/重生/盾、去重/迁移/reset）。桌面完整三Boss→真实鼠标刮画→Gallery→刷新；390×844三Boss→CDP真实触摸修复；另844×390、320×568、568×320双指/单指释放/辅助瞄准/双时钟暂停/早退碎片刷新。浏览器加快普通时间/能量并固定玩家保护排除随机AI干扰，Boss正常射击击败，不将其称六分钟人工局。全遮盖换图、GPU封面变形与原色不透明、80Drop池、自由绘制/重置/旧入口兼容检查。32/80 NPC各10秒本机高质约60fps；玩家12FBO+首页独立12FBO，NPC缓存生成后无常驻模拟。证据work/campaign-*.json/png，测试产物不提交。
+- **Known / pending**：第一幅/一个Boss三档已完整可玩，后续画卷/新Boss未制作。真实iOS/Android、长期GPU/电池、人工难度/能量收益/伤害与小体型手感仍需验收。二维原画位移不能自动分离/驱动鱼、山和鸟；NPC/Boss近看部分细刺偏几何/贴图边缘偏软，后续可用实例化SDF/noise shader与分层美术升级，无需切换引擎。单机本机存档无云/多标签事务锁，实时局和未完成涂抹不续存。
+- **Git / preserved**：仅白名单运行代码、两张WebP/来源说明/生成工具、测试与文档提交；保留旧版源码与所有原画/旧README视觉介绍/链接、独立visual-effects（主角共用原算法）、NPC保留浓墨历史实现；不提交work/builddeps/截图/浏览器配置，不force push或改remote。最终SHA/部署见Git log与work/campaign-publication.json。
+
+**Next**：以真实手机和完整人工六分钟局调整生存/Boss难度、能量积累和触屏视野；随后精修实例化水墨刺/眼shader与作者分层flowmap、增加下一幅画，不恢复普通地图射击或背景擦画。
+
+
+
 ## 2026-10-13 — 仅主角视觉回退，当前浓墨转NPC [CURRENT]
 
 本轮用户拒绝3e63bd4的主角浓稠拖尾，明确要求只恢复上一版主角视觉，同时将当前算法留给NPC，测试后commit/push；禁止整体Git revert。

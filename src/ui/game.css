@@ -67,3 +67,20 @@ body:not(.playing) #world{display:none}#homeFluid{opacity:1;mix-blend-mode:norma
 @media(max-width:600px){.playing[data-mode="paper"] #timer{top:17px;padding:8px 12px;left:auto;right:16px;transform:none}.playing[data-mode="paper"] #pauseBtn{left:16px;top:16px}.playing[data-mode="paper"] #modeLabel{left:74px;top:26px}.playing[data-mode="paper"] #inkMetric{left:16px;top:74px;font-size:13px}.playing[data-mode="paper"] #rankMetric{left:16px;top:116px;font-size:13px}.playing[data-mode="paper"] .actions{right:16px;bottom:22px}}
 
 .playing #minimap{width:100%;height:auto;aspect-ratio:1;background:transparent;border:0;box-shadow:none;backdrop-filter:none}
+
+/* Six-minute ink journey; all battlefield controls remain paper/glass HUDs. */
+#travelMatte{position:absolute;inset:0;width:100%;height:100%;z-index:60;pointer-events:auto}
+#campaignStatus{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);max-width:50%;padding:9px 18px;border-radius:18px;background:#f4eddcbd;color:#6e6046;font-size:12px;text-align:center;backdrop-filter:blur(8px)}
+#bossHud{position:absolute;top:100px;left:50%;transform:translateX(-50%);width:min(330px,48vw);padding:12px 20px;background:#eee5d2df;border:1px solid #fff8;border-radius:18px;display:grid;gap:7px;text-align:center;font-size:14px;box-shadow:0 8px 30px #30271618}
+#bossHealth{width:100%;height:6px;accent-color:#554c3d}#bossDetails{font-size:11px;color:#796c54}
+#shootJoystick{display:none;position:absolute;right:24px;bottom:110px;width:104px;height:104px;border:1px solid #64553955;border-radius:50%;background:#eadfc377;pointer-events:auto}#shootJoystick i{position:absolute;left:calc(50% + var(--x,0px));top:calc(50% + var(--y,0px));width:38px;height:38px;transform:translate(-50%,-50%);border-radius:50%;background:#79674666}#shootJoystick small{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:10px;color:#837354}.mobile[data-encounter="boss"] #shootJoystick{display:block}
+.eyebrow{font-size:11px;letter-spacing:.22em;color:#998b6e}#fragmentBadges{display:flex;gap:18px;justify-content:center}#fragmentBadges span{width:64px;height:76px;display:grid;place-items:center;border:1px dashed #ae9d7b;border-radius:12px;color:#a79a82;background:#e1d6bd;font-size:28px;opacity:.45}#fragmentBadges .owned{opacity:1;background:#f7efdc;box-shadow:0 6px 18px #7a68301c;border-style:solid;color:#78623e}
+#restoration{width:min(1020px,96vw);border-radius:22px}.repair-panel{padding:clamp(14px,3vw,30px);display:grid;gap:16px}.repair-panel header{display:flex;justify-content:space-between;align-items:center;gap:14px}.repair-panel h2{font-weight:400;font-size:26px;margin:8px 0}.repair-panel p{font-size:14px;color:#786b53;text-align:center}.repair-panel #repairCanvas{display:block;width:100%;height:min(54vh,480px);min-height:180px;background:#e9dfca;border-radius:12px;touch-action:none}.repair-panel .ink-button{border-radius:12px}.restored{animation:repair-glow 1.8s ease-out}@keyframes repair-glow{30%{box-shadow:0 0 70px 14px #fff4b8}}
+@media(max-width:600px){#campaignStatus{left:16px;bottom:144px;transform:none;max-width:52%;font-size:10px;padding:8px 12px}#bossHud{top:175px;width:64vw;padding:10px 14px}#shootJoystick{right:18px;bottom:120px}.repair-panel header h2{font-size:22px}.repair-panel .ink-button{padding:10px 14px}.repair-panel #repairCanvas{height:42vh}}
+@media(max-height:450px){#bossHud{top:66px;padding:6px 12px;gap:3px;width:35vw;font-size:12px}#campaignStatus{bottom:14px;left:50%;transform:translateX(-50%);max-width:45%;font-size:10px}#shootJoystick{bottom:32px;right:120px;width:88px;height:88px}.repair-panel #repairCanvas{height:43vh;min-height:120px}.repair-panel{gap:8px}.repair-panel h2{margin:3px 0;font-size:20px}}
+
+#fragmentBadges span{height:110px;gap:3px;overflow:hidden;border-radius:8px;font-size:12px;padding-bottom:6px}#fragmentBadges canvas{display:block;width:64px;height:88px}#fragmentBadges small{font-size:12px}
+
+@media(max-height:450px){.mobile[data-encounter="boss"] #shootJoystick{right:160px}}
+
+input[type="checkbox"]{accent-color:#6b6048;width:18px;height:18px}

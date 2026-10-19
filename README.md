@@ -3,34 +3,44 @@
 ## New Version
 
 - [New Version — 墨—BOKU—](https://a29k055-arch.github.io/html-inkgame/)
-- [旧版游戏（保留）](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
+- [旧版 HTML 游戏（保留）](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
 - [水墨视觉效果测试](https://a29k055-arch.github.io/html-inkgame/visual-effects/?mode=player&form=ink)
 - [水墨视觉效果 README](prototypes/ink/README.md)
 
-新版循环为「墨を磨る → 保存墨 → 描く → 完成 / 收藏」。无需账号，使用当前浏览器的本机存档。
+这是原项目的纯HTML/Canvas/WebGL浏览器版，不是Unity项目；PC和手机通过网页地址游玩，无新增运行时依赖。
 
-- **墨を磨る**：五分钟争墨，3400×3400大地图、32个有不同性格的AI、760墨点、吞噬成长、极小重生、墨技与清水缩圈。提前纳墨按时间比例结算，完整局有排名奖励；结算所得加到总墨量。
-- **描く**：进入按原画比例放大的地图（荷花作品为4240×1800），控制玩家在画内移动，墨迹与吐墨逐渐显露原画。三分钟或墨用尽后收画。Shift向朝向吐墨，消耗4墨；移动按距离消耗保存墨。首次存档获110基础墨一次，重复开画不会补回；数据重置后墨量为0，可继续研墨。
-- PC：鼠标 / WASD / 箭头移动，Esc暂停。研墨 Shift用当前墨技，描く Shift吐墨。触屏：摇杆移动，另一根手指按右侧功能按钮；无自由加速。
-- 主角与visual-effects共享8f92488版本的高级水墨算法。3e63bd4的浓稠水墨算法保留在 `src/ink/npc-material/`，只用于一次性生成12帧紧凑NPC动画贴图：96网格、4次压力迭代、裁去长尾，随后释放GPU；所有NPC共享Canvas贴图，不影响主角流体。
-- 首页只渲染独立清单中的一幅原画。鼠标 / 点击 / 触摸产生局部轻微扰动，不接入游戏数据。菜单与背景独立；支持固定、随机、轮换、解锁作品和Gallery选背景。
-- HUD使用半透明宣纸色圆角矩形；战斗和绘制都有圆角矩形小地图。完成度达到75%解锁下一幅作品；Gallery保留Original、Best与最近5次History。
-- 设置中的「データをリセット」需要再次确认。清除总墨量、额外解锁、完成记录与绘制图片；保留画质/操作等纯设置，以及第一幅基础作品。旧版独立存档不删除。
+### 当前核心循环
 
-## 本地运行与开发
+**3400×3400普通大地图 → 吃墨/吞噬积累气配 → 水墨蒙版转场 → 异界Boss战 → 获得新碎片 → 返回普通地图 → 三片齐全 → 拼片归位/涂抹修复 → Gallery解锁。**
 
-运行 `node prototypes/ink/preview.cjs`，打开 http://127.0.0.1:8765/ 。新版需要同源HTTP；无构建步骤或新增运行时依赖。
+- 普通地图保留32个AI、760个持续补充墨点、七种既有性格、追逃/互吞、成长、清水缩圈、微小重生、随机墨技和当前/备用槽。普通地图不射击，也没有背景擦画。
+- 普通地图累计最长6分钟；Boss时间和转场不消耗这个计时。能量100/250/450，并分别达到普通地图60/180/300秒后进入；每局最多3次。到360秒仍未参加Boss且还缺碎片时保底一次。已收齐碎片后不再为同一幅画生成空奖励Boss；剩余机会同时受缺片数量限制。
+- 每次进入异界必有Boss，资源/吞噬收益×2。Boss会追近、扇射/环射、接触攻击、眨眼、受击和瓦解；三次复用同一形态，血量/移动/攻击节奏递增。Boss有100秒单场上限，超时不掉碎片，可以返回普通地图或结算。胜利必得尚缺的一片，立即写存档；收齐三片可选择修复，也能继续普通地图剩余时间。
+- 主角保留已认可的正常MaterialInk。NPC为水墨刺球/眼球，动态尖刺、眨眼、浓淡和短墨尾；造型与AI独立。NPC仅缓存贴图/Canvas装饰，不向玩家流体写入。Boss使用黑白水墨刺球与眼睛组合。
+- 第一幅收集画为用户的水墨画4：既有 `outputs/assets/gallery/ink-04.png` 与原图逐字节一致，2774×1275，无裁剪或改画。三个不规则区域共享边界；齐片后归位，鼠标/手指刮去淡宣纸遮罩，按原画墨迹权重达到72%后完整显现、边缘短暂发亮，并正式解锁。Gallery优先展示当前画卷，保留全部旧藏品、Original/Best/最近5次History。
+- 首页独立流体使用既有测试模块的速度平流、压力与位移场，采样原图RGB，不叠黑圆、不读取游戏或绘画图层；鼠标/触摸扰动画作，空闲停止求解。背景清单和固定/随机/轮换/解锁策略保留。参考视频前段已在浏览器实际播放，未声称复制视频中所有分层山体、鸟船动画。
 
-- `src/data/backgrounds.js`：素材池与解锁关联；新素材放 `assets/home/backgrounds/` 后配置，见该目录README。
-- `src/data/save.js`：集中式localStorage元数据 `boku.save.v1`，包含saveVersion、inkAmount、unlockedArtworks、settings、progress；首次迁移旧收藏与设置。结算防重复，消费防透支；移动消费每200ms合并写入，pagehide立即刷盘。异常关闭最多可能丢失200ms内消费，普通刷新/正常关闭会保存。
-- `src/data/records.js`：IndexedDB `boku.paintings.v1` 保存结果PNG Blob。存储不可用时明确提示会话回退。已收画进度与图片持久化；未收画的实时位置/蒙版、未结算战斗不提供断点续玩。
-- `src/game/config.js` / `paper-world.js` / `inkstone.js` / `ai.js`：平衡、绘制世界、战斗与决策。
-- `src/ink/home-artwork.js` / `paper-map.js` / `game-renderer.js` / `npc-painter.js`：独立原画首页、世界显影、单玩家流体适配与轻量NPC。
-- `prototypes/ink/src/material.js` / `fluid.js`：游戏与视觉测试共享的玩家效果；旧版地图、生成与移速基础见 `src/game/legacy-foundation.js`。
+### 操作与存档
 
-规则检查：`node tests/game-rules.mjs`、`node tests/combat-ai.mjs`、`node tests/combat-ecology.mjs`、`node tests/paper-save.mjs`。
+- PC：鼠标或WASD/箭头移动；仅Boss战自动持续射击。辅助瞄准开启时锁定Boss，关闭时朝鼠标；Esc暂停，Shift仍用墨技。
+- 手机：左摇杆移动；Boss战右摇杆瞄准，自动连续射击；左右指针独立。辅助瞄准可在设置或暂停中开关。Boss近距离镜头兼顾玩家与Boss；普通地图使用原镜头。
+- 总墨量、设置、碎片和解锁在本机浏览器保存，关闭/刷新后保留已获得碎片。 `src/data/save.js` 的schema2沿用 `boku.save.v1` 键并迁移旧schema1收藏/设置/余额；图片在IndexedDB `boku.paintings.v1`。无账号、IP绑定或服务器数据库。
+- 纳墨沿用本局收入/死亡处罚/普通时间比例/完整时排名奖励；每次结算和Boss碎片都有去重标识。碎片即时保存，不必等本局结束；未结算墨量和未完成的实时局/刮画蒙版不做断点续玩。
+- 「データをリセット」仍需二次确认，清除新游戏墨量、碎片、修复/解锁及图片记录，保留纯设置和第一幅基础旧藏品，不清除独立旧版存档。存储不可用时提示仅本次会话。
+- 旧自由绘制作为可选练习从修复页进入，仍用累计墨量并保留移动/Shift吐墨；它不能绕过碎片解锁画卷。
 
-本轮Edge检查涵盖五种桌面/手机尺寸、双指控制、关闭重开存档、重置、原画首页、方向拖尾与NPC像素隔离。短时本机GPU测量不等于真实手机或长时性能认证。作品专用mask、AI/收益与显影范围平衡、真机Safari/Android仍待继续优化。
+### 本地运行与维护
+
+运行 `node prototypes/ink/preview.cjs`，访问 http://127.0.0.1:8765/ 。使用HTTP，不能用file://加载ES Modules。
+
+- `src/game/campaign.js` 调度原 `Inkstone`，没有另写吞噬/AI/移动系统；关键参数在 `CAMPAIGN_CONFIG`，基础平衡保留 `GAME_CONFIG`。
+- `src/ink/alien-ink.js`、`campaign-painter.js`：敌人和Boss/墨弹；`matte-effects.js`：80实例Drops池与全遮盖后切图；`src/ui/restoration.js`：复用PaperReveal原画/蒙版/加权完成度的三片修复。
+- `assets/effects/`：实测不透明黑白H.264 MOV转换的透明WebP序列。32帧Drop和36帧Transition合计约126KB，预加载后使用；原素材不动。来源与重建方法见该目录README及 `tools/build-ink-mattes.py`，FFmpeg/Pillow仅用于素材准备。
+- `src/data/backgrounds.js`：首页素材池与解锁关联；`src/data/save.js`：统一持久化；`src/data/records.js`：作品PNG。
+
+模型检查：`node tests/game-rules.mjs`、`node tests/combat-ai.mjs`、`node tests/combat-ecology.mjs`、`node tests/paper-save.mjs`、`node tests/campaign-rules.mjs`。
+
+验收：桌面完整三Boss→鼠标修复→Gallery；手机390×844三Boss→真实触摸修复，另测844×390、320×568、568×320双摇杆、辅助瞄准、暂停、提前结算、碎片刷新。浏览器流程加快普通地图计时/能量，并固定玩家保护以排除随机AI干扰；Boss均由真实弹丸击败，伤害/重生另行专项检查；另有完整360秒模型模拟、保底/超时/去重/死亡重生测试。不是六分钟人工完整试玩或手机真机认证。32/80 NPC本机10秒短测约60fps，真机Safari/Android、长时GPU/电池与难度收益平衡仍待验证。
 
 ---
 

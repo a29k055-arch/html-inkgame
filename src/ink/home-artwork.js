@@ -1,14 +1,11 @@
-// Original pixels only: no game, reveal mask, actor or fluid field is referenced here.
+import {InkFluid} from '../../prototypes/ink/src/fluid.js';
+// Dedicated actor-free study field; it samples original RGB, never gameplay or reveal layers.
 export class HomeArtwork {
- constructor(canvas){this.canvas=canvas;this.ctx=canvas.getContext('2d');this.ripples=[];this.image=null;this.resize();}
- resize(){this.dirty=true;this.w=innerWidth;this.h=innerHeight;const d=Math.min(devicePixelRatio||1,2);this.canvas.width=this.w*d;this.canvas.height=this.h*d;this.ctx.setTransform(d,0,0,d,0,0);}
- setBackground(image){this.image=image;this.dirty=true;this.ripples=[];this.draw(0);}
- interact(x,y,click=false){this.dirty=true;if(this.ripples.length>=8)this.ripples.shift();this.ripples.push({x,y,age:0,strength:click?1:.35});}
- draw(dt){if(!this.image||(!this.dirty&&!this.ripples.length))return;this.dirty=false;const c=this.ctx,img=this.image,s=Math.max(this.w/img.naturalWidth,this.h/img.naturalHeight),x=(this.w-img.naturalWidth*s)/2,y=(this.h-img.naturalHeight*s)/2;c.clearRect(0,0,this.w,this.h);c.drawImage(img,x,y,img.naturalWidth*s,img.naturalHeight*s);
-  for(const ripple of this.ripples){ripple.age+=dt;const radius=26+ripple.age*48,fade=Math.max(0,1-ripple.age/1.5)*ripple.strength;
-   // Small concentric strips resample the original image by at most 1.1 CSS pixels.
-   for(let band=0;band<3;band++){const r=radius+band*6,shift=Math.sin(ripple.age*9-band)*1.1*fade;c.save();c.beginPath();c.arc(ripple.x,ripple.y,r,0,Math.PI*2);c.arc(ripple.x,ripple.y,Math.max(0,r-3),0,Math.PI*2,true);c.clip('evenodd');c.drawImage(img,x+shift,y-shift*.4,img.naturalWidth*s,img.naturalHeight*s);c.restore();}
-  }this.ripples=this.ripples.filter(r=>r.age<1.5);
- }
- dispose(){this.ripples=[];}
+ constructor(canvas,quality='balanced'){this.canvas=canvas;this.fluid=new InkFluid(canvas,quality);this.fluid.backgroundMode=true;this.clock=0;this.activity=0;this.lastPointer=null;this.ready=false;this.dirty=true;}
+ resize(){this.dirty=true;const previous=this.canvas.style.display;if(!this.canvas.getBoundingClientRect().width)this.canvas.style.display='block';this.fluid.resize();this.canvas.style.display=previous;if(this.ready)this.draw(0);}
+ setQuality(q){this.fluid.quality=q;this.resize();}
+ setBackground(image){this.fluid.setBackground(image);this.fluid.clear();this.ready=true;this.dirty=true;this.draw(0);}
+ interact(x,y,click=false){const now=performance.now(),p={x:x/innerWidth,y:y/innerHeight,time:now};const previous=this.lastPointer||p,dt=Math.max(.016,(now-previous.time)/1000);let vx=(p.x-previous.x)/dt,vy=(p.y-previous.y)/dt,n=Math.hypot(vx,vy)||1;const force=35*Math.tanh(n*.9)/n;this.fluid.stir({...p,vx:vx*force,vy:vy*force,radius:.035});if(click)for(let i=0;i<5;i++){const a=i/5*Math.PI*2;this.fluid.stir({x:p.x+Math.cos(a)*.012,y:p.y+Math.sin(a)*.012,vx:Math.cos(a)*10,vy:Math.sin(a)*10,radius:.022});}this.lastPointer=p;this.activity=3;this.dirty=true;}
+ draw(dt){if(!this.ready||(!this.dirty&&this.activity<=0))return;this.dirty=false;const f=this.fluid;if(this.activity>0){this.activity-=dt;this.clock+=dt;if(this.clock>=1/30){f.step(Math.min(this.clock,1/30));this.clock=0;}}const imageScale=f.aspect>f.imageAspect?[1,f.aspect/f.imageAspect]:[f.imageAspect/f.aspect,1];f.pass('homeArtwork',null,{imageTexture:f.imageTexture,deformation:f.warp.read,imageScale});}
+ dispose(){this.fluid.dispose();}
 }
