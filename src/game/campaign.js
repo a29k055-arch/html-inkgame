@@ -44,5 +44,5 @@ export class Campaign {
   else if(this.bossElapsed>=C.bossTimeLimit){this.scene='reward';this.onEvent('boss-lost',{attempt:this.attempts});}
  }
  hurt(amount){const p=this.player;if(p.invincible||p.effects.water||p.dead)return;this.health=Math.max(0,this.health-amount);p.invincible=C.bossHitProtection;this.onEvent('impact',{x:p.x,y:p.y,r:p.r});if(this.health<=0){p.invincible=0;const killed=this.arena.kill(p,null);if(!killed&&!p.dead)this.health=Math.max(1,C.playerHealth*C.shieldHealthFraction);}}
- finish(){if(this.finished)return this.result;this.finished=true;this.result={...settlement(this.earned,this.elapsed,1+this.normal.entities.filter(e=>e!==this.normal.player&&!e.dead&&e.mass>this.player.mass).length,{...GAME_CONFIG,inkstoneDuration:C.duration}),attempts:this.attempts,wins:this.wins};this.onEvent('finish',this.result);return this.result;}
+ finish(){if(this.finished)return this.result;this.finished=true;this.result={...settlement(this.player.ink,this.elapsed,1+this.normal.entities.filter(e=>e!==this.normal.player&&!e.dead&&e.mass>this.player.mass).length,{...GAME_CONFIG,inkstoneDuration:C.duration}),attempts:this.attempts,wins:this.wins};this.onEvent('finish',this.result);return this.result;}
 }

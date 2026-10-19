@@ -12,6 +12,8 @@
 
 ### Changed
 
+- Campaign settlement uses effective remaining player ink, preserving water dilution and attack losses instead of paying the pre-loss acquisition counter.
+
 - NPC appearance becomes animated thorn/eye ink independent of the seven existing AI profiles. Reuses cached dense ink bodies, adds rotating/pulsing spines, blink/iris, soft short tails. Player approved MaterialInk source unchanged; NPCs never write player fields.
 - Special map parchment wash and Boss HUD/minimap distinguish encounters. Boss-only camera pairing keeps near Boss/player visible on phones; normal movement/camera/consumption remains legacy-based.
 - Home now reuses private study fluid advection/deformation with ORIGINAL RGB artwork sampling. No actor/reveal layer or black-circle overlay; paused/idle fields save work. Hidden-home resize/quality and back-forward cache re-entry handled.
