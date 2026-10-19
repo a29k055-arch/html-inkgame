@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026-10-20 - Gallery Simplification, Living Ink Enemies and Size-Based Boss Combat
+
+### Changed
+
+- Home now has exactly Grind Ink / Gallery / Settings. Removed free-painting, picker, export and score/history UI from the current route while retaining algorithms and legacy pages.
+- Replaced current Gallery with five verified collection states, blurred locked thumbnails, visible owned-piece positions, 3/3 restoration gate and direct original viewing after unlock. Existing unlocks/fragments/IndexedDB Best/History remain intact; no new painting-history writes.
+- Gallery restoration is a short grayscale/blur-to-clear assembly and scratch performance, auto-completes at its internal threshold, glows and returns to the painting detail. No score, balance consumption, history or percentage UI.
+- Curved, irregular, grain-textured animated thorn/eye silhouettes replace mechanical triangles and separate underlying ink bodies. Both NPC thorns and Boss have no extra base. Shared 88-frame256px cache preloads in bounded frame slices; small eyes use reduced detail and HUD updates at10Hz.
+- Renderer-only gaze selects largest visibly stronger nearby unit, otherwise nearest; attacking aggressive/expert controllers prioritize their actual hunted target. WeakMap lock/smoothing/blink never changes AI. Boss follows player.
+- Drops scale radius/lifetime/opacity from consumed size, capped and pooled80. Thicker17px Boss health with numeric HP, hit and delayed-loss feedback.
+- Death immediately before a stage gate now enters with tiny respawn mass, preventing revival of the pre-death large body.
+- Boss HP2000/3000/4200,140s timeout, faster/more threatening shots, standoff/orbit movement and locked fan/ring telegraphs. PROJECTILE_BALANCE uses one entry-size sample plus bounded relative combat growth; each shot carries its own size/damage. PC/mobile controls and normal/Boss/fragment cycle retained.
+- Central Japanese/Simplified Chinese/English localization across current UI, dynamic HUD/dialogs/notices/errors; immediate refresh and persistent language. Settings includes working quiet sound volume. Save version2 and progress remain compatible.
+- Home artwork shader adds bounded ink-weighted/noise-modulated local flow, weaker paper displacement and smooth return to an unwarped original after interaction. Player simulation shaders unchanged.
+
+### Validation / Limits
+
+- Six model suites pass, including real projectile small/medium/large first-Boss TTK28.8/17.1/11.5s, no unbounded multipliers, exact entry/return transfer, largest/prey/nearest gaze, smoothing, size-scaled Drops and complete dictionaries.
+- Desktop browser three actual Boss kills, six opaque switches, Gallery-only repair, all collection states, three languages, pause, refresh and preserved old image-record sentinel. Stage gates accelerated and player protected; no Boss HP shortcut.
+- Four phone viewports pass independent double touch/release, manual/assisted aim, pause, immediate language and layout.390x844 additionally one real Boss win and touch repair; two extra repair-fixture fragments are explicit. Not physical-phone/full mobile three-Boss certification.
+- Home GPU flow/opaque color,80Drop cap, reset cancel/confirm preserving settings, legacy Gallery, unchanged historical player GPU hash and0/80NPC field isolation pass. After cache warm-up changes, high-quality32/80NPC10s short samples around57–60fps. Long-run GPU/battery, real devices, human difficulty and author-supplied art layers remain pending.
+
+
 ## 2026-10-20 - HTML Ink Journey, Alien Enemies, Boss Fragments and Restoration
 
 ### Added

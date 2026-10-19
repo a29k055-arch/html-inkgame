@@ -1,18 +1,28 @@
-// Appearance only: reads world entities, never changes movement, mass, collision or fluids.
-export function alienDetails(c,e,time,index=0,boss=false,target=null){
- const r=e.r*(e.effects?.dense?1.32:1),kind=boss?'boss':e.appearance||((index%2)?'eye':'thorn'),phase=time+index*.73;
- c.save();c.globalAlpha*=e.effects?.water?.26:e.diluted?.5:1;c.translate(e.x+(e.hit?Math.sin(time*170)*5:0),e.y);
- if(kind!=='eye'){
-  c.save();c.rotate(phase*(boss?.16:.22));const count=boss?34:23;
-  c.fillStyle=e.hit?'#8a7b60':'#25231ee0';c.strokeStyle='#645e4f55';c.lineWidth=r*.03;c.beginPath();
-  for(let i=0;i<count;i++){const a=i/count*Math.PI*2,spike=r*(1.12+.17*Math.sin(i*13.4)+.11*Math.sin(phase*2.1+i*.8));for(const [offset,length] of [[-.055,r*.77],[0,spike],[.055,r*.77]])c.lineTo(Math.cos(a+offset)*length,Math.sin(a+offset)*length);}c.closePath();c.fill();c.stroke();c.restore();
- }
- if(kind!=='thorn'){
-  const blink=Math.min(1,Math.abs(Math.sin(phase*.85))*7),eyeW=r*.59,eyeH=r*.42*Math.max(.035,blink),angle=target?Math.atan2(target.y-e.y,target.x-e.x):Math.sin(phase*.45)*.6;
-  c.save();c.beginPath();c.ellipse(0,0,eyeW,eyeH,Math.sin(phase*.32)*.06,0,Math.PI*2);c.fillStyle='#eee9d9';c.fill();c.clip();
-  c.fillStyle='#777365';c.beginPath();c.arc(Math.cos(angle)*r*.09,Math.sin(angle)*r*.09,r*.28,0,Math.PI*2);c.fill();
-  c.fillStyle='#1d1c18';c.beginPath();c.ellipse(Math.cos(angle)*r*.12,Math.sin(angle)*r*.12,r*.12,r*.23,0,0,Math.PI*2);c.fill();c.fillStyle='#faf7e9';c.beginPath();c.arc(-r*.10,-r*.13,r*.055,0,Math.PI*2);c.fill();c.restore();
-  c.strokeStyle='#24221ce8';c.lineWidth=r*.04;c.beginPath();c.ellipse(0,0,eyeW,eyeH,0,0,Math.PI*2);c.stroke();
- }
- c.restore();
+import {GAME_CONFIG} from '../game/config.js';
+// Gaze is presentation-only. WeakMap state never enters AI controllers or saves.
+const gazeStates=new WeakMap(),TAU=Math.PI*2;
+const noise=n=>{const v=Math.sin(n*127.1+311.7)*43758.5453;return v-Math.floor(v);};
+export function selectGazeTarget(e,units,range=GAME_CONFIG.aiPerceptionRange){
+ const visible=units.filter(o=>o!==e&&!o.dead&&!o.effects?.water&&Math.hypot(o.x-e.x,o.y-e.y)<range+o.r);
+ const ctrl=e.controller;if(['aggressive','expert'].includes(ctrl?.personality)&&ctrl.intent==='hunt'){const prey=visible.find(o=>o.id===ctrl.goal?.id);if(prey)return prey;}
+ const large=visible.filter(o=>o.r>=e.r*1.2);return large.length?large.reduce((a,b)=>b.r>a.r?b:a):visible.reduce((a,b)=>!a||Math.hypot(b.x-e.x,b.y-e.y)<Math.hypot(a.x-e.x,a.y-e.y)?b:a,null);
 }
+export function gazeFor(e,time,index=0,units=[],forced=null){let s=gazeStates.get(e);if(!s){s={x:0,y:0,last:time,next:0,target:null};gazeStates.set(e,s);}const dt=Math.max(0,Math.min(.1,time-s.last));s.last=time;
+ const attack=['aggressive','expert'].includes(e.controller?.personality)&&e.controller.intent==='hunt'&&s.target?.id!==e.controller.goal?.id;
+ if(forced){s.target=forced;}else if(time>=s.next||attack||s.target?.dead){s.target=selectGazeTarget(e,units);s.next=time+.45+noise(index)*.2;}
+ let x,y;if(s.target){const dx=s.target.x-e.x,dy=s.target.y-e.y,n=Math.hypot(dx,dy)||1,amount=Math.min(1,n/(e.r*3));x=dx/n*amount;y=dy/n*amount;}else{x=Math.sin(time*.37+index)*.52;y=Math.cos(time*.29+index*.7)*.32;}
+ const blend=1-Math.exp(-dt*7);s.x+=(x-s.x)*blend;s.y+=(y-s.y)*blend;return {x:s.x,y:s.y,target:s.target};
+}
+const cache=new Map();
+function bodySprite(kind,variant,frame){const key=`${kind}:${variant}:${frame}`;if(cache.has(key))return cache.get(key);const canvas=document.createElement('canvas');canvas.width=canvas.height=256;const c=canvas.getContext('2d'),R=110,phase=frame/(kind==='eye'?8:16)*TAU,path=new Path2D();c.scale(.8,.8);
+ if(kind==='eye'){for(let i=0;i<=100;i++){const a=i/100*TAU,r=R*(.88+.032*Math.sin(a*5+phase)+.021*Math.sin(a*11-phase));path.lineTo(160+Math.cos(a)*r,160+Math.sin(a)*r);}path.closePath();}
+ else{const count=kind==='boss'?31:25;for(let i=0;i<count;i++){const a=(i+noise(i+variant*51)*.42)/count*TAU,bend=(noise(i*5+variant)-.5)*.35+.04*Math.sin(phase+i),length=R*(.92+noise(i*13+variant*7)*.40+.055*Math.sin(phase*2+i*.9)),base=R*(.65+noise(i*7)*.11),width=.07+noise(i*3+variant)*.055;const point=(angle,r)=>[160+Math.cos(angle)*r,160+Math.sin(angle)*r];const start=point(a-width,base),tip=point(a+bend,length),end=point(a+width,base);if(!i)path.moveTo(...start);else path.quadraticCurveTo(...point(a-width*1.6,base*.94),...start);path.bezierCurveTo(...point(a-width*.8,R*.93),...point(a+bend*.55,length*.94),...tip);path.bezierCurveTo(...point(a+bend*.9,length*.84),...point(a+width*.35,R*.75),...end);}path.closePath();}
+ c.save();c.shadowBlur=2;c.shadowColor='#37342b70';c.fillStyle='#35332dc0';c.fill(path);c.restore();const ink=c.createRadialGradient(136,127,4,163,164,144);ink.addColorStop(0,'#292923');ink.addColorStop(.45,'#181c19');ink.addColorStop(.75,'#30322b');ink.addColorStop(1,'#45443ae0');c.fillStyle=ink;c.fill(path);c.save();c.clip(path);
+ for(let i=0;i<17;i++){const x=80+noise(i*3+variant)*170,y=80+noise(i*5+variant)*170,r=8+noise(i+7)*30,g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,i%3?'#bbb9a91c':'#000a071b');g.addColorStop(1,'#0000');c.fillStyle=g;c.fillRect(x-r,y-r,r*2,r*2);}
+ for(let i=0;i<520;i++){c.fillStyle=i%3?'#dfd8bf14':'#050e0b2b';const x=noise(i*17+variant)*320,y=noise(i*29+variant)*320;c.fillRect(x,y,.7+noise(i)*1.8,.7+noise(i*3)*1.4);}c.restore();c.strokeStyle='#817b611f';c.lineWidth=1.2;c.stroke(path);cache.set(key,canvas);return canvas;}
+export function alienBody(c,e,time,index=0,boss=false){const r=e.r*(e.effects?.dense?1.32:1),kind=boss?'boss':e.appearance||((index%2)?'eye':'thorn'),variant=boss?0:index%3,phase=time*.75+index*.73,frame=Math.floor((phase%TAU+TAU)%TAU/TAU*(kind==='eye'?8:16)),sprite=bodySprite(kind,variant,frame),size=r*320/110;c.save();c.globalAlpha*=e.effects?.water?.26:e.diluted?.5:1;c.translate(e.x+(e.hit?Math.sin(time*170)*3:0),e.y);c.rotate(kind==='eye'?Math.sin(phase*.25)*.025:phase*(boss?.14:.18));c.drawImage(sprite,-size/2,-size/2,size,size);if(e.hit){c.globalCompositeOperation='source-atop';c.globalAlpha=.10;c.drawImage(sprite,-size/2,-size/2,size,size);}c.restore();}
+export function alienDetails(c,e,time,index=0,boss=false,target=null,units=[]){const kind=boss?'boss':e.appearance||((index%2)?'eye':'thorn');if(kind==='thorn')return;const r=e.r*(e.effects?.dense?1.32:1),gaze=gazeFor(e,time,index,units,target),cycle=(time+index*.81)%(4.1+noise(index)*1.4),blink=cycle<.18?Math.abs(cycle-.09)/.09:1,eyeW=r*.57,eyeH=r*.39*Math.max(.025,blink);c.save();c.globalAlpha*=e.effects?.water?.26:e.diluted?.5:1;c.translate(e.x+(e.hit?Math.sin(time*170)*3:0),e.y-r*.015);c.rotate(Math.sin(time*.3+index)*.025);c.beginPath();c.ellipse(0,0,eyeW,eyeH,0,0,TAU);const white=c.createRadialGradient(-r*.18,-r*.14,0,0,0,r*.65);white.addColorStop(0,'#fcf6df');white.addColorStop(.65,'#dfddc9');white.addColorStop(1,'#99978a');c.fillStyle=white;c.fill();c.save();c.clip();const ix=gaze.x*r*.22,iy=gaze.y*r*.14,iris=c.createRadialGradient(ix-r*.04,iy-r*.05,0,ix,iy,r*.29);iris.addColorStop(0,'#181e1b');iris.addColorStop(.54,'#4d4d46');iris.addColorStop(.84,'#929080');iris.addColorStop(1,'#32342ee0');c.fillStyle=iris;c.beginPath();c.arc(ix,iy,r*.29,0,TAU);c.fill();c.strokeStyle='#aaa69450';c.lineWidth=r*.012;for(let i=0;i<(r>=35?18:0);i++){const a=i/18*TAU;c.beginPath();c.moveTo(ix+Math.cos(a)*r*.16,iy+Math.sin(a)*r*.16);c.lineTo(ix+Math.cos(a+.035)*r*.265,iy+Math.sin(a+.035)*r*.265);c.stroke();}c.fillStyle='#101916';c.beginPath();c.ellipse(ix,iy,r*.115,r*.20,0,0,TAU);c.fill();c.fillStyle='#fff9e9dc';c.beginPath();c.ellipse(ix-r*.08,iy-r*.10,r*.053,r*.036,-.4,0,TAU);c.fill();c.restore();c.lineWidth=r*.045;c.strokeStyle='#171f1b';c.stroke();c.beginPath();c.ellipse(0,-r*.012,eyeW*1.04,eyeH*1.09,0,Math.PI,TAU);c.lineWidth=r*.035;c.strokeStyle='#85877570';c.stroke();c.restore();}
+export const alienCacheSize=()=>cache.size;
+
+let warmed;
+export function preloadAlienSkins(){return warmed??=(async()=>{let start=performance.now();for(const kind of ["thorn","eye","boss"])for(let variant=0;variant<(kind==="boss"?1:3);variant++)for(let frame=0;frame<(kind==="eye"?8:16);frame++){bodySprite(kind,variant,frame);if(performance.now()-start>5){await new Promise(requestAnimationFrame);start=performance.now();}}return cache.size;})();}

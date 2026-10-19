@@ -1,5 +1,24 @@
 # 墨—BOKU— Project Handoff
 
+## 2026-10-20 — 三入口 / Gallery短修复 / 异墨注视 / 体型弹丸 / 三语言 [CURRENT]
+
+本节优先于下面历史说明。用户本轮授权完整迭代、测试、commit/push，仍是原 HTML 项目，不是 Unity。首页自由绘画/独立修复入口和新绘画成绩已明确退役；保留底层算法、原 AI / 普通生态 / Boss碎片循环和历史存档。
+
+- **Audit/checkpoint**：开始 main 与 origin/main 均5c12cc08f2322021af2aa99c14eb0ed3de79d265，正式工作区干净。正式仓库 C:/Users/Nine/Documents/GitHub/html-inkgame；D:/ink_game_codex/html-inkgame-main 为维护副本。Git本地checkpoint/ui-boss-before-20261020，D盘work/ui-boss-checkpoint包含开始及阶段快照。未重写历史或建立新项目。
+- **Current UI**：index只保留三主入口。app不再导入/进入PaperWorld、不写saveRecord；旧模块和独立旧版仍在。src/ui/gallery-records.js为当前独立Gallery，不再导入旧Gallery脚本；稳定ARTWORKS IDs不变。0/1/2片为灰色模糊，详情显示已得区域；3片只显示可修复，unlocked优先显示原图；保留老收藏。其他画尚未有新碎片来源，明确提示futurePainting。
+- **Restoration**：仅Gallery详情、三片且未解锁才能open。源图blur灰白缓存，三块共享边界拼合，继承PaperReveal mask揭示原彩原图，内部72%自动补全/柔光1.8秒自动关回详情；不展示成绩/百分比、不消费墨、不保存新PNG。旧IndexedDB Best/History无读写覆盖，reset仍需确认。Painting_01=id ink-04，不要改稳定存档ID。
+- **Visual**：alien-ink.js统一完整轮廓：非均匀曲线尖刺/内部墨色渐变与颗粒，外缘细晕，不再在其下面画NpcPainter墨球。眼/刺/Boss共享最多88张256px缓存，加载阶段分帧warm，约22MiB原始像素上限；NPC无活跃流体/额外玩家FBO。NpcPainter旧浓墨atlas仍供小弹滴纹理，归档实现保留。眼视线用renderer WeakMap短锁与指数平滑，最大明显大单位→最近→巡视；aggressive/expert且intent hunt时当前goal.id优先；Boss强制玩家；不修改ai.js/controller目标。小眼省略虹膜细纹。Boss移动/普通AI不由gaze驱动。
+- **Boss balance**：config.js的CAMPAIGN_CONFIG HP2000/3000/4200、移速82/98/116、140秒、弹速235随阶段增长、伤害22/接触32；standoff/orbit使其不会钻入大玩家导致弹丸从Boss背后生成，0.65s锁角/锁fan-ring预警与真实弹道匹配。PROJECTILE_BALANCE entryRadius归一化^.7确定基础damage/radius，currentMass/entryMass^.18仅0.65..1.18修正，不算dense临时视觉倍数；弹丸保存r/damage，NPC弹伤同倍率。每次进入从普通当前mass明确复制，再记录entryMass/r；若转场时正处dead延迟，先规范为8半径/64质量，防死亡前大体型复活；战斗死亡保持该场entry基线但相对体型系数会降低，下次场重新采样。普通不射击、不加速。Boss HUD17px条/HP数/延迟伤害/命中反馈；手机paired镜头中心下移留HUD空间，普通镜头不改。
+- **Drops/home**：dropStyle按被吞半径计算大小、寿命、浓度，上下限/80池/原WebP预加载保持。homeArtwork shader唯一改动：RGB原画的噪声调制/墨色权重、纸面弱化、.006归一化位移上限与activity收束至原图；无图层独立鱼/植物运动。主角MaterialInk、其material/contain/vorticity主shader未变，与visual-effects同源。
+- **Localization**：src/ui/i18n.js集中三语字典、t、artTitle、data-i18n、aria和语言事件。getSave.settings.language持久化、默认ja，非法key回退友好错误而非裸key。app动态结果/奖励/HUD、Gallery和修复状态即时更新，暂停时也能刷新；音量轻提示合成音，音频节点结束断开，无音乐依赖。saveVersion仍2，新增纯设置，无全存档迁移清空。
+- **Verification**：六个模型套件；体型18/65/145实际第一Boss弹杀约28.8/17.1/11.5s，不同弹径/伤害/时长与进入/返回mass测试；NPC互吞、重生、盾、去重、超时/保底/3次仍测。桌面Edge完整三Boss、6次alpha255换图、Gallery鼠标修复/自动回详情/刷新；五种状态、语言/暂停即时刷新、旧Best/History哨兵无覆盖。四手机视口独立双指/释放、辅助瞄准、暂停、语言、布局；390真CDP触摸修复，先打一场Boss，再补两片fixture作修复专项。不能称本轮手机完整三Boss或真机测试。浏览器阶段时间/能量加速并固定玩家保护，Boss真实射击击败；伤害重生有模型/前轮专项。历史主角GPU哈希2061883632一致、0/80NPC玩家hash164962785一致；封面流动原色不透明、reset保设置与旧版Gallery正常。
+- **Performance**：初测懒加载轮廓出现卡顿，已改加载阶段按5ms预算分帧缓存、细小眼LOD、HUD10Hz。复测高画质1440×900，32NPC约59–60、80NPC约57–60fps，各10秒，12玩家FBO。非手机真机/长时/电池认证。证据work/ui-boss-*.json和ui-*.png，不提交测试产物。
+- **Preserved**：ai.js、inkstone.js、legacy-foundation.js、玩家material.js、存档save.js/records.js、旧outputs代码/画作/视觉README不改。README历史视觉/旧版后缀原样保留，New Version入口继续英文。
+- **Known TODO**：实机Safari/Android双指与长期内存/电池；完整人工6分钟难度与三阶段收益；仅第一幅收片/一个Boss三档；其他画片源未开放；未结束局/刮画mask不续存。88张缓存近景仍是纹理而非真实墨丝流体；下一次如升级用实例化SDF+噪声距离场替代轮廓，不给每NPC流体。单图不能自动分离鱼/植物，需作者分层PNG/alpha mask/flowmap，勿过度扭曲原画。
+
+**下一步第一条操作**：读取本节与git log/status确认最终发布SHA；直接做真实手机与完整人工普通→三Boss→Gallery难度验收，保留新三入口/短修复/i18n架构，不恢复自由绘画成绩或独立入口。最终提交与Pages部署结果以Git历史及本地work/ui-boss-publication.json为准。
+
+
 ## 2026-10-20 — HTML普通地图/Boss/三片修复新循环 [CURRENT]
 
 用户本轮明确：原GitHub HTML浏览器版，不是Unity；复用大地图、AI、吞噬、资源、控制和视觉，尽量完成全部任务，测试后commit/push。此节替代历史“砚→三分钟大画布”为主要循环的说明；旧自由绘制只作可选练习，不能提前解锁画卷。主角视觉仍以8f92488/f8d3e2c已认可版本为基础，不恢复被拒绝的浓稠主角拖尾。

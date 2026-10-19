@@ -29,7 +29,7 @@ vec3 fishMasks(vec2 p){
 vec4 sampleLinear(sampler2D s,vec2 p){vec2 z=clamp(p,texel*.5,1.-texel*.5)/texel-.5;vec2 i=floor(z),f=fract(z);vec2 q=(i+.5)*texel;return mix(mix(texture(s,q),texture(s,q+vec2(texel.x,0.)),f.x),mix(texture(s,q+vec2(0.,texel.y)),texture(s,q+texel),f.x),f.y);}
 `;
 const shaders={
- homeArtwork:`vec2 offset=sampleLinear(deformation,uv).xy*.45;vec2 q=(uv+offset-.5)/imageScale+.5;o=vec4(texture(imageTexture,clamp(q,0.,1.)).rgb,1.);`,
+ homeArtwork:`vec2 base=(uv-.5)/imageScale+.5;vec3 paper=texture(imageTexture,clamp(base,0.,1.)).rgb;float pigment=1.-dot(paper,vec3(.299,.587,.114));vec2 offset=sampleLinear(deformation,uv).xy*.45;offset*=.8+.2*noise(uv*17.);offset/=max(1.,length(offset)/.006);offset*=smoothstep(0.,1.,amount)*mix(.18,1.,smoothstep(.06,.46,pigment));vec2 q=(uv+offset-.5)/imageScale+.5;o=vec4(texture(imageTexture,clamp(q,0.,1.)).rgb,1.);`,
 
  // Camera-only coordinate reprojection. It introduces no new velocity or actor forces.
  reproject:`vec2 q=uv*imageScale+point;float inside=step(0.,q.x)*step(q.x,1.)*step(0.,q.y)*step(q.y,1.);vec4 value=sampleLinear(field,q)*inside;value.xy*=amount;o=value;`,

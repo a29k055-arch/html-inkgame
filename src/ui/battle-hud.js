@@ -1,15 +1,17 @@
+import {t,getLanguage} from './i18n.js';
 import {GAME_CONFIG as C,SKILLS} from '../game/config.js';
 const $=id=>document.getElementById(id);
 export function updateBattleHud(game,renderer){
  const player=game.player,ink=$('inkMetric');
- if(!ink.querySelector('strong'))ink.innerHTML='<small>手元の墨</small><strong></strong><span class="body-size"></span>';
- ink.querySelector('strong').textContent=Math.floor(player.ink).toLocaleString('ja-JP');ink.querySelector('.body-size').textContent=`大きさ ${Math.round(player.r)}`;
- const ranking=$('rankMetric');if(!ranking.querySelector('strong'))ranking.innerHTML='<small>硯の順位</small><strong></strong><span></span>';
+ if(!ink.querySelector('strong'))ink.innerHTML='<small></small><strong></strong><span class="body-size"></span>';
+ ink.querySelector('small').textContent=t('heldInk');
+ ink.querySelector('strong').textContent=Math.floor(player.ink).toLocaleString(getLanguage());ink.querySelector('.body-size').textContent=t('size',{n:Math.round(player.r)});
+ const ranking=$('rankMetric');if(!ranking.querySelector('strong'))ranking.innerHTML='<small></small><strong></strong><span></span>';ranking.querySelector('small').textContent=t('rank');
  ranking.querySelector('strong').textContent=game.rank;ranking.querySelector('span').textContent=`/ ${game.entities.length}`;
- const current=player.skills[0],next=player.skills[1],button=$('skillBtn');button.querySelector('.skill-name').textContent=current?.label||'墨技';button.disabled=!current||!!player.dead;button.setAttribute('aria-label',current?`${current.label}を使う（Shift）`:'墨技を拾うと使えます');button.classList.toggle('equipped',!!current);
- $('reserveSlot').querySelector('span').textContent=next?.label||'—';$('reserveSlot').classList.toggle('filled',!!next);
- $('effectStatus').textContent=Object.entries(player.effects).map(([id,seconds])=>`${SKILLS.find(s=>s.id===id)?.label||''} ${Math.ceil(seconds)}秒`).join(' · ');
- const status=player.dead?'一滴から、もう一度':player.diluted?'清水に墨が薄まっています':player.invincible>0?'墨を整えています':player.swallowed?`吸収 ${player.swallowed} · 墨を納める時を見極める`:'墨を集め、強い墨から距離をとる';
+ const current=player.skills[0],next=player.skills[1],button=$('skillBtn');button.querySelector('.skill-name').textContent=current?t(current.id):t('technique');button.disabled=!current||!!player.dead;button.setAttribute('aria-label',current?t('useTechnique',{name:t(current.id)}):t('findTechnique'));button.classList.toggle('equipped',!!current);
+ $('reserveSlot').querySelector('span').textContent=next?t(next.id):'—';$('reserveSlot').classList.toggle('filled',!!next);
+ $('effectStatus').textContent=Object.entries(player.effects).map(([id,seconds])=>`${t(id)} ${t('seconds',{n:Math.ceil(seconds)})}`).join(' · ');
+ const status=player.dead?t('reborn'):player.diluted?t('diluted'):player.invincible>0?t('protected'):player.swallowed?t('absorbed',{n:player.swallowed}):t('survive');
  $('battleStatus').textContent=status;$('battleStatus').classList.toggle('water-warning',player.diluted);
  const c=$('minimap').getContext('2d'),size=128,pad=7,scale=(size-pad*2)/C.world.width;c.clearRect(0,0,size,size);c.save();c.translate(pad,pad);c.strokeStyle='#83755a66';c.lineWidth=.7;c.strokeRect(0,0,size-pad*2,size-pad*2);c.beginPath();c.arc(game.center.x*scale,game.center.y*scale,game.safeRadius*scale,0,Math.PI*2);c.stroke();
  const cam=renderer.camera;c.fillStyle='#8474520d';c.fillRect(cam.x*scale,cam.y*scale,innerWidth/cam.scale*scale,innerHeight/cam.scale*scale);

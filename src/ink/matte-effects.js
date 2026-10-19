@@ -1,10 +1,11 @@
 const load=src=>{const image=new Image();image.src=new URL(src,import.meta.url).href;return image.decode().then(()=>image);};
 let cached;
 export function preloadMattes(){return cached??=Promise.all([load('../../assets/effects/drops.webp'),load('../../assets/effects/transition.webp')]);}
+export function dropStyle(r=12,kind){const size=Math.max(0,Math.min(170,Number(r)||0)),large=kind==='enemy';return {r:large?Math.min(185,30+size*.94):Math.min(30,10+size*1.7),life:large?1.05+Math.sqrt(size/170)*.65:.62+size*.008,opacity:large?.40+Math.sqrt(size/170)*.20:.29};}
 export class DropPool {
  constructor(){this.active=[];this.free=Array.from({length:80},()=>({}));this.image=null;preloadMattes().then(([drop])=>this.image=drop);}
- add({x,y,r=12,kind}){const e=this.free.pop()||this.active.shift();Object.assign(e,{x,y,r:Math.min(65,kind==='food'?r+12:r),age:0,life:kind==='enemy'?1.2:.7,angle:Math.random()*6.28});this.active.push(e);}
- draw(c,dt){if(!this.image)return;for(let i=this.active.length-1;i>=0;i--){const e=this.active[i];e.age+=dt;if(e.age>=e.life){this.free.push(e);this.active.splice(i,1);continue;}const t=e.age/e.life,frame=Math.min(31,Math.floor(t*32)),size=e.r*(3.4+t*1.2);c.save();c.translate(e.x,e.y);c.rotate(e.angle);c.globalAlpha=(1-t)*.42;c.drawImage(this.image,(frame%8)*160,Math.floor(frame/8)*160,160,160,-size/2,-size/2,size,size);c.restore();}}
+ add({x,y,r=12,kind}){const e=this.free.pop()||this.active.shift();Object.assign(e,{x,y,...dropStyle(r,kind),age:0,angle:Math.random()*6.28});this.active.push(e);}
+ draw(c,dt){if(!this.image)return;for(let i=this.active.length-1;i>=0;i--){const e=this.active[i];e.age+=dt;if(e.age>=e.life){this.free.push(e);this.active.splice(i,1);continue;}const t=e.age/e.life,frame=Math.min(31,Math.floor(t*32)),size=e.r*(3.4+t*1.2);c.save();c.translate(e.x,e.y);c.rotate(e.angle);c.globalAlpha=(1-t)*e.opacity;c.drawImage(this.image,(frame%8)*160,Math.floor(frame/8)*160,160,160,-size/2,-size/2,size,size);c.restore();}}
  clear(){this.free.push(...this.active);this.active=[];}
 }
 export class MatteTransition {

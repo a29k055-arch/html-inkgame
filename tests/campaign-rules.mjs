@@ -7,7 +7,7 @@ run.normal.entities=[run.player];run.normal.foods=[{x:run.player.x,y:run.player.
 for(let wave=0;wave<3;wave++){
  if(wave){run.energy=C.thresholds[wave];run.normal.elapsed=C.earliest[wave];run.update(.01,{x:0,y:0});assert.equal(run.scene,'travel');run.enterBoss();}
  assert(run.boss.hp>0);run.arena.entities=[run.player];run.player.invincible=999;
- const time=run.elapsed;for(let i=0;i<2400&&run.scene==='boss';i++){run.update(1/60,{x:0,y:0},{x:0,y:1},true);if(run.enemyShots.length)enemyAttacks=true;}
+ const time=run.elapsed;for(let i=0;i<8500&&run.scene==='boss';i++){run.update(1/60,{x:0,y:0},{x:0,y:1},true);if(run.enemyShots.length)enemyAttacks=true;}
  assert.equal(run.scene,'reward');assert.equal(run.elapsed,time,'Boss never advances normal clock');assert.equal(run.boss.hp,0);assert.equal(S.fragmentIds().length,wave+1);if(wave<2)assert.equal(S.restoreArtwork(C.artworkId),false);assert.equal(S.awardFragment(C.artworkId,`${run.id}:boss:${wave+1}`),null);for(let i=0;i<20;i++)run.update(.05,{x:0,y:0});assert.equal(wins,wave+1);
  assert(run.returnNormal());assert.equal(run.normal,normalObject);assert.equal(run.shots.length,0);
 }
