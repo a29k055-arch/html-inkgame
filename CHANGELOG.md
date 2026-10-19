@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Scene entry now refreshes HUD immediately before revealing the map; normal10Hz updates do not leave an empty Boss label during the first frame.
 - Home now has exactly Grind Ink / Gallery / Settings. Removed free-painting, picker, export and score/history UI from the current route while retaining algorithms and legacy pages.
 - Replaced current Gallery with five verified collection states, blurred locked thumbnails, visible owned-piece positions, 3/3 restoration gate and direct original viewing after unlock. Existing unlocks/fragments/IndexedDB Best/History remain intact; no new painting-history writes.
 - Gallery restoration is a short grayscale/blur-to-clear assembly and scratch performance, auto-completes at its internal threshold, glows and returns to the painting detail. No score, balance consumption, history or percentage UI.
