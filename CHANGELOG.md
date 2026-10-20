@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-20 - Resumed Publication Checks and Locked Painting Preview Guard
+
+### Fixed
+
+- Gallery details previously overlaid clear owned fragments on the blurred preview;3/3 could therefore expose an almost complete painting before restoration. Collected pieces now mark their positions with a translucent tint only. Every0/1/2/3 un-restored preview stays grayscale/blurred; only the persistent unlock enables a clear original. Added rendering-operation regression coverage and a translated ready-to-restore hint instead of asking3/3 players to collect more fragments.
+
+### Verified
+
+- Resumed from clean local/origin main011a690 after the usage-limit interruption; did not rebuild completed systems. Confirmed successful Pages deployment and ran published desktop smoke through a real Boss kill, Gallery repair and persisted language/unlock.
+- Completed the previously partial mobile full-cycle check on published390x844:three actual shooting Boss wins,six alpha255 map switches,three real saved fragment rewards,touch restoration,automatic detail return and refresh persistence. Ordinary gates accelerated and player protected; Boss HP is not directly cleared and no fragment fixtures are inserted in this complete-cycle test.
+- Rechecked all five Gallery states, mouse repair, three languages and old Best/History sentinel preservation after the preview fix. Existing four-viewport controls, six model suites, size balance and player-fluid isolation evidence remain valid.
+- Remaining validation limits:physical iOS/Android, prolonged GPU/battery and unaided human difficulty tuning. No original gameplay feature was removed; only Gallery preview clarity and verification documentation change in this continuation.
+
+
 ## 2026-10-20 - Gallery Simplification, Living Ink Enemies and Size-Based Boss Combat
 
 ### Changed
