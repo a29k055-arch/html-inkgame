@@ -1,4 +1,4 @@
-import {t} from '../ui/i18n.js';
+import {t,entityLabel} from '../ui/i18n.js';
 import {DropPool} from './matte-effects.js';
 import {InkFluid} from '../../prototypes/ink/src/fluid.js';
 import {MaterialInk} from '../../prototypes/ink/src/material.js';
@@ -9,7 +9,7 @@ import {cameraTarget} from '../game/legacy-foundation.js';
 import {NpcPainter} from './npc-painter.js';
 export class GameRenderer {
  constructor(output,quality,mode){
-  this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
+  this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
   this.canvas=document.createElement('canvas');this.canvas.style.cssText='position:fixed;left:-10000px;top:0;pointer-events:none;';document.body.append(this.canvas);
   this.onContextLost=e=>{e.preventDefault();document.dispatchEvent(new Event('boku:render-error'));};this.canvas.addEventListener('webglcontextlost',this.onContextLost);
   this.setBounds();this.fluid=new InkFluid(this.canvas,quality);this.fluid.materialMode=true;this.fluid.sizeBoundary=mode==='inkstone';
@@ -24,7 +24,7 @@ export class GameRenderer {
   const paired=focus&&Math.hypot(player.x-focus.x,player.y-focus.y)<1400,cx=paired?(player.x+focus.x)/2:player.x,cy=paired?(player.y+focus.y)/2:player.y;
   if(paired)target.scale=Math.min(target.scale,Math.max(.28,Math.min(this.viewW/(Math.abs(player.x-focus.x)+2*(focus.r+80)),this.viewH/(Math.abs(player.y-focus.y)+2*(focus.r+120)))));
   const fresh=immediate||!this.cameraReady,zoom=fresh?1:1-Math.exp(-dt*2.76),follow=fresh?1:1-Math.exp(-dt*5);
-  this.camera.scale+=(target.scale-this.camera.scale)*zoom;target.x=clamp(cx-this.viewW/this.camera.scale/2,0,Math.max(0,(this.paper?.world||C.world).width-this.viewW/this.camera.scale));target.y=clamp(cy-this.viewH/this.camera.scale*(paired&&this.mobile?.62:.5),0,Math.max(0,(this.paper?.world||C.world).height-this.viewH/this.camera.scale));this.camera.x+=(target.x-this.camera.x)*follow;this.camera.y+=(target.y-this.camera.y)*follow;
+  this.camera.scale+=(target.scale-this.camera.scale)*zoom;target.x=clamp(cx-this.viewW/this.camera.scale/2,0,Math.max(0,(this.paper?.world||C.world).width-this.viewW/this.camera.scale));target.y=clamp(cy-this.viewH/this.camera.scale*(paired&&this.mobile?.68:.5),0,Math.max(0,(this.paper?.world||C.world).height-this.viewH/this.camera.scale));this.camera.x+=(target.x-this.camera.x)*follow;this.camera.y+=(target.y-this.camera.y)*follow;
   if(!fresh){const ratio=old.scale/this.camera.scale,offset=[(this.camera.x-old.x)*old.scale/this.viewW,1-ratio-(this.camera.y-old.y)*old.scale/this.viewH];this.fluid.reproject(ratio,offset);}
   this.cameraReady=true;
  }
@@ -53,11 +53,11 @@ export class GameRenderer {
   for(const wave of game.waves){c.save();c.translate(wave.x,wave.y);c.rotate(Math.atan2(wave.aim.y,wave.aim.x));c.strokeStyle=`rgba(66,60,45,${.28*(1-wave.age/C.skillDurations.splash)})`;c.lineWidth=16*(1-wave.age/C.skillDurations.splash);c.beginPath();c.arc(0,0,wave.range*wave.age/C.skillDurations.splash,-1,1);c.stroke();c.restore();}
   c.restore();
   c.save();c.globalAlpha=p.effects.water?.28:p.diluted?.58:1;c.drawImage(this.canvas,0,0,w,h);c.restore();
-  c.save();c.textAlign='center';c.font='12px serif';for(const e of game.entities){if(e.dead||!this.visible(e,e.r+40))continue;const x=(e.x-cam.x)*scale,y=(e.y-cam.y)*scale,r=e.r*(e.effects.dense?1.32:1)*scale;c.fillStyle=e===p?'#353127':'#585246';c.fillText(e===p?t('player'):e.id,x,y-r-10);if(e.effects.shield){c.strokeStyle='#a1853c99';c.beginPath();c.arc(x,y,r+4,0,Math.PI*2);c.stroke();}}
-  c.restore();
+  c.save();c.textAlign='center';c.font='12px '+this.fontFamily;for(const e of game.entities){if(e.dead||!this.visible(e,e.r+40))continue;const x=(e.x-cam.x)*scale,y=(e.y-cam.y)*scale,r=e.r*(e.effects.dense?1.32:1)*scale;c.fillStyle=e===p?'#353127':'#585246';c.fillText(entityLabel(e),x,y-r-10);if(e.effects.shield){c.strokeStyle='#a1853c99';c.beginPath();c.arc(x,y,r+4,0,Math.PI*2);c.stroke();}}
+  if(p.hitFlash>0){c.strokeStyle='#ad5c4977';c.lineWidth=3;c.beginPath();c.arc((p.x-cam.x)*scale,(p.y-cam.y)*scale,p.r*scale+7,0,Math.PI*2);c.stroke();}c.restore();
  }
  visible(e,margin){const cam=this.camera,x=(e.x-cam.x)*cam.scale,y=(e.y-cam.y)*cam.scale,r=margin*cam.scale;return x>-r&&x<this.viewW+r&&y>-r&&y<this.viewH+r;}
  drawPaper(dt,run){this.scan+=dt;if(run.painting&&this.scan>=.1){this.paper.absorbWorld(this.canvas,this.camera);this.scan=0;}this.paper.draw(this.camera,dt);const c=this.ctx,cam=this.camera;c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);for(const ball of run.projectiles){const r=ball.r*.15,g=c.createRadialGradient(ball.x,ball.y,0,ball.x,ball.y,r);g.addColorStop(0,"#26231de0");g.addColorStop(1,"#26231d00");c.fillStyle=g;c.fillRect(ball.x-r,ball.y-r,r*2,r*2);}c.restore();c.save();c.globalAlpha=.65;c.drawImage(this.canvas,0,0,this.viewW,this.viewH);c.restore();}
  snapshot(){this.paper.updateLayer();const image=document.createElement('canvas');image.width=this.paper.source.width;image.height=this.paper.source.height;const c=image.getContext('2d');c.fillStyle='#ede1c9';c.fillRect(0,0,image.width,image.height);c.globalCompositeOperation='multiply';c.drawImage(this.paper.layer,0,0);return image;}
- dispose(){this.canvas.removeEventListener('webglcontextlost',this.onContextLost);this.fluid.dispose();this.fluid.gl.getExtension('WEBGL_lose_context')?.loseContext();this.canvas.remove();}
+ dispose(){this.textAbort.abort();this.canvas.removeEventListener('webglcontextlost',this.onContextLost);this.fluid.dispose();this.fluid.gl.getExtension('WEBGL_lose_context')?.loseContext();this.canvas.remove();}
 }

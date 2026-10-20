@@ -1,11 +1,12 @@
+import {reserveState} from '../game/ink-reserve.js';
 import {t,getLanguage} from './i18n.js';
 import {GAME_CONFIG as C,SKILLS} from '../game/config.js';
 const $=id=>document.getElementById(id);
 export function updateBattleHud(game,renderer){
- const player=game.player,ink=$('inkMetric');
+ const player=game.player,ink=$('inkMetric'),reserve=reserveState(player.ink);$('inkLevel').textContent=`Lv.${reserve.level}`;$('inkReserveValue').textContent=t('reserveValue',{ink:Math.floor(reserve.ink).toLocaleString(getLanguage()),next:reserve.upper.toLocaleString(getLanguage())});$('inkReserveProgress').value=reserve.progress;$('inkReserveProgress').setAttribute('aria-label',t('reserveProgress',{level:reserve.level,remaining:Math.ceil(reserve.upper-reserve.ink)}));$('inkNextLevel').textContent=t('reserveProgress',{level:reserve.level,remaining:Math.ceil(reserve.upper-reserve.ink)});const pending=player.growth?.pendingLevels.length||0;const reward=player.growth?.rewardFlash>0?player.growth.lastReward:null;$('pendingLevelRewards').hidden=!pending&&!reward;$('pendingLevelRewards').textContent=reward?t('levelReward',{level:reward.level,name:t(reward.skillId)}):t('pendingRewards',{n:pending});
  if(!ink.querySelector('strong'))ink.innerHTML='<small></small><strong></strong><span class="body-size"></span>';
- ink.querySelector('small').textContent=t('heldInk');
- ink.querySelector('strong').textContent=Math.floor(player.ink).toLocaleString(getLanguage());ink.querySelector('.body-size').textContent=t('size',{n:Math.round(player.r)});
+ ink.querySelector('small').textContent=t('inkSize');
+ ink.querySelector('strong').textContent=Math.round(player.r).toLocaleString(getLanguage());ink.querySelector('.body-size').textContent=t('peakLevel',{n:player.growth?.peakLevel||1});
  const ranking=$('rankMetric');if(!ranking.querySelector('strong'))ranking.innerHTML='<small></small><strong></strong><span></span>';ranking.querySelector('small').textContent=t('rank');
  ranking.querySelector('strong').textContent=game.rank;ranking.querySelector('span').textContent=`/ ${game.entities.length}`;
  const current=player.skills[0],next=player.skills[1],button=$('skillBtn');button.querySelector('.skill-name').textContent=current?t(current.id):t('technique');button.disabled=!current||!!player.dead;button.setAttribute('aria-label',current?t('useTechnique',{name:t(current.id)}):t('findTechnique'));button.classList.toggle('equipped',!!current);
