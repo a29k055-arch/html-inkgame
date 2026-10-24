@@ -1,5 +1,6 @@
+import {coreRadius,spikeContact} from './alien-geometry.js';
 import {initReserve,gainReserve,syncReserve,resetReserveOnDeath,advanceRewards} from './ink-reserve.js';
-import {GAME_CONFIG as C,SKILLS,clamp,dist,settlement} from './config.js';
+import {GAME_CONFIG as C,CONTACT_CONFIG as K,SKILLS,clamp,dist,settlement} from './config.js';
 import {random,randomPoint,randomNpcPoint,createFood,moveSpeed} from './legacy-foundation.js';
 import {aiController,aiDirection,shouldUseSkill} from './ai.js';
 const names=['澄','雨音','竹影','白露','山月','凪','青嵐','葉舟','霧','雲間','春水','松風','雪','一滴','遠山','野菊','夕凪','石庭','朧','青竹','時雨','水面','木漏れ日','冬泉','夜舟','霞','新月','梢','秋声','墨雨','雲雀','朝露'];
@@ -17,11 +18,11 @@ export class Inkstone {
   for(let i=0;i<(options.aiCount??C.aiCount);i++){
    const point=randomNpcPoint(this.player),roll=Math.random();
    const radius=roll>.93?random(78,118):roll>.78?random(42,72):random(14,38);
-   const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i));npc.nameIndex=i%names.length;npc.nameNumber=i>=names.length?i+1:'';npc.appearance=i%2?'eye':'thorn';this.entities.push(npc);
+   const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i));npc.skinIndex=i;npc.nameIndex=i%names.length;npc.nameNumber=i>=names.length?i+1:'';npc.appearance=i%2?'eye':'thorn';this.entities.push(npc);
   }
   this.foods=Array.from({length:this.foodTarget},()=>this.food());this.items=[];
  }
- get safeRadius(){const initial=Math.hypot(C.world.width,C.world.height)/2+30,t=clamp((this.elapsed/this.duration-C.waterRingStart)/(1-C.waterRingStart),0,1);return initial+(C.waterRingEndRadius-initial)*t;}
+ get safeRadius(){const initial=Math.hypot(C.world.width,C.world.height)/2+30,t=clamp((this.elapsed/this.duration-C.waterRingStart)/(1-C.waterRingStart),0,1);return initial+(C.waterRingEndRadius-initial)*(1-(1-t)**C.waterRingExponent);}
  get rank(){return 1+this.entities.filter(e=>e!==this.player&&!e.dead&&e.mass>this.player.mass).length;}
  spawnPoint(clearance=0){
   let point=randomPoint(),best={...this.center},bestClearance=-Infinity;
@@ -34,7 +35,9 @@ export class Inkstone {
  }
  food(){return createFood(this.spawnPoint());}
  speed(e){return moveSpeed(e.r)*(e.controller.type==='ai'?(.70+e.controller.profile.skill*.18):1)*(e.effects.dense?.65:1);}
- radius(e){return e.r*(e.effects.dense?1.32:1)*e.collisionScale;}
+ radius(e){return coreRadius(e);}
+ drainInk(e,dt,multiplier=1){if(e.dead||e.effects.water)return 0;const lost=Math.max(0,Math.min(e.mass-C.respawnRadius**2,e.mass*C.waterDecay*multiplier*dt));if(e.growth){e.ink=Math.max(0,e.ink-lost);syncReserve(e);}else{e.mass-=lost;e.r=Math.sqrt(e.mass);e.ink=Math.max(0,e.ink-lost);}return lost;}
+ applySpikes(source,target,dt){if(target.dead||source.dead||target.invincible||target.effects.water||!spikeContact(source,target,this.radius(target)))return;const lost=this.drainInk(target,dt,K.spikeDrainMultiplier);target.spikeContact=lost>0;target.spikeFeedback=Math.max(0,(target.spikeFeedback||0)-dt);if(lost>0&&target.spikeFeedback<=0){target.spikeFeedback=K.feedbackInterval;this.onEvent('spike-loss',{entity:target,x:target.x,y:target.y,r:Math.min(12,target.r*.16)});}}
  useSkill(e=this.player){
   if(e.dead||!e.skills.length||this.finished)return false;
   const skill=e.skills.shift();e.effects[skill.id]=C.skillDurations[skill.id];
@@ -48,16 +51,17 @@ export class Inkstone {
  kill(e,killer){
   if(e.dead||e.invincible>0||e.effects.water)return false;
   if(e.effects.shield){delete e.effects.shield;e.invincible=1.2;this.onEvent('shield',e);return false;}
-  if(killer){const gain=e.mass*C.npcGain*this.rewardMultiplier;if(killer.growth)gainReserve(killer,gain);else{killer.mass=Math.min(C.maxRadius**2,killer.mass+gain);killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}killer.swallowed++;this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,gain,kind:'enemy'});}
-  e.deaths++;e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);return true;
+  if(killer){const gain=e.mass*C.npcGain*this.rewardMultiplier;if(killer.growth)gainReserve(killer,gain);else{killer.mass=Math.min(C.maxRadius**2,killer.mass+gain);killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}killer.swallowed++;this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,kind:'enemy'});}
+  e.deaths++;if(!e.growth)e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);return true;
  }
  respawn(e){
-  const p=this.spawnPoint(120);Object.assign(e,{x:p.x,y:p.y,vx:0,vy:0,r:C.respawnRadius,mass:C.respawnRadius**2,collisionScale:1,invincible:C.respawnProtection});
+  const retained=e.growth?e.r:C.respawnRadius,p=this.spawnPoint(retained+180);Object.assign(e,{x:p.x,y:p.y,vx:0,vy:0,r:retained,mass:retained**2,collisionScale:1,invincible:C.respawnProtection});
   if(e.growth)syncReserve(e,0,true);e.controller.goal=null;e.controller.think=0;this.onEvent('respawn',e);
  }
  update(dt,input){
   if(this.finished)return;this.elapsed=Math.min(this.duration,this.elapsed+dt);
   for(const e of this.entities){
+   e.visualTime=this.elapsed;e.spikeContact=false;
    if(e.dead>0){e.dead=Math.max(0,e.dead-dt);if(!e.dead)this.respawn(e);continue;}
    e.invincible=Math.max(0,e.invincible-dt);for(const key of Object.keys(e.effects)){e.effects[key]-=dt;if(e.effects[key]<=0)delete e.effects[key];}
    const v=e.controller.type==='human'?input:aiDirection(this,e,dt);
@@ -70,14 +74,16 @@ export class Inkstone {
    const t=clamp((velocity/1200-.08)/.72,0,1),target=1-.12*t*t*(3-2*t);
    e.collisionScale+=(target-e.collisionScale)*(1-Math.exp(-dt*5));
    e.diluted=dist(e,this.center)>this.safeRadius;
-   if(e.diluted){const lost=Math.max(0,Math.min(e.mass-C.respawnRadius**2,e.mass*C.waterDecay*dt));e.mass-=lost;e.ink=Math.max(0,e.ink-lost);}
+   if(e.diluted)this.drainInk(e,dt);
    if(!e.growth)e.r=Math.sqrt(e.mass);
-   for(let i=this.foods.length-1;i>=0;i--){const food=this.foods[i],reach=this.radius(e)+(e.effects.absorb?55:0);const dx=e.x-food.x,dy=e.y-food.y,reachWithFood=reach+food.r;if(Math.abs(dx)<reachWithFood&&Math.abs(dy)<reachWithFood&&dx*dx+dy*dy<reachWithFood*reachWithFood){const gain=food.mass*C.foodGain*this.rewardMultiplier;if(e.growth)gainReserve(e,gain);else{e.mass=Math.min(C.maxRadius**2,e.mass+gain);e.r=Math.sqrt(e.mass);e.ink+=gain;}this.foods.splice(i,1);this.onEvent('consume',{entity:e,x:food.x,y:food.y,r:food.r,gain,kind:'food'});}}
+   for(let i=this.foods.length-1;i>=0;i--){const food=this.foods[i],reach=this.radius(e)+(e.effects.absorb?55:0);const dx=e.x-food.x,dy=e.y-food.y,reachWithFood=reach+food.r;if(Math.abs(dx)<reachWithFood&&Math.abs(dy)<reachWithFood&&dx*dx+dy*dy<reachWithFood*reachWithFood){const gain=food.mass*C.foodGain*this.rewardMultiplier;if(e.growth)gainReserve(e,gain);else{e.mass=Math.min(C.maxRadius**2,e.mass+gain);e.r=Math.sqrt(e.mass);e.ink+=gain;}this.foods.splice(i,1);this.onEvent('consume',{entity:e,x:food.x,y:food.y,r:food.r,playerSize:e.r,gain,kind:'food'});}}
    if(e.growth){syncReserve(e,dt);advanceRewards(e,dt,this.onEvent);}
    for(let i=this.items.length-1;i>=0;i--){if(e.skills.length<2&&dist(e,this.items[i])<this.radius(e)+10){const skill=SKILLS[Math.floor(Math.random()*SKILLS.length)];e.skills.push(skill);this.items.splice(i,1);this.onEvent('skill',{entity:e,skill});}}
   }
   // Legacy NPC mutual consumption: size advantage plus substantial coverage, never touch-to-kill.
   for(let i=0;i<this.entities.length;i++){const a=this.entities[i];if(a.dead||a.effects.water)continue;for(let j=i+1;j<this.entities.length;j++){const b=this.entities[j];if(b.dead||b.effects.water)continue;const [big,small]=this.radius(a)>this.radius(b)?[a,b]:[b,a];if(this.radius(big)>this.radius(small)*C.consumeRatio&&dist(big,small)<this.radius(big)-this.radius(small)*C.consumeOverlap){this.kill(small,big);if(a.dead)break;}}}
+  // Swallowing wins priority; only surviving contacts receive dt-based spike loss.
+  for(const source of this.entities){if(source.dead||source.appearance!=='thorn')continue;for(const target of this.entities){if(source!==target)this.applySpikes(source,target,dt);}}
   this.foodClock+=dt*this.foodSpawnRate;while(this.foodClock>=1){this.foodClock--;if(this.foods.length<this.foodTarget)this.foods.push(this.food());}
   this.itemClock-=dt;if(this.itemClock<=0){this.itemClock=C.itemSpawnInterval;if(this.items.length<C.maxItems)this.items.push({...this.spawnPoint(),r:10});}
   for(const wave of this.waves)wave.age+=dt;this.waves=this.waves.filter(w=>w.age<C.skillDurations.splash);

@@ -13,7 +13,7 @@ p.dead=0;p.skills=[SKILLS[0],SKILLS[1]];g.useSkill();assert.equal(p.skills[0].id
 p.invincible=0;p.effects={water:1};assert.equal(g.kill(p,n),false);p.effects={shield:1};assert.equal(g.kill(p,n),false);assert.equal(p.effects.shield,undefined);
 p.effects={};g.elapsed=299.99;g.update(.02,{x:0,y:0});assert.equal(g.finished,true);assert.equal(g.result.full,true);g.finish();g.finish();assert.equal(finishes,1);
 const h=new Inkstone();h.entities=h.entities.slice(0,1);h.player.invincible=0;h.player.x=C.world.width/2;h.player.y=C.world.height/2;h.foods=[{x:C.world.width/2,y:C.world.height/2,mass:10,r:3}];h.update(.016,{x:0,y:0});assert.ok(h.player.ink>0);assert.ok(h.player.mass>C.initialRadius**2);
-const start=h.player.mass;h.elapsed=210;h.player.x=C.world.width-30;h.player.y=C.world.height/2;h.update(.1,{x:0,y:0});assert.ok(h.player.mass<start);assert.equal(h.player.diluted,true);
+const start=h.player.mass;h.elapsed=290;h.player.x=C.world.width-30;h.player.y=C.world.height/2;h.update(.1,{x:0,y:0});assert.ok(h.player.mass<start);assert.equal(h.player.diluted,true);
 console.log('PASS settlement, full-round rewards, separate ink/mass, tiny respawn, protection, queue, shield, water, food, shrink, finish idempotency');
 const full=new Inkstone();for(let i=0;i<3001;i++)full.update(.1,{x:Math.sin(i*.03),y:Math.cos(i*.03)});
 assert.equal(full.finished,true);assert.equal(full.elapsed,300);assert.ok(full.safeRadius<=C.waterRingEndRadius+.001);

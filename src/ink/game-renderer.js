@@ -5,7 +5,7 @@ import {MaterialInk} from '../../prototypes/ink/src/material.js';
 import {QUALITY} from '../../prototypes/ink/src/config.js';
 import {PaperMap} from './paper-map.js';
 import {GAME_CONFIG as C,clamp} from '../game/config.js';
-import {cameraTarget} from '../game/legacy-foundation.js';
+import {followCamera} from '../game/camera.js';
 import {NpcPainter} from './npc-painter.js';
 export class GameRenderer {
  constructor(output,quality,mode){
@@ -20,11 +20,7 @@ export class GameRenderer {
  resize(){this.setBounds();this.fluid.resize();this.body.reset();this.cameraReady=false;const d=Math.min(devicePixelRatio||1,2);this.output.width=Math.round(this.viewW*d);this.output.height=Math.round(this.viewH*d);this.ctx.setTransform(d,0,0,d,0,0);this.paper?.resize();}
  setQuality(q){this.fluid.quality=q;this.resize();}
  updateCamera(player,dt=1/60,immediate=false,focus=null){
-  const old={...this.camera},target=cameraTarget(player,this.viewW,this.viewH,this.mobile);
-  const paired=focus&&Math.hypot(player.x-focus.x,player.y-focus.y)<1400,cx=paired?(player.x+focus.x)/2:player.x,cy=paired?(player.y+focus.y)/2:player.y;
-  if(paired)target.scale=Math.min(target.scale,Math.max(.28,Math.min(this.viewW/(Math.abs(player.x-focus.x)+2*(focus.r+80)),this.viewH/(Math.abs(player.y-focus.y)+2*(focus.r+120)))));
-  const fresh=immediate||!this.cameraReady,zoom=fresh?1:1-Math.exp(-dt*2.76),follow=fresh?1:1-Math.exp(-dt*5);
-  this.camera.scale+=(target.scale-this.camera.scale)*zoom;target.x=clamp(cx-this.viewW/this.camera.scale/2,0,Math.max(0,(this.paper?.world||C.world).width-this.viewW/this.camera.scale));target.y=clamp(cy-this.viewH/this.camera.scale*(paired&&this.mobile?.68:.5),0,Math.max(0,(this.paper?.world||C.world).height-this.viewH/this.camera.scale));this.camera.x+=(target.x-this.camera.x)*follow;this.camera.y+=(target.y-this.camera.y)*follow;
+  const old={...this.camera},fresh=immediate||!this.cameraReady;Object.assign(this.camera,followCamera(old,player,this.viewW,this.viewH,this.mobile,dt,fresh,focus,this.paper?.world||C.world));
   if(!fresh){const ratio=old.scale/this.camera.scale,offset=[(this.camera.x-old.x)*old.scale/this.viewW,1-ratio-(this.camera.y-old.y)*old.scale/this.viewH];this.fluid.reproject(ratio,offset);}
   this.cameraReady=true;
  }

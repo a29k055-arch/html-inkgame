@@ -1,4 +1,4 @@
-import {GAME_CONFIG as C,clamp,dist} from './config.js';
+import {GAME_CONFIG as C,CAMERA_CONFIG as B,clamp,dist} from './config.js';
 export const random=(a,b)=>a+Math.random()*(b-a);
 // Adapted from GitHub legacy randomPoint/randomNpcPoint/createFood/moveSpeed.
 // No revealAt, obscureNpcTrail, painting state, recoil or fluid fields are imported.
@@ -16,6 +16,6 @@ export function createFood(point=randomPoint()){
 }
 export function moveSpeed(radius){return 235*(1-clamp((radius-C.initialRadius)/(170-C.initialRadius),0,1)*.38);}
 export function cameraTarget(player,width,height,mobile){
- const scale=clamp((1.12-(player.r-C.initialRadius)/220)*(mobile?.8:1),mobile?(height>width?.4:.44):.52,1.12);
+ const floor=Math.max(width/C.world.width,height/C.world.height,mobile?B.mobileMin:B.desktopMin),scale=Math.max(floor,(1.12-(player.r-C.initialRadius)/B.growthRange)*(mobile?.8:1));
  return {scale,x:clamp(player.x-width/scale/2,0,Math.max(0,C.world.width-width/scale)),y:clamp(player.y-height/scale/2,0,Math.max(0,C.world.height-height/scale))};
 }
