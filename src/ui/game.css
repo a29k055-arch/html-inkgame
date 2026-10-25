@@ -44,3 +44,4 @@ body[data-home-visual=paper] #homeFluid{visibility:hidden}body[data-home-visual=
 @media(max-width:350px){#activeItems{bottom:116px}#buffBar{bottom:117px;max-width:calc(100vw - 145px)}}
 @media(max-height:500px) and (min-width:500px){#activeItems{bottom:15px;right:16px}#buffBar{bottom:105px;max-width:55%}#campaignStatus{top:auto;bottom:14px;max-width:37%}}
 .choice-tools{display:grid;justify-items:end;gap:8px}.choice-later-top{display:block!important;position:static!important;top:auto!important;right:auto!important;padding:4px 7px;background:transparent;color:#8b7755;border:0;font-size:11px;min-height:26px}.choice-shell>small[data-choice-meter]{padding-right:0}
+.brush.selected:before,.brush:hover:before,.brush:focus-visible:before{mix-blend-mode:screen;filter:brightness(1.7);opacity:.13!important}
