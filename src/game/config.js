@@ -30,5 +30,7 @@ export const CONTACT_CONFIG={coreRatio:.73,spikeBaseRate:.012,spikeReferenceRadi
 export const CAMERA_CONFIG={desktopMin:.78,mobileMin:.66,growthRange:900,bossMin:.66};
 export const DROP_CONFIG={minScreenRadius:20,maxScreenRadius:270,playerWeight:.45,targetWeight:1.35};
 
-export const TALENT_CONFIG={earnedPerChoice:1200,maxLevel:3,ward:[2,3,4],haste:[.15,.25,.35],power:[.20,.35,.50],surge:[.25,.40,.55],thrift:[.12,.20,.28],refill:300};
-export const BOSS_ATTACK_CONFIG={warningSeconds:.95,maxWarningSeconds:3.6,reactionMargin:.30,hitFlat:10,hitFraction:.025,hitCap:180,contactFlat:16,contactFraction:.035,contactCap:240,fanSpeed:215,ringSpeed:150,fanCount:[3,4,5],ringCount:[12,14,16],ringGap:.85,intervals:[2.3,2.0,1.8],laneSpread:.20};
+export const TALENT_CONFIG={earnedPerChoice:1200,maxLevel:3,ward:[1,2,3],haste:[.05,.10,.15],tempo:[.05,.10,.15],power:[.05,.10,.15],magnet:[.10,.20,.30],magnetBaseReach:140,magnetSpeed:270,magnetAcceleration:5,surge:[.10,.20,.30],thrift:[.04,.08,.12],refill:300};
+export const BOSS_ATTACK_CONFIG={warningSeconds:.95,maxWarningSeconds:3.6,reactionMargin:.30,hitFlat:10,hitFraction:.025,hitCap:180,contactFlat:16,contactFraction:.035,contactCap:240,fanSpeed:215,ringSpeed:150,fanCount:[3,4,5],ringCount:[12,16,20],ringGap:.85,intervals:[2.3,2.1,1.95],speedScale:[1,1.06,1.12],echoDelay:.48,echoSpeed:.86,laneSpread:.20};
+
+export const ACTIVE_CONFIG={dash:{duration:[2.5,3,3.5],cooldown:[14,13,12],speed:[.25,.30,.35]},veil:{duration:[2,2.5,3],cooldown:[24,22,20]}};

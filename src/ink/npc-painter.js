@@ -1,9 +1,9 @@
 import {CONTACT_CONFIG as VISUAL} from '../game/config.js';
 import {alienBody,alienDetails} from './alien-ink.js';
-import {npcAtlas,atlasMetrics} from './npc-material/atlas.js';
+
 // Runtime draws only cached animation. The bake's fluid never reaches a player renderer.
 export class NpcPainter {
- constructor(){this.tailStates=new WeakMap();this.sprites=Array.from({length:8},(_,index)=>this.makeSprite(index));this.eyeSprites=[...this.sprites];this.animated=false;this.metrics=atlasMetrics;this.ready=npcAtlas().then(sprites=>{this.sprites=sprites;this.animated=true;}).catch(e=>console.warn('NPC atlas:',e.message));}
+ constructor(){this.tailStates=new WeakMap();this.sprites=Array.from({length:8},(_,index)=>this.makeSprite(index));this.eyeSprites=[...this.sprites];this.animated=false;this.metrics={liveSimulations:0,frames:8};this.ready=Promise.resolve();}
  makeSprite(seed){
   const canvas=document.createElement('canvas');canvas.width=canvas.height=160;const c=canvas.getContext('2d'),r=67;
   const ink=c.createRadialGradient(80-r*.26,80-r*.28,0,80,80,r*1.03);
