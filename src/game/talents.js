@@ -1,0 +1,8 @@
+import {TALENT_CONFIG as C} from './config.js';
+export const TALENTS=[{id:'ward',symbol:'◈'},{id:'haste',symbol:'彡'},{id:'power',symbol:'✦'},{id:'surge',symbol:'泉'},{id:'thrift',symbol:'◎'}];
+export const talentValue=(e,id)=>C[id]?.[(e.talents?.[id]||0)-1]||0;
+export function initTalents(e){e.talents??={};e.choices??={claimed:0,offer:null,serial:0};e.wardCharges??=0;}
+export const pendingChoices=e=>Math.max(0,Math.floor((e.growth?.collected||0)/C.earnedPerChoice)-(e.choices?.claimed||0));
+export function makeOffer(e){initTalents(e);if(!pendingChoices(e))return null;if(e.choices.offer)return e.choices.offer;const available=TALENTS.filter(s=>(e.talents[s.id]||0)<C.maxLevel),pool=[...available];while(pool.length<3)pool.push({id:['refill','wardRefill','clarity'][pool.length%3],symbol:'雲',boon:true});for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}e.choices.offer={serial:++e.choices.serial,cards:pool.slice(0,3).map(s=>({...s,from:e.talents[s.id]||0,to:s.boon?0:(e.talents[s.id]||0)+1}))};return e.choices.offer;}
+export function chooseTalent(e,id,serial){const offer=e.choices?.offer;if(!offer||offer.serial!==serial||!offer.cards.some(c=>c.id===id))return false;const card=offer.cards.find(c=>c.id===id);if(card.boon){if(id==='refill')e.ink+=C.refill;else if(id==='wardRefill')e.wardCharges=Math.max(e.wardCharges,2);else{e.effects.water=5;e.effects.absorb=5;}}else{e.talents[id]=card.to;if(id==='ward')e.wardCharges=C.ward[card.to-1];}e.choices.claimed++;e.choices.offer=null;return true;}
+export function blockHit(e){if(e.wardCharges>0){e.wardCharges--;return true;}if(e.effects?.shield){delete e.effects.shield;return true;}return false;}

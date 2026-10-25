@@ -1,6 +1,7 @@
+import {talentValue,blockHit} from './talents.js';
 import {coreRadius,spikeContact} from './alien-geometry.js';
 import {initReserve,gainReserve,syncReserve,resetReserveOnDeath,advanceRewards} from './ink-reserve.js';
-import {GAME_CONFIG as C,CONTACT_CONFIG as K,SKILLS,clamp,dist,settlement} from './config.js';
+import {GAME_CONFIG as C,CONTACT_CONFIG as K,INK_RESERVE_CONFIG as R,SKILLS,clamp,dist,settlement} from './config.js';
 import {random,randomPoint,randomNpcPoint,createFood,moveSpeed} from './legacy-foundation.js';
 import {aiController,aiDirection,shouldUseSkill} from './ai.js';
 const names=['澄','雨音','竹影','白露','山月','凪','青嵐','葉舟','霧','雲間','春水','松風','雪','一滴','遠山','野菊','夕凪','石庭','朧','青竹','時雨','水面','木漏れ日','冬泉','夜舟','霞','新月','梢','秋声','墨雨','雲雀','朝露'];
@@ -34,10 +35,11 @@ export class Inkstone {
   return best;
  }
  food(){return createFood(this.spawnPoint());}
- speed(e){return moveSpeed(e.r)*(e.controller.type==='ai'?(.70+e.controller.profile.skill*.18):1)*(e.effects.dense?.65:1);}
+ speed(e){return moveSpeed(e.r)*(1+talentValue(e,'haste'))*(e.controller.type==='ai'?(.70+e.controller.profile.skill*.18):1)*(e.effects.dense?.65:1);}
  radius(e){return coreRadius(e);}
- drainInk(e,dt,multiplier=1){if(e.dead||e.effects.water)return 0;const lost=Math.max(0,Math.min(e.mass-C.respawnRadius**2,e.mass*C.waterDecay*multiplier*dt));if(e.growth){e.ink=Math.max(0,e.ink-lost);syncReserve(e);}else{e.mass-=lost;e.r=Math.sqrt(e.mass);e.ink=Math.max(0,e.ink-lost);}return lost;}
- applySpikes(source,target,dt){if(target.dead||source.dead||target.invincible||target.effects.water||!spikeContact(source,target,this.radius(target)))return;const lost=this.drainInk(target,dt,K.spikeDrainMultiplier);target.spikeContact=lost>0;target.spikeFeedback=Math.max(0,(target.spikeFeedback||0)-dt);if(lost>0&&target.spikeFeedback<=0){target.spikeFeedback=K.feedbackInterval;this.onEvent('spike-loss',{entity:target,x:target.x,y:target.y,r:Math.min(12,target.r*.16)});}}
+ drainInk(e,dt,multiplier=1){if(e.dead||e.effects.water)return 0;const lost=Math.max(0,Math.min(e.mass-C.respawnRadius**2,e.mass*C.waterDecay*multiplier*dt));if(e.growth){e.ink=Math.max(Math.min(e.ink,K.spikeInkFloor),e.ink-lost);syncReserve(e);}else{e.mass-=lost;e.r=Math.sqrt(e.mass);e.ink=Math.max(0,e.ink-lost);}return lost;}
+ applySpikes(source,target,dt){if(target.dead||source.dead||target.invincible||target.effects.water||this.radius(source)<=this.radius(target)*C.consumeRatio||!spikeContact(source,target,this.radius(target)))return;const resource=target.growth?target.ink:Math.max(0,(target.mass-C.respawnRadius**2)/4),size=clamp(this.radius(source)/K.spikeReferenceRadius,K.spikeSizeMin,K.spikeSizeMax),rate=Math.min(K.spikeMaxLossPerSecond,resource*K.spikeBaseRate*size);if(target.spikeFrame!==this.elapsed){target.spikeFrame=this.elapsed;target.spikeRate=0;}const add=Math.max(0,rate-(target.spikeRate||0));target.spikeRate=Math.max(rate,target.spikeRate||0);const loss=add*Math.min(K.contactInterval,Math.max(0,dt));if(target.growth){target.ink=Math.max(Math.min(target.ink,K.spikeInkFloor),target.ink-loss);syncReserve(target);}else{const massLoss=Math.min(Math.max(0,target.mass-C.respawnRadius**2),loss*4);target.mass-=massLoss;target.r=Math.sqrt(target.mass);target.ink=Math.max(0,target.ink-loss);}target.spikeContact=loss>0;target.spikeFeedback=Math.max(0,(target.spikeFeedback||0)-dt);if(loss>0&&target.spikeFeedback<=0){target.spikeFeedback=K.feedbackInterval;this.onEvent('spike-loss',{entity:target,x:target.x,y:target.y,r:Math.min(10,target.r*.12)});}}
+
  useSkill(e=this.player){
   if(e.dead||!e.skills.length||this.finished)return false;
   const skill=e.skills.shift();e.effects[skill.id]=C.skillDurations[skill.id];
@@ -50,8 +52,8 @@ export class Inkstone {
  }
  kill(e,killer){
   if(e.dead||e.invincible>0||e.effects.water)return false;
-  if(e.effects.shield){delete e.effects.shield;e.invincible=1.2;this.onEvent('shield',e);return false;}
-  if(killer){const gain=e.mass*C.npcGain*this.rewardMultiplier;if(killer.growth)gainReserve(killer,gain);else{killer.mass=Math.min(C.maxRadius**2,killer.mass+gain);killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}killer.swallowed++;this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,kind:'enemy'});}
+  if(blockHit(e)){e.invincible=1.2;this.onEvent('shield',e);return false;}
+  if(killer){const rawGain=e.mass*C.npcGain*this.rewardMultiplier,gain=killer.growth?Math.min(R.playerNpcGainCap,rawGain*R.playerNpcGainScale):rawGain;if(killer.growth)gainReserve(killer,gain);else{killer.mass=Math.min(C.maxRadius**2,killer.mass+gain);killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}killer.swallowed++;this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,kind:'enemy'});}
   e.deaths++;if(!e.growth)e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);return true;
  }
  respawn(e){
@@ -76,7 +78,7 @@ export class Inkstone {
    e.diluted=dist(e,this.center)>this.safeRadius;
    if(e.diluted)this.drainInk(e,dt);
    if(!e.growth)e.r=Math.sqrt(e.mass);
-   for(let i=this.foods.length-1;i>=0;i--){const food=this.foods[i],reach=this.radius(e)+(e.effects.absorb?55:0);const dx=e.x-food.x,dy=e.y-food.y,reachWithFood=reach+food.r;if(Math.abs(dx)<reachWithFood&&Math.abs(dy)<reachWithFood&&dx*dx+dy*dy<reachWithFood*reachWithFood){const gain=food.mass*C.foodGain*this.rewardMultiplier;if(e.growth)gainReserve(e,gain);else{e.mass=Math.min(C.maxRadius**2,e.mass+gain);e.r=Math.sqrt(e.mass);e.ink+=gain;}this.foods.splice(i,1);this.onEvent('consume',{entity:e,x:food.x,y:food.y,r:food.r,playerSize:e.r,gain,kind:'food'});}}
+   for(let i=this.foods.length-1;i>=0;i--){const food=this.foods[i],reach=this.radius(e)+(e.effects.absorb?55:0);const dx=e.x-food.x,dy=e.y-food.y,reachWithFood=reach+food.r;if(Math.abs(dx)<reachWithFood&&Math.abs(dy)<reachWithFood&&dx*dx+dy*dy<reachWithFood*reachWithFood){const gain=food.mass*C.foodGain*this.rewardMultiplier*(e.growth?R.humanFoodGainScale:1)*(this.theme==='boss'?1+talentValue(e,'surge'):1);if(e.growth)gainReserve(e,gain);else{e.mass=Math.min(C.maxRadius**2,e.mass+gain);e.r=Math.sqrt(e.mass);e.ink+=gain;}this.foods.splice(i,1);this.onEvent('consume',{entity:e,x:food.x,y:food.y,r:food.r,playerSize:e.r,gain,kind:'food'});}}
    if(e.growth){syncReserve(e,dt);advanceRewards(e,dt,this.onEvent);}
    for(let i=this.items.length-1;i>=0;i--){if(e.skills.length<2&&dist(e,this.items[i])<this.radius(e)+10){const skill=SKILLS[Math.floor(Math.random()*SKILLS.length)];e.skills.push(skill);this.items.splice(i,1);this.onEvent('skill',{entity:e,skill});}}
   }
