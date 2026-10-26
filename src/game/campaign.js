@@ -41,7 +41,7 @@ export class Campaign {
   this.shots.length=0;this.enemyShots.length=0;this.shotClock=0;return true;
  }
  returnNormal(){if(this.scene!=='reward')return false;const p=this.player;Object.assign(this.normal.player,{talents:p.talents,choices:p.choices,wardCharges:p.wardCharges,itemsHeld:p.itemsHeld,itemUse:p.itemUse,growth:p.growth,mass:p.mass,r:p.r,ink:p.ink,skills:[...p.skills],effects:{...p.effects},deaths:p.deaths,swallowed:p.swallowed,aim:{...p.aim},dead:0,invincible:3,vx:0,vy:0});this.arena=this.normal;this.scene='normal';this.shots.length=0;this.enemyShots.length=0;this.boss=null;return true;}
- useActive(id=this.player.itemsHeld[0]){if(!['normal','boss'].includes(this.scene)||!useActive(this.player,id))return false;if(id==='veil'){this.shotPool.push(...this.shots);this.shots.length=0;}this.onEvent('active-used',{entity:this.player,id});return true;}
+ useActive(id=this.player.itemsHeld[0]){if(!['normal','boss'].includes(this.scene)||!useActive(this.player,id))return false;if(id==='veil'){this.shotPool.push(...this.shots);this.shots.length=0;const ranged=this.arena.ranged;if(ranged)for(let i=ranged.shots.length-1;i>=0;i--)if(ranged.shots[i].owner===this.player.id){ranged.pool.push(ranged.shots[i]);ranged.shots.splice(i,1);}}this.onEvent('active-used',{entity:this.player,id});return true;}
  spawnShot(list,pool,values,limit){if(list.length>=limit)return false;list.push(Object.assign(pool.pop()||{},values));return true;}
  updateBoss(dt,aim,assist){
   const b=this.boss,p=this.player,tier=this.attempts-1;this.bossElapsed+=dt;b.visualTime=this.arena.elapsed;p.hitFlash=Math.max(0,(p.hitFlash||0)-dt);this.recoverInk(dt);b.phase+=dt;b.hit=Math.max(0,b.hit-dt);

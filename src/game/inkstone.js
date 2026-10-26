@@ -58,7 +58,7 @@ export class Inkstone {
   if(e.dead||e.invincible>0||e.effects.water)return false;
   if(blockHit(e)){e.invincible=1.2;this.onEvent('shield',e);return false;}
   if(killer){const rawGain=e.mass*C.npcGain*this.rewardMultiplier;let gain=killer.growth?Math.min(R.playerNpcGainCap,rawGain*R.playerNpcGainScale):rawGain;if(killer.growth){const before=killer.ink;gainReserve(killer,gain,true,this.theme!=='boss');gain=killer.ink-before;}else{killer.mass=Math.min(C.maxRadius**2,killer.mass+gain);killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}if(killer.controller.type==='ai'&&e.controller.type==='ai'){this.ecology.npcSwallows++;this.ecology.maxRadius=Math.max(this.ecology.maxRadius,killer.r);}killer.swallowed++;this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,kind:'enemy'});}
-  stopActives(e);e.deaths++;if(!e.growth)e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);return true;
+  stopActives(e);this.ranged?.reset(e);e.deaths++;if(!e.growth)e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);return true;
  }
  respawn(e){
   const retained=e.growth?e.r:C.respawnRadius,p=this.spawnPoint(retained+180);Object.assign(e,{x:p.x,y:p.y,vx:0,vy:0,r:retained,mass:retained**2,collisionScale:1,invincible:C.respawnProtection});
