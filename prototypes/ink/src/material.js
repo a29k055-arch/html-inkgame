@@ -19,8 +19,6 @@ export class MaterialInk {
   // Dense, continually advected core makes the controlled position readable without a fixed painted circle.
   f.inject({x:entity.x,y:entity.y,vx:0,vy:0,radius:r*.32,intensity:dt*18});
   this.nextFeed-=dt;if(this.nextFeed<=0){this.nextFeed=.13;const a=this.time*2.3;f.inject({x:entity.x+Math.cos(a)*r*.16/f.aspect,y:entity.y+Math.sin(a)*r*.16,vx:0,vy:0,radius:r*.32,intensity:.35});}
-  // A narrow, sparse feed keeps large bodies' wakes legible without a second solver.
-  const motion=Math.min(1,speed/.085);if(motion>.02){const n=Math.hypot(entity.vx*f.aspect,entity.vy)||1,dx=entity.vx*f.aspect/n,dy=entity.vy/n;for(let i=0;i<3;i++){const t=(i+1)/3,d=r*(.4+t*1.25);f.inject({x:entity.x-dx*d/f.aspect,y:entity.y-dy*d,vx:0,vy:0,radius:r*(.15-t*.085),intensity:dt*1.6*motion*(1-t*.7)});}}
   f.pass('contain',f.d.write,{field:f.d.read,point:[entity.x,1-entity.y],force:[entity.vx,-entity.vy],radius:r,dt});f.d.swap();
  }
  draw(){this.canvas.hidden=true;}

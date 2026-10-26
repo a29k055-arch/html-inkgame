@@ -30,11 +30,11 @@ export const CONTACT_CONFIG={coreRatio:.73,spikeBaseRate:.012,spikeReferenceRadi
 export const CAMERA_CONFIG={desktopMin:.78,mobileMin:.66,growthRange:900,bossMin:.66};
 export const DROP_CONFIG={minScreenRadius:20,maxScreenRadius:270,playerWeight:.45,targetWeight:1.35};
 
-export const TALENT_CONFIG={earnedPerChoice:1200,maxLevel:3,ward:[1,2,3],haste:[.03,.06,.09],tempo:[.03,.06,.09],power:[.03,.06,.09],magnet:[.05,.10,.15],magnetBaseReach:140,magnetSpeed:270,magnetAcceleration:5,surge:[.05,.10,.15],thrift:[.03,.06,.09],refill:300,clarityInk:100};
-export const BOSS_ATTACK_CONFIG={warningSeconds:.95,maxWarningSeconds:3.6,reactionMargin:.30,hitFlat:10,hitFraction:.025,hitCap:180,contactFlat:16,contactFraction:.035,contactCap:240,fanSpeed:215,ringSpeed:150,fanCount:[3,4,5],ringCount:[12,16,20],ringGap:.85,intervals:[2.3,2.1,1.95],speedScale:[1,1.06,1.12],echoDelay:.48,echoSpeed:.86,laneSpread:.20};
+export const TALENT_CONFIG={earnedPerChoice:1200,maxLevel:3,ward:[1,2,3],haste:[.03,.06,.09],tempo:[.03,.06,.09],power:[.03,.06,.09],magnet:[.05,.10,.15],magnetBaseReach:140,magnetSpeed:480,magnetAcceleration:10,magnetDamping:2.2,surge:[.05,.10,.15],thrift:[.03,.06,.09],refill:300,clarityInk:100};
+export const BOSS_ATTACK_CONFIG={range:980,baseDamage:14,radiusDamage:.20,damageCap:90,warningSeconds:.95,maxWarningSeconds:3.6,reactionMargin:.30,hitFlat:10,hitFraction:.025,hitCap:180,contactFlat:16,contactFraction:.035,contactCap:240,fanSpeed:215,ringSpeed:150,fanCount:[3,4,5],ringCount:[12,16,20],ringGap:.85,intervals:[2.3,2.1,1.95],speedScale:[1,1.06,1.12],echoDelay:.48,echoSpeed:.86,laneSpread:.20};
 
 export const ACTIVE_CONFIG={dash:{duration:3,speed:.30,effect:'rush'},veil:{duration:3,effect:'water'},absorb:{duration:5,effect:'absorb',reach:220},reflect:{duration:3,effect:'reflect'}};
-export const ITEM_CONFIG={capacity:2,starter:['dash','veil']};
-export const RANGED_CONFIG={range:460,minRange:65,interval:4.4,jitter:1.2,windup:.65,speed:190,spikeSpeed:225,shotRadius:7,spikeRadius:9,maxShots:64,life:3.4,flatDamage:2,inkFraction:.007,damageCap:35,inkFloor:10,hitProtection:.65,minTargetRatio:.60};
+export const ITEM_CONFIG={capacity:2,starter:[]};
+export const RANGED_CONFIG={range:460,minRange:65,interval:4.4,jitter:1.2,windup:.65,speed:190,spikeSpeed:225,shotRadius:7,spikeRadius:9,maxShots:64,life:3.4,flatDamage:2,inkFraction:.007,damageCap:35,inkFloor:10,hitProtection:.65,minTargetRatio:.60,baseDamage:3,radiusDamage:.20,minDamage:5,maxDamage:38,shotSizeCap:16,sourceReference:24};
 export const BOSS_MOTION_CONFIG={interval:[6,5.5,5],gather:.8,burst:.65,recover:.85,speed:[195,225,250]};
-export const SPIKE_SHOT_CONFIG={count:[2,3,4],speed:[245,270,295],radius:[10,12,14],spread:.28,length:3.6,width:1.1,damageFlat:18,damageFraction:.028,damageCap:190,minCoverage:.08};
+export const SPIKE_SHOT_CONFIG={count:[2,3,4],speed:[245,270,295],radius:[10,12,14],spread:.28,length:5.2,width:.42,damageFlat:18,damageFraction:.028,damageCap:190,minCoverage:.08};

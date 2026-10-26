@@ -49,18 +49,7 @@ const shaders={
  float irregular=.65+.22*noise(uv*9.+vec2(time*.017,-time*.013))+.13*noise(uv*23.+vec2(-time*.023,time*.011));
  vec2 shift=old*exp(-dt*1.5)+v*dt*.32*irregular;
  float len=length(shift);shift*=.014/max(.014,len);o=vec4(shift,0.,1.);`,
- contain:`
- vec4 ink=texture(field,uv);vec2 delta=uv-point;delta.x*=aspect;
- vec2 direction=vec2(force.x*aspect,force.y);float speed=length(direction);direction=normalize(direction+vec2(.00001,0.));
- float along=dot(delta,direction),side=abs(dot(delta,vec2(-direction.y,direction.x)));
- float activity=smoothstep(.012,.09,speed);
- float tail=radius*mix(2.2,6.8,activity);
- float taper=smoothstep(.35,6.2,max(0.,-along)/radius)*activity;
- float width=radius*mix(1.6,.13,taper);
- float lateral=smoothstep(width,width*1.65,side);
- float front=smoothstep(radius*1.7,radius*2.8,along);
- float rear=smoothstep(tail,tail*1.3,-along);
- ink.z*=exp(-dt*(lateral+front+rear)*2.4);o=ink;`,
+ contain:`vec4 ink=texture(field,uv);vec2 delta=uv-point;delta.x*=aspect;float edge=smoothstep(radius*.62,radius*.95,length(delta));ink.z*=exp(-dt*edge*18.);o=ink;`,
  material:`
  vec2 v=texture(velocity,uv).xy;
  float d=max(0.,texture(field,uv).z);

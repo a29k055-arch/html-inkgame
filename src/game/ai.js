@@ -43,7 +43,7 @@ export function chooseGoal(game,e){
  if(intent==='hunt'&&ctrl.goal?.id===goal.id)ctrl.chaseTime+=p.reaction;else ctrl.chaseTime=0;
  ctrl.previousDistance=dist(e,goal);ctrl.intent=intent;return goal;
 }
-export function aiDirection(game,e,dt){
+export function aiDirection(game,e,dt){if(game.theme==='boss')return clashDirection(game,e,dt);
  const ctrl=e.controller;ctrl.waterExposure=dist(e,game.center)+e.r>game.safeRadius?(ctrl.waterExposure||0)+dt:0;ctrl.think-=dt;if(ctrl.think<=0||!ctrl.goal){ctrl.goal=chooseGoal(game,e);ctrl.think=ctrl.profile.reaction*random(.8,1.3);}
  let dx=ctrl.goal.x-e.x,dy=ctrl.goal.y-e.y,n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;
  // Legacy NPC-to-NPC avoidance, updated to include the human using the same strength rules.
@@ -53,3 +53,5 @@ export function aiDirection(game,e,dt){
  n=Math.hypot(dx,dy)||1;return {x:dx/n,y:dy/n};
 }
 export function shouldUseSkill(game,e){const id=e.skills[0]?.id,c=e.controller;if(!id)return false;if(id==='water'||id==='shield')return !!c.danger;if(id==='dense')return c.intent==='hunt'&&!!c.prey&&dist(e,c.prey)<220;if(id==='absorb')return c.intent==='forage'&&game.foods.filter(f=>dist(e,f)<100).length>=3;if(id==='splash')return !!c.prey&&dist(e,c.prey)<C.splashRange;return false;}
+
+function clashDirection(game,e,dt){const p=game.player,c=e.controller,dx=p.x-e.x,dy=p.y-e.y,n=Math.hypot(dx,dy)||1,profile=c.profile,range=460+(profile.skill-.5)*70,spacing=Math.max(game.radius(e)+game.radius(p)+30,range*(.42+(1-profile.risk)*.18)),approach=n>range*.86?1:n<spacing?-.45:.12,orbit=Math.sin(game.elapsed*(.35+profile.skill*.35)+c.routeSeed)*(.18+profile.risk*.36);if(n>C.aiPerceptionRange*(.65+profile.skill*.7)){const gx=game.center.x+Math.sin(c.routeSeed)*220-e.x,gy=game.center.y+Math.cos(c.routeSeed)*220-e.y,length=Math.hypot(gx,gy)||1;c.goal={x:e.x+gx,y:e.y+gy};c.prey=null;c.intent='search';c.attackTarget=null;return {x:gx/length*.8,y:gy/length*.8};}c.goal={id:p.id,x:p.x,y:p.y};c.prey=p;c.intent=approach>0?'hunt':'adjust';c.attackTarget=p.id;return {x:dx/n*approach-dy/n*orbit,y:dy/n*approach+dx/n*orbit};}
