@@ -31,7 +31,7 @@ localStorage 存档版本2保持兼容；碎片即时保存，Gallery解锁与�
 
 本地启动：node prototypes/ink/preview.cjs。12套模型涵盖资源/碰撞/阶段/Boss/Gallery/i18n、奖励队列、主动道具、磁吸争夺及3×600秒生态模拟。桌面与390×844触控模拟通过真实三次Boss弹杀、选牌、碎片、全遮盖转场、修复与刷新解锁（加速门槛、保护/自动采集夹具，非人工整局）。四视口三语、手机双指、待选跨场景与死亡保留通过；1440×900高画质32NPC短测59–60FPS、80NPC样本51–60FPS及满Boss弹幕压力约60FPS，玩家12FBO、墨弹预热后零独立求解器。
 
-原生importmap统一模块版本 scroll-items-20261026release；发布时运行 node tools/update-release-imports.cjs <新版本键>，防旧脚本混载。技能/攻击/平衡配置在 src/game/config.js。清水按真实墨库10%/秒扣减，避免显示质量误作资源；Boss扇射根据玩家大小与移速适配0.95–3.6秒预警。
+原生importmap统一模块版本 scroll-items-20261026release2；发布时运行 node tools/update-release-imports.cjs <新版本键>，防旧脚本混载。技能/攻击/平衡配置在 src/game/config.js。清水按真实墨库10%/秒扣减，避免显示质量误作资源；Boss扇射根据玩家大小与移速适配0.95–3.6秒预警。
 
 尚需实体手机、长时性能及无保护人工难度测试；自动触控模拟不等于真机。眼球/刺球现有圆核吞噬之外新增有限射程墨弹/锥刺，非致命墨量消耗；Boss增加覆盖面积伤害锥刺与锁向短冲。双方长细墨尾共享Hero密度与缓存，不引入逐弹流体。首页单图局部流动保留，鱼/植物独立运动需分层素材。维护入口与阶段细节见 PROJECT_HANDOFF.md。
 
