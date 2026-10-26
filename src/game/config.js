@@ -13,7 +13,7 @@ export const GAME_CONFIG={
  // Tunable formula. Early departure never grants ranking bonus.
  earlyExitRatio(elapsed,duration){return Math.min(1,Math.max(0,elapsed/duration));},
 };
-// Speed-changing dash is retired. Shift exclusively consumes an equipped ink technique.
+// Legacy NPC techniques; player consumables are separate and Shift consumes the front item.
 export const SKILLS=[{id:'splash',label:'溌墨'},{id:'dense',label:'濃墨'},{id:'water',label:'水遁'},{id:'shield',label:'墨障'},{id:'absorb',label:'吸墨'}];
 export const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);

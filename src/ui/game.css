@@ -52,3 +52,4 @@ body[data-home-visual=paper] #homeWash:after{opacity:.52;mask-image:radial-gradi
 @media(max-height:500px) and (min-width:500px){#activeItems{bottom:14px;right:14px}#useItemBtn{min-height:88px;width:76px}#reserveItemSlot{min-height:64px;width:45px}.tutorial-grid{grid-template-columns:1fr 1fr}body[data-hud-density=detailed] #bossHud{top:118px}.home-primary{min-height:43px}.help-button{top:15px}}
 .help-button{pointer-events:auto}
 body[data-hud-density=detailed] #choiceProgress,body[data-hud-density=detailed] #inkNextLevel,body[data-hud-density=detailed] #shotPower{display:block!important}body[data-hud-density=detailed] #inkNextLevel[hidden]{display:none!important}@media(max-width:700px){body[data-hud-density=detailed] #inkReserveHud{width:calc(100vw - 172px);min-width:140px}body[data-hud-density=detailed] #choiceProgress{font-size:9px}}
+body.mobile .current-item kbd{display:none}

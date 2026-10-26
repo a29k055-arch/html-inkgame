@@ -24,6 +24,7 @@ import {t,getLanguage,setLanguage,applyTranslations,artTitle} from './ui/i18n.js
 const $=id=>document.getElementById(id);
 let mode='home',game=null,renderer=null,homeFluid=null,homeImage=null,paused=false,transitioning=false,last=0,noticeTime=0,noticeKey=null,frameCount=0,measure=0,fps=0,hudClock=0,resultData=null,rewardData=null;
 let settings={quality:matchMedia('(pointer:coarse)').matches?'balanced':'high',controls:'auto',homeVisual:'paper',hudDensity:'simple',backgroundPolicy:'fixed',backgroundId:null,aimAssist:true,volume:.3,...getSave().settings,language:getLanguage()};
+if(!['simple','detailed'].includes(settings.hudDensity))settings.hudDensity='simple';
 if(!['paper','painting'].includes(settings.homeVisual))settings.homeVisual='paper';document.body.dataset.homeVisual=settings.homeVisual;document.body.dataset.hudDensity=settings.hudDensity==='detailed'?'detailed':'simple';
 settings.volume=Math.min(1,Math.max(0,Number(settings.volume)||0));if(!QUALITY[settings.quality])settings.quality='balanced';let quality=settings.quality;
 function saveSettings(){settings.language=getLanguage();updateSettings({...getSave().settings,...settings});if(!storageAvailable())notify('sessionOnly');}
@@ -39,7 +40,7 @@ input.controls=settings.controls;
 function applyControls(){input.controls=settings.controls;document.body.classList.toggle('mobile',input.mobile);input.reset();if(renderer)renderer.mobile=input.mobile;}
 $('useItemBtn').onclick=()=>{if(active())game.useActive();};
 setupTutorial(()=>{input.reset();last=performance.now();});
-addEventListener('keydown',e=>{if(e.key==='?'&&$('loading').hidden&&!transitioning&&!document.querySelector('dialog[open]')){e.preventDefault();$('homeHelp').click();}});
+addEventListener('keydown',e=>{if(e.key==='F1'&&$('loading').hidden&&!transitioning&&!document.querySelector('dialog[open]')){e.preventDefault();$('homeHelp').click();}});
 $('hudDensity').value=settings.hudDensity||'simple';$('hudDensity').onchange=()=>{settings.hudDensity=$('hudDensity').value;document.body.dataset.hudDensity=settings.hudDensity;saveSettings();if(game&&renderer)refreshHud();};
 function setSelected(btn){for(const b of document.querySelectorAll('.menu button'))b.classList.toggle('selected',b===btn);}
 for(const b of document.querySelectorAll('.menu button')){b.addEventListener('pointerenter',()=>setSelected(b));b.addEventListener('focus',()=>setSelected(b));}
