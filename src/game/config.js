@@ -20,7 +20,7 @@ export const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 export function settlement(ink,elapsed,rank,config=GAME_CONFIG){const full=elapsed>=config.inkstoneDuration;const ratio=config.earlyExitRatio(elapsed,config.inkstoneDuration);const bonus=full?(config.rankingRewards[rank-1]||1):1;return {ink:Math.floor(Math.max(0,ink)*ratio*bonus),ratio,bonus,full,rank,elapsed};}
 
 // Campaign timing uses NORMAL-map active time only; Boss time is separate.
-export const CAMPAIGN_CONFIG={duration:360,thresholds:[100,250,450],earliest:[60,180,300],maxBosses:3,energyScale:.12,specialReward:2,specialAI:12,bossTimeLimit:140,bossInkReward:180,bossRadius:115,spawnSeparation:500,bossContactInterval:.8,bossHitProtection:.45,enemyBulletLife:7,npcBulletDamage:40,bulletSpeed:850,bulletLife:2.6,bulletDamage:16,maxShots:96,maxEnemyShots:100,bossHealth:[2400,3800,5400],bossSpeed:[82,98,116],bossStandoff:100,bossSteerRange:100,bossRetreat:.8,bossOrbit:28,bossWarningSlow:.58,repairThreshold:.72,artworkId:'ink-04'};
+export const CAMPAIGN_CONFIG={duration:360,thresholds:[100,250,450],earliest:[60,180,300],maxBosses:3,energyScale:.12,specialReward:2,specialAI:12,bossTimeLimit:140,bossInkReward:180,bossRadius:115,spawnSeparation:500,bossContactInterval:.8,bossHitProtection:.45,enemyBulletLife:7,npcBulletDamage:40,bulletSpeed:850,bulletLife:2.6,bulletDamage:16,maxShots:96,maxEnemyShots:100,bossHealth:[2700,4300,6200],bossSpeed:[82,98,116],bossStandoff:100,bossSteerRange:100,bossRetreat:.8,bossOrbit:28,bossWarningSlow:.58,repairThreshold:.72,artworkId:'ink-04'};
 
 // Per-round reserve is the only player growth currency; NPC legacy mass remains unchanged.
 export const INK_RESERVE_CONFIG={startInk:65,humanFoodGainScale:.65,playerNpcGainScale:.55,playerNpcGainCap:900,maxInk:1000000,respawnSizeRetention:.30,minimumRespawnInk:65,sizeMassPerInk:4,sizeSmoothing:3.4,preservePeakOnDeath:true,shotCostRatio:.025,maximumShotCost:55,shotReserveFloor:20,minimumShotCost:2,shotInterval:.38,powerSaturationLevel:8,levelThresholds:[0,180,600,1500,3200,6200,11000,18000],minimumDamage:13,damageRange:36,minimumShotRadius:4.5,shotRadiusRange:9,normalFoodTarget:950,normalFoodSpawnRate:32,bossFoodTarget:1660,bossFoodSpawnRate:64,recoveryBelow:120,recoveryRadius:220,recoveryMinimumDots:6,recoveryBatch:2,recoveryInterval:1,recoverySpawnNear:55,recoverySpawnFar:150};
@@ -30,7 +30,11 @@ export const CONTACT_CONFIG={coreRatio:.73,spikeBaseRate:.012,spikeReferenceRadi
 export const CAMERA_CONFIG={desktopMin:.78,mobileMin:.66,growthRange:900,bossMin:.66};
 export const DROP_CONFIG={minScreenRadius:20,maxScreenRadius:270,playerWeight:.45,targetWeight:1.35};
 
-export const TALENT_CONFIG={earnedPerChoice:1200,maxLevel:3,ward:[1,2,3],haste:[.05,.10,.15],tempo:[.05,.10,.15],power:[.05,.10,.15],magnet:[.10,.20,.30],magnetBaseReach:140,magnetSpeed:270,magnetAcceleration:5,surge:[.10,.20,.30],thrift:[.04,.08,.12],refill:300};
+export const TALENT_CONFIG={earnedPerChoice:1200,maxLevel:3,ward:[1,2,3],haste:[.03,.06,.09],tempo:[.03,.06,.09],power:[.03,.06,.09],magnet:[.05,.10,.15],magnetBaseReach:140,magnetSpeed:270,magnetAcceleration:5,surge:[.05,.10,.15],thrift:[.03,.06,.09],refill:300,clarityInk:100};
 export const BOSS_ATTACK_CONFIG={warningSeconds:.95,maxWarningSeconds:3.6,reactionMargin:.30,hitFlat:10,hitFraction:.025,hitCap:180,contactFlat:16,contactFraction:.035,contactCap:240,fanSpeed:215,ringSpeed:150,fanCount:[3,4,5],ringCount:[12,16,20],ringGap:.85,intervals:[2.3,2.1,1.95],speedScale:[1,1.06,1.12],echoDelay:.48,echoSpeed:.86,laneSpread:.20};
 
-export const ACTIVE_CONFIG={dash:{duration:[2.5,3,3.5],cooldown:[14,13,12],speed:[.25,.30,.35]},veil:{duration:[2,2.5,3],cooldown:[24,22,20]}};
+export const ACTIVE_CONFIG={dash:{duration:3,speed:.30,effect:'rush'},veil:{duration:3,effect:'water'},absorb:{duration:5,effect:'absorb',reach:220},reflect:{duration:3,effect:'reflect'}};
+export const ITEM_CONFIG={capacity:2,starter:['dash','veil']};
+export const RANGED_CONFIG={range:460,minRange:65,interval:4.4,jitter:1.2,windup:.65,speed:190,spikeSpeed:225,shotRadius:7,spikeRadius:9,maxShots:64,life:3.4,flatDamage:2,inkFraction:.007,damageCap:35,inkFloor:10,hitProtection:.65,minTargetRatio:.60};
+export const BOSS_MOTION_CONFIG={interval:[6,5.5,5],gather:.8,burst:.65,recover:.85,speed:[195,225,250]};
+export const SPIKE_SHOT_CONFIG={count:[2,3,4],speed:[245,270,295],radius:[10,12,14],spread:.28,length:3.6,width:1.1,damageFlat:18,damageFraction:.028,damageCap:190,minCoverage:.08};

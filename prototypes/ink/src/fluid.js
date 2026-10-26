@@ -53,10 +53,13 @@ const shaders={
  vec4 ink=texture(field,uv);vec2 delta=uv-point;delta.x*=aspect;
  vec2 direction=vec2(force.x*aspect,force.y);float speed=length(direction);direction=normalize(direction+vec2(.00001,0.));
  float along=dot(delta,direction),side=abs(dot(delta,vec2(-direction.y,direction.x)));
- float tail=radius*(2.8+min(speed,1.)*4.);
- float lateral=smoothstep(radius*1.6,radius*2.7,side);
+ float activity=smoothstep(.012,.09,speed);
+ float tail=radius*mix(2.2,6.8,activity);
+ float taper=smoothstep(.35,6.2,max(0.,-along)/radius)*activity;
+ float width=radius*mix(1.6,.13,taper);
+ float lateral=smoothstep(width,width*1.65,side);
  float front=smoothstep(radius*1.7,radius*2.8,along);
- float rear=smoothstep(tail,tail*1.4,-along);
+ float rear=smoothstep(tail,tail*1.3,-along);
  ink.z*=exp(-dt*(lateral+front+rear)*2.4);o=ink;`,
  material:`
  vec2 v=texture(velocity,uv).xy;
@@ -69,7 +72,9 @@ const shaders={
  vec2 spring=vec2(delta.x/aspect,delta.y)*vec2(1./texel.x,1./texel.y)*12.;
  vec2 tangent=vec2(-delta.y,delta.x/aspect)*vec2(1./texel.x,1./texel.y);
  float swirl=sin(time*1.7+distanceToInk*45.)*1.8;
- vec2 acceleration=(carry-v)*5.5+spring+tangent*swirl;
+ vec2 heading=normalize(carry*texel*vec2(aspect,1.)+vec2(.00001,0.));
+ float rear=smoothstep(.2,2.6,dot(delta,heading)/max(radius,.001))*smoothstep(.012,.09,length(carry*texel));
+ vec2 acceleration=(carry*(1.-rear*.70)-v)*5.5+spring*(1.-rear*.90)+tangent*swirl*(1.-rear*.65);
  v+=acceleration*dt*wet*mix(.30,1.,envelope);
  o=vec4(clamp(v,vec2(-650.),vec2(650.)),0.,1.);`,
  advect:`vec2 v=texture(velocity,uv).xy;vec2 back=uv-dt*v*texel;o=sampleLinear(field,back)*exp(-decay*dt);`,

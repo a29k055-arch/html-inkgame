@@ -1,3 +1,4 @@
+import {RangedCombat} from './ranged-combat.js';
 import {tickActives,stopActives} from './active-items.js';
 import {talentValue,blockHit,grantChoice} from './talents.js';
 import {coreRadius,spikeContact} from './alien-geometry.js';
@@ -22,7 +23,7 @@ export class Inkstone {
    const radius=roll>.93?random(78,118):roll>.78?random(42,72):random(14,38);
    const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i));npc.skinIndex=i;npc.nameIndex=i%names.length;npc.nameNumber=i>=names.length?i+1:'';npc.appearance=i%2?'eye':'thorn';this.entities.push(npc);
   }
-  this.foods=Array.from({length:this.foodTarget},()=>this.food());this.items=[];
+  this.foods=Array.from({length:this.foodTarget},()=>this.food());this.items=[];this.ranged=this.reserveGrowth?new RangedCombat(this):null;
  }
  get safeRadius(){const initial=Math.hypot(C.world.width,C.world.height)/2+30,t=clamp((this.elapsed/this.duration-C.waterRingStart)/(1-C.waterRingStart),0,1);return initial+(C.waterRingEndRadius-initial)*(1-(1-t)**C.waterRingExponent);}
  get rank(){return 1+this.entities.filter(e=>e!==this.player&&!e.dead&&e.mass>this.player.mass).length;}
@@ -36,13 +37,13 @@ export class Inkstone {
   return best;
  }
  food(){return createFood(this.spawnPoint());}
- speed(e,includeActive=true){return moveSpeed(e.r)*(1+talentValue(e,'haste'))*(e.controller.type==='ai'?(.70+e.controller.profile.skill*.18):1)*(e.effects.dense?.65:1)*(includeActive&&e.actives?.dash.remaining>0?1+A.dash.speed[(e.talents.dash||1)-1]:1);}
+ speed(e,includeActive=true){return moveSpeed(e.r)*(1+talentValue(e,'haste'))*(e.controller.type==='ai'?(.70+e.controller.profile.skill*.18):1)*(e.effects.dense?.65:1)*(includeActive&&e.effects.rush?1+A.dash.speed:1);}
  radius(e){return coreRadius(e);}
  drainInk(e,dt,multiplier=1){if(e.dead||e.effects.water)return 0;if(e.growth){const before=e.ink;e.ink=Math.max(Math.min(before,K.spikeInkFloor),before-before*C.waterDecay*multiplier*dt);syncReserve(e);return before-e.ink;}const lost=Math.max(0,Math.min(e.mass-C.respawnRadius**2,e.mass*C.waterDecay*multiplier*dt));e.mass-=lost;e.r=Math.sqrt(e.mass);e.ink=Math.max(0,e.ink-lost);return lost;}
 
  applySpikes(source,target,dt){if(target.dead||source.dead||source.effects?.water||target.invincible||target.effects.water||this.radius(source)<=this.radius(target)*C.consumeRatio||!spikeContact(source,target,this.radius(target)))return;const resource=target.growth?target.ink:Math.max(0,(target.mass-C.respawnRadius**2)/4),size=clamp(this.radius(source)/K.spikeReferenceRadius,K.spikeSizeMin,K.spikeSizeMax),rate=Math.min(K.spikeMaxLossPerSecond,resource*K.spikeBaseRate*size);if(target.spikeFrame!==this.elapsed){target.spikeFrame=this.elapsed;target.spikeRate=0;}const add=Math.max(0,rate-(target.spikeRate||0));target.spikeRate=Math.max(rate,target.spikeRate||0);const loss=add*Math.min(K.contactInterval,Math.max(0,dt));if(target.growth){target.ink=Math.max(Math.min(target.ink,K.spikeInkFloor),target.ink-loss);syncReserve(target);}else{const massLoss=Math.min(Math.max(0,target.mass-C.respawnRadius**2),loss*4);target.mass-=massLoss;target.r=Math.sqrt(target.mass);target.ink=Math.max(0,target.ink-loss);}target.spikeContact=loss>0;target.spikeFeedback=Math.max(0,(target.spikeFeedback||0)-dt);if(loss>0&&target.spikeFeedback<=0){target.spikeFeedback=K.feedbackInterval;this.onEvent('spike-loss',{entity:target,x:target.x,y:target.y,r:Math.min(10,target.r*.12)});}}
 
- updateMagnet(dt){const p=this.player,level=p.talents?.magnet||0;if(!level||p.dead)return;const reach=this.radius(p)+T.magnetBaseReach*(1+talentValue(p,'magnet')),blend=1-Math.exp(-T.magnetAcceleration*dt),decay=Math.exp(-dt*5);for(const food of this.foods){const dx=p.x-food.x,dy=p.y-food.y;if(Math.abs(dx)<reach&&Math.abs(dy)<reach){const distance=Math.hypot(dx,dy)||1;if(distance<reach){const force=T.magnetSpeed*(.3+.7*(1-distance/reach)),swirl=Math.sin(this.elapsed*2+(food.rot||0))*Math.min(22,distance*.15),vx=dx/distance*force-dy/distance*swirl,vy=dy/distance*force+dx/distance*swirl;food.vx=(food.vx||0)+(vx-(food.vx||0))*blend;food.vy=(food.vy||0)+(vy-(food.vy||0))*blend;}}food.vx=(food.vx||0)*decay;food.vy=(food.vy||0)*decay;food.x=clamp(food.x+food.vx*dt,food.r,C.world.width-food.r);food.y=clamp(food.y+food.vy*dt,food.r,C.world.height-food.r);}}
+ updateMagnet(dt){const p=this.player,level=p.talents?.magnet||0;if((!level&&!p.effects.absorb)||p.dead)return;const reach=this.radius(p)+T.magnetBaseReach*(1+talentValue(p,'magnet'))+(p.effects.absorb?A.absorb.reach:0),blend=1-Math.exp(-T.magnetAcceleration*dt),decay=Math.exp(-dt*5);for(const food of this.foods){const dx=p.x-food.x,dy=p.y-food.y;if(Math.abs(dx)<reach&&Math.abs(dy)<reach){const distance=Math.hypot(dx,dy)||1;if(distance<reach){const force=T.magnetSpeed*(.3+.7*(1-distance/reach)),swirl=Math.sin(this.elapsed*2+(food.rot||0))*Math.min(22,distance*.15),vx=dx/distance*force-dy/distance*swirl,vy=dy/distance*force+dx/distance*swirl;food.vx=(food.vx||0)+(vx-(food.vx||0))*blend;food.vy=(food.vy||0)+(vy-(food.vy||0))*blend;}}food.vx=(food.vx||0)*decay;food.vy=(food.vy||0)*decay;food.x=clamp(food.x+food.vx*dt,food.r,C.world.width-food.r);food.y=clamp(food.y+food.vy*dt,food.r,C.world.height-food.r);}}
  useSkill(e=this.player){
   if(e.dead||e.effects.water||!e.skills.length||this.finished)return false;
   const skill=e.skills.shift();e.effects[skill.id]=C.skillDurations[skill.id];
@@ -66,7 +67,7 @@ export class Inkstone {
  update(dt,input){
   if(this.finished)return;this.elapsed=Math.min(this.duration,this.elapsed+dt);this.updateMagnet(dt);
   for(const e of this.entities){
-   tickActives(e,dt);e.visualTime=this.elapsed;e.spikeContact=false;
+   tickActives(e,dt);e.hitFlash=Math.max(0,(e.hitFlash||0)-dt);e.visualTime=this.elapsed;e.spikeContact=false;
    if(e.dead>0){e.dead=Math.max(0,e.dead-dt);if(!e.dead)this.respawn(e);continue;}
    e.invincible=Math.max(0,e.invincible-dt);for(const key of Object.keys(e.effects)){e.effects[key]-=dt;if(e.effects[key]<=0)delete e.effects[key];}
    const v=e.controller.type==='human'?input:aiDirection(this,e,dt);
@@ -91,6 +92,7 @@ export class Inkstone {
   for(const source of this.entities){if(source.dead||source.appearance!=='thorn')continue;for(const target of this.entities){if(source!==target)this.applySpikes(source,target,dt);}}
   this.foodClock+=dt*this.foodSpawnRate;while(this.foodClock>=1){this.foodClock--;if(this.foods.length<this.foodTarget)this.foods.push(this.food());}
   this.itemClock-=dt;if(this.itemClock<=0){this.itemClock=C.itemSpawnInterval;if(this.theme!=='boss'&&this.items.length<C.maxItems)this.items.push({...this.spawnPoint(),r:10});}
+  this.ranged?.update(dt);
   for(const wave of this.waves)wave.age+=dt;this.waves=this.waves.filter(w=>w.age<C.skillDurations.splash);
   if(this.autoFinish&&this.elapsed>=this.duration)this.finish();
  }
