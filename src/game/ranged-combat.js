@@ -39,7 +39,7 @@ export class RangedCombat{
  range(e){return C.range+(e.controller.profile.skill-.5)*70;}
  reset(e){this.states.delete(e);e.rangedCharge=0;}
  fire(e,target){
-  const g=this.world;if(!canShoot(g)||target!==g.player||target.dead||dist(e,target)>this.range(e)*1.12||this.shots.length>=C.maxShots)return false;
+  const g=this.world;if(!canShoot(g)||factionOf(e)!=='enemy'||e.dead||e.effects.water||target!==g.player||target.dead||dist(e,target)>this.range(e)*1.12||this.shots.length>=C.maxShots)return false;
   const dx=target.x-e.x,dy=target.y-e.y,n=Math.hypot(dx,dy)||1,kind=e.appearance==='thorn'?'spike':'ink',speed=kind==='spike'?C.spikeSpeed:C.speed,sourceRadius=g.radius(e),scale=clamp(Math.sqrt(sourceRadius/C.sourceReference),.7,1.85),damage=clamp(C.baseDamage+sourceRadius*C.radiusDamage,C.minDamage,C.maxDamage);
   this.shots.push(Object.assign(this.pool.pop()||{},{x:e.x+dx/n*(sourceRadius+15),y:e.y+dy/n*(sourceRadius+15),vx:dx/n*speed,vy:dy/n*speed,r:Math.min(C.shotSizeCap,(kind==='spike'?C.spikeRadius:C.shotRadius)*scale),kind,owner:e.id,team:'enemy',target:target.id,sourceRadius,damage,age:0,seed:++this.metrics.fired,trailId:++this.serial,friendly:false}));return true;
  }
