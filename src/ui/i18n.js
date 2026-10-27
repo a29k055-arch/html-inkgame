@@ -2,6 +2,7 @@ import {getSave,updateSettings} from '../data/save.js';
 
 // Every current-game message lives here. Legacy routes keep their original UI.
 const rows={
+backGallery:["作品一覧","作品列表","Painting List"],
 specialMap:["決戦フェーズ","激战阶段","Clash Phase"],
 scrollFragment:["画巻の断片","画卷碎片","Scroll Fragment"],
 completeRun:["旅を完了","完成本局","Complete Run"],

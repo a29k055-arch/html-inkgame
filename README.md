@@ -3,9 +3,13 @@
 - [New Version](https://a29k055-arch.github.io/html-inkgame/)
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
 - [水墨视觉效果 README](prototypes/ink/README.md)
-- [水墨视觉测试](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
+- [水墨视觉测试 · 冻结历史候选](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
+- [水墨效果对比实验室](https://a29k055-arch.github.io/html-inkgame/visual-effects/lab.html)
+- [视觉来源与参数](visual-effects/REFERENCE.md)
 
-新增：玩家与墨弹按世界坐标留下真实墨迹，急转不重建旧尾；全屏卷轴按实际资源准备进度展开，失败可重试。小地图右上，暂停与单栏教学重新排版。每局道具槽和待选从空开始；Boss胜利只提供继续/结算，第三次完成后结束本局，Gallery从首页进入。
+本轮：保留2d00e16及ccddc4b独立视觉参考；主角材质恢复历史候选，世界轨迹修复折返并限制大体型尾宽。首页加载与静态轴杆合并为同一卷轴，唯一标题连续显影；Gallery底部返回常驻。
+
+玩家与墨弹按世界坐标留下真实墨迹，急转不重建旧尾；全屏卷轴按实际资源准备进度展开，失败可重试。小地图右上，暂停与单栏教学重新排版。每局道具槽和待选从空开始；Boss胜利只提供继续/结算，第三次完成后结束本局，Gallery从首页进入。
 
 首页：开始 / プレイ / Play、Gallery、Settings，宣纸流云卷轴与右上问号。教学也可从暂停进入，支持三语言。简洁/详细HUD可在设置切换并保存。默认浅宣纸流云封面，设置中可切回原动态水墨画。研磨阶段吃墨、追逃互吞（无远程攻击） → 激战阶段联敌与 Boss → 三块唯一画卷碎片 → Gallery 短时修复与解锁。保留七类 AI、移动端双摇杆、Drops/Transitions、三语言与旧存档。
 

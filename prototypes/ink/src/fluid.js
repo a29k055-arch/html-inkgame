@@ -5,7 +5,7 @@ const common=`#version 300 es
 precision highp float; in vec2 uv; out vec4 o;
 uniform sampler2D field, velocity, pressure, curl, predictor, reverse;
 uniform sampler2D imageTexture, deformation;
-uniform vec2 texel, point, force, imageScale, fishDirection, fishFlow, renderTexel; uniform float interactionRadius, sizeBoundary, localEntities, dt, decay, radius, amount, aspect, time, backgroundActive, coreSpeed, fishActive, fishPhase, fishSpeed, fishActivity, fishTurn;
+uniform vec2 texel, point, force, imageScale, fishDirection, fishFlow, renderTexel; uniform float bodyLimit, interactionRadius, sizeBoundary, localEntities, dt, decay, radius, amount, aspect, time, backgroundActive, coreSpeed, fishActive, fishPhase, fishSpeed, fishActivity, fishTurn;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}
 float ellipseInk(vec2 p,vec2 center,vec2 size,float rough){return 1.-smoothstep(.92,1.06,length((p-center)/size)+rough);}
@@ -49,7 +49,7 @@ const shaders={
  float irregular=.65+.22*noise(uv*9.+vec2(time*.017,-time*.013))+.13*noise(uv*23.+vec2(-time*.023,time*.011));
  vec2 shift=old*exp(-dt*1.5)+v*dt*.32*irregular;
  float len=length(shift);shift*=.014/max(.014,len);o=vec4(shift,0.,1.);`,
- contain:`vec4 ink=texture(field,uv);vec2 delta=uv-point;delta.x*=aspect;float edge=smoothstep(radius*.62,radius*.95,length(delta));ink.z*=exp(-dt*edge*18.);o=ink;`,
+ contain:`vec4 ink=texture(field,uv);vec2 delta=uv-point;delta.x*=aspect;float edge=smoothstep(radius*.70,radius*1.30,length(delta));ink.z*=exp(-dt*edge*6.);o=ink;`,
  material:`
  vec2 v=texture(velocity,uv).xy;
  float d=max(0.,texture(field,uv).z);
@@ -61,9 +61,7 @@ const shaders={
  vec2 spring=vec2(delta.x/aspect,delta.y)*vec2(1./texel.x,1./texel.y)*12.;
  vec2 tangent=vec2(-delta.y,delta.x/aspect)*vec2(1./texel.x,1./texel.y);
  float swirl=sin(time*1.7+distanceToInk*45.)*1.8;
- vec2 heading=normalize(carry*texel*vec2(aspect,1.)+vec2(.00001,0.));
- float rear=smoothstep(.2,2.6,dot(delta,heading)/max(radius,.001))*smoothstep(.012,.09,length(carry*texel));
- vec2 acceleration=(carry*(1.-rear*.70)-v)*5.5+spring*(1.-rear*.90)+tangent*swirl*(1.-rear*.65);
+ vec2 acceleration=(carry-v)*5.5+spring+tangent*swirl;
  v+=acceleration*dt*wet*mix(.30,1.,envelope);
  o=vec4(clamp(v,vec2(-650.),vec2(650.)),0.,1.);`,
  advect:`vec2 v=texture(velocity,uv).xy;vec2 back=uv-dt*v*texel;o=sampleLinear(field,back)*exp(-decay*dt);`,
@@ -86,6 +84,7 @@ const shaders={
  float dash=smoothstep(.04,.12,dashPhase)*(1.-smoothstep(.55,.63,dashPhase));
  a*=1.-boundary*dash*.24*smoothstep(.12,.8,d);
  }}
+ if(bodyLimit>0.){vec2 q=uv-point;q.x*=aspect;a*=1.-smoothstep(bodyLimit*.78,bodyLimit,length(q));}
  // Fish uses the same advected density optics as ink; no opaque fish silhouette is composited.
  if(fishActive>.5){vec2 p=fishLocal(uv);float eye=1.-smoothstep(.016,.032,length(p-vec2(.72,-.17)));tone=mix(tone,.25,eye*.32*smoothstep(.6,1.5,d));}
  if(backgroundActive>.5){vec2 offset=sampleLinear(deformation,uv).xy;vec2 imageUV=(uv+offset-.5)/imageScale+.5;
@@ -117,6 +116,6 @@ export class InkFluid {
  reproject(scale,offset){for(const pair of [this.v,this.d,this.p]){this.pass('reproject',pair.write,{field:pair.read,imageScale:[scale,scale],point:offset,amount:pair===this.v?1/scale:1});pair.swap();}}
  setBackground(image){const g=this.gl;if(this.imageTexture)g.deleteTexture(this.imageTexture.t);const t=g.createTexture();g.bindTexture(g.TEXTURE_2D,t);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_MIN_FILTER,g.LINEAR);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_MAG_FILTER,g.LINEAR);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_WRAP_S,g.CLAMP_TO_EDGE);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_WRAP_T,g.CLAMP_TO_EDGE);g.pixelStorei(g.UNPACK_FLIP_Y_WEBGL,true);g.texImage2D(g.TEXTURE_2D,0,g.RGBA,g.RGBA,g.UNSIGNED_BYTE,image);g.pixelStorei(g.UNPACK_FLIP_Y_WEBGL,false);this.imageTexture={t};this.imageAspect=image.naturalWidth/image.naturalHeight;}
  fishUniforms(){return {point:this.core?.point||[.5,.5],radius:this.core?.radius||.05,fishActive:this.fish?1:0,fishDirection:[Math.cos(this.fish?.heading||0),-Math.sin(this.fish?.heading||0)],fishPhase:this.fish?.phase||0,fishSpeed:this.fish?.speed||0,fishActivity:this.fish?.activity||0,fishTurn:this.fish?.turn||0,fishFlow:this.fish?.flow||[0,0]};}
- draw(prediction=0){const imageScale=this.imageFit==='cover'?(this.aspect>this.imageAspect?[1,this.aspect/this.imageAspect]:[this.imageAspect/this.aspect,1]):this.aspect>this.imageAspect?[.9*this.imageAspect/this.aspect,.9]:[.9,.9*this.aspect/this.imageAspect];this.pass('display',null,{field:this.d.read,velocity:this.v.read,dt:prediction,amount:this.materialMode?1:0,sizeBoundary:this.sizeBoundary&&!this.fish?1:0,renderTexel:[1/this.canvas.width,1/this.canvas.height],point:this.core?.point||[.5,.5],radius:this.core?.radius||.05,coreSpeed:this.core?.speed||0,interactionRadius:this.core?.collisionRadius||0,backgroundActive:this.backgroundMode?1:0,...this.fishUniforms(),imageTexture:this.imageTexture||this.d.read,deformation:this.warp.read,imageScale});}
+ draw(prediction=0){const imageScale=this.imageFit==='cover'?(this.aspect>this.imageAspect?[1,this.aspect/this.imageAspect]:[this.imageAspect/this.aspect,1]):this.aspect>this.imageAspect?[.9*this.imageAspect/this.aspect,.9]:[.9,.9*this.aspect/this.imageAspect];this.pass('display',null,{field:this.d.read,velocity:this.v.read,bodyLimit:(this.core?.collisionBaseRadius||.02)*(this.bodyHalo||0),dt:prediction,amount:this.materialMode?1:0,sizeBoundary:this.sizeBoundary&&!this.fish?1:0,renderTexel:[1/this.canvas.width,1/this.canvas.height],point:this.core?.point||[.5,.5],radius:this.core?.radius||.05,coreSpeed:this.core?.speed||0,interactionRadius:this.core?.collisionRadius||0,backgroundActive:this.backgroundMode?1:0,...this.fishUniforms(),imageTexture:this.imageTexture||this.d.read,deformation:this.warp.read,imageScale});}
  dispose(){this.releaseTargets();if(this.imageTexture)this.gl.deleteTexture(this.imageTexture.t);for(const p of Object.values(this.programs))this.gl.deleteProgram(p);this.gl.deleteBuffer(this.buffer);this.gl.deleteVertexArray(this.vao);}
 }

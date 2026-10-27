@@ -1,4 +1,5 @@
-import {WorldInkTrail} from '../../prototypes/ink/src/world-trail.js';
+import {HeroWorldTrail} from './hero-trail.js';
+import {HERO_BODY_CONFIG} from './hero-visual-config.js';
 import {ProjectileTrails} from './projectile-trails.js';
 import {t,entityLabel} from '../ui/i18n.js';
 import {DropPool} from './matte-effects.js';
@@ -10,8 +11,8 @@ import {GAME_CONFIG as C,clamp} from '../game/config.js';
 import {followCamera} from '../game/camera.js';
 import {NpcPainter} from './npc-painter.js';
 export class GameRenderer {
- constructor(output,quality,mode){
-  this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.trail=new WorldInkTrail();this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
+ constructor(output,quality,mode,visual={}){
+  this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.bodyVisual={...HERO_BODY_CONFIG,...visual.body};this.trail=new HeroWorldTrail(visual.trail);this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
   this.canvas=document.createElement('canvas');this.canvas.style.cssText='position:fixed;left:-10000px;top:0;pointer-events:none;';document.body.append(this.canvas);
   this.onContextLost=e=>{e.preventDefault();document.dispatchEvent(new Event('boku:render-error'));};this.canvas.addEventListener('webglcontextlost',this.onContextLost);
   this.setBounds();this.fluid=new InkFluid(this.canvas,quality);this.fluid.materialMode=true;this.fluid.sizeBoundary=mode==='inkstone';
@@ -34,7 +35,7 @@ export class GameRenderer {
  async loadPaper(src){this.paper=new PaperMap(this.output);await this.paper.load(src);}
  // Deliberately accepts ONLY the player. NPC positions/count/skills cannot enter this simulation.
  step(dt,player,started=true){
-  const f=this.fluid;if(started&&!player.dead)this.trail.sample(player.x,player.y,player.r,dt,Math.hypot(player.vx,player.vy));else this.trail.advance(dt);if(started&&!player.dead)this.body.update(this.normalized(player),dt);
+  const f=this.fluid;const b=this.bodyVisual;f.bodyHalo=b.smallHalo+(b.largeHalo-b.smallHalo)*Math.min(1,Math.max(0,(player.r-b.haloStartRadius)/(b.haloEndRadius-b.haloStartRadius)));if(started&&!player.dead)this.trail.sample(player.x,player.y,player.r,dt,Math.hypot(player.vx,player.vy));else this.trail.advance(dt);if(started&&!player.dead)this.body.update(this.normalized(player),dt);
   this.clock+=dt;if(this.clock>=1/QUALITY[f.quality].simulationHz){f.step(Math.min(this.clock,1/30));this.clock=0;}f.draw(this.clock);
  }
  drawStone(game){
