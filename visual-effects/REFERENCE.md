@@ -3,8 +3,9 @@
 本目录的默认入口现在使用 **2d00e16 历史候选**，不是正式游戏的可变调参页。
 
 - [冻结历史参考](./?mode=player&form=ink)：原始 app / fluid / material / config / fish / paper / body 与样式按提交逐字节保存。
+- [紧接轨迹重构前 bde0c40](reference-bde0c40/?mode=player&form=ink)：保留上轮世界拖尾加入前的流体尾迹，是另一份重要候选。
 - [修改前参考 ccddc4b](reference-ccddc4b/?mode=player&form=ink)：保留本轮开始前的视觉，方便回看。
-- [对比实验室](lab.html)：历史候选 / 修改前 / 修复候选，支持小中大体型、直线、直角、原路返回、停止消散及可重复的时间定位。
+- [对比实验室](lab.html)：早期原版 / 重构前 / 修改前 / 修复候选，支持小中大体型、直线、直角、原路返回、停止消散及可重复的时间定位。
 
 ## 历史依据和接受度边界
 
@@ -14,7 +15,7 @@
 
 ## 隔离规则
 
-reference-2d00e16/ 与 reference-ccddc4b/ 不参与发布版本重写，每份 manifest.json 记录源码 SHA256。tests/visual-recovery.mjs 校验所有归档 JS 与样式。不能直接修改归档；未来需要新候选时新增目录。
+reference-2d00e16/、reference-bde0c40/ 与 reference-ccddc4b/ 不参与发布版本重写，每份 manifest.json 记录源码 SHA256。tests/visual-recovery.mjs 校验所有归档 JS 与样式。不能直接修改归档；未来需要新候选时新增目录。
 
 正式游戏参数：src/ink/hero-visual-config.js。
 实验室参数：visual-effects/lab-config.js，独立副本；修改正式游戏参数不会静默改写实验场景。
