@@ -17,3 +17,5 @@
 版本打包tools/package-versions.cjs：v2固定tag、v3固定tag、v4当前HEAD，资源全量自含，无共享可变路径；旧/previews/reveal-scroll仍固定V3。预览分支根页取main，main正式发布根页取HEAD。deploy-pages与预览都用同一打包器，避免下次main部署误删版本目录。
 
 下一步：检查全套tests、真实PC完整局和手机结果，推送tags/安全阶段提交；验证Pages三路径后填写README实际链接，并把已验证版本发布至main。B站本次直接访问受限；沿用此前实际14～16秒观察与截图，未取得作者源码，不声称本次重新观看成功。
+
+V4发布验证：/v2、/v3、/v4均已真实访问与操作；旧版本归档168/185文件逐字节匹配，Windows归档换行转换已显式禁用。PC251.8秒、手机198.3秒正常规则整局完成并刷新解锁，20套测试通过；准备主线发布和v4-reveal首发标签。后续状态以PROJECT_HANDOFF发布补记与Git为准，实体手机/Safari仍待测。

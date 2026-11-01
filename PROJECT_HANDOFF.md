@@ -839,3 +839,10 @@ origin为 `https://github.com/a29k055-arch/html-inkgame.git`，开发分支main�
 公开预览：https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/ 。线上Edge桌面/390触控：首页、三语Settings、Gallery锁定、开始、移动显画、真实轨迹、Shift/触屏加速、暂停/恢复通过，无pageerror/requestfailed，短测约60FPS。正式根index逐字节SHA256=0d27b5880fc14b3455ea4720885bdf441d04b743310be0be2fc6bf357f9e0c10，与origin/main:index.html完全相同。
 本机完整结算/刷新解锁证据work/browser-pc.json、browser-mobile.json；线上仅做基础烟测，未声称再次完成整局。Actions另有reveal-scroll-preview下载包，保留7天。后续main发布可能清除该预览路径，届时须重跑分支预览；不要误认为预览部署已合并main。
 当前交付完整一局已打通。剩余：实体手机/Safari、低端设备/长时间内存、长尾美术用户反馈；用户根首页原始故障仍未在正常WebGL环境复现。下一步第一条操作：打开公开预览实际试玩并记录上述反馈，不恢复Boss/抽卡。
+
+### V4 完整验证及发布准备（2026-11-02）
+分支功能提交ad1ce94，预览工作流41326359501成功。公开/v2、/v3、/v4均HTTP200并实际进入游戏、Settings/Gallery/三语言正常；V4 PC与390触控移动、加速、短尾和临时层检查通过，无pageerror/requestfailed或HTTP资源错误。V2/V3线上index与冻结Git blob逐字节相同。归档审计V2共168文件、V3共185文件均匹配标签。
+发现Windows core.autocrlf会让本地git archive转换普通文本换行，打包器显式禁用转换，跨Windows/Linux一致；未改冻结代码。README已填写实际验证链接与标签/分支/URL对应关系。
+正常规则真实整局：PC251.8秒、吞敌27、AI互吞29；手机198.3秒、吞敌26、AI互吞26，均结算100%、刷新Gallery解锁、零错误。所有20套测试通过；并行浏览器和模型压力下约38～60FPS（结束演出/压力低点，非实体手机指标）。独立线上短测V4约60FPS，V3预热约35FPS。小/大/转弯/折返/停止共享渲染截图已查看；大体型收窄连续注墨后减少圆盘感，但最终美术接受度仍需用户反馈。
+接下来将经过验证的分支正常合并main，不强推；根首页采用V4，三个固定子目录保持独立；v4-reveal标签保存首发。最终合并SHA与Actions结果见Git和后续补记。未来新增V5时应先冻结V4标签再调整打包映射，不能直接覆盖/v2或/v3。
+剩余：实体手机/Safari、低端设备与长时间内存；大体型墨色和细丝的用户视觉反馈。本轮没有增加Boss/抽卡/复杂道具。
