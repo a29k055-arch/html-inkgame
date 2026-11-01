@@ -12,10 +12,10 @@ import {followCamera} from '../game/camera.js';
 import {NpcPainter} from './npc-painter.js';
 export class GameRenderer {
  constructor(output,quality,mode,visual={}){
-  this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.bodyVisual={...HERO_BODY_CONFIG,...visual.body};this.trail=new HeroWorldTrail(visual.trail);this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
+  this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.world=visual.world||C.world;this.ground=visual.ground;this.itemPainter=visual.itemPainter;this.foodPainter=visual.foodPainter;this.bodyVisual={...HERO_BODY_CONFIG,...visual.body};this.trail=new (visual.TrailClass||HeroWorldTrail)(visual.trail);this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
   this.canvas=document.createElement('canvas');this.canvas.style.cssText='position:fixed;left:-10000px;top:0;pointer-events:none;';document.body.append(this.canvas);
   this.onContextLost=e=>{e.preventDefault();document.dispatchEvent(new Event('boku:render-error'));};this.canvas.addEventListener('webglcontextlost',this.onContextLost);
-  this.setBounds();this.fluid=new InkFluid(this.canvas,quality);this.fluid.materialMode=true;this.fluid.sizeBoundary=mode==='inkstone';
+  this.setBounds();try{this.fluid=new InkFluid(this.canvas,quality);}catch(error){this.textAbort.abort();this.canvas.remove();throw error;}this.fluid.materialMode=true;this.fluid.sizeBoundary=mode==='inkstone';
   // The published player study uses the default single-body solver, not localEntities.
   this.body=new MaterialInk(this.fluid,document.createElement('canvas'));this.npcs=mode==='inkstone'?new NpcPainter():null;this.resize();
  }
@@ -23,7 +23,7 @@ export class GameRenderer {
  resize(){this.setBounds();this.fluid.resize();this.body.reset();this.cameraReady=false;const d=Math.min(devicePixelRatio||1,2);this.output.width=Math.round(this.viewW*d);this.output.height=Math.round(this.viewH*d);this.ctx.setTransform(d,0,0,d,0,0);this.paper?.resize();}
  setQuality(q){this.fluid.quality=q;this.resize();}
  updateCamera(player,dt=1/60,immediate=false,focus=null){
-  const old={...this.camera},fresh=immediate||!this.cameraReady;Object.assign(this.camera,followCamera(old,player,this.viewW,this.viewH,this.mobile,dt,fresh,focus,this.paper?.world||C.world));
+  const old={...this.camera},fresh=immediate||!this.cameraReady;Object.assign(this.camera,followCamera(old,player,this.viewW,this.viewH,this.mobile,dt,fresh,focus,this.paper?.world||this.world));
   if(!fresh){const ratio=old.scale/this.camera.scale,offset=[(this.camera.x-old.x)*old.scale/this.viewW,1-ratio-(this.camera.y-old.y)*old.scale/this.viewH];this.fluid.reproject(ratio,offset);}
   this.cameraReady=true;
  }
@@ -42,13 +42,13 @@ export class GameRenderer {
   const c=this.ctx,w=this.viewW,h=this.viewH,p=game.player,cam=this.camera,scale=cam.scale;
   c.clearRect(0,0,w,h);c.fillStyle='#e7dfcc';c.fillRect(0,0,w,h);c.save();c.translate(-cam.x*scale,-cam.y*scale);c.scale(scale,scale);
   // Pure paper/water ground. No paintings, reveal masks, erasure or completion in battle.
-  const center=game.center,wash=c.createRadialGradient(center.x,center.y,Math.max(1,game.safeRadius-60),center.x,center.y,game.safeRadius+130);
-  wash.addColorStop(0,game.theme==='boss'?'#d9d8cc':'#e8e0cc');wash.addColorStop(.45,game.theme==='boss'?'#bfc4b8':'#d9ddcf');wash.addColorStop(1,game.theme==='boss'?'#aeb7aa':'#edf0e6');c.fillStyle=wash;c.fillRect(0,0,C.world.width,C.world.height);
-  if(game.theme==='boss'){const inkWash=c.createRadialGradient(center.x,center.y,80,center.x,center.y,1500);inkWash.addColorStop(0,'#faf8e218');inkWash.addColorStop(.65,'#727b6509');inkWash.addColorStop(1,'#4a53402b');c.fillStyle=inkWash;c.fillRect(0,0,C.world.width,C.world.height);}
-  c.strokeStyle='#887d6455';c.lineWidth=3;c.strokeRect(1,1,C.world.width-2,C.world.height-2);
+  if(this.ground)this.ground.draw(c,game);else {const center=game.center,wash=c.createRadialGradient(center.x,center.y,Math.max(1,game.safeRadius-60),center.x,center.y,game.safeRadius+130);
+  wash.addColorStop(0,game.theme==='boss'?'#d9d8cc':'#e8e0cc');wash.addColorStop(.45,game.theme==='boss'?'#bfc4b8':'#d9ddcf');wash.addColorStop(1,game.theme==='boss'?'#aeb7aa':'#edf0e6');c.fillStyle=wash;c.fillRect(0,0,this.world.width,this.world.height);
+  if(game.theme==='boss'){const inkWash=c.createRadialGradient(center.x,center.y,80,center.x,center.y,1500);inkWash.addColorStop(0,'#faf8e218');inkWash.addColorStop(.65,'#727b6509');inkWash.addColorStop(1,'#4a53402b');c.fillStyle=inkWash;c.fillRect(0,0,this.world.width,this.world.height);}
+  }c.strokeStyle='#887d6455';c.lineWidth=3;c.strokeRect(1,1,this.world.width-2,this.world.height-2);
   this.trail.draw(c,'ink',{...cam,width:w,height:h});
-  for(const food of game.foods){if(!this.visible(food,12))continue;c.save();c.translate(food.x,food.y);c.rotate(food.rot);c.fillStyle=`rgba(39,35,27,${food.alpha})`;c.beginPath();if(food.shape==='circle'){c.arc(0,0,food.r,0,Math.PI*2);}else{const sides=food.shape==='square'?4:food.shape==='triangle'?3:5;for(let i=0;i<sides;i++){const a=i/sides*Math.PI*2-Math.PI/2;c.lineTo(Math.cos(a)*food.r,Math.sin(a)*food.r);}c.closePath();}c.fill();c.restore();}
-  for(const item of game.items){if(!this.visible(item,20))continue;c.save();c.translate(item.x,item.y);c.rotate(Math.PI/4);c.shadowBlur=10;c.shadowColor='#f7e4a1';c.fillStyle='#b6a16a';c.fillRect(-8,-8,16,16);c.strokeStyle='#faf0cd';c.strokeRect(-6,-6,12,12);c.restore();}
+  for(const food of game.foods){if(!this.visible(food,12))continue;if(this.foodPainter){this.foodPainter(c,food);continue;}c.save();c.translate(food.x,food.y);c.rotate(food.rot);c.fillStyle=`rgba(39,35,27,${food.alpha})`;c.beginPath();if(food.shape==='circle'){c.arc(0,0,food.r,0,Math.PI*2);}else{const sides=food.shape==='square'?4:food.shape==='triangle'?3:5;for(let i=0;i<sides;i++){const a=i/sides*Math.PI*2-Math.PI/2;c.lineTo(Math.cos(a)*food.r,Math.sin(a)*food.r);}c.closePath();}c.fill();c.restore();}
+  for(const item of game.items){if(!this.visible(item,20))continue;if(this.itemPainter){this.itemPainter(c,item);continue;}c.save();c.translate(item.x,item.y);c.rotate(Math.PI/4);c.shadowBlur=10;c.shadowColor='#f7e4a1';c.fillStyle='#b6a16a';c.fillRect(-8,-8,16,16);c.strokeStyle='#faf0cd';c.strokeRect(-6,-6,12,12);c.restore();}
   game.entities.slice(1).forEach((npc,i)=>{if(!npc.dead&&this.visible(npc,npc.r*1.8+25))this.npcs.draw(c,npc,i,game.entities,game.theme==='boss'?game.player:null);});
   for(const wave of game.waves){c.save();c.translate(wave.x,wave.y);c.rotate(Math.atan2(wave.aim.y,wave.aim.x));c.strokeStyle=`rgba(66,60,45,${.28*(1-wave.age/C.skillDurations.splash)})`;c.lineWidth=16*(1-wave.age/C.skillDurations.splash);c.beginPath();c.arc(0,0,wave.range*wave.age/C.skillDurations.splash,-1,1);c.stroke();c.restore();}
   c.restore();

@@ -1,0 +1,37 @@
+name: Reveal branch preview (preserve main)
+on:
+  push:
+    branches: [codex/reveal-scroll-rework]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  preview:
+    if: github.ref == 'refs/heads/codex/reveal-scroll-rework'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}previews/reveal-scroll/
+    steps:
+      - uses: actions/checkout@v6
+      - name: Checkout unchanged main for public root
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          path: _site
+      - name: Add isolated tracked preview
+        run: |
+          mkdir -p _site/previews/reveal-scroll
+          git archive HEAD | tar -x -C _site/previews/reveal-scroll
+          rm -rf _site/.git
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4

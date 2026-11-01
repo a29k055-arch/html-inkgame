@@ -23,3 +23,5 @@ export class HeroWorldTrail {
  }
 }
 let grain;function paperGrain(){if(grain)return grain;grain=document.createElement('canvas');grain.width=grain.height=128;const c=grain.getContext('2d'),pixels=c.createImageData(128,128);for(let y=0;y<128;y++)for(let x=0;x<128;x++){const u=x/128*Math.PI*2,v=y/128*Math.PI*2,i=(y*128+x)*4,a=.55+.16*Math.sin(u*2+Math.sin(v*3))+.1*Math.cos(v*5+Math.sin(u*3))+.04*Math.sin(u*17+v*11);pixels.data[i]=pixels.data[i+1]=pixels.data[i+2]=255;pixels.data[i+3]=Math.min(255,Math.max(70,a*255));}c.putImageData(pixels,0,0);return grain;}
+
+export const heroPaperTexture=()=>paperGrain();

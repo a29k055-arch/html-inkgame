@@ -13,7 +13,7 @@ export const AI_PROFILES={
 export function aiController(index){const personality=Object.keys(AI_PROFILES)[index%7],profile=AI_PROFILES[personality];return {type:'ai',personality,profile:{...profile,reaction:profile.reaction*random(.8,1.25),skill:clamp(profile.skill+random(-.08,.08),.1,1)},think:random(0,.7),goal:null,intent:'wander',chaseTime:0,previousDistance:Infinity,routeSeed:random(0,6.28)};}
 function threatCost(point,threats,e,game){let cost=0;for(const t of threats){const d=dist(point,t),reach=game.radius(t)+game.radius(e)+190;if(d<reach)cost+=(reach-d)/reach*(1+game.radius(t)/game.radius(e));}return cost;}
 export function chooseGoal(game,e){
- const ctrl=e.controller,p=ctrl.profile,own=game.radius(e),perception=C.aiPerceptionRange*(.65+p.skill*.7);
+ const world=game.world||C.world,ctrl=e.controller,p=ctrl.profile,own=game.radius(e),perception=C.aiPerceptionRange*(.65+p.skill*.7);
  const nearby=game.entities.filter(o=>o!==e&&!o.dead&&!o.effects.water&&dist(o,e)<perception);
  const threats=nearby.filter(o=>game.radius(o)>own*1.06);
  const immediate=threats.filter(o=>dist(o,e)<own+game.radius(o)+100+(1-p.risk)*200).sort((a,b)=>dist(a,e)-dist(b,e))[0];
@@ -23,7 +23,7 @@ export function chooseGoal(game,e){
  if(immediate){
   // Fan candidate routes: escape away from threats while avoiding walls/water and dead ends.
   const away=Math.atan2(e.y-immediate.y,e.x-immediate.x);let best=null,bestScore=-Infinity;
-  for(const offset of [-1,-.5,0,.5,1]){const a=away+offset,point={x:clamp(e.x+Math.cos(a)*420,e.r+30,C.world.width-e.r-30),y:clamp(e.y+Math.sin(a)*420,e.r+30,C.world.height-e.r-30)};const score=dist(point,immediate)-threatCost(point,threats,e,game)*220-Math.max(0,dist(point,center)-game.safeRadius+60)*2;if(score>bestScore){bestScore=score;best=point;}}
+  for(const offset of [-1,-.5,0,.5,1]){const a=away+offset,point={x:clamp(e.x+Math.cos(a)*420,e.r+30,world.width-e.r-30),y:clamp(e.y+Math.sin(a)*420,e.r+30,world.height-e.r-30)};const score=dist(point,immediate)-threatCost(point,threats,e,game)*220-Math.max(0,dist(point,center)-game.safeRadius+60)*2;if(score>bestScore){bestScore=score;best=point;}}
   ctrl.intent='flee';return best;
  }
  let goal=null,best=-Infinity,intent='forage';
@@ -38,7 +38,7 @@ export function chooseGoal(game,e){
  }
  // Linear scan avoids sorting the whole food list for every NPC.
  for(const food of game.foods){const distance=dist(e,food);if(distance>perception||dist(food,center)>game.safeRadius-45+waterLimit*.65)continue;const score=p.food*(.65+food.mass/60)/(1+distance/110)-threatCost(food,threats,e,game)*(2-p.risk)-Math.max(0,dist(food,center)+45-game.safeRadius)/Math.max(1,waterLimit)*1.2;if(score>best){best=score;goal={x:food.x,y:food.y};intent='forage';}}
- if(e.skills.length<2)for(const item of game.items){const distance=dist(e,item);if(distance>perception||dist(item,center)>game.safeRadius-45)continue;const score=p.items*1.7/(1+distance/150)-threatCost(item,threats,e,game)*2;if(score>best){best=score;goal={x:item.x,y:item.y};intent='item';}}
+ if(!game.simplePickups&&e.skills.length<2)for(const item of game.items){const distance=dist(e,item);if(distance>perception||dist(item,center)>game.safeRadius-45)continue;const score=p.items*1.7/(1+distance/150)-threatCost(item,threats,e,game)*2;if(score>best){best=score;goal={x:item.x,y:item.y};intent='item';}}
  if(!goal){ctrl.intent=edge?'water':'wander';return edge?{...center}:game.spawnPoint();}
  if(intent==='hunt'&&ctrl.goal?.id===goal.id)ctrl.chaseTime+=p.reaction;else ctrl.chaseTime=0;
  ctrl.previousDistance=dist(e,goal);ctrl.intent=intent;return goal;
@@ -48,7 +48,7 @@ export function aiDirection(game,e,dt){if(game.theme==='boss')return clashDirect
  let dx=ctrl.goal.x-e.x,dy=ctrl.goal.y-e.y,n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;
  // Legacy NPC-to-NPC avoidance, updated to include the human using the same strength rules.
  for(const other of game.entities){if(other===e||other.dead)continue;const d=dist(e,other),reach=e.r+other.r+150;if(d<1||d>reach)continue;const danger=game.radius(other)>game.radius(e)*1.06;const sameTarget=ctrl.goal.id===other.id;if(sameTarget&&!danger)continue;const weight=(reach-d)/reach*(danger?2.8: .35);dx+=(e.x-other.x)/d*weight;dy+=(e.y-other.y)/d*weight;}
- const margin=e.r+75;dx+=(e.x<margin?.6:e.x>C.world.width-margin?-.6:0);dy+=(e.y<margin?.6:e.y>C.world.height-margin?-.6:0);
+ const world=game.world||C.world,margin=e.r+75;dx+=(e.x<margin?.6:e.x>world.width-margin?-.6:0);dy+=(e.y<margin?.6:e.y>world.height-margin?-.6:0);
  if(ctrl.personality==='novice'){ctrl.routeSeed+=dt;dx+=Math.sin(ctrl.routeSeed)*.14;dy+=Math.cos(ctrl.routeSeed*1.3)*.14;}
  n=Math.hypot(dx,dy)||1;return {x:dx/n,y:dy/n};
 }

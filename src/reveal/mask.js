@@ -12,7 +12,7 @@ export class RevealMask {
   }if(changed)this.version++;
  }
  reveal(x,y,r){this.blooms.push({x,y,r,age:0});if(this.blooms.length>96)this.blooms.shift();}
- consume(event){if(event.kind!=='enemy')return false;this.reveal(event.x,event.y,this.config.consumeRadius+Math.max(0,event.r)*this.config.consumeRadiusGrowth);return true;}
+ consume(event){if(event.kind!=='enemy')return false;this.reveal(event.x,event.y,Math.min(this.config.consumeRadiusMax,this.config.consumeRadius+Math.max(0,event.r)*this.config.consumeRadiusGrowth));return true;}
  erode(x,y,r,dt){this.brush(x,y,Math.max(18,r*this.config.erosionRadiusScale),this.config.erosionPerSecond*Math.max(0,dt),true);}
- update(dt){for(const b of this.blooms){b.age+=Math.max(0,dt);const t=Math.min(1,b.age/this.config.bloomDuration);this.brush(b.x,b.y,b.r*(.12+.88*(1-(1-t)**3)),Math.min(1,t*3));}this.blooms=this.blooms.filter(b=>b.age<this.config.bloomDuration);}
+ update(dt){for(const b of this.blooms){b.age+=Math.max(0,dt);const t=Math.min(1,b.age/this.config.bloomDuration),spread=1-(1-t)**2.2;this.brush(b.x,b.y,b.r*(.10+.90*spread),Math.min(1,t*3));if(t>.15)for(let i=0;i<3;i++){const angle=i*2.399+b.x*.003,offset=b.r*.25;this.brush(b.x+Math.cos(angle)*offset,b.y+Math.sin(angle)*offset,b.r*spread*.70,Math.min(1,(t-.1)*2));}}this.blooms=this.blooms.filter(b=>b.age<this.config.bloomDuration);}
 }
