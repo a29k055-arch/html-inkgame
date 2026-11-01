@@ -28,6 +28,7 @@ export function chooseGoal(game,e){
  }
  let goal=null,best=-Infinity,intent='forage';
  for(const prey of nearby){
+  if(game.boundarySliding){const reachable={x:clamp(prey.x,own,world.width-own),y:clamp(prey.y,own,world.height-own)};if(dist(reachable,prey)>own-game.radius(prey)*C.consumeOverlap){ctrl.unreachable=prey.id;continue;}}
   const sizeRatio=own/game.radius(prey),distance=dist(e,prey);if(sizeRatio<1.12||prey.invincible||p.hunt<.15||dist(prey,center)>game.safeRadius-e.r+waterLimit)continue;
   const speedRatio=game.speed(e)/game.speed(prey),closing=distance/Math.max(25,game.speed(e));
   if(speedRatio<.86&&distance>own+140)continue;
@@ -45,10 +46,11 @@ export function chooseGoal(game,e){
 }
 export function aiDirection(game,e,dt){if(game.theme==='boss')return clashDirection(game,e,dt);
  const ctrl=e.controller;ctrl.waterExposure=dist(e,game.center)+e.r>game.safeRadius?(ctrl.waterExposure||0)+dt:0;ctrl.think-=dt;if(ctrl.think<=0||!ctrl.goal){ctrl.goal=chooseGoal(game,e);ctrl.think=ctrl.profile.reaction*random(.8,1.3);}
+ if(game.boundarySliding){const r=game.radius(e);ctrl.goal.x=clamp(ctrl.goal.x,r,game.world.width-r);ctrl.goal.y=clamp(ctrl.goal.y,r,game.world.height-r);if(ctrl.escapeUntil>game.elapsed){const dx=game.center.x-e.x,dy=game.center.y-e.y,n=Math.hypot(dx,dy)||1;ctrl.intent='reroute';return {x:dx/n,y:dy/n};}}
  let dx=ctrl.goal.x-e.x,dy=ctrl.goal.y-e.y,n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;
  // Legacy NPC-to-NPC avoidance, updated to include the human using the same strength rules.
  for(const other of game.entities){if(other===e||other.dead)continue;const d=dist(e,other),reach=e.r+other.r+150;if(d<1||d>reach)continue;const danger=game.radius(other)>game.radius(e)*1.06;const sameTarget=ctrl.goal.id===other.id;if(sameTarget&&!danger)continue;const weight=(reach-d)/reach*(danger?2.8: .35);dx+=(e.x-other.x)/d*weight;dy+=(e.y-other.y)/d*weight;}
- const world=game.world||C.world,margin=e.r+75;dx+=(e.x<margin?.6:e.x>world.width-margin?-.6:0);dy+=(e.y<margin?.6:e.y>world.height-margin?-.6:0);
+ const world=game.world||C.world,margin=game.boundarySliding?game.radius(e)+20:e.r+75;dx+=(e.x<margin?.6:e.x>world.width-margin?-.6:0);dy+=(e.y<margin?.6:e.y>world.height-margin?-.6:0);
  if(ctrl.personality==='novice'){ctrl.routeSeed+=dt;dx+=Math.sin(ctrl.routeSeed)*.14;dy+=Math.cos(ctrl.routeSeed*1.3)*.14;}
  n=Math.hypot(dx,dy)||1;return {x:dx/n,y:dy/n};
 }

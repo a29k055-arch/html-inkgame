@@ -24,6 +24,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Package frozen V2, frozen V3, current V4
+        run: node tools/package-versions.cjs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -31,7 +36,7 @@ jobs:
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: dist-pages
 
       - name: Deploy to GitHub Pages
         id: deployment

@@ -15,9 +15,9 @@ export class GameRenderer {
   this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.world=visual.world||C.world;this.ground=visual.ground;this.itemPainter=visual.itemPainter;this.foodPainter=visual.foodPainter;this.bodyVisual={...HERO_BODY_CONFIG,...visual.body};this.trail=new (visual.TrailClass||HeroWorldTrail)(visual.trail);this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
   this.canvas=document.createElement('canvas');this.canvas.style.cssText='position:fixed;left:-10000px;top:0;pointer-events:none;';document.body.append(this.canvas);
   this.onContextLost=e=>{e.preventDefault();document.dispatchEvent(new Event('boku:render-error'));};this.canvas.addEventListener('webglcontextlost',this.onContextLost);
-  this.setBounds();try{this.fluid=new InkFluid(this.canvas,quality);}catch(error){this.textAbort.abort();this.canvas.remove();throw error;}this.fluid.materialMode=true;this.fluid.sizeBoundary=mode==='inkstone';
+  this.setBounds();try{this.fluid=new (visual.FluidClass||InkFluid)(this.canvas,quality);}catch(error){this.textAbort.abort();this.canvas.remove();throw error;}this.fluid.materialMode=true;this.fluid.sizeBoundary=visual.bodyDebug??(mode==='inkstone');
   // The published player study uses the default single-body solver, not localEntities.
-  this.body=new MaterialInk(this.fluid,document.createElement('canvas'));this.npcs=mode==='inkstone'?new NpcPainter():null;this.resize();
+  this.body=new (visual.BodyClass||MaterialInk)(this.fluid,document.createElement('canvas'));this.npcs=mode==='inkstone'?new NpcPainter():null;this.resize();
  }
  setBounds(){this.viewW=innerWidth;this.viewH=innerHeight;this.canvas.style.width=this.viewW+'px';this.canvas.style.height=this.viewH+'px';}
  resize(){this.setBounds();this.fluid.resize();this.body.reset();this.cameraReady=false;const d=Math.min(devicePixelRatio||1,2);this.output.width=Math.round(this.viewW*d);this.output.height=Math.round(this.viewH*d);this.ctx.setTransform(d,0,0,d,0,0);this.paper?.resize();}
