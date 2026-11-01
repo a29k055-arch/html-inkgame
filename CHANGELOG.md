@@ -612,3 +612,5 @@ This update keeps the original demo and adds a new playable version at `outputs/
 
 - GitHub Pages entry now points to the v2 demo.
 - Added a GitHub Pages deployment workflow.
+
+- 发布补记：用户批准精确分支许可后，预览run41321969532 attempt2成功；公开预览/previews/reveal-scroll/线上PC与390触控基础回归通过。正式根index哈希与main完全相同。双指加速修复已原生触控复测；实体手机/Safari仍待测。

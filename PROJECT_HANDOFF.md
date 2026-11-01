@@ -810,3 +810,9 @@ origin为 `https://github.com/a29k055-arch/html-inkgame.git`，开发分支main�
 ### 发布补记（2026-11-02）
 功能提交9237870已推送codex/reveal-scroll-rework。首次预览run41321769656在任何步骤运行前失败；GitHub annotation明确为该分支不允许部署到github-pages环境。不是构建代码失败，不应通过改环境名绕过保护。已询问用户是否只授权此分支预览；没有答复前不修改环境规则，不合并main。
 工作流拆成先构建并上传reveal-scroll-preview可下载包、后受保护部署。计划公开预览路径尚未上线，不能给出已部署结论。本机http://127.0.0.1:4190/已验证可用。main仍d882581。下一步先核对用户发布许可与最新run；获准后仅增加此分支精确许可，再重跑部署与线上回归，不扩大到所有分支。
+
+### 发布补记更新：已获授权并成功上线
+用户已明确批准仅此分支发布预览。检查原环境为custom_branch_policies且仅main；只添加codex/reveal-scroll-rework精确规则，main和其他保护设置未改。GitHub连接器无重跑权限，使用现有Git登录重跑失败部署步骤；run41321969532 attempt2成功，代码cbb60e9。
+公开预览：https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/ 。线上Edge桌面/390触控：首页、三语Settings、Gallery锁定、开始、移动显画、真实轨迹、Shift/触屏加速、暂停/恢复通过，无pageerror/requestfailed，短测约60FPS。正式根index逐字节SHA256=0d27b5880fc14b3455ea4720885bdf441d04b743310be0be2fc6bf357f9e0c10，与origin/main:index.html完全相同。
+本机完整结算/刷新解锁证据work/browser-pc.json、browser-mobile.json；线上仅做基础烟测，未声称再次完成整局。Actions另有reveal-scroll-preview下载包，保留7天。后续main发布可能清除该预览路径，届时须重跑分支预览；不要误认为预览部署已合并main。
+当前交付完整一局已打通。剩余：实体手机/Safari、低端设备/长时间内存、长尾美术用户反馈；用户根首页原始故障仍未在正常WebGL环境复现。下一步第一条操作：打开公开预览实际试玩并记录上述反馈，不恢复Boss/抽卡。

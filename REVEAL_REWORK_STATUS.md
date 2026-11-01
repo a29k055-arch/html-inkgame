@@ -10,3 +10,5 @@
 - 待办：实体手机/Safari、长尾美术反馈、低端GPU/长时间内存。不要重新启用Boss/抽卡。
 
 发布状态：功能9237870已推送独立分支，预览部署被github-pages分支保护拒绝（run41321769656）；main未变更。构建包可单独生成，不能把计划预览地址当作已上线。详见PROJECT_HANDOFF发布补记。
+
+最终发布：用户批准精确分支许可后run41321969532 attempt2成功；公开预览https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/已上线。线上PC/390触控基本回归通过，正式根index与main逐字节一致。上文暂被保护拦截是首次尝试的历史状态，已解决；main未合并。剩余实体手机/Safari、低端设备/长时间内存、美术反馈。
