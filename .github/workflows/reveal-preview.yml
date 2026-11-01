@@ -1,0 +1,41 @@
+name: Reveal branch preview (preserve main)
+on:
+  push:
+    branches: [codex/reveal-scroll-rework]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.ref == 'refs/heads/codex/reveal-scroll-rework'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Package frozen V2, frozen V3, current V4
+        run: node tools/package-versions.cjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist-pages
+      - name: Downloadable preview if deployment is protected
+        uses: actions/upload-artifact@v4
+        with:
+          name: v4-preview
+          path: dist-pages/v4
+          retention-days: 7
+  preview:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}v4/
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

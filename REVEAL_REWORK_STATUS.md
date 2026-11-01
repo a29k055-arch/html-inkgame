@@ -1,0 +1,14 @@
+# 卷轴显画重构：当前状态
+
+2026-11-02算法检查点已接成完整一局。先读PROJECT_HANDOFF.md最新章节；11-01尚未接入结论已过期。
+
+- 分支codex/reveal-scroll-rework；稳定基线d882581，main不合并。
+- index为新显画，classic保留旧玩法，三份视觉参考不改。
+- 18套模型、桌面/手机视口整局结算和刷新Gallery通过。
+- 本机 http://127.0.0.1:4190/ 。公开预览 /previews/reveal-scroll/ 以Handoff发布补记为准。
+- B站已观看14/15/16秒，评论/源码受限；根首页故障未复现，artistic404与无WebGL加载失败路径已确认。
+- 待办：实体手机/Safari、长尾美术反馈、低端GPU/长时间内存。不要重新启用Boss/抽卡。
+
+发布状态：功能9237870已推送独立分支，预览部署被github-pages分支保护拒绝（run41321769656）；main未变更。构建包可单独生成，不能把计划预览地址当作已上线。详见PROJECT_HANDOFF发布补记。
+
+最终发布：用户批准精确分支许可后run41321969532 attempt2成功；公开预览https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/已上线。线上PC/390触控基本回归通过，正式根index与main逐字节一致。上文暂被保护拦截是首次尝试的历史状态，已解决；main未合并。剩余实体手机/Safari、低端设备/长时间内存、美术反馈。

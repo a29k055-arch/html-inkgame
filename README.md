@@ -1,19 +1,35 @@
 # 墨—BOKU—
 
-- [New Version](https://a29k055-arch.github.io/html-inkgame/)
+## 游戏版本
+
+| 版本 | 直接游玩 | 冻结引用与来源 |
+|---|---|---|
+| **V4｜最新版水墨涂色游戏** | **[打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/)** | main 持续维护；首发标签 v4-reveal |
+| V3｜上一版水墨涂色游戏 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-reveal → 1faf41f，来自 codex/reveal-scroll-rework |
+| V2｜旧版吞噬成长游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-scroll → d882581，原稳定 main |
+
+三个地址已实际验证可加载并进入游戏。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；原 /previews/reveal-scroll/ 固定保留V3。
+
+- [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V4）
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
 - [水墨视觉效果 README](prototypes/ink/README.md)
 - [水墨视觉测试 · 冻结历史候选](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
+- [V4共享水墨测试](https://a29k055-arch.github.io/html-inkgame/v4/visual-effects/v4.html)
 - [水墨效果对比实验室](https://a29k055-arch.github.io/html-inkgame/visual-effects/lab.html)
 - [视觉来源与参数](visual-effects/REFERENCE.md)
 
-本轮：保留2d00e16、bde0c40及ccddc4b独立视觉参考；主角材质恢复历史候选，世界轨迹修复折返并限制大体型尾宽。首页加载与静态轴杆合并为同一卷轴，唯一标题连续显影；Gallery底部返回常驻。
+本轮在独立分支推出一局显现一幅画：移动显画、吞敌大落墨、敌人柔和侵蚀，完成后进入Gallery。V4将短时美术墨尾、30秒临时显画和吞敌永久落墨分开；Boss/碎片/抽卡停用，旧流程在V2固定入口保留；卷轴首页、三语言、Settings与冻结视觉参考继续保留。
 
-玩家与墨弹按世界坐标留下真实墨迹，急转不重建旧尾；全屏卷轴按实际资源准备进度展开，失败可重试。小地图右上，暂停与单栏教学重新排版。每局道具槽和待选从空开始；Boss胜利只提供继续/结算，第三次完成后结束本局，Gallery从首页进入。
+- [Reveal Painting Preview](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/)（已发布独立预览；正式根入口保持稳定版）
+- [Preserved Campaign](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/classic.html)（保留旧流程）
 
-首页：开始 / プレイ / Play、Gallery、Settings，宣纸流云卷轴与右上问号。教学也可从暂停进入，支持三语言。简洁/详细HUD可在设置切换并保存。默认浅宣纸流云封面，设置中可切回原动态水墨画。研磨阶段吃墨、追逃互吞（无远程攻击） → 激战阶段联敌与 Boss → 三块唯一画卷碎片 → Gallery 短时修复与解锁。保留七类 AI、移动端双摇杆、Drops/Transitions、三语言与旧存档。
+本地运行：node tools/serve-preview.cjs 4190，打开脚本输出的根首页。平衡与架构见 [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md)。
 
-### 墨量与战斗
+## 当前显画玩法
+
+8分钟内永久显画达到62%后完成画作。美术墨尾1.8～2秒；按实际圆核半径移动揭画，单格保持30秒后5秒淡出；吞敌才产生永久落墨，敌人侵蚀两层。普通墨点只成长并有小型反馈。Shift/触屏固定加速，盾与速度拾取即用。配置集中src/reveal/config.js，完整规则与验证见PROJECT_HANDOFF.md。
+
+## 保留版玩法（仅 classic.html）
 
 F1 / 首页问号 / 暂停可进入分区折叠教学。永久属性与两格一次性道具完全分开，道具没有LV或自动冷却再生。
 
