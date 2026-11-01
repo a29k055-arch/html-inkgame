@@ -1,7 +1,7 @@
 # 墨—BOKU— Project Handoff
 ## 2026-11-02 — V4 三层显画与固定版本发布 [CURRENT]
 
-本轮从1faf41f继续，checkpoint/v4-before-1faf41f保存原状；v2-scroll=d882581、v3-reveal=1faf41f。当前分支codex/reveal-scroll-rework。V3的36秒美术尾迹/固定130移动笔刷已按用户新要求替换，下面旧阶段数值仅作历史，不得恢复。
+本轮从1faf41f继续，checkpoint/v4-before-1faf41f保存原状；v2-scroll=d882581、v3-reveal=1faf41f。开发分支codex/reveal-scroll-rework，现已合并main；最终状态见发布补记。V3的36秒美术尾迹/固定130移动笔刷已按用户新要求替换，下面旧阶段数值仅作历史，不得恢复。
 
 ### 规则与渲染
 - Hero Ink：正式与visual-effects/v4.html共享createRevealRenderer/CometTrail和hero-ink.js；直接引用冻结2d00e16的Fluid与MaterialInk（归档不改）。差异根因是正式原来用了径向contain和bodyHalo圆形裁切，而测试保留后向流体；V4使用参考的方向性contain，去掉圆裁切/碰撞虚线，密度decay1.7。大体型零力连续注墨半径最高收窄30%、浓度降低20%，种子墨丝和碰撞不改。历史参考仍独立可对比。
@@ -846,3 +846,9 @@ origin为 `https://github.com/a29k055-arch/html-inkgame.git`，开发分支main�
 正常规则真实整局：PC251.8秒、吞敌27、AI互吞29；手机198.3秒、吞敌26、AI互吞26，均结算100%、刷新Gallery解锁、零错误。所有20套测试通过；并行浏览器和模型压力下约38～60FPS（结束演出/压力低点，非实体手机指标）。独立线上短测V4约60FPS，V3预热约35FPS。小/大/转弯/折返/停止共享渲染截图已查看；大体型收窄连续注墨后减少圆盘感，但最终美术接受度仍需用户反馈。
 接下来将经过验证的分支正常合并main，不强推；根首页采用V4，三个固定子目录保持独立；v4-reveal标签保存首发。最终合并SHA与Actions结果见Git和后续补记。未来新增V5时应先冻结V4标签再调整打包映射，不能直接覆盖/v2或/v3。
 剩余：实体手机/Safari、低端设备与长时间内存；大体型墨色和细丝的用户视觉反馈。本轮没有增加Boss/抽卡/复杂道具。
+
+
+### V4 主线发布与独立存档收尾
+主线合并459f3a9已推送，Pages run41326850855成功，首发引用v4-reveal保留。V2/V3标签不移动；最终维护版本采用v4-stable标签，源码以main最新提交和versions.json为准。
+收尾发现旧版加载会丢弃未知progress字段，因此V4改用boku.save.v4，首次缺省时读取boku.save.v1兼容迁移；只写新键。V4重置不再清理旧Gallery记录数据库。模型和浏览器验证了旧钱包/碎片/解锁迁移、部分锁定、完成刷新、重置后旧键原样不变；涉及保存模块的campaign/paper/UI测试再次通过。无WebGL V4仍可Canvas进入，旧classic仍保持原失败反馈（不改冻结V2）。
+公开URL /v2/ /v3/ /v4/均已实测，V4最终补丁发布后再核对versions.json和主线Actions。README顶部已列真实入口。剩余仅实体手机/Safari、低端设备/长时间内存和大体型水墨的用户审美反馈；没有未接通的玩法主循环。下一次先核对main与v4-stable，并试玩/v4/，不要重做旧系统或恢复Boss。

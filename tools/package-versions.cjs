@@ -9,4 +9,3 @@ const manifest={root:execFileSync('git',['rev-parse',rootRef],{encoding:'utf8'})
 for(const [name,[ref,expected]] of Object.entries(releases)){const sha=execFileSync('git',['rev-parse',ref],{encoding:'utf8'}).trim();if(expected&&!sha.startsWith(expected))throw Error('Frozen release ref changed: '+ref);unpack(ref,path.join(out,name));manifest.versions[name]={ref,sha};}
 unpack('v3-reveal',path.join(out,'previews','reveal-scroll'));
 fs.writeFileSync(path.join(out,'versions.json'),JSON.stringify(manifest,null,2));console.log(JSON.stringify(manifest,null,2));
-

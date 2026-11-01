@@ -4,11 +4,11 @@
 
 | 版本 | 直接游玩 | 冻结引用与来源 |
 |---|---|---|
-| **V4｜最新版水墨涂色游戏** | **[打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/)** | main 持续维护；首发标签 v4-reveal |
+| **V4｜最新版水墨涂色游戏** | **[打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/)** | main 持续维护；发布标签 v4-stable |
 | V3｜上一版水墨涂色游戏 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-reveal → 1faf41f，来自 codex/reveal-scroll-rework |
 | V2｜旧版吞噬成长游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-scroll → d882581，原稳定 main |
 
-三个地址已实际验证可加载并进入游戏。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；原 /previews/reveal-scroll/ 固定保留V3。
+三个地址已实际验证可加载并进入游戏。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；原 /previews/reveal-scroll/ 固定保留V3。V4使用独立本机存档 boku.save.v4，首次兼容读取旧记录但不改写旧键；V2/V3保留原存档方式。
 
 - [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V4）
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
@@ -18,9 +18,9 @@
 - [水墨效果对比实验室](https://a29k055-arch.github.io/html-inkgame/visual-effects/lab.html)
 - [视觉来源与参数](visual-effects/REFERENCE.md)
 
-本轮在独立分支推出一局显现一幅画：移动显画、吞敌大落墨、敌人柔和侵蚀，完成后进入Gallery。V4将短时美术墨尾、30秒临时显画和吞敌永久落墨分开；Boss/碎片/抽卡停用，旧流程在V2固定入口保留；卷轴首页、三语言、Settings与冻结视觉参考继续保留。
+V4已发布至main，一局显现一幅画：移动显画、吞敌大落墨、敌人柔和侵蚀，完成后进入Gallery。V4将短时美术墨尾、30秒临时显画和吞敌永久落墨分开；Boss/碎片/抽卡停用，旧流程在V2固定入口保留；卷轴首页、三语言、Settings与冻结视觉参考继续保留。
 
-- [Reveal Painting Preview](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/)（已发布独立预览；正式根入口保持稳定版）
+- [Reveal Painting Preview](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/)（V3旧预览兼容地址）
 - [Preserved Campaign](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/classic.html)（保留旧流程）
 
 本地运行：node tools/serve-preview.cjs 4190，打开脚本输出的根首页。平衡与架构见 [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md)。

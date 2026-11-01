@@ -1,7 +1,8 @@
 import {REVEAL_CONFIG} from '../reveal/config.js';
 import {GAME_CONFIG} from '../game/config.js';
 // All NEW game metadata goes through this module. Legacy pages retain their own saves.
-export const SAVE_KEY='boku.save.v1';
+export const SAVE_KEY='boku.save.v4';
+export const LEGACY_SAVE_KEY='boku.save.v1';
 export const SAVE_VERSION=2;
 const firstArtwork='ink-13';
 const defaults=()=>({saveVersion:SAVE_VERSION,inkAmount:GAME_CONFIG.paperBaseInk,unlockedArtworks:[firstArtwork],settings:{},progress:{rounds:0,earnedInk:0,spentInk:0,artworks:{},receipts:[],fragments:{},bossReceipts:[],restoredArtworks:[],revealArtworks:{},revealReceipts:[]}});
@@ -9,7 +10,7 @@ let available=true,timer=null;
 const read=key=>{try{return JSON.parse(localStorage.getItem(key)||'null');}catch{available=false;return null;}};
 const finite=n=>typeof n==='number'&&Number.isFinite(n)&&n>=0;
 function load(){
- const stored=read(SAVE_KEY),save=defaults();
+ const stored=read(SAVE_KEY)||read(LEGACY_SAVE_KEY),save=defaults();
  if(stored&&stored.saveVersion>SAVE_VERSION){available=false;return save;}
  if(stored&&typeof stored==='object'){
   if(finite(stored.inkAmount))save.inkAmount=stored.inkAmount;
