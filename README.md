@@ -9,8 +9,8 @@
 
 本轮在独立分支推出一局显现一幅画：移动显画、吞敌大落墨、敌人柔和侵蚀，完成后进入Gallery。默认新入口关闭Boss/碎片/抽卡，旧流程保留在classic.html；卷轴首页、三语言、Settings与冻结视觉参考继续保留。
 
-- [Reveal Painting Preview](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/)（独立预览，正式根入口保持稳定版；部署状态见PROJECT_HANDOFF.md）
-- [Preserved Campaign](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/classic.html)
+- Reveal Painting Preview：独立分支已推送，Pages预览暂被分支保护拦截；尚未上线，详见PROJECT_HANDOFF.md。
+- Preserved Campaign：本机 classic.html 保留旧流程；正式根入口的稳定版继续可用。
 
 本地运行：node tools/serve-preview.cjs 4190，打开脚本输出的根首页。平衡与架构见 [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md)。
 

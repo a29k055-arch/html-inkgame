@@ -11,12 +11,9 @@ concurrency:
   group: pages
   cancel-in-progress: false
 jobs:
-  preview:
+  build:
     if: github.ref == 'refs/heads/codex/reveal-scroll-rework'
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}previews/reveal-scroll/
     steps:
       - uses: actions/checkout@v6
       - name: Checkout unchanged main for public root
@@ -28,10 +25,22 @@ jobs:
         run: |
           mkdir -p _site/previews/reveal-scroll
           git archive HEAD | tar -x -C _site/previews/reveal-scroll
-          rm -rf _site/.git
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
+      - name: Downloadable preview if deployment is protected
+        uses: actions/upload-artifact@v4
+        with:
+          name: reveal-scroll-preview
+          path: _site/previews/reveal-scroll
+          retention-days: 7
+  preview:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}previews/reveal-scroll/
+    steps:
       - id: deploy
         uses: actions/deploy-pages@v4
