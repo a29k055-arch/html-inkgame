@@ -1,6 +1,18 @@
 # 墨—BOKU— Project Handoff
+## 2026-11-01 — 卷轴显画重构 / 阶段检查点 [CURRENT]
 
-## 2026-10-27 — 历史水墨参考隔离 / 折返轨迹 / 连续卷轴 [CURRENT]
+本轮回到稳定卷轴基线d882581，新分支codex/reveal-scroll-rework；上轮9a127c4保留于checkpoint/before-reveal-rework-20261101及artistic-rework。main与存档未变更。
+
+已实测线上根首页与本机4183根首页HTTP200，Settings/Gallery/开始/移动通过，无pageerror/requestfailed。线上artistic.html为404：上轮艺术入口仅本地提交、未部署；最新Pages run40458005797在d882581成功。用户侧根首页打不开未复现，不可编造唯一根因。已有4183本机服务，再启动报EADDRINUSE仅表示端口占用。
+
+B站视频已实际定位14/15/16秒观察山水向右下扩张。view API 412，但播放器可看；评论未完整取得，未找到直接GitHub仓库链接。观察及限制见REVEAL_REWORK_STATUS.md。
+
+新增独立RevealMask和配置，支持吞敌大落墨、普通墨点排除、柔边持久显影、按时间侵蚀及恢复，规则测试通过；冻结参考哈希测试通过。尚未接正式游戏，36秒拖尾只是配置，并未生效；新道具、Gallery完成解锁、新结算、三语新提示及手机完整试玩未完成。当前根入口仍是稳定旧玩法，不能宣称新整局已打通。
+
+下一次第一步：从稳定app新增新玩法控制器，复用原卷轴首页/Settings/Gallery/三语，将RevealMask接入移动、吞敌、NPC路径，停用Campaign入口。完整顺序与证据见REVEAL_REWORK_STATUS.md。不要以半成品覆盖main。
+
+
+## 2026-10-27 — 历史水墨参考隔离 / 折返轨迹 / 连续卷轴 [PREVIOUS]
 
 基线 main/origin/main=ccddc4b，开始工作区干净；检查点 checkpoint/visual-reference-before-ccddc4b。只修改视觉/布局/测试，没有变更吞噬、成长、AI、阵营、Boss数值、选牌、道具、碎片或saveVersion2。
 

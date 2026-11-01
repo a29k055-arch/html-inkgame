@@ -1,0 +1,2 @@
+// All rates use simulation seconds / world units, independent of display FPS.
+export const REVEAL_CONFIG=Object.freeze({width:3400,height:3400*1275/2774,columns:192,duration:240,completionThreshold:.88,moveRadius:90,moveRadiusGrowth:.28,moveSpacing:26,consumeRadius:250,consumeRadiusGrowth:2.2,bloomDuration:2.1,erosionPerSecond:.035,erosionRadiusScale:.65,itemInterval:18,trailLifetime:36,trailMaxLength:3600,maxTrailPoints:384});
