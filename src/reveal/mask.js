@@ -1,4 +1,4 @@
-import {DROP_ALPHA,DROP_SHAPE,dropStage} from './drop-shape.js';
+import {DROP_ALPHA,DROP_SHAPE,dropStage,sampleDrop} from './drop-shape.js';
 import {REVEAL_CONFIG as C} from './config.js';
 // Persistent reveal state, never derived from transient Flow Trail pixels.
 export class RevealMask {
@@ -15,6 +15,6 @@ export class RevealMask {
  reveal(x,y,r){this.blooms.push({x,y,r,angle:Math.sin(x*.13+y*.07)*2.8,age:0});if(this.blooms.length>96)this.blooms.shift();}
  consume(event){if(event.kind!=='enemy')return false;this.reveal(event.x,event.y,Math.min(this.config.consumeRadiusMax,this.config.consumeRadius+Math.max(0,event.r)*this.config.consumeRadiusGrowth));return true;}
  erode(x,y,r,dt){this.brush(x,y,Math.max(1,r*this.config.erosionRadiusScale),this.config.erosionPerSecond*Math.max(0,dt),true);}
- stampDrop(b){const t=Math.min(1,b.age/this.config.bloomDuration),r=b.r,stage=dropStage(t),sx=this.width/this.cols,sy=this.height/this.rows,co=Math.cos(b.angle),si=Math.sin(b.angle),n=DROP_SHAPE.size;let changed=false;for(let y=Math.max(0,Math.floor((b.y-r*1.42)/sy));y<=Math.min(this.rows-1,Math.ceil((b.y+r*1.42)/sy));y++)for(let x=Math.max(0,Math.floor((b.x-r*1.42)/sx));x<=Math.min(this.cols-1,Math.ceil((b.x+r*1.42)/sx));x++){const dx=(x+.5)*sx-b.x,dy=(y+.5)*sy-b.y,u=(dx*co+dy*si)/(r*2)+.5,v=(-dx*si+dy*co)/(r*2)+.5;if(u<0||v<0||u>=1||v>=1)continue;const alpha=stage[Math.min(n-1,Math.floor(v*n))*n+Math.min(n-1,Math.floor(u*n))]/255,k=y*this.cols+x,old=this.cells[k],value=Math.fround(Math.max(old,alpha));if(value!==old){this.cells[k]=value;this.sum+=value-old;changed=true;}}if(changed)this.version++;}
+ stampDrop(b){const t=Math.min(1,b.age/this.config.bloomDuration),r=b.r,stage=dropStage(t),sx=this.width/this.cols,sy=this.height/this.rows,co=Math.cos(b.angle),si=Math.sin(b.angle),n=DROP_SHAPE.size;let changed=false;for(let y=Math.max(0,Math.floor((b.y-r*1.42)/sy));y<=Math.min(this.rows-1,Math.ceil((b.y+r*1.42)/sy));y++)for(let x=Math.max(0,Math.floor((b.x-r*1.42)/sx));x<=Math.min(this.cols-1,Math.ceil((b.x+r*1.42)/sx));x++){const dx=(x+.5)*sx-b.x,dy=(y+.5)*sy-b.y,u=(dx*co+dy*si)/(r*2)+.5,v=(-dx*si+dy*co)/(r*2)+.5;if(u<0||v<0||u>=1||v>=1)continue;const alpha=sampleDrop(stage,u,v)/255,k=y*this.cols+x,old=this.cells[k],value=Math.fround(Math.max(old,alpha));if(value!==old){this.cells[k]=value;this.sum+=value-old;changed=true;}}if(changed)this.version++;}
  update(dt){for(const b of this.blooms){b.age+=Math.max(0,dt);this.stampDrop(b);}this.blooms=this.blooms.filter(b=>b.age<this.config.bloomDuration);}
 }
