@@ -8,7 +8,7 @@
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |
 | V2｜更早期原版游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-original → 1bb0250（原版入口重定向至 outputs/ink_demo_v2.html） |
 
-按本轮定义纠正编号：V2原版、V3复杂玩法、V4涂色。本机三版本打包产物均已验证可启动；本次线上映射切换的最终验证见PROJECT_HANDOFF发布补记。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；旧涂色快照保留于 /previews/reveal-scroll/ 和 /archive/reveal-v3/（旧误标V3，来源1faf41f）；原误标V2的复杂快照另保留 /archive/scroll-v2/。历史Git标签不移动。V4使用独立本机存档 boku.save.v4，首次兼容读取旧记录但不改写旧键；V2/V3保留原存档方式。
+按本轮定义纠正编号：V2原版、V3复杂玩法、V4涂色。本机打包与GitHub Pages三个公开地址均已实测可启动（2026-11-02，发布41388737604）；最终验证见PROJECT_HANDOFF发布补记。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；旧涂色快照保留于 /previews/reveal-scroll/ 和 /archive/reveal-v3/（旧误标V3，来源1faf41f）；原误标V2的复杂快照另保留 /archive/scroll-v2/。历史Git标签不移动。V4使用独立本机存档 boku.save.v4，首次兼容读取旧记录但不改写旧键；V2/V3保留原存档方式。
 
 - [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V4）
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
@@ -30,7 +30,9 @@ V4已发布至main，一局显现一幅画：移动显画、吞敌大落墨、�
 10分钟内实时绘画进度达到80%后完成画作。进度为临时与持续显画Alpha的max并集，重叠不重复计算；眼球涂白和临时过期会使进度回退。临时显画只来自实际可见墨体/有效尾迹的定频Alpha采样，保持30秒后5秒淡出。吞敌Drops最终定帧Alpha与显画直接共享，普通墨点只成长。B单尾方案默认，A/B/C/D可在共享测试页切换；短时美术尾迹与绘画计时独立。刺球周期掉墨，墨龟挡一次危险，墨鲤加速。
 
 
-## 保留版玩法（仅 classic.html）
+## 历史复杂玩法说明（V3／classic.html）
+
+以下保留旧版规则与文档，数值不用于当前V4。
 
 F1 / 首页问号 / 暂停可进入分区折叠教学。永久属性与两格一次性道具完全分开，道具没有LV或自动冷却再生。
 
