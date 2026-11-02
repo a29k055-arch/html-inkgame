@@ -72,3 +72,7 @@ body[data-experience=reveal] #inkReserveHud,body[data-experience=reveal] #modeLa
 @media(max-width:700px){#revealMeter{left:64px;transform:none;top:72px;width:calc(100vw - 166px);padding:9px 12px}#revealMeter header{font-size:12px}#revealInk{font-size:9px}#boostBtn{right:16px;bottom:30px;width:82px;min-height:80px}body[data-experience=reveal] #mapWrap{width:76px}body[data-experience=reveal] #timer{font-size:20px}}@media(max-height:500px) and (min-width:500px){#revealMeter{top:12px;left:50%;transform:translateX(-50%);width:230px}#boostBtn{min-height:62px;width:80px;bottom:18px;font-size:16px}}
 
 body[data-experience=reveal] .dash-icon{width:28px;height:28px;justify-self:center;filter:brightness(0) invert(.88)}body[data-experience=reveal] #boostBtn{gap:2px}
+
+#revealMeter{width:min(580px,48vw);padding:6px 14px;background:#f8f0dfbf;border-radius:9px;box-shadow:none}#revealMeter header{font-size:12px}#revealProgress{height:4px;margin-top:5px}#revealInk{font-size:9px;margin-top:3px}@media(max-width:700px){#revealMeter{left:14px;top:70px;width:calc(100vw - 120px);padding:6px 10px}}
+
+body[data-experience=reveal] .dash-icon{filter:none;background:#efe7d3;border-radius:50%;padding:3px;width:34px;height:34px}#revealInk img{width:17px;height:17px;vertical-align:middle;margin-right:4px}

@@ -1,0 +1,5 @@
+// Bounded readback at 8 Hz, never the world canvas (which also contains NPCs/art).
+export class InkContactSampler {
+ constructor(){this.canvas=document.createElement('canvas');this.ctx=this.canvas.getContext('2d',{willReadFrequently:true});this.clock=0;this.samples=0;this.lastMs=0;}
+ sample(renderer,run,dt){this.clock+=dt;if(this.clock<1/run.config.contactHz||run.player.dead||run.state!=='playing')return;this.clock=0;const begin=performance.now(),w=renderer.viewW,h=renderer.viewH,scale=Math.min(1,256/Math.max(w,h)),c=this.canvas,d=this.ctx;const cw=Math.max(2,Math.round(w*scale)),ch=Math.max(2,Math.round(h*scale));if(c.width!==cw||c.height!==ch){c.width=cw;c.height=ch;}d.setTransform(c.width/w,0,0,c.height/h,0,0);d.clearRect(0,0,w,h);const cam=renderer.camera;d.save();d.translate(-cam.x*cam.scale,-cam.y*cam.scale);d.scale(cam.scale,cam.scale);renderer.trail.draw(d,'ink',{...cam,width:w,height:h},true);d.restore();d.drawImage(renderer.canvas,0,0,w,h);const image=d.getImageData(0,0,c.width,c.height);run.applyInkContact(image,cam,w,h);this.samples++;this.lastMs=performance.now()-begin;}
+}
