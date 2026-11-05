@@ -9,7 +9,7 @@ export class RevealMask {
   for(let j=Math.max(0,Math.floor((y-r*1.12)/sy));j<=Math.min(this.rows-1,Math.ceil((y+r*1.12)/sy));j++)for(let i=Math.max(0,Math.floor((x-r*1.12)/sx));i<=Math.min(this.cols-1,Math.ceil((x+r*1.12)/sx));i++){
    const dx=(i+.5)*sx-x,dy=(j+.5)*sy-y,a=Math.atan2(dy,dx),edge=erase?1:1+.055*Math.sin(a*5+x*.017)+.035*Math.sin(a*9+y*.011),d=Math.hypot(dx,dy)/(r*edge),t=Math.max(0,Math.min(1,(1-d)/.28)),soft=t*t*(3-2*t),k=j*this.cols+i,old=this.cells[k];
    // Exponential erosion is frame-rate independent, bounded, and leaves no hard rectangles.
-   const next=Math.fround(erase?old*Math.exp(-Math.max(0,amount)*soft):Math.max(old,Math.min(1,amount)*soft));if(next!==old){this.cells[k]=next;this.sum+=next-old;changed=true;}
+   const next=Math.fround(erase?Math.max(0,old-Math.max(0,amount)*soft):Math.max(old,Math.min(1,amount)*soft));if(next!==old){this.cells[k]=next;this.sum+=next-old;changed=true;}
   }if(changed)this.version++;
  }
  reveal(x,y,r){this.blooms.push({x,y,r,angle:Math.sin(x*.13+y*.07)*2.8,age:0});if(this.blooms.length>96)this.blooms.shift();}
