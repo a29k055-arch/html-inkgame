@@ -654,3 +654,7 @@ This update keeps the original demo and adds a new playable version at `outputs/
 - 发布补记：用户批准精确分支许可后，预览run41321969532 attempt2成功；公开预览/previews/reveal-scroll/线上PC与390触控基础回归通过。正式根index哈希与main完全相同。双指加速修复已原生触控复测；实体手机/Safari仍待测。
 
 - V4发布回归：20套测试、PC251.8秒/手机198.3秒正常整局和刷新解锁通过；Pages预览41326359501成功，三版本URL实测可用，V2/V3归档逐字节匹配。README新增真实版本入口与来源映射；主线发布状态见Handoff。
+
+
+### 发布可靠性补记
+最终r2第一次发布在GitHub Pages syncing_files阶段超时（构建/上传均成功）；发布步骤延长等待至20分钟并正常提交重试，游戏代码不变。最终部署结果见Handoff。
