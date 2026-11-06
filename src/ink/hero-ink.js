@@ -5,6 +5,7 @@ import {InkFluid as StudyFluid} from '../../visual-effects/reference-2d00e16/src
 export {MaterialInk as HeroInkBody} from '../../visual-effects/reference-2d00e16/src/material.js';
 
 export class HeroInkFluid extends StudyFluid {
+ prepareCloud(){return cloudPrograms(this);}
  dispose(){if(this.cloudPrograms)for(const p of Object.values(this.cloudPrograms))this.gl.deleteProgram(p);super.dispose();}
  inject(ink){
   const core=this.core,size=Math.max(0,Math.min(1,((core?.radius||0)-.10)/.30)),moving=Math.min(1,(core?.speed||0)/.16);
