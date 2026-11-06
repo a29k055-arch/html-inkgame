@@ -76,3 +76,21 @@ body[data-experience=reveal] .dash-icon{width:28px;height:28px;justify-self:cent
 #revealMeter{width:min(580px,48vw);padding:6px 14px;background:#f8f0dfbf;border-radius:9px;box-shadow:none}#revealMeter header{font-size:12px}#revealProgress{height:4px;margin-top:5px}#revealInk{font-size:9px;margin-top:3px}@media(max-width:700px){#revealMeter{left:14px;top:70px;width:calc(100vw - 120px);padding:6px 10px}}
 
 body[data-experience=reveal] .dash-icon{filter:none;background:#efe7d3;border-radius:50%;padding:3px;width:34px;height:34px}#revealInk img{width:17px;height:17px;vertical-align:middle;margin-right:4px}
+
+/* V4: readable painting progress and timed pickups share one compact strip. */
+body[data-experience=reveal] #revealMeter{width:min(680px,54vw);padding:8px 14px;border-radius:11px}
+body[data-experience=reveal] #revealMeter header{align-items:baseline;font-size:12px;line-height:1.3}
+body[data-experience=reveal] #revealPercent{font-size:17px;font-weight:600;letter-spacing:.025em;color:#654c34}
+body[data-experience=reveal] #revealProgress{height:6px;margin-top:5px;border-radius:5px;overflow:hidden}
+body[data-experience=reveal] .reveal-meter-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:26px;margin-top:4px}
+body[data-experience=reveal] #revealInk{margin:0;font-size:10px;white-space:nowrap}
+body[data-experience=reveal] #revealBuffs{display:flex;align-items:center;justify-content:flex-end;gap:5px}
+body[data-experience=reveal] #revealBuffs[hidden],body[data-experience=reveal] .reveal-buff[hidden]{display:none}
+body[data-experience=reveal] .reveal-buff{display:inline-flex;align-items:center;gap:2px;min-width:41px;padding:2px 4px 2px 2px;border-radius:13px;background:#fdf8e9b8;border:1px solid #9b8a5b33;color:#625b45}
+body[data-experience=reveal] .reveal-buff img{width:23px;height:23px;object-fit:contain}
+body[data-experience=reveal] .reveal-buff time{font-size:10px;line-height:1;font-variant-numeric:tabular-nums;min-width:15px}
+body[data-experience=reveal] #notice{top:clamp(135px,20vh,190px);padding:9px 16px;max-width:min(580px,88vw);font-size:12px;line-height:1.5}
+@media(max-width:700px){body[data-experience=reveal] #revealMeter{top:94px;left:14px;transform:none;width:calc(100vw - 28px);padding:7px 11px}body[data-experience=reveal] #revealPercent{font-size:16px}body[data-experience=reveal] .reveal-meter-footer{gap:6px;min-height:25px}body[data-experience=reveal] #revealBuffs{gap:4px}body[data-experience=reveal] .reveal-buff{min-width:39px;padding-right:3px}body[data-experience=reveal] .reveal-buff img{width:22px;height:22px}body[data-experience=reveal] #notice{top:clamp(184px,23vh,225px);font-size:11px;max-width:calc(100vw - 36px)}}
+@media(max-height:500px) and (min-width:500px){body[data-experience=reveal] #revealMeter{left:50%;top:12px;transform:translateX(-50%);width:min(610px,calc(100vw - 300px));padding:6px 10px}body[data-experience=reveal] #notice{top:100px}body[data-experience=reveal] #revealPercent{font-size:15px}body[data-experience=reveal] .reveal-meter-footer{min-height:23px}}
+
+body[data-experience=reveal] #revealProgress{appearance:none;-webkit-appearance:none;background:#d6cbb8;border:none;accent-color:#434d40}body[data-experience=reveal] #revealProgress::-webkit-progress-bar{background:#d6cbb8;border-radius:5px}body[data-experience=reveal] #revealProgress::-webkit-progress-value{background:linear-gradient(90deg,#303b33,#72795f);border-radius:5px}body[data-experience=reveal] #revealProgress::-moz-progress-bar{background:#434d40;border-radius:5px}
