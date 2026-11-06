@@ -657,4 +657,4 @@ This update keeps the original demo and adds a new playable version at `outputs/
 
 
 ### 发布可靠性补记
-最终r2第一次发布在GitHub Pages syncing_files阶段超时（构建/上传均成功）；发布步骤延长等待至20分钟并正常提交重试，游戏代码不变。最终部署结果见Handoff。
+最终r2第一次发布在GitHub Pages syncing_files阶段超时（构建/上传均成功）；发布步骤延长等待至20分钟并正常提交重试，游戏代码不变。重试42282690521成功，公开运行1eee4ba；V4新参数、GPU墨云与PC/触控入口复验通过，V2/V3固定源码不变。最后仅验收文档提交跳过重复构建。

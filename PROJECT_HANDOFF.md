@@ -990,3 +990,12 @@ V2新映射1bb0250的本机归档已实测原始入口重定向、过场/回退�
 
 ### 2026-11-07 Pages平台同步超时与重试
 42280484141的打包/上传成功，但deploy-pages默认600000ms内一直syncing_files，最终取消；不是资源404、import或游戏异常。原生GitHub连接器重跑接口返回Resource not accessible by integration（403），因此用正常Git push触发新发布，不改远端保护/不强推。主Pages步骤超时设置为1200000ms（官方action.yml确认单位），以容纳平台文件同步波动；不改变V2/V3打包策略。最终结果待发布补记核对，不把超时部署写为成功。
+
+
+## 2026-11-07 — 最终公开发布补记 [LATEST]
+
+最终游戏代码与v4-ink-cloud-20261107-r2/c06dc9c一致；部署提交1eee4ba只另含发布等待配置与文档。Pages Actions 42282690521重试成功（首次42280484141在syncing_files超时取消）。公开versions.json root/V4=1eee4ba，V2=1bb0250、V3=d882581。
+
+work/nov7-final-online.cjs实际复验通过：V2/V3 index源码哈希与固定引用一致，可进入游戏；V4 PC/390×844触控移动、Shift/触控加速、三语言、Gallery/Settings通过；实际加载heroPreset=cloud、heroTrailMode=gpu-cloud、fallback=false、targets12、movingFactor=.15、goal=.5。六个视觉候选/停止场景与归档入口通过，V3/V4无pageerror/请求错误；V2原MOV被浏览器取消但HTTP200且原有回退正常，不改冻结原版。报告work/nov7-r2-published-report.json。
+
+本次最后的[skip ci]提交仅记录验收文档，没有产品代码或构建配置变更，避免重复触发已经成功的Pages同步；因此公开运行SHA保持1eee4ba，可能与最新文档HEAD不同，这是预期的docs-only差异，不是发布故障。下轮先读本节与最上方最终验收；不重新开发已通过修复。
