@@ -8,7 +8,7 @@
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |
 | V2｜更早期原版游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-original → 1bb0250（原版入口重定向至 outputs/ink_demo_v2.html） |
 
-按本轮定义纠正编号：V2原版、V3复杂玩法、V4涂色。本机打包与GitHub Pages三个公开地址均已实测可启动（2026-11-07，最终r2发布42282690521，公开运行版本1eee4ba）；最终验证见PROJECT_HANDOFF发布补记。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；旧涂色快照保留于 /previews/reveal-scroll/ 和 /archive/reveal-v3/（旧误标V3，来源1faf41f）；原误标V2的复杂快照另保留 /archive/scroll-v2/。历史Git标签不移动。V4使用独立本机存档 boku.save.v4，首次兼容读取旧记录但不改写旧键；V2/V3保留原存档方式。
+按本轮定义纠正编号：V2原版、V3复杂玩法、V4涂色。本机打包与GitHub Pages三个公开地址均已实测可启动（2026-11-09，发布42523329507，公开运行版本fd9ea21）；最终验证见PROJECT_HANDOFF发布补记。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；旧涂色快照保留于 /previews/reveal-scroll/ 和 /archive/reveal-v3/（旧误标V3，来源1faf41f）；原误标V2的复杂快照另保留 /archive/scroll-v2/。历史Git标签不移动。V4使用独立本机存档 boku.save.v4，首次兼容读取旧记录但不改写旧键；V2/V3保留原存档方式。
 
 - [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V4）
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
