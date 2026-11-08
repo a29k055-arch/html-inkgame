@@ -9,7 +9,7 @@ import {QUALITY} from '../../prototypes/ink/src/config.js';
 import {PaperMap} from './paper-map.js';
 import {GAME_CONFIG as C,clamp} from '../game/config.js';
 import {followCamera} from '../game/camera.js';
-import {NpcPainter} from './npc-painter.js';
+import {NpcPainter,paintNpcDanger} from './npc-painter.js';
 export class GameRenderer {
  constructor(output,quality,mode,visual={}){
   this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.world=visual.world||C.world;this.ground=visual.ground;this.itemPainter=visual.itemPainter;this.foodPainter=visual.foodPainter;this.bodyVisual={...HERO_BODY_CONFIG,...visual.body};this.trail=new (visual.TrailClass||HeroWorldTrail)(visual.trail);this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
@@ -49,6 +49,8 @@ export class GameRenderer {
   this.trail.draw(c,'ink',{...cam,width:w,height:h});
   for(const food of game.foods){if(!this.visible(food,12))continue;if(this.foodPainter){this.foodPainter(c,food);continue;}c.save();c.translate(food.x,food.y);c.rotate(food.rot);c.fillStyle=`rgba(39,35,27,${food.alpha})`;c.beginPath();if(food.shape==='circle'){c.arc(0,0,food.r,0,Math.PI*2);}else{const sides=food.shape==='square'?4:food.shape==='triangle'?3:5;for(let i=0;i<sides;i++){const a=i/sides*Math.PI*2-Math.PI/2;c.lineTo(Math.cos(a)*food.r,Math.sin(a)*food.r);}c.closePath();}c.fill();c.restore();}
   for(const item of game.items){if(!this.visible(item,20))continue;if(this.itemPainter){this.itemPainter(c,item);continue;}c.save();c.translate(item.x,item.y);c.rotate(Math.PI/4);c.shadowBlur=10;c.shadowColor='#f7e4a1';c.fillStyle='#b6a16a';c.fillRect(-8,-8,16,16);c.strokeStyle='#faf0cd';c.strokeRect(-6,-6,12,12);c.restore();}
+  // V4 warnings belong to each threatening NPC, under its ink body.
+  for(const npc of game.entities.slice(1))if(!npc.dead&&this.visible(npc,npc.r*1.8+25))paintNpcDanger(c,npc,p,scale);
   game.entities.slice(1).forEach((npc,i)=>{if(!npc.dead&&this.visible(npc,npc.r*1.8+25))this.npcs.draw(c,npc,i,game.entities,game.theme==='boss'?game.player:null);});
   for(const wave of game.waves){c.save();c.translate(wave.x,wave.y);c.rotate(Math.atan2(wave.aim.y,wave.aim.x));c.strokeStyle=`rgba(66,60,45,${.28*(1-wave.age/C.skillDurations.splash)})`;c.lineWidth=16*(1-wave.age/C.skillDurations.splash);c.beginPath();c.arc(0,0,wave.range*wave.age/C.skillDurations.splash,-1,1);c.stroke();c.restore();}
   c.restore();

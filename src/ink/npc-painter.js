@@ -1,5 +1,18 @@
-import {CONTACT_CONFIG as VISUAL} from '../game/config.js';
+import {CONTACT_CONFIG as VISUAL,GAME_CONFIG} from '../game/config.js';
+import {coreRadius,visualRadius} from '../game/alien-geometry.js';
 import {alienBody,alienDetails} from './alien-ink.js';
+
+// Presentation-only warning: compares the same current core radii as swallowing.
+export const NPC_DANGER_STYLE=Object.freeze({nearMinimum:180,nearMaximum:420,nearPlayerScale:2.5,thornOutlineScale:1.50,eyeOutlineScale:1.20,gapPixels:5,linePixels:1.15,minAlpha:.16,maxAlpha:.32});
+export function npcDangerState(enemy,player,scale=1){
+ if(!player||!enemy?.v4Visual||enemy===player||enemy.dead||player?.dead||enemy.effects?.water||player?.effects?.water)return null;
+ const enemyCore=coreRadius(enemy),playerCore=coreRadius(player),threshold=playerCore*GAME_CONFIG.consumeRatio;
+ if(enemyCore<=threshold+1e-6)return null;
+ const distance=Math.hypot(enemy.x-player.x,enemy.y-player.y),range=enemyCore+playerCore+Math.max(NPC_DANGER_STYLE.nearMinimum,Math.min(NPC_DANGER_STYLE.nearMaximum,playerCore*NPC_DANGER_STYLE.nearPlayerScale));
+ if(distance>range)return null;
+ const near=1-distance/range;return {enemyCore,playerCore,threshold,distance,range,radius:visualRadius(enemy)*(enemy.appearance==='thorn'?NPC_DANGER_STYLE.thornOutlineScale:NPC_DANGER_STYLE.eyeOutlineScale)+NPC_DANGER_STYLE.gapPixels/scale,alpha:NPC_DANGER_STYLE.minAlpha+(NPC_DANGER_STYLE.maxAlpha-NPC_DANGER_STYLE.minAlpha)*near};
+}
+export function paintNpcDanger(c,enemy,player,scale=1){const state=npcDangerState(enemy,player,scale);if(!state)return false;c.save();c.strokeStyle='rgba(151,64,43,'+state.alpha+')';c.lineWidth=NPC_DANGER_STYLE.linePixels/scale;c.beginPath();c.arc(enemy.x,enemy.y,state.radius,0,Math.PI*2);c.stroke();c.restore();return true;}
 
 // Runtime draws only cached animation. The bake's fluid never reaches a player renderer.
 export class NpcPainter {

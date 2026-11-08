@@ -4,7 +4,7 @@
 
 | 版本 | 直接游玩 | 冻结引用与来源 |
 |---|---|---|
-| **V4｜最新版水墨涂色游戏** | **[打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/)** | main 持续维护；本轮标签 v4-ink-cloud-20261107-r2 |
+| **V4｜最新版水墨涂色游戏** | **[打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/)** | main 持续维护；本轮标签 v4-living-cloud-20261109 |
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |
 | V2｜更早期原版游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-original → 1bb0250（原版入口重定向至 outputs/ink_demo_v2.html） |
 
@@ -18,16 +18,18 @@
 - [水墨效果对比实验室](https://a29k055-arch.github.io/html-inkgame/visual-effects/lab.html)
 - [视觉来源与参数](visual-effects/REFERENCE.md)
 
-V4已发布至main，一局显现一幅画：移动显画、吞敌大落墨、敌人柔和侵蚀，完成后进入Gallery。V4将短时美术墨尾、30秒临时显画和吞敌永久落墨分开；Boss/碎片/抽卡停用，旧流程在V3固定入口保留；卷轴首页、三语言、Settings与冻结视觉参考继续保留。
+V4已发布至main，一局显现一幅画：移动显画、吞敌大落墨、敌人柔和侵蚀，完成后进入Gallery。V4将短时美术墨尾、随体型28–48秒临时显画和吞敌永久落墨分开；Boss/碎片/抽卡停用，旧流程在V3固定入口保留；卷轴首页、三语言、Settings与冻结视觉参考继续保留。
 
 - [Reveal Painting Preview](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/)（上一版涂色快照兼容地址，不是本轮定义的V3）
 - [Preserved Campaign](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/classic.html)（保留旧流程）
 
 本地运行：node tools/serve-preview.cjs 4190，打开脚本输出的根首页。平衡与架构见 [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md)。
 
+本轮参数、视觉方案与验证边界见 [11月9日说明](docs/V4-2026-11-09.md)。V4地图扩大15%，墨龟半径临时增加30%持续5秒；V2/V3冻结引用不变。本轮部署结果以PROJECT_HANDOFF最新发布补记为准。
+
 ## 当前显画玩法
 
-12分钟内实时绘画进度达到50%后完成画作。进度为临时与持续显画Alpha的max并集，重叠不重复计算；眼球涂白和临时过期会使进度回退。临时显画只来自实际可见墨体/有效尾迹的定频Alpha采样，保持30秒后5秒淡出。吞敌Drops最终定帧Alpha与显画直接共享，普通墨点只成长。E参考墨云默认，A/B/C/D/E/G可在共享测试页切换，并支持体型/速度/路线比较；短时美术尾迹与绘画计时独立。所有NPC逐渐涂白，刺球另有周期掉墨；墨龟临时变大、墨虾磁吸、墨鱼加速。
+14分钟内实时绘画进度达到50%后完成画作。进度为临时与持续显画Alpha的max并集，重叠不重复计算；眼球涂白和临时过期会使进度回退。临时显画只来自实际可见墨体/有效尾迹的定频Alpha采样，按当次体型保持28–48秒后5秒淡出。吞敌Drops最终定帧Alpha与显画直接共享，普通墨点只成长。H缓流墨云默认（E对照保留），A/B/C/D/E/G/H可在共享测试页切换，并支持体型/速度/路线比较；短时美术尾迹与绘画计时独立。所有NPC逐渐涂白，刺球另有周期掉墨；墨龟临时变大、墨虾磁吸、墨鱼加速。
 
 
 ## 历史复杂玩法说明（V3／classic.html）
