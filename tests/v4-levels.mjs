@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {REVEAL_ARTWORKS,selectRevealArtwork,artworkWorld} from '../src/reveal/artwork-levels.js';
+import {recordRevealRun,getSave,updateSettings,resetSave} from '../src/data/save.js';
+assert.equal(REVEAL_ARTWORKS.length,11);
+const first=REVEAL_ARTWORKS[0],second=REVEAL_ARTWORKS[1];
+const save={settings:{},unlockedArtworks:[],progress:{revealArtworks:{}}};
+assert.equal(selectRevealArtwork(save).id,first.id);
+save.unlockedArtworks.push(first.id);assert.equal(selectRevealArtwork(save).id,second.id);
+save.settings.selectedRevealArtwork=first.id;assert.equal(selectRevealArtwork(save).id,first.id,'manual replay overrides automatic next');
+save.settings.selectedRevealArtwork='invalid';assert.equal(selectRevealArtwork(save).id,second.id);
+save.settings.selectedRevealArtwork=null;save.unlockedArtworks=REVEAL_ARTWORKS.map(a=>a.id);assert.equal(selectRevealArtwork(save).id,first.id);
+for(const art of REVEAL_ARTWORKS){const world=artworkWorld(art);assert(Math.abs(world.width/world.height-art.width/art.height)<1e-12);assert.equal(Math.max(world.width,world.height),3910);const rows=Math.ceil(world.columns*world.height/world.width);assert(world.columns*rows<264000,'portrait grids must not multiply mobile memory');assert(world.width>1000&&world.height>1000);}
+resetSave();updateSettings({...getSave().settings,selectedRevealArtwork:'ink-01'});
+recordRevealRun('ink-01',.4,false,'portrait-partial');assert.equal(getSave().progress.revealArtworks['ink-01'].completed,false);
+assert(!getSave().unlockedArtworks.includes('ink-01'));
+recordRevealRun('ink-01',1,true,'portrait-win');assert(getSave().unlockedArtworks.includes('ink-01'));
+const attempts=getSave().progress.revealArtworks['ink-01'].attempts;
+assert.equal(recordRevealRun('ink-01',1,true,'portrait-win'),false);assert.equal(getSave().progress.revealArtworks['ink-01'].attempts,attempts);
+assert.equal(getSave().settings.selectedRevealArtwork,'ink-01');
+console.log('PASS eleven stable levels, automatic unfinished order/manual replay, original aspect and bounded portrait grids, partial/complete/idempotent per-artwork receipts');

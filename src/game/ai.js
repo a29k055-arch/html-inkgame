@@ -32,7 +32,7 @@ export function chooseGoal(game,e){
   const sizeRatio=own/game.radius(prey),distance=dist(e,prey);if(sizeRatio<1.12||prey.invincible||p.hunt<.15||dist(prey,center)>game.safeRadius-e.r+waterLimit)continue;
   const speedRatio=game.speed(e)/game.speed(prey),closing=distance/Math.max(25,game.speed(e));
   if(speedRatio<.86&&distance>own+140)continue;
-  const previous=ctrl.goal?.id===prey.id;if(previous&&ctrl.chaseTime>4.5&&distance>own+100&&distance>=ctrl.previousDistance-8)continue;
+  if(e.v4Visual&&ctrl.v4IgnoreId===prey.id&&game.elapsed<ctrl.v4IgnoreUntil)continue;const previous=ctrl.goal?.id===prey.id;if(previous&&ctrl.chaseTime>4.5&&distance>own+100&&distance>=ctrl.previousDistance-8)continue;
   const reward=prey.mass*C.npcGain/(e.mass+200),risk=threatCost(prey,threats,e,game);
   const score=p.hunt*(reward+1.1)/(1+closing*.65)-risk*(2-p.risk)-Math.max(0,dist(prey,center)+e.r-game.safeRadius)/Math.max(1,waterLimit)*.8;
   if(score>best){best=score;goal={id:prey.id,x:prey.x+prey.vx*.3*p.skill,y:prey.y+prey.vy*.3*p.skill};intent='hunt';ctrl.prey=prey;}
@@ -45,12 +45,13 @@ export function chooseGoal(game,e){
  ctrl.previousDistance=dist(e,goal);ctrl.intent=intent;return goal;
 }
 export function aiDirection(game,e,dt){if(game.theme==='boss')return clashDirection(game,e,dt);
- const ctrl=e.controller;ctrl.waterExposure=dist(e,game.center)+e.r>game.safeRadius?(ctrl.waterExposure||0)+dt:0;ctrl.think-=dt;if(ctrl.think<=0||!ctrl.goal){ctrl.goal=chooseGoal(game,e);ctrl.think=ctrl.profile.reaction*random(.8,1.3);}
+ const ctrl=e.controller,c=game.behavior,variant=e.v4Visual&&c;if(variant){ctrl.v4Cycle=(ctrl.v4Cycle||0)-dt;if(ctrl.v4Cycle<=0){ctrl.v4Cycle=random(c.cycleMin,c.cycleMax);ctrl.v4Patience=random(c.patienceMin,c.patienceMax);ctrl.v4Noise=random(c.noiseMin,c.noiseMax);ctrl.v4Phase=random(0,Math.PI*2);ctrl.v4Rethink=random(.85,1.15);}if(ctrl.intent==='hunt'&&ctrl.goal?.id){if(ctrl.v4HuntTarget!==ctrl.goal.id){ctrl.v4HuntTarget=ctrl.goal.id;ctrl.v4HuntTime=0;}ctrl.v4HuntTime=(ctrl.v4HuntTime||0)+dt;const prey=game.entities.find(o=>o.id===ctrl.goal.id);if(ctrl.v4HuntTime>ctrl.v4Patience&&prey&&dist(e,prey)>game.radius(e)+game.radius(prey)+24){ctrl.v4IgnoreId=prey.id;ctrl.v4IgnoreUntil=game.elapsed+random(c.cooldownMin,c.cooldownMax);ctrl.goal=null;ctrl.prey=null;ctrl.v4HuntTime=0;}}else{ctrl.v4HuntTime=0;ctrl.v4HuntTarget=null;}}ctrl.waterExposure=dist(e,game.center)+e.r>game.safeRadius?(ctrl.waterExposure||0)+dt:0;ctrl.think-=dt;if(ctrl.think<=0||!ctrl.goal){ctrl.goal=chooseGoal(game,e);ctrl.think=ctrl.profile.reaction*random(.8,1.3)*(variant?ctrl.v4Rethink:1);}
  if(game.boundarySliding){const r=game.radius(e);ctrl.goal.x=clamp(ctrl.goal.x,r,game.world.width-r);ctrl.goal.y=clamp(ctrl.goal.y,r,game.world.height-r);if(ctrl.escapeUntil>game.elapsed){const dx=game.center.x-e.x,dy=game.center.y-e.y,n=Math.hypot(dx,dy)||1;ctrl.intent='reroute';return {x:dx/n,y:dy/n};}}
  let dx=ctrl.goal.x-e.x,dy=ctrl.goal.y-e.y,n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;
  // Legacy NPC-to-NPC avoidance, updated to include the human using the same strength rules.
  for(const other of game.entities){if(other===e||other.dead)continue;const d=dist(e,other),reach=e.r+other.r+150;if(d<1||d>reach)continue;const danger=game.radius(other)>game.radius(e)*1.06;const sameTarget=ctrl.goal.id===other.id;if(sameTarget&&!danger)continue;const weight=(reach-d)/reach*(danger?2.8: .35);dx+=(e.x-other.x)/d*weight;dy+=(e.y-other.y)/d*weight;}
  const world=game.world||C.world,margin=game.boundarySliding?game.radius(e)+20:e.r+75;dx+=(e.x<margin?.6:e.x>world.width-margin?-.6:0);dy+=(e.y<margin?.6:e.y>world.height-margin?-.6:0);
+ if(variant){const phase=game.elapsed+ctrl.v4Phase;dx+=Math.sin(phase*1.3)*ctrl.v4Noise;dy+=Math.cos(phase*.9)*ctrl.v4Noise;}
  if(ctrl.personality==='novice'){ctrl.routeSeed+=dt;dx+=Math.sin(ctrl.routeSeed)*.14;dy+=Math.cos(ctrl.routeSeed*1.3)*.14;}
  n=Math.hypot(dx,dy)||1;return {x:dx/n,y:dy/n};
 }

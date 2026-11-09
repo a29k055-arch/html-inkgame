@@ -1,0 +1,182 @@
+[
+  {
+    "id": "start-01",
+    "file": "start-01.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (1).mov",
+    "sourceSha256": "ec8eb6c69b29fc98cba064ce9fd2ed05643e02564d51fdae253315f80585d4f5",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 63698,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.10428433641975308,
+      "middle": 0.9612416031227305,
+      "last": 0.9884095860566449
+    }
+  },
+  {
+    "id": "start-02",
+    "file": "start-02.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (3).mov",
+    "sourceSha256": "04df1da765131eb1c609313467b049949654151dc5b533d1c9506d88767ac0d7",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 96082,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.039324845679012344,
+      "middle": 0.5001669163035585,
+      "last": 0.9213695987654321
+    }
+  },
+  {
+    "id": "start-03",
+    "file": "start-03.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (5).mov",
+    "sourceSha256": "15f22e5dd83d74a6763761aa6ecac48210a695db51677a4cc8c5fdfc541953e6",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 76788,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.19317969317356573,
+      "middle": 0.9635915940450254,
+      "last": 0.9884095860566449
+    }
+  },
+  {
+    "id": "start-04",
+    "file": "start-04.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (8).mov",
+    "sourceSha256": "2a75222fca61175d60653a9d52bcb75f4653da46b1c3d2d659ef4a9ccfe4f7b1",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 86748,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.14982865831517791,
+      "middle": 0.6389357525417575,
+      "last": 0.9884212736020334
+    }
+  },
+  {
+    "id": "start-05",
+    "file": "start-05.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (10).mov",
+    "sourceSha256": "c0443b6e7a388fd104b57603aa293b27a896ec72761be2ffe3a47105fc594acc",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 234118,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.07306066176470588,
+      "middle": 0.5728483569353667,
+      "last": 0.9113608614742194
+    }
+  },
+  {
+    "id": "start-06",
+    "file": "start-06.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (13).mov",
+    "sourceSha256": "4fc2d7d2d942c241f99462953740381635699c4b2cb15eea773c2d8d6ac96545",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 54960,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.17204180283224402,
+      "middle": 0.7452859477124183,
+      "last": 0.9884095860566449
+    }
+  },
+  {
+    "id": "start-07",
+    "file": "start-07.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (17).mov",
+    "sourceSha256": "a195c2d71518d6bc8aa03ed07269af568240d9907507c0e582a6381dc0f7c016",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 110838,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.04330383079157589,
+      "middle": 0.6263146786492375,
+      "last": 0.9876865468409586
+    }
+  },
+  {
+    "id": "start-08",
+    "file": "start-08.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (21).mov",
+    "sourceSha256": "86b649542b028cd059a6d7a54e18640a17bfc0448e717270ad2a36281cac97a4",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 104516,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.189520697167756,
+      "middle": 0.8429292619825708,
+      "last": 0.9881869553376906
+    }
+  },
+  {
+    "id": "start-09",
+    "file": "start-09.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (29).mov",
+    "sourceSha256": "b7178c7d33be17a8f832a62b04b2df6bfc0e907869d94befcd6dab5520c6e49d",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 101254,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.23084434005083515,
+      "middle": 0.7705801788307916,
+      "last": 0.988166190087146
+    }
+  },
+  {
+    "id": "start-10",
+    "file": "start-10.webp",
+    "source": "Transitions/Version 1/LookAE Ink Transition (V1) (35).mov",
+    "sourceSha256": "89dead4a4631472c401d74a71f4d26a24d24c1e342a8098a5a20b3e9736bf589",
+    "width": 256,
+    "height": 135,
+    "columns": 6,
+    "frames": 36,
+    "duration": 2,
+    "bytes": 132300,
+    "decodedBytes": 4976640,
+    "alphaCoverage": {
+      "first": 0.43553002450980394,
+      "middle": 0.7479406091140159,
+      "last": 0.9884095860566449
+    }
+  }
+]
