@@ -1,0 +1,326 @@
+{
+  "date": "2026-11-10",
+  "codeCommit": "4d06bbb8cf69ee13be500e29cdb6a665d52fbd3b",
+  "pagesRun": 42662196801,
+  "pagesConclusion": "success",
+  "versions": {
+    "v2": {
+      "ref": "v2-original",
+      "sha": "1bb02502f68b6fd99e28338ef183825711054443"
+    },
+    "v3": {
+      "ref": "v3-roguelike",
+      "sha": "d882581af3ea15193e7cd880017cd2295a6fad21"
+    },
+    "v4": {
+      "ref": "HEAD",
+      "sha": "4d06bbb8cf69ee13be500e29cdb6a665d52fbd3b"
+    }
+  },
+  "tests": [
+    {
+      "name": "campaign-rules.mjs",
+      "passed": true
+    },
+    {
+      "name": "collision-camera.mjs",
+      "passed": true
+    },
+    {
+      "name": "combat-ai.mjs",
+      "passed": true
+    },
+    {
+      "name": "combat-ecology.mjs",
+      "passed": true
+    },
+    {
+      "name": "deep-combat.mjs",
+      "passed": true
+    },
+    {
+      "name": "deep-presets.mjs",
+      "passed": true
+    },
+    {
+      "name": "deep-reveal.mjs",
+      "passed": true
+    },
+    {
+      "name": "game-rules.mjs",
+      "passed": true
+    },
+    {
+      "name": "ink-life-cards.mjs",
+      "passed": true
+    },
+    {
+      "name": "ink-reserve.mjs",
+      "passed": true
+    },
+    {
+      "name": "paper-save.mjs",
+      "passed": true
+    },
+    {
+      "name": "reveal-mask.mjs",
+      "passed": true
+    },
+    {
+      "name": "reveal-run.mjs",
+      "passed": true
+    },
+    {
+      "name": "reveal-save.mjs",
+      "passed": true
+    },
+    {
+      "name": "scroll-items-ranged.mjs",
+      "passed": true
+    },
+    {
+      "name": "ui-boss-upgrade.mjs",
+      "passed": true
+    },
+    {
+      "name": "ui-ecosystem.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-boundaries.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-levels.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-nov10-mechanics.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-nov6.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-nov7-mechanics.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-nov9-mechanics.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-nov9-npc.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-reveal-layers.mjs",
+      "passed": true
+    },
+    {
+      "name": "v4-start-transitions.mjs",
+      "passed": true
+    },
+    {
+      "name": "visual-recovery.mjs",
+      "passed": true
+    },
+    {
+      "name": "world-trails-phases.mjs",
+      "passed": true
+    }
+  ],
+  "artworks": [
+    {
+      "id": "ink-04",
+      "width": 2774,
+      "height": 1275,
+      "ratioError": 0,
+      "columns": 512,
+      "rows": 236,
+      "hasInk": true,
+      "inkFraction": 0.1241271771378576
+    },
+    {
+      "id": "ink-13",
+      "width": 1175,
+      "height": 499,
+      "ratioError": 0,
+      "columns": 512,
+      "rows": 218,
+      "hasInk": true,
+      "inkFraction": 0.2108163172923091
+    },
+    {
+      "id": "ink-01",
+      "width": 690,
+      "height": 1056,
+      "ratioError": 0,
+      "columns": 335,
+      "rows": 513,
+      "hasInk": true,
+      "inkFraction": 0.2054990428834044
+    },
+    {
+      "id": "ink-06",
+      "width": 952,
+      "height": 1464,
+      "ratioError": 0,
+      "columns": 333,
+      "rows": 513,
+      "hasInk": true,
+      "inkFraction": 0.04829205159008588
+    },
+    {
+      "id": "ink-07",
+      "width": 741,
+      "height": 1586,
+      "ratioError": 0,
+      "columns": 239,
+      "rows": 512,
+      "hasInk": true,
+      "inkFraction": 0.10996956965922007
+    },
+    {
+      "id": "ink-08",
+      "width": 821,
+      "height": 1618,
+      "ratioError": 0,
+      "columns": 260,
+      "rows": 513,
+      "hasInk": true,
+      "inkFraction": 0.14470260411694838
+    },
+    {
+      "id": "ink-10",
+      "width": 813,
+      "height": 1596,
+      "ratioError": 0,
+      "columns": 261,
+      "rows": 513,
+      "hasInk": true,
+      "inkFraction": 0.22343379274899788
+    },
+    {
+      "id": "ink-09",
+      "width": 548,
+      "height": 1512,
+      "ratioError": 0,
+      "columns": 186,
+      "rows": 514,
+      "hasInk": true,
+      "inkFraction": 0.2625689011783746
+    },
+    {
+      "id": "ink-11",
+      "width": 439,
+      "height": 1640,
+      "ratioError": 0,
+      "columns": 137,
+      "rows": 512,
+      "hasInk": true,
+      "inkFraction": 0.2449598606176214
+    },
+    {
+      "id": "ink-12",
+      "width": 965,
+      "height": 499,
+      "ratioError": 0,
+      "columns": 512,
+      "rows": 265,
+      "hasInk": true,
+      "inkFraction": 0.08086193680075887
+    },
+    {
+      "id": "ink-05",
+      "width": 2622,
+      "height": 1269,
+      "ratioError": 0,
+      "columns": 512,
+      "rows": 248,
+      "hasInk": true,
+      "inkFraction": 0.13417491443764737
+    }
+  ],
+  "portrait": [
+    {
+      "mobileEmulation": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "layer": {
+        "width": 1280,
+        "height": 4782
+      },
+      "frames": 596,
+      "seconds": 10.00459999997616,
+      "fps": 59.5725966057034,
+      "pageErrors": []
+    },
+    {
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "layer": {
+        "width": 1280,
+        "height": 4782
+      },
+      "frames": 601,
+      "seconds": 10.009300000071526,
+      "fps": 60.04415893176399,
+      "pageErrors": []
+    }
+  ],
+  "online": [
+    {
+      "version": "v2",
+      "mobileEmulation": false,
+      "errors": [
+        "https://a29k055-arch.github.io/html-inkgame/v2/outputs/assets/ink-mattes/transitions/transition-v2-02.mov net::ERR_ABORTED"
+      ]
+    },
+    {
+      "version": "v3",
+      "mobileEmulation": false,
+      "errors": [],
+      "scene": "normal"
+    },
+    {
+      "version": "v4",
+      "mobileEmulation": false,
+      "errors": [],
+      "heroPreset": "wash",
+      "scene": "playing",
+      "artworkId": "ink-04",
+      "transition": {
+        "id": "start-07",
+        "phase": "idle",
+        "switches": 1
+      }
+    },
+    {
+      "version": "v4",
+      "mobileEmulation": true,
+      "errors": [],
+      "heroPreset": "wash",
+      "scene": "playing",
+      "artworkId": "ink-04",
+      "transition": {
+        "id": "start-05",
+        "phase": "idle",
+        "switches": 1
+      }
+    }
+  ],
+  "visualPageErrors": [],
+  "limitations": [
+    "Native touch emulation is not physical phone certification.",
+    "Normal complete-game runs cover the first artwork; weighted-ink victory is independently verified in fixtures.",
+    "V2 retains its pre-existing MOV abort with HTTP 200 and working fallback.",
+    "Portrait backing canvas is 1280x4782; current desktop/emulated-touch sample is stable but low-memory hardware is not certified."
+  ]
+}
