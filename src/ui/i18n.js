@@ -2,7 +2,9 @@ import {getSave,updateSettings} from '../data/save.js';
 
 // Every current-game message lives here. Legacy routes keep their original UI.
 const rows={
-revealFlowerPicked:["蓮花 · 3秒間、墨粒 +25%","墨荷花 · 墨点收益+25%，持续3秒","Lotus Blossom · +25% food ink for 3s"],
+materialNoticeText:["本作の絵画と素材は、展示・鑑賞・ゲーム体験のために使用しています。本作の利用によって、素材の抽出、転載、商用利用、再配布の許可が与えられるものではありません。各素材の権利はそれぞれの権利者に帰属します。","本项目中的画作与相关素材仅用于展示、观赏与游玩体验。使用本项目不代表取得素材的提取、转载、商业使用或二次分发许可。相关权利归各权利人所有。","The paintings and materials in this project are presented for viewing and gameplay. Using the game does not grant permission to extract, republish, commercially use or redistribute these materials. Rights remain with their respective holders."],
+materialNotice:["著作権・素材について","版权声明／素材说明","Copyright & Materials"],
+revealFlowerPicked:["蓮花 · 墨粒+25%、3秒追加","墨荷花 · 墨点收益+25%，增加3秒","Lotus Blossom · +25% food ink, +3s"],
 revealLeafPicked:["蓮葉 · 3秒間、近くの絵を守る","墨荷叶 · 护墨3秒","Lotus Leaf · protect nearby ink for 3s"],
 revealFlowerEffect:["墨粒の獲得量 +25%","墨点收益 +25%","Food ink +25%"],
 revealLeafEffect:["近くの塗り戻し −50%","附近涂白减弱50%","Nearby whitening −50%"],
@@ -26,9 +28,9 @@ revealShieldPicked:["墨亀 · 5秒間、大きさ +30%","墨龟 · 体型 +30%�
 revealSpeedPicked:["墨鯉 · 短い加速","墨鲤 · 短时加速","Ink Koi · temporary speed"],
 revealTurtleName:["墨亀","墨龟","Ink Turtle"],revealShrimpName:["墨海老","墨虾","Ink Shrimp"],revealKoiName:["墨鯉","墨鲤","Ink Koi"],
 revealTurtleEffect:["大きさ +30%","体型 +30%","Size +30%"],revealShrimpEffect:["吸引範囲 +50%","吸附范围 +50%","Attraction range +50%"],revealKoiEffect:["移動速度上昇","移动加速","Movement boost"],
-revealTurtlePicked:["墨亀 · 3秒間、大きさ +30%","墨龟 · 体型 +30%，持续3秒","Ink Turtle · +30% size for 3s"],
-revealShrimpPicked:["墨海老 · 3秒間、吸引範囲 +50%","墨虾 · 吸附范围 +50%，持续3秒","Ink Shrimp · +50% attraction for 3s"],
-revealKoiPicked:["墨鯉 · 3秒間、移動速度上昇","墨鲤 · 加速3秒","Ink Koi · movement boost for 3s"],
+revealTurtlePicked:["墨亀 · 大きさ+30%、3秒追加","墨龟 · 体型+30%，增加3秒","Ink Turtle · +30% size, +3s"],
+revealShrimpPicked:["墨海老 · 吸引範囲+50%、3秒追加","墨虾 · 吸附范围+50%，增加3秒","Ink Shrimp · +50% attraction, +3s"],
+revealKoiPicked:["墨鯉 · 加速を3秒追加","墨鲤 · 加速增加3秒","Ink Koi · +3s boost"],
 revealGiant:["亀 {n}s","龟 {n}秒","Turtle {n}s"],revealMagnet:["海老 {n}s","虾 {n}秒","Shrimp {n}s"],
 revealBrief:["動いて絵を現し、小さな墨を捕食して大きく広げよう","移动显画，吞噬较小敌人可大范围扩张","Move to reveal. Swallow smaller ink to bloom outward."],
 revealFallback:["軽量描画で続けます","已启用轻量绘制，仍可完成画卷","Lightweight ink enabled; the full game remains playable."],
@@ -41,11 +43,11 @@ revealPending:["未完成","未完成","Unfinished"],
 revealGalleryHint:["好きな画巻を選んで遊べます。完成すると原画を鑑賞できます。","可选择任意画作游玩，完成后收藏完整原画。","Choose any painting to play. Complete it to collect the original."],
 revealGalleryNote:["次の画巻を選び、完成した絵を楽しみましょう。","选择下一局画作，收藏已完成的作品。","Choose your next painting and view completed works."],
 revealTeachWalk:["歩いて描く","移动显画","Move to Reveal"],
-revealTeachWalkText:["移動した墨の形が絵を現します。大きさに応じて28～48秒、墨500ごとにさらに1秒（最大12秒）残り、ゆっくり白に戻ります。","实际墨体经过的地方会显现画作，按体型保持28–48秒；每500墨再增加1秒，最多加12秒，之后逐渐变白。","Visible ink reveals the painting for 28–48s by size, plus 1s per 500 ink (up to 12 extra seconds), then fades."],
+revealTeachWalkText:["墨が触れた場所が絵を現します。体の大きさで28～48秒、墨250ごとにさらに1秒（最大12秒）残り、その後ゆっくり白に戻ります。","墨体实际接触的位置会显现画作，按体型保持28–48秒；每250墨再增加1秒，最多加12秒，之后逐渐变白。","Visible ink reveals the painting for 28–48s by size, plus 1s per 250 ink (up to 12 extra seconds), then fades."],
 revealTeachConsume:["捕食で広げる","吞噬扩张","Swallow to Bloom"],
-revealTeachConsumeText:["小さな相手を飲み込むと、墨滴が広がり長く残ります。池の亀・鯉・海老・蓮葉・蓮花は拾うと3秒間働きます。","吞噬较小敌人会留下持续落墨；池中墨龟、墨鲤、墨虾、荷叶、荷花拾取后立即生效3秒。","Swallow smaller enemies to leave lasting blooms. Pond turtles, koi, shrimp, leaves and blossoms grant 3-second effects."],
+revealTeachConsumeText:["小さな相手を飲み込むと、長く残る墨が広がります。海老・鯉・亀・蓮花は自分より小さければ食べられ、効果は3秒追加されます。強さは重なりません。","吞噬较小敌人会留下持续落墨。虾、鱼、龟和荷花需要体型足够才能拾取；每次增加3秒效果，不叠加强度。","Swallow smaller enemies for lasting blooms. Shrimp, koi, turtles and blossoms require enough body size to collect. Each adds 3s of duration, without stacking strength."],
 revealTeachDanger:["敵と道具","敌人与道具","Enemies & Pickups"],
-revealTeachDangerText:["敵は絵を少しずつ白く戻します。大きな刺の敵に触れると一定間隔で墨を失います。墨亀は5秒間30%大きく、墨海老は5秒間吸引範囲50%増、墨鯉は加速。Shiftか右下で短い疾走も使えます。","所有敌人会逐渐涂白画作，较大刺球接触尖刺会周期掉墨。吞噬小敌人扩张，墨龟令体型增大30%持续5秒，墨虾令吸附范围增加50%持续5秒，墨鲤立即加速；Shift 或右下按钮可短时加速。","All enemies gradually cover the painting. Larger thorns shed ink on contact at intervals. Turtle: +30% size for 5s. Shrimp: +50% attraction range for 5s. Koi: speed. Shift or the bottom-right button dashes."],
+revealTeachDangerText:["敵は現れた絵を白く戻します。大きな追手が近づいた時だけ朱の輪が現れます。蓮葉は食べられませんが、プレイヤーは下を通れ、敵を遮ります。葉のそばの花は放置すると新しい葉へ育ちます。","NPC会逐渐涂白画作；只有贴近且能吞噬你的追击者才显示朱砂圈。荷叶不能吃，玩家可从下方穿过，NPC会被挡住；叶旁荷花久未拾取会长成新叶。","NPCs gradually whiten revealed areas. A cinnabar ring marks a close pursuer that can swallow you. Leaves cannot be eaten: you can pass beneath them while NPCs are blocked. Uncollected nearby blossoms may grow into new leaves."],
 revealTeachFinish:["画巻を完成する","完成画卷","Complete the Painting"],
 revealTeachFinishText:["{duration}分以内に全体の{percent}%、または墨の絵柄の{inkPercent}%を現すと完成。画廊で解放され、次は別の画巻へ進めます。","在{duration}分钟内，总绘画进度达到{percent}%，或有墨区域显现达到{inkPercent}%，即可完成并在画廊解锁。","Within {duration} minutes, reveal {percent}% overall or {inkPercent}% of the ink details to unlock the painting in Gallery."],
 backGallery:["作品一覧","作品列表","Painting List"],
@@ -171,6 +173,6 @@ export const dictionaries=Object.fromEntries(LANGUAGES.map((l,i)=>[l,Object.from
 let language=LANGUAGES.includes(getSave().settings.language)?getSave().settings.language:'ja';
 export const getLanguage=()=>language;
 export function t(key,values={}){const message=dictionaries[language][key]||dictionaries.ja[key]||dictionaries[language].loadError;return message.replace(/\{(\w+)\}/g,(_,name)=>String(values[name]??'—'));}
-export function artTitle(art){return art.id==='ink-04'?t('painting01'):t('painting',{n:String(Number(art.label.match(/\d+/)?.[0])||1).padStart(2,'0')});}
+export function artTitle(art){if(art.title)return art.title;return art.id==='ink-04'?t('painting01'):t('painting',{n:String(Number(art.label.match(/\d+/)?.[0])||1).padStart(2,'0')});}
 export function applyTranslations(root=document){for(const e of root.querySelectorAll('[data-i18n]'))e.textContent=t(e.dataset.i18n);for(const e of root.querySelectorAll('[data-i18n-aria]'))e.setAttribute('aria-label',t(e.dataset.i18nAria));document.documentElement.lang=language==='zh'?'zh-CN':language;}
 export function setLanguage(next){if(!LANGUAGES.includes(next))return;language=next;updateSettings({...getSave().settings,language});if(typeof document!=='undefined'){applyTranslations();document.dispatchEvent(new Event('boku:language'));}}

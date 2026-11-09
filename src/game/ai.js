@@ -38,7 +38,7 @@ export function chooseGoal(game,e){
   if(score>best){best=score;goal={id:prey.id,x:prey.x+prey.vx*.3*p.skill,y:prey.y+prey.vy*.3*p.skill};intent='hunt';ctrl.prey=prey;}
  }
  // Linear scan avoids sorting the whole food list for every NPC.
- for(const food of game.foods){const distance=dist(e,food);if(distance>perception||dist(food,center)>game.safeRadius-45+waterLimit*.65)continue;const score=p.food*(.65+food.mass/60)/(1+distance/110)-threatCost(food,threats,e,game)*(2-p.risk)-Math.max(0,dist(food,center)+45-game.safeRadius)/Math.max(1,waterLimit)*1.2;if(score>best){best=score;goal={x:food.x,y:food.y};intent='forage';}}
+ for(const food of game.foods){if(game.isPointBlockedForNpc?.(food,e))continue;const distance=dist(e,food);if(distance>perception||dist(food,center)>game.safeRadius-45+waterLimit*.65)continue;const score=p.food*(.65+food.mass/60)/(1+distance/110)-threatCost(food,threats,e,game)*(2-p.risk)-Math.max(0,dist(food,center)+45-game.safeRadius)/Math.max(1,waterLimit)*1.2;if(score>best){best=score;goal={x:food.x,y:food.y};intent='forage';}}
  if(!game.simplePickups&&e.skills.length<2)for(const item of game.items){const distance=dist(e,item);if(distance>perception||dist(item,center)>game.safeRadius-45)continue;const score=p.items*1.7/(1+distance/150)-threatCost(item,threats,e,game)*2;if(score>best){best=score;goal={x:item.x,y:item.y};intent='item';}}
  if(!goal){ctrl.intent=edge?'water':'wander';return edge?{...center}:game.spawnPoint();}
  if(intent==='hunt'&&ctrl.goal?.id===goal.id)ctrl.chaseTime+=p.reaction;else ctrl.chaseTime=0;

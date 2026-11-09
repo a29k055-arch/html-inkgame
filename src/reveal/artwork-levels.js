@@ -1,4 +1,4 @@
-import {ARTWORKS} from '../data/artworks.js';
+import {V4_ARTWORKS as ARTWORKS} from '../data/v4-artworks.js';
 import {REVEAL_CONFIG} from './config.js';
 
 // Stable gallery IDs and existing pictures; no duplicate catalog or save namespace.

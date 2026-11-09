@@ -27,7 +27,7 @@ export class Inkstone {
   }
   this.foods=Array.from({length:this.foodTarget},()=>this.food());this.items=[];this.ranged=this.reserveGrowth?new RangedCombat(this):null;
  }
- constrain(e){const r=Math.min(this.radius(e),Math.min(this.world.width,this.world.height)/2-1);e.x=clamp(e.x,r,this.world.width-r);e.y=clamp(e.y,r,this.world.height-r);if((e.x<=r+.01&&e.vx<0)||(e.x>=this.world.width-r-.01&&e.vx>0))e.vx=0;if((e.y<=r+.01&&e.vy<0)||(e.y>=this.world.height-r-.01&&e.vy>0))e.vy=0;}
+ constrain(e){const r=Math.min(this.radius(e),Math.min(this.world.width,this.world.height)/2-1);e.x=clamp(e.x,r,this.world.width-r);e.y=clamp(e.y,r,this.world.height-r);if((e.x<=r+.01&&e.vx<0)||(e.x>=this.world.width-r-.01&&e.vx>0))e.vx=0;if((e.y<=r+.01&&e.vy<0)||(e.y>=this.world.height-r-.01&&e.vy>0))e.vy=0;if(e!==this.player)this.staticConstraint?.(e,r);}
  get safeRadius(){if(!this.shrink)return Math.hypot(this.world.width,this.world.height);const initial=Math.hypot(this.world.width,this.world.height)/2+30,t=clamp((this.elapsed/this.duration-C.waterRingStart)/(1-C.waterRingStart),0,1);return initial+(C.waterRingEndRadius-initial)*(1-(1-t)**C.waterRingExponent);}
  get rank(){return 1+this.entities.filter(e=>e!==this.player&&!e.dead&&e.mass>this.player.mass).length;}
  spawnPoint(clearance=0){
@@ -61,7 +61,7 @@ export class Inkstone {
  kill(e,killer){
   if(e.dead||e.invincible>0||e.effects.water)return false;
   if(blockHit(e)){e.invincible=this.combatRules?.lethalGrace||1.2;if(this.combatRules){e.effects.escape=this.combatRules.escapeDuration;e.shieldReason='swallow';}this.onEvent('shield',e);return false;}
-  if(killer){const rawGain=e.mass*C.npcGain*this.rewardMultiplier;let gain=killer.growth?Math.min(R.playerNpcGainCap,rawGain*R.playerNpcGainScale):rawGain;if(killer.growth){const before=killer.ink;gain*=this.growthFactor(killer);gainReserve(killer,gain,true,this.rewardChoices&&this.theme!=='boss');gain=killer.ink-before;}else{const before=killer.mass;killer.mass=Math.min(this.npcMaxRadius**2,killer.mass+gain);gain=killer.mass-before;killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}if(killer.controller.type==='ai'&&e.controller.type==='ai'){this.ecology.npcSwallows++;this.ecology.maxRadius=Math.max(this.ecology.maxRadius,killer.r);}killer.swallowed++;this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,coreRadius:this.radius(e),kind:'enemy'});}
+  if(killer){const rawGain=e.mass*C.npcGain*this.rewardMultiplier;let gain=killer.growth?Math.min(R.playerNpcGainCap,rawGain*R.playerNpcGainScale):rawGain;if(killer.growth){const before=killer.ink;gain*=this.growthFactor(killer);gainReserve(killer,gain,true,this.rewardChoices&&this.theme!=='boss');gain=killer.ink-before;}else{const before=killer.mass;killer.mass=Math.min(this.npcMaxRadius**2,killer.mass+gain);gain=killer.mass-before;killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}if(killer.controller.type==='ai'&&e.controller.type==='ai'){this.ecology.npcSwallows++;this.ecology.maxRadius=Math.max(this.ecology.maxRadius,killer.r);}killer.swallowed++;if(this.staticConstraint&&killer!==this.player)this.constrain(killer);this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,coreRadius:this.radius(e),kind:'enemy'});}
   stopActives(e);this.ranged?.reset(e);e.deaths++;if(!e.growth)e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);return true;
  }
  respawn(e){
@@ -74,7 +74,7 @@ export class Inkstone {
    tickActives(e,dt);e.hitFlash=Math.max(0,(e.hitFlash||0)-dt);e.visualTime=this.elapsed;e.spikeContact=false;
    if(e.dead>0){e.dead=Math.max(0,e.dead-dt);if(!e.dead)this.respawn(e);continue;}
    e.invincible=Math.max(0,e.invincible-dt);for(const key of Object.keys(e.effects)){e.effects[key]-=dt;if(e.effects[key]<=0)delete e.effects[key];}
-   const v=e.controller.type==='human'?input:aiDirection(this,e,dt);
+   const desired=e.controller.type==='human'?input:aiDirection(this,e,dt),v=e!==this.player&&this.staticDirection?this.staticDirection(e,desired):desired;
    if(e.controller.type==='ai'&&shouldUseSkill(this,e)&&Math.random()<dt*(1+e.controller.profile.skill*4))this.useSkill(e);
    const speed=this.speed(e),blend=1-Math.exp(-dt*(e.controller.type==='human'?4:2.2));
    e.vx+=(v.x*speed-e.vx)*blend;e.vy+=(v.y*speed-e.vy)*blend;

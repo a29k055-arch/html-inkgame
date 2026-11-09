@@ -8,8 +8,8 @@ export const HOME_BACKGROUNDS=[
 ];
 export const BACKGROUND_CONFIG={rotationSeconds:35,defaultId:'lotus-paper'};
 export class HomeBackgrounds {
- constructor(onChange){this.onChange=onChange;this.current=null;this.clock=0;this.policy='fixed';this.generation=0;}
- eligible(){const ids=window.BokuGallery?.unlockedIds?.()||unlockedIds();const pool=HOME_BACKGROUNDS.filter(b=>this.policy==='unlocked'?ids.has(b.artworkId):b.public||ids.has(b.artworkId));return pool.length?pool:[HOME_BACKGROUNDS[0]];}
+ constructor(onChange,entries=HOME_BACKGROUNDS){this.entries=entries;this.onChange=onChange;this.current=null;this.clock=0;this.policy='fixed';this.generation=0;}
+ eligible(){const ids=window.BokuGallery?.unlockedIds?.()||unlockedIds();const pool=this.entries.filter(b=>this.policy==='unlocked'?ids.has(b.artworkId):b.public||ids.has(b.artworkId));return pool.length?pool:[this.entries[0]];}
  async choose(next=false){const choices=this.eligible();let entry=choices.find(b=>b.id===BACKGROUND_CONFIG.defaultId)||choices[0];if(this.policy==='random'||this.policy==='unlocked'){const pool=choices.filter(b=>b.id!==this.current?.id);entry=(pool.length?pool:choices)[Math.floor(Math.random()*(pool.length||choices.length))];}else if(next||this.policy==='rotate'){const i=choices.findIndex(b=>b.id===this.current?.id);entry=choices[(i+1)%choices.length];}else if(this.current&&choices.includes(this.current))entry=this.current;
   const generation=++this.generation;const img=new Image();img.src=entry.src;await img.decode();if(generation!==this.generation)return;this.current=entry;this.clock=0;this.onChange(img,entry);
  }

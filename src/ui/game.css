@@ -130,3 +130,8 @@ body[data-experience=reveal] .dash-icon{filter:none;background:transparent;borde
 @media(max-height:500px) and (min-width:500px){body[data-experience=reveal] #revealMeter{left:calc(180px + env(safe-area-inset-left));transform:none;width:calc(100vw - 285px - env(safe-area-inset-left) - env(safe-area-inset-right))}}
 @media(max-height:500px) and (min-width:500px) and (max-width:700px){body[data-experience=reveal] .reveal-meter-footer{flex-wrap:wrap;gap:2px}body[data-experience=reveal] #revealBuffs{justify-content:flex-start;flex-wrap:wrap;max-width:100%;gap:2px}body[data-experience=reveal] #revealInk{width:100%}body[data-experience=reveal] .reveal-buff{min-width:34px;padding:0 1px;font-size:9px}}
 @media(max-height:500px) and (min-width:500px) and (max-width:650px){body[data-experience=reveal] .reveal-meter-footer{flex-wrap:nowrap}body[data-experience=reveal] #revealInk{width:auto}body[data-experience=reveal] #revealBuffs{gap:4px;flex-wrap:nowrap}body[data-experience=reveal] .reveal-buff{min-width:0;padding:0;gap:2px}body[data-experience=reveal] .reveal-buff img{width:20px;height:20px}body[data-experience=reveal] .reveal-buff time{font-size:9px;min-width:12px}}
+
+/* Quiet material notice and raised pickup feedback. */
+body[data-experience=reveal] #notice{top:clamp(114px,17vh,162px)}
+#settings .text-link{border:0;background:none;color:#756a55;font:inherit;font-size:11px;justify-self:center;padding:6px 10px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}#settings .text-link:hover{color:#383d31}.material-notice{max-width:480px}.material-notice p{font-size:13px;line-height:1.9;color:#625e50}
+@media(max-height:500px) and (min-width:500px){body[data-experience=reveal] #notice{top:85px}}

@@ -1,0 +1,1990 @@
+{
+  "baseline": "ebbd846",
+  "checkpoint": "checkpoint/v4-before-pond-habitat-ebbd846",
+  "releaseKey": "v4-pond-habitat-r1",
+  "automatedSuites": [
+    {
+      "test": "campaign-rules.mjs",
+      "exit": 0
+    },
+    {
+      "test": "collision-camera.mjs",
+      "exit": 0
+    },
+    {
+      "test": "combat-ai.mjs",
+      "exit": 0
+    },
+    {
+      "test": "combat-ecology.mjs",
+      "exit": 0
+    },
+    {
+      "test": "deep-combat.mjs",
+      "exit": 0
+    },
+    {
+      "test": "deep-presets.mjs",
+      "exit": 0
+    },
+    {
+      "test": "deep-reveal.mjs",
+      "exit": 0
+    },
+    {
+      "test": "game-rules.mjs",
+      "exit": 0
+    },
+    {
+      "test": "ink-life-cards.mjs",
+      "exit": 0
+    },
+    {
+      "test": "ink-reserve.mjs",
+      "exit": 0
+    },
+    {
+      "test": "paper-save.mjs",
+      "exit": 0
+    },
+    {
+      "test": "reveal-mask.mjs",
+      "exit": 0
+    },
+    {
+      "test": "reveal-run.mjs",
+      "exit": 0
+    },
+    {
+      "test": "reveal-save.mjs",
+      "exit": 0
+    },
+    {
+      "test": "scroll-items-ranged.mjs",
+      "exit": 0
+    },
+    {
+      "test": "ui-boss-upgrade.mjs",
+      "exit": 0
+    },
+    {
+      "test": "ui-ecosystem.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-boundaries.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-levels.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-nov10-mechanics.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-nov6.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-nov7-mechanics.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-nov9-mechanics.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-nov9-npc.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-pond-habitat.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-reveal-layers.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-slow-ink.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-start-lifecycle.mjs",
+      "exit": 0
+    },
+    {
+      "test": "v4-start-transitions.mjs",
+      "exit": 0
+    },
+    {
+      "test": "visual-recovery.mjs",
+      "exit": 0
+    },
+    {
+      "test": "world-trails-phases.mjs",
+      "exit": 0
+    }
+  ],
+  "additionalTests": [
+    "v4-cropped-artworks.mjs",
+    "v4-slow-ink.mjs",
+    "v4-pond-habitat.mjs",
+    "v4-start-lifecycle.mjs"
+  ],
+  "visual": {
+    "rows": [
+      {
+        "preset": "wash",
+        "size": "18",
+        "speed": "60",
+        "hash": "19832717e4ec532dbb004690af524b4f96c6cb92f247baa85d6c0ad328402a0e",
+        "rear": 113.99999999999989,
+        "span": 132,
+        "count": 6432,
+        "targets": 12
+      },
+      {
+        "preset": "wash",
+        "size": "18",
+        "speed": "320",
+        "hash": "b8a945e06430e369d7fb0e18465eb5f8172237130d4c0bb79a16f7b65b8566d8",
+        "rear": 208.99999999999875,
+        "span": 220,
+        "count": 17400,
+        "targets": 12
+      },
+      {
+        "preset": "wash",
+        "size": "90",
+        "speed": "60",
+        "hash": "fa6356c2171e7f2447f4ef6740297dab72d0baf3046488234af1ee0beda983f6",
+        "rear": 167.9999999999999,
+        "span": 259,
+        "count": 41869,
+        "targets": 12
+      },
+      {
+        "preset": "wash",
+        "size": "90",
+        "speed": "320",
+        "hash": "9989fd7e247971857aa1ce0ae39ae9189a706b9345f2dafa4a1bd7d1c4177b46",
+        "rear": 592.9999999999987,
+        "span": 658,
+        "count": 79206,
+        "targets": 12
+      },
+      {
+        "preset": "wash",
+        "size": "170",
+        "speed": "60",
+        "hash": "d3c235a212c2ba61d82a9b6ede02780df44e91bf40556268a06ffb82315164cc",
+        "rear": 266.9999999999999,
+        "span": 421,
+        "count": 108021,
+        "targets": 12
+      },
+      {
+        "preset": "wash",
+        "size": "170",
+        "speed": "320",
+        "hash": "95061a5a32346bd7af2209021c710688f6410989b878f9ba84d2b853cd31a93c",
+        "rear": 796.9999999999987,
+        "span": 897,
+        "count": 166861,
+        "targets": 12
+      },
+      {
+        "preset": "drift",
+        "size": "18",
+        "speed": "60",
+        "hash": "690066a7b9830cee607a9132a7b1bdcc3732c4bfca9c3298117fc065a3751d82",
+        "rear": 147.9999999999999,
+        "span": 163,
+        "count": 5813,
+        "targets": 12
+      },
+      {
+        "preset": "drift",
+        "size": "18",
+        "speed": "320",
+        "hash": "b8a945e06430e369d7fb0e18465eb5f8172237130d4c0bb79a16f7b65b8566d8",
+        "rear": 208.99999999999875,
+        "span": 220,
+        "count": 17400,
+        "targets": 12
+      },
+      {
+        "preset": "drift",
+        "size": "90",
+        "speed": "60",
+        "hash": "adf687ebf583a425fd2a0bbe391f42fc1cf68ae2a961599fa6bf12ef44f650b8",
+        "rear": 188.9999999999999,
+        "span": 271,
+        "count": 40153,
+        "targets": 12
+      },
+      {
+        "preset": "drift",
+        "size": "90",
+        "speed": "320",
+        "hash": "9989fd7e247971857aa1ce0ae39ae9189a706b9345f2dafa4a1bd7d1c4177b46",
+        "rear": 592.9999999999987,
+        "span": 658,
+        "count": 79206,
+        "targets": 12
+      },
+      {
+        "preset": "drift",
+        "size": "170",
+        "speed": "60",
+        "hash": "c2275a6bf4bb9367959a85288bdd32c2610f3f0c4834c00d97a54afb7dc944c8",
+        "rear": 317.9999999999999,
+        "span": 445,
+        "count": 98325,
+        "targets": 12
+      },
+      {
+        "preset": "drift",
+        "size": "170",
+        "speed": "320",
+        "hash": "95061a5a32346bd7af2209021c710688f6410989b878f9ba84d2b853cd31a93c",
+        "rear": 796.9999999999987,
+        "span": 897,
+        "count": 166861,
+        "targets": 12
+      }
+    ],
+    "errors": []
+  },
+  "transition": {
+    "rows": [
+      {
+        "ok": true,
+        "id": "start-01",
+        "ids": [
+          "start-03",
+          "start-01"
+        ],
+        "switches": 1,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-03",
+          "ids": [
+            "start-03",
+            "start-01"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-03",
+          "start-01"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-03",
+        "ids": [
+          "start-07",
+          "start-03"
+        ],
+        "switches": 2,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-07",
+          "ids": [
+            "start-07",
+            "start-03"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-07",
+          "start-03"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-01",
+        "ids": [
+          "start-05",
+          "start-01"
+        ],
+        "switches": 3,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-05",
+          "ids": [
+            "start-05",
+            "start-01"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-05",
+          "start-01"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-02",
+        "ids": [
+          "start-06",
+          "start-02"
+        ],
+        "switches": 4,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-06",
+          "ids": [
+            "start-06",
+            "start-02"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-06",
+          "start-02"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-10",
+        "ids": [
+          "start-09",
+          "start-10"
+        ],
+        "switches": 5,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-09",
+          "ids": [
+            "start-09",
+            "start-10"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-09",
+          "start-10"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-05",
+        "ids": [
+          "start-08",
+          "start-05"
+        ],
+        "switches": 6,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-08",
+          "ids": [
+            "start-08",
+            "start-05"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-08",
+          "start-05"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-09",
+        "ids": [
+          "start-07",
+          "start-09"
+        ],
+        "switches": 7,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-07",
+          "ids": [
+            "start-07",
+            "start-09"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-07",
+          "start-09"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-01",
+        "ids": [
+          "start-06",
+          "start-01"
+        ],
+        "switches": 8,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-06",
+          "ids": [
+            "start-06",
+            "start-01"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-06",
+          "start-01"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-10",
+        "ids": [
+          "start-03",
+          "start-10"
+        ],
+        "switches": 9,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-03",
+          "ids": [
+            "start-03",
+            "start-10"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-03",
+          "start-10"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-10",
+        "ids": [
+          "start-09",
+          "start-10"
+        ],
+        "switches": 10,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-09",
+          "ids": [
+            "start-09",
+            "start-10"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-09",
+          "start-10"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-02",
+        "ids": [
+          "start-05",
+          "start-02"
+        ],
+        "switches": 11,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-05",
+          "ids": [
+            "start-05",
+            "start-02"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-05",
+          "start-02"
+        ]
+      },
+      {
+        "ok": true,
+        "id": "start-03",
+        "ids": [
+          "start-06",
+          "start-03"
+        ],
+        "switches": 12,
+        "covered": {
+          "pixels": [
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ],
+            [
+              31,
+              29,
+              25,
+              255
+            ]
+          ],
+          "phase": "changing",
+          "id": "start-06",
+          "ids": [
+            "start-06",
+            "start-03"
+          ],
+          "sceneVisible": true
+        },
+        "busy": false,
+        "hidden": true,
+        "drawn": [
+          "start-06",
+          "start-03"
+        ]
+      }
+    ],
+    "repeated": {
+      "changes": 1,
+      "second": false,
+      "switches": 1,
+      "signalAborted": false,
+      "ids": [
+        "start-10",
+        "start-08"
+      ]
+    },
+    "covered": {
+      "pixels": [
+        [
+          31,
+          29,
+          25,
+          255
+        ],
+        [
+          31,
+          29,
+          25,
+          255
+        ],
+        [
+          31,
+          29,
+          25,
+          255
+        ],
+        [
+          31,
+          29,
+          25,
+          255
+        ],
+        [
+          31,
+          29,
+          25,
+          255
+        ]
+      ],
+      "id": "start-02",
+      "ids": [
+        "start-02",
+        "start-09"
+      ]
+    },
+    "final": {
+      "id": "start-09",
+      "ids": [
+        "start-02",
+        "start-09"
+      ],
+      "hidden": true
+    },
+    "fallback": {
+      "none": [
+        "fallback",
+        "fallback"
+      ],
+      "one": [
+        "start-01",
+        "fallback"
+      ],
+      "changes": 2,
+      "noneFallback": true,
+      "oneFallback": true,
+      "error": "Start scene preparation timed out",
+      "hidden": true,
+      "busy": false
+    },
+    "errors": []
+  },
+  "loading": {
+    "initial": {
+      "done": [],
+      "total": 3,
+      "target": 0,
+      "completedWeight": 0,
+      "totalWeight": 10,
+      "progress": 0,
+      "resourcesReady": false,
+      "error": false,
+      "panel": {
+        "x": 580,
+        "y": 738.1875,
+        "width": 280,
+        "height": 34.1875,
+        "bottom": 772.375
+      },
+      "settings": {
+        "bottom": 708.1875
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sameScroll": true,
+      "scrollCount": 1,
+      "scrollState": "loading",
+      "hidden": false
+    },
+    "layouts": [
+      {
+        "done": [],
+        "total": 3,
+        "target": 0,
+        "completedWeight": 0,
+        "totalWeight": 10,
+        "progress": 0,
+        "resourcesReady": false,
+        "error": false,
+        "panel": {
+          "x": 580,
+          "y": 738.1875,
+          "width": 280,
+          "height": 34.1875,
+          "bottom": 772.375
+        },
+        "settings": {
+          "bottom": 708.1875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "sameScroll": true,
+        "scrollCount": 1,
+        "scrollState": "loading",
+        "hidden": false
+      },
+      {
+        "done": [],
+        "total": 3,
+        "target": 0,
+        "completedWeight": 0,
+        "totalWeight": 10,
+        "progress": 0,
+        "resourcesReady": false,
+        "error": false,
+        "panel": {
+          "x": 55,
+          "y": 670.71875,
+          "width": 280,
+          "height": 32.59375,
+          "bottom": 703.3125
+        },
+        "settings": {
+          "bottom": 640.71875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sameScroll": true,
+        "scrollCount": 1,
+        "scrollState": "loading",
+        "hidden": false
+      },
+      {
+        "done": [],
+        "total": 3,
+        "target": 0,
+        "completedWeight": 0,
+        "totalWeight": 10,
+        "progress": 0,
+        "resourcesReady": false,
+        "error": false,
+        "panel": {
+          "x": 282,
+          "y": 288.5,
+          "width": 280,
+          "height": 24,
+          "bottom": 312.5
+        },
+        "settings": {
+          "bottom": 258.5
+        },
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "sameScroll": true,
+        "scrollCount": 1,
+        "scrollState": "loading",
+        "hidden": false
+      },
+      {
+        "done": [],
+        "total": 3,
+        "target": 0,
+        "completedWeight": 0,
+        "totalWeight": 10,
+        "progress": 0,
+        "resourcesReady": false,
+        "error": false,
+        "panel": {
+          "x": 40,
+          "y": 540.265625,
+          "width": 280,
+          "height": 32.59375,
+          "bottom": 572.859375
+        },
+        "settings": {
+          "bottom": 510.265625
+        },
+        "viewport": {
+          "width": 360,
+          "height": 640
+        },
+        "sameScroll": true,
+        "scrollCount": 1,
+        "scrollState": "loading",
+        "hidden": false
+      }
+    ],
+    "painting": {
+      "done": [
+        "painting"
+      ],
+      "total": 3,
+      "target": 0.576,
+      "completedWeight": 6,
+      "totalWeight": 10,
+      "progress": 0.5738700304993057,
+      "resourcesReady": false,
+      "error": false,
+      "panel": {
+        "x": 580,
+        "y": 738.1875,
+        "width": 280,
+        "height": 34.1875,
+        "bottom": 772.375
+      },
+      "settings": {
+        "bottom": 708.1875
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sameScroll": true,
+      "scrollCount": 1,
+      "scrollState": "loading",
+      "hidden": false
+    },
+    "plateau": {
+      "done": [
+        "painting"
+      ],
+      "total": 3,
+      "target": 0.576,
+      "completedWeight": 6,
+      "totalWeight": 10,
+      "progress": 0.5759882404821828,
+      "resourcesReady": false,
+      "error": false,
+      "panel": {
+        "x": 580,
+        "y": 738.1875,
+        "width": 280,
+        "height": 34.1875,
+        "bottom": 772.375
+      },
+      "settings": {
+        "bottom": 708.1875
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sameScroll": true,
+      "scrollCount": 1,
+      "scrollState": "loading",
+      "hidden": false
+    },
+    "mattes": {
+      "done": [
+        "painting",
+        "mattes"
+      ],
+      "total": 3,
+      "target": 0.864,
+      "completedWeight": 9,
+      "totalWeight": 10,
+      "progress": 0.8629341594639076,
+      "resourcesReady": false,
+      "error": false,
+      "panel": {
+        "x": 580,
+        "y": 738.1875,
+        "width": 280,
+        "height": 34.1875,
+        "bottom": 772.375
+      },
+      "settings": {
+        "bottom": 702.7889404296875
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sameScroll": true,
+      "scrollCount": 1,
+      "scrollState": "loading",
+      "hidden": false
+    },
+    "title": {
+      "done": [
+        "painting",
+        "mattes",
+        "title"
+      ],
+      "total": 3,
+      "target": 0.96,
+      "completedWeight": 10,
+      "totalWeight": 10,
+      "progress": 0.9164203840626965,
+      "resourcesReady": false,
+      "error": false,
+      "panel": {
+        "x": 580,
+        "y": 738.1875,
+        "width": 280,
+        "height": 34.1875,
+        "bottom": 772.375
+      },
+      "settings": {
+        "bottom": 701.600341796875
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sameScroll": true,
+      "scrollCount": 1,
+      "scrollState": "loading",
+      "hidden": false
+    },
+    "final": {
+      "done": [
+        "painting",
+        "mattes",
+        "title"
+      ],
+      "total": 3,
+      "target": 1,
+      "completedWeight": 10,
+      "totalWeight": 10,
+      "progress": 1,
+      "resourcesReady": true,
+      "error": false,
+      "panel": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "bottom": 0
+      },
+      "settings": {
+        "bottom": 700.1875
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sameScroll": true,
+      "scrollCount": 1,
+      "scrollState": "home",
+      "hidden": true
+    },
+    "errors": []
+  },
+  "ui": [
+    {
+      "name": "1440x900",
+      "passed": true,
+      "titles": [
+        "荷露清圆",
+        "游鱼浅塘",
+        "芦石秋影",
+        "墨虾游影",
+        "荷荫蟹趣",
+        "芦汀蟹影",
+        "荷塘清风",
+        "寒枝栖禽",
+        "疏竹清影",
+        "竹林听风",
+        "青绿叠嶂"
+      ],
+      "notices": [
+        {
+          "lang": "zh",
+          "text": "本项目中的画作与相关素材仅用于展示、观赏与游玩体验。使用本项目不代表取得素材的提取、转载、商业使用或二次分发许可。相关权利归各权利人所有。"
+        },
+        {
+          "lang": "en",
+          "text": "The paintings and materials in this project are presented for viewing and gameplay. Using the game does not grant permission to extract, republish, commercially use or redistribute these materials. Rights remain with their respective holders."
+        },
+        {
+          "lang": "ja",
+          "text": "本作の絵画と素材は、展示・鑑賞・ゲーム体験のために使用しています。本作の利用によって、素材の抽出、転載、商用利用、再配布の許可が与えられるものではありません。各素材の権利はそれぞれの権利者に帰属します。"
+        }
+      ],
+      "manual": "ink-13",
+      "assets": [
+        "/assets/artworks/v4-cropped/1.png",
+        "/assets/artworks/v4-cropped/7.png",
+        "/assets/artworks/v4-cropped/5.png",
+        "/assets/artworks/v4-cropped/3.png",
+        "/assets/artworks/v4-cropped/6.png",
+        "/assets/artworks/v4-cropped/2.png",
+        "/assets/artworks/v4-cropped/4.png",
+        "/assets/artworks/v4-cropped/8.png",
+        "/assets/artworks/v4-cropped/9.png",
+        "/assets/artworks/v4-cropped/10.png",
+        "/assets/artworks/v4-cropped/11.png"
+      ],
+      "leafCount": 6,
+      "flowerCount": 6,
+      "smallPlayerCrossedLeaf": true,
+      "pondObservation": {
+        "leaf": {
+          "x": 1378.140177679277,
+          "y": 1735.2912076130724,
+          "r": 115.65658656160818
+        },
+        "npc": {
+          "x": 1552.529585993033,
+          "y": 1654.5332171723744,
+          "r": 44.76932721375221
+        },
+        "distance": 192.18095314583528
+      },
+      "layout": {
+        "meter": {
+          "x": 380,
+          "y": 18,
+          "width": 680,
+          "height": 99.484375,
+          "top": 18,
+          "right": 1060,
+          "bottom": 117.484375,
+          "left": 380
+        },
+        "timer": {
+          "x": 76,
+          "y": 12,
+          "width": 90.28125,
+          "height": 52,
+          "top": 12,
+          "right": 166.28125,
+          "bottom": 64,
+          "left": 76
+        },
+        "map": {
+          "x": 1314,
+          "y": 16,
+          "width": 108,
+          "height": 108,
+          "top": 16,
+          "right": 1422,
+          "bottom": 124,
+          "left": 1314
+        },
+        "buffs": {
+          "x": 822,
+          "y": 79.484375,
+          "width": 223,
+          "height": 29,
+          "top": 79.484375,
+          "right": 1045,
+          "bottom": 108.484375,
+          "left": 822
+        }
+      },
+      "errors": []
+    },
+    {
+      "name": "390x844",
+      "passed": true,
+      "titles": [
+        "荷露清圆",
+        "游鱼浅塘",
+        "芦石秋影",
+        "墨虾游影",
+        "荷荫蟹趣",
+        "芦汀蟹影",
+        "荷塘清风",
+        "寒枝栖禽",
+        "疏竹清影",
+        "竹林听风",
+        "青绿叠嶂"
+      ],
+      "notices": [
+        {
+          "lang": "zh",
+          "text": "本项目中的画作与相关素材仅用于展示、观赏与游玩体验。使用本项目不代表取得素材的提取、转载、商业使用或二次分发许可。相关权利归各权利人所有。"
+        },
+        {
+          "lang": "en",
+          "text": "The paintings and materials in this project are presented for viewing and gameplay. Using the game does not grant permission to extract, republish, commercially use or redistribute these materials. Rights remain with their respective holders."
+        },
+        {
+          "lang": "ja",
+          "text": "本作の絵画と素材は、展示・鑑賞・ゲーム体験のために使用しています。本作の利用によって、素材の抽出、転載、商用利用、再配布の許可が与えられるものではありません。各素材の権利はそれぞれの権利者に帰属します。"
+        }
+      ],
+      "manual": "ink-14",
+      "assets": [
+        "/assets/artworks/v4-cropped/1.png",
+        "/assets/artworks/v4-cropped/7.png",
+        "/assets/artworks/v4-cropped/5.png",
+        "/assets/artworks/v4-cropped/2.png",
+        "/assets/artworks/v4-cropped/3.png",
+        "/assets/artworks/v4-cropped/4.png",
+        "/assets/artworks/v4-cropped/6.png",
+        "/assets/artworks/v4-cropped/8.png",
+        "/assets/artworks/v4-cropped/10.png",
+        "/assets/artworks/v4-cropped/9.png",
+        "/assets/artworks/v4-cropped/11.png"
+      ],
+      "leafCount": 6,
+      "flowerCount": 6,
+      "smallPlayerCrossedLeaf": true,
+      "pondObservation": {
+        "leaf": {
+          "x": 1324.734686361251,
+          "y": 452.7323247205446,
+          "r": 104.99467705722773
+        },
+        "npc": {
+          "x": 1157.518593875085,
+          "y": 652.4713871745998,
+          "r": 18.996691995228552
+        },
+        "distance": 260.4935981101398
+      },
+      "layout": {
+        "meter": {
+          "x": 14,
+          "y": 94,
+          "width": 362,
+          "height": 90.796875,
+          "top": 94,
+          "right": 376,
+          "bottom": 184.796875,
+          "left": 14
+        },
+        "timer": {
+          "x": 72,
+          "y": 8,
+          "width": 87.25,
+          "height": 51,
+          "top": 8,
+          "right": 159.25,
+          "bottom": 59,
+          "left": 72
+        },
+        "map": {
+          "x": 302,
+          "y": 10,
+          "width": 76,
+          "height": 76,
+          "top": 10,
+          "right": 378,
+          "bottom": 86,
+          "left": 302
+        },
+        "buffs": {
+          "x": 160,
+          "y": 151.796875,
+          "width": 204,
+          "height": 25,
+          "top": 151.796875,
+          "right": 364,
+          "bottom": 176.796875,
+          "left": 160
+        }
+      },
+      "errors": []
+    },
+    {
+      "name": "844x390",
+      "passed": true,
+      "titles": [
+        "荷露清圆",
+        "游鱼浅塘",
+        "芦石秋影",
+        "墨虾游影",
+        "荷荫蟹趣",
+        "芦汀蟹影",
+        "荷塘清风",
+        "寒枝栖禽",
+        "疏竹清影",
+        "竹林听风",
+        "青绿叠嶂"
+      ],
+      "notices": [
+        {
+          "lang": "zh",
+          "text": "本项目中的画作与相关素材仅用于展示、观赏与游玩体验。使用本项目不代表取得素材的提取、转载、商业使用或二次分发许可。相关权利归各权利人所有。"
+        },
+        {
+          "lang": "en",
+          "text": "The paintings and materials in this project are presented for viewing and gameplay. Using the game does not grant permission to extract, republish, commercially use or redistribute these materials. Rights remain with their respective holders."
+        },
+        {
+          "lang": "ja",
+          "text": "本作の絵画と素材は、展示・鑑賞・ゲーム体験のために使用しています。本作の利用によって、素材の抽出、転載、商用利用、再配布の許可が与えられるものではありません。各素材の権利はそれぞれの権利者に帰属します。"
+        }
+      ],
+      "manual": "ink-13",
+      "assets": [
+        "/assets/artworks/v4-cropped/1.png",
+        "/assets/artworks/v4-cropped/7.png",
+        "/assets/artworks/v4-cropped/5.png",
+        "/assets/artworks/v4-cropped/4.png",
+        "/assets/artworks/v4-cropped/3.png",
+        "/assets/artworks/v4-cropped/2.png",
+        "/assets/artworks/v4-cropped/6.png",
+        "/assets/artworks/v4-cropped/8.png",
+        "/assets/artworks/v4-cropped/9.png",
+        "/assets/artworks/v4-cropped/10.png",
+        "/assets/artworks/v4-cropped/11.png"
+      ],
+      "leafCount": 6,
+      "flowerCount": 6,
+      "smallPlayerCrossedLeaf": true,
+      "pondObservation": {
+        "leaf": {
+          "x": 500.0927114027977,
+          "y": 2710.0965472137855,
+          "r": 105.55483779286315
+        },
+        "npc": {
+          "x": 611.1486222774895,
+          "y": 2649.5077030755356,
+          "r": 17.44123973774734
+        },
+        "distance": 126.50859012026268
+      },
+      "layout": {
+        "meter": {
+          "x": 180,
+          "y": 12,
+          "width": 559,
+          "height": 92.890625,
+          "top": 12,
+          "right": 739,
+          "bottom": 104.890625,
+          "left": 180
+        },
+        "timer": {
+          "x": 76,
+          "y": 12,
+          "width": 90.203125,
+          "height": 52,
+          "top": 12,
+          "right": 166.203125,
+          "bottom": 64,
+          "left": 76
+        },
+        "map": {
+          "x": 760,
+          "y": 12,
+          "width": 72,
+          "height": 72,
+          "top": 12,
+          "right": 832,
+          "bottom": 84,
+          "left": 760
+        },
+        "buffs": {
+          "x": 505,
+          "y": 68.890625,
+          "width": 223,
+          "height": 29,
+          "top": 68.890625,
+          "right": 728,
+          "bottom": 97.890625,
+          "left": 505
+        }
+      },
+      "errors": []
+    },
+    {
+      "name": "568x320",
+      "passed": true,
+      "titles": [
+        "荷露清圆",
+        "游鱼浅塘",
+        "芦石秋影",
+        "墨虾游影",
+        "荷荫蟹趣",
+        "芦汀蟹影",
+        "荷塘清风",
+        "寒枝栖禽",
+        "疏竹清影",
+        "竹林听风",
+        "青绿叠嶂"
+      ],
+      "notices": [
+        {
+          "lang": "zh",
+          "text": "本项目中的画作与相关素材仅用于展示、观赏与游玩体验。使用本项目不代表取得素材的提取、转载、商业使用或二次分发许可。相关权利归各权利人所有。"
+        },
+        {
+          "lang": "en",
+          "text": "The paintings and materials in this project are presented for viewing and gameplay. Using the game does not grant permission to extract, republish, commercially use or redistribute these materials. Rights remain with their respective holders."
+        },
+        {
+          "lang": "ja",
+          "text": "本作の絵画と素材は、展示・鑑賞・ゲーム体験のために使用しています。本作の利用によって、素材の抽出、転載、商用利用、再配布の許可が与えられるものではありません。各素材の権利はそれぞれの権利者に帰属します。"
+        }
+      ],
+      "manual": "ink-14",
+      "assets": [
+        "/assets/artworks/v4-cropped/1.png",
+        "/assets/artworks/v4-cropped/7.png",
+        "/assets/artworks/v4-cropped/2.png",
+        "/assets/artworks/v4-cropped/5.png",
+        "/assets/artworks/v4-cropped/4.png",
+        "/assets/artworks/v4-cropped/3.png",
+        "/assets/artworks/v4-cropped/6.png",
+        "/assets/artworks/v4-cropped/8.png",
+        "/assets/artworks/v4-cropped/9.png",
+        "/assets/artworks/v4-cropped/10.png",
+        "/assets/artworks/v4-cropped/11.png"
+      ],
+      "leafCount": 6,
+      "flowerCount": 6,
+      "smallPlayerCrossedLeaf": true,
+      "pondObservation": {
+        "leaf": {
+          "x": 1466.5896047767035,
+          "y": 3193.502206804168,
+          "r": 112.06726248628678
+        },
+        "npc": {
+          "x": 1594.985314528082,
+          "y": 3225.945904019883,
+          "r": 18.348810182464856
+        },
+        "distance": 132.43130963478848
+      },
+      "layout": {
+        "meter": {
+          "x": 180,
+          "y": 12,
+          "width": 283,
+          "height": 85.5,
+          "top": 12,
+          "right": 463,
+          "bottom": 97.5,
+          "left": 180
+        },
+        "timer": {
+          "x": 72,
+          "y": 8,
+          "width": 87.421875,
+          "height": 51,
+          "top": 8,
+          "right": 159.421875,
+          "bottom": 59,
+          "left": 72
+        },
+        "map": {
+          "x": 480,
+          "y": 12,
+          "width": 76,
+          "height": 76,
+          "top": 12,
+          "right": 556,
+          "bottom": 88,
+          "left": 480
+        },
+        "buffs": {
+          "x": 296,
+          "y": 68,
+          "width": 156,
+          "height": 22,
+          "top": 68,
+          "right": 452,
+          "bottom": 90,
+          "left": 296
+        }
+      },
+      "errors": []
+    }
+  ],
+  "layers": [
+    {
+      "mobile": false,
+      "small": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 128.61224489795916,
+        "order": [
+          {
+            "id": "leaf-1",
+            "kind": "leaf",
+            "pass": "upper"
+          }
+        ],
+        "size": 18,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "large": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 13.02721088435374,
+        "order": [
+          {
+            "id": "leaf-1",
+            "kind": "leaf",
+            "pass": "lower"
+          }
+        ],
+        "size": 150,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "attached": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 128.61224489795916,
+        "order": [
+          {
+            "id": "leaf-1",
+            "kind": "leaf",
+            "pass": "upper"
+          },
+          {
+            "id": "flower-1",
+            "kind": "flower",
+            "pass": "upper"
+          }
+        ],
+        "size": 40,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "smallTurtle": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 48.74829931972788,
+        "order": [
+          {
+            "id": "turtle",
+            "kind": "shield",
+            "pass": "upper"
+          }
+        ],
+        "size": 18,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "bigTurtle": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 11.748299319727893,
+        "order": [
+          {
+            "id": "turtle",
+            "kind": "shield",
+            "pass": "lower"
+          }
+        ],
+        "size": 80,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "classic": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 13.02721088435374,
+        "order": [
+          {
+            "id": "flower-1",
+            "kind": "flower",
+            "pass": "lower"
+          },
+          {
+            "id": "leaf-1",
+            "kind": "leaf",
+            "pass": "lower"
+          }
+        ],
+        "size": 18,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "errors": []
+    },
+    {
+      "mobile": true,
+      "small": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 128.61224489795916,
+        "order": [
+          {
+            "id": "leaf-1",
+            "kind": "leaf",
+            "pass": "upper"
+          }
+        ],
+        "size": 18,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "large": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 13.02721088435374,
+        "order": [
+          {
+            "id": "leaf-1",
+            "kind": "leaf",
+            "pass": "lower"
+          }
+        ],
+        "size": 150,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "attached": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 128.61224489795916,
+        "order": [
+          {
+            "id": "leaf-1",
+            "kind": "leaf",
+            "pass": "upper"
+          },
+          {
+            "id": "flower-1",
+            "kind": "flower",
+            "pass": "upper"
+          }
+        ],
+        "size": 40,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "smallTurtle": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 48.74829931972788,
+        "order": [
+          {
+            "id": "turtle",
+            "kind": "shield",
+            "pass": "upper"
+          }
+        ],
+        "size": 18,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "bigTurtle": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 11.748299319727893,
+        "order": [
+          {
+            "id": "turtle",
+            "kind": "shield",
+            "pass": "lower"
+          }
+        ],
+        "size": 80,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "classic": {
+        "gpu": true,
+        "dpr": 2,
+        "lum": 13.02721088435374,
+        "order": [
+          {
+            "id": "flower-1",
+            "kind": "flower",
+            "pass": "lower"
+          },
+          {
+            "id": "leaf-1",
+            "kind": "leaf",
+            "pass": "lower"
+          }
+        ],
+        "size": 18,
+        "canEatLeaf": false,
+        "extent": 136
+      },
+      "errors": []
+    }
+  ],
+  "performance": {
+    "fps": 60.02478958830136,
+    "frames": 1201,
+    "seconds": 20.00840000002384,
+    "clockScale": 1,
+    "quality": "performance",
+    "targets": 12,
+    "errors": []
+  },
+  "fullRounds": [
+    {
+      "device": "pc",
+      "clockScale": 3,
+      "completed": false,
+      "elapsed": 840.0169999997939,
+      "area": 0.38702981417617216,
+      "ink": 0.41702367805275975,
+      "maxArea": 0.47828482123964333,
+      "swallows": 53,
+      "ecology": {
+        "npcSwallows": 50,
+        "npcRespawns": 103,
+        "npcFood": 16014,
+        "maxRadius": 138.73365454733403
+      },
+      "errors": []
+    },
+    {
+      "device": "mobile",
+      "clockScale": 3,
+      "completed": false,
+      "elapsed": 840.0038999997903,
+      "area": 0.41009769234719085,
+      "ink": 0.6168885765072745,
+      "maxArea": 0.4340268058993405,
+      "swallows": 44,
+      "ecology": {
+        "npcSwallows": 52,
+        "npcRespawns": 96,
+        "npcFood": 15530,
+        "maxRadius": 145
+      },
+      "errors": []
+    }
+  ],
+  "limitations": [
+    "65%/90% natural automated win not achieved; both complete 840s samples timed out",
+    "No physical phone/Safari certification",
+    "Reference art has finer thin translucent folds than current rendering"
+  ]
+}
