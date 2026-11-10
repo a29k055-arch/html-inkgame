@@ -1027,5 +1027,58 @@
   "limitations": [
     "Official painting titles and authors are not verifiable from numbered source files; localized descriptive titles retained",
     "Natural complete rounds, physical phones/Safari and mobile65% difficulty not reaccepted in this visual/object update"
-  ]
+  ],
+  "publication": {
+    "commit": "3390a4804acc6a0c7b6fd65c78cb731acc72feaf",
+    "run": 42759301946,
+    "conclusion": "success",
+    "manifest": {
+      "root": "3390a4804acc6a0c7b6fd65c78cb731acc72feaf",
+      "versions": {
+        "v2": {
+          "ref": "v2-original",
+          "sha": "1bb02502f68b6fd99e28338ef183825711054443"
+        },
+        "v3": {
+          "ref": "v3-roguelike",
+          "sha": "d882581af3ea15193e7cd880017cd2295a6fad21"
+        },
+        "v4": {
+          "ref": "HEAD",
+          "sha": "3390a4804acc6a0c7b6fd65c78cb731acc72feaf"
+        }
+      }
+    },
+    "checks": [
+      {
+        "version": "v2",
+        "mobile": false,
+        "errors": [
+          "https://a29k055-arch.github.io/html-inkgame/v2/outputs/assets/ink-mattes/transitions/transition-v2-02.mov net::ERR_ABORTED"
+        ]
+      },
+      {
+        "version": "v3",
+        "mobile": false,
+        "scene": "normal",
+        "targets": 12,
+        "errors": []
+      },
+      {
+        "version": "v4",
+        "mobile": false,
+        "scene": "playing",
+        "targets": 12,
+        "errors": []
+      },
+      {
+        "version": "v4",
+        "mobile": true,
+        "scene": "playing",
+        "targets": 12,
+        "errors": []
+      }
+    ],
+    "visualErrors": []
+  }
 }

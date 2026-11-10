@@ -8,7 +8,7 @@
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |
 | V2｜更早期原版游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-original → 1bb0250（原版入口重定向至 outputs/ink_demo_v2.html） |
 
-按本轮定义纠正编号：V2原版、V3复杂玩法、V4涂色。本机打包与GitHub Pages三个公开地址均已实测可启动（2026-11-10，发布42752901957，公开运行版本34096e2，功能提交9d46308）；最终验证见PROJECT_HANDOFF发布补记。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；旧涂色快照保留于 /previews/reveal-scroll/ 和 /archive/reveal-v3/（旧误标V3，来源1faf41f）；原误标V2的复杂快照另保留 /archive/scroll-v2/。历史Git标签不移动。V4使用独立本机存档 boku.save.v4，首次兼容读取旧记录但不改写旧键；V2/V3保留原存档方式。
+按本轮定义纠正编号：V2原版、V3复杂玩法、V4涂色。本机打包与GitHub Pages三个公开地址均已实测可启动（2026-11-10，发布42759301946，公开运行版本3390a48）；最终验证见PROJECT_HANDOFF发布补记。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；旧涂色快照保留于 /previews/reveal-scroll/ 和 /archive/reveal-v3/（旧误标V3，来源1faf41f）；原误标V2的复杂快照另保留 /archive/scroll-v2/。历史Git标签不移动。V4使用独立本机存档 boku.save.v4，首次兼容读取旧记录但不改写旧键；V2/V3保留原存档方式。
 
 - [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V4）
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
@@ -20,7 +20,7 @@
 
 V4已发布至main，十一幅原画可选关，一局显现一幅画：移动显画、吞敌大落墨、敌人柔和侵蚀，完成后进入Gallery。V4将短时美术墨尾、随体型与墨量28–60秒临时显画和吞敌永久落墨分开；Boss/碎片/抽卡停用，旧流程在V3固定入口保留；卷轴首页、三语言、Settings与冻结视觉参考继续保留。
 
-本轮更新：正式J缓游墨云保留I高速表现，九候选可对照；仅使用指定目录11张无题字裁图。总绘画65%或有墨区域90%可完成，临时显画每250墨额外+1秒（最多12秒）；开局两个不同水墨转场连续播放。接续调整NPC侵蚀节奏后，PC真实831秒达到65%并完成画廊刷新解锁，保留840秒时限；逐画人工难度与实体手机反馈仍待补。参数与实际发布结果见最新Handoff。
+本轮更新：正式J缓游墨云保留I高速表现，九候选可对照；仅使用指定目录11张无题字裁图。总绘画65%或有墨区域90%可完成，临时显画每250墨额外+1秒（最多12秒）；开局两个不同水墨转场连续播放。上一轮调整NPC侵蚀节奏后，PC真实831秒达到65%并完成画廊刷新解锁，保留840秒时限；逐画人工难度与实体手机反馈仍待补。参数与实际发布结果见最新Handoff。
 
 荷塘物件已各有3种水墨样式，花持续保留且缓慢生长，NPC稳定绕叶；拾取统一轻水滴音色。画作支持独立中日英展示名，正式题名/作者仍需原始目录核实。此轮验证范围与素材来源见Handoff及assets/pond/README.md。
 
