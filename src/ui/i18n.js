@@ -47,7 +47,7 @@ revealTeachWalkText:["墨が触れた場所が絵を現します。体の大き�
 revealTeachConsume:["捕食で広げる","吞噬扩张","Swallow to Bloom"],
 revealTeachConsumeText:["小さな相手を飲み込むと、長く残る墨が広がります。海老・鯉・亀・蓮花は自分より小さければ食べられ、効果は3秒追加されます。強さは重なりません。","吞噬较小敌人会留下持续落墨。虾、鱼、龟和荷花需要体型足够才能拾取；每次增加3秒效果，不叠加强度。","Swallow smaller enemies for lasting blooms. Shrimp, koi, turtles and blossoms require enough body size to collect. Each adds 3s of duration, without stacking strength."],
 revealTeachDanger:["敵と道具","敌人与道具","Enemies & Pickups"],
-revealTeachDangerText:["敵は現れた絵を白く戻します。大きな追手が近づいた時だけ朱の輪が現れます。蓮葉は食べられませんが、プレイヤーは下を通れ、敵を遮ります。葉のそばの花は放置すると新しい葉へ育ちます。","NPC会逐渐涂白画作；只有贴近且能吞噬你的追击者才显示朱砂圈。荷叶不能吃，玩家可从下方穿过，NPC会被挡住；叶旁荷花久未拾取会长成新叶。","NPCs gradually whiten revealed areas. A cinnabar ring marks a close pursuer that can swallow you. Leaves cannot be eaten: you can pass beneath them while NPCs are blocked. Uncollected nearby blossoms may grow into new leaves."],
+revealTeachDangerText:["敵は現れた絵を白く戻します。大きな追手が近づいた時だけ朱の輪が現れます。蓮葉は食べられませんが、プレイヤーは下を通れ、敵を遮ります。花は食べるまで残り、敵の通り道を遮りません。葉と花はゆっくり増えます。","NPC会逐渐涂白画作；只有贴近且能吞噬你的追击者才显示朱砂圈。荷叶不能吃，玩家可从下方穿过，NPC会被挡住；荷花不会自行消失，也不阻挡NPC；荷叶与荷花会缓慢增生。","NPCs gradually whiten revealed areas. A cinnabar ring marks a close pursuer that can swallow you. Leaves cannot be eaten: you can pass beneath them while NPCs are blocked. Flowers persist until collected and do not block NPCs. Leaves and blossoms spread slowly."],
 revealTeachFinish:["画巻を完成する","完成画卷","Complete the Painting"],
 revealTeachFinishText:["{duration}分以内に全体の{percent}%、または墨の絵柄の{inkPercent}%を現すと完成。画廊で解放され、次は別の画巻へ進めます。","在{duration}分钟内，总绘画进度达到{percent}%，或有墨区域显现达到{inkPercent}%，即可完成并在画廊解锁。","Within {duration} minutes, reveal {percent}% overall or {inkPercent}% of the ink details to unlock the painting in Gallery."],
 backGallery:["作品一覧","作品列表","Painting List"],
@@ -173,6 +173,6 @@ export const dictionaries=Object.fromEntries(LANGUAGES.map((l,i)=>[l,Object.from
 let language=LANGUAGES.includes(getSave().settings.language)?getSave().settings.language:'ja';
 export const getLanguage=()=>language;
 export function t(key,values={}){const message=dictionaries[language][key]||dictionaries.ja[key]||dictionaries[language].loadError;return message.replace(/\{(\w+)\}/g,(_,name)=>String(values[name]??'—'));}
-export function artTitle(art){if(art.title)return art.title;return art.id==='ink-04'?t('painting01'):t('painting',{n:String(Number(art.label.match(/\d+/)?.[0])||1).padStart(2,'0')});}
+export function artTitle(art){if(art.titles)return art.titles[language]||art.titles.zh||art.title;if(art.title)return art.title;return art.id==='ink-04'?t('painting01'):t('painting',{n:String(Number(art.label.match(/\d+/)?.[0])||1).padStart(2,'0')});}
 export function applyTranslations(root=document){for(const e of root.querySelectorAll('[data-i18n]'))e.textContent=t(e.dataset.i18n);for(const e of root.querySelectorAll('[data-i18n-aria]'))e.setAttribute('aria-label',t(e.dataset.i18nAria));document.documentElement.lang=language==='zh'?'zh-CN':language;}
 export function setLanguage(next){if(!LANGUAGES.includes(next))return;language=next;updateSettings({...getSave().settings,language});if(typeof document!=='undefined'){applyTranslations();document.dispatchEvent(new Event('boku:language'));}}

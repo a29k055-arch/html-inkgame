@@ -38,3 +38,22 @@ V4 opts into lower/upper object passes around the Hero layer. Inedible objects c
 
 
 Layer validation: work/pond-layer-report.json covers Canvas fallback rendering on PC and mobile; work/pond-layer-gpu-report.json covers actual WebGL rendering with DPR2 on PC1440×900 and mobile390×844. Fixtures compare image pixels and actual lower/Hero/upper draw order, never game completion. Small-player leaf center luminance128.6 versus large-player cover13.0 in WebGL; leaf remains inedible in both states; attached flower sorts above its leaf; classic opt-out order is unchanged. Both contexts report no page errors.
+
+## Current — three variants per kind (2026-11-10)
+
+Added two independently generated paintings per kind, ten separate built-in imagegen calls, matching the existing user-guided shuimo assets. All are true transparent overhead sprites, without frames or coin backings. Different shell/petal/vein/ink patterns and body silhouettes are original variations, not palette swaps. Prompts retained black-gray layered ink washes, restrained rose lotus tips, full subject containment and transparent outside. Only delivery resizing to512px and PNG compression9 was applied; generated originals remain untouched.
+
+- turtle-v2.png: exec-b43e4e6f-ae23-4af6-a656-b0c480aa35f9
+- shrimp-v2.png: exec-6d51b9d1-35d8-433d-924d-c4ce7ca10429
+- koi-v2.png: exec-6dbacfe8-e1da-47b7-a349-0339e523775a
+- lotus-leaf-v3.png: exec-ee0f661c-fd04-404f-a196-2a46cd6a1f5a
+- lotus-flower-v3.png: exec-4f76a096-d35e-4fe4-882c-6e7a8dc2febd
+- turtle-v3.png: exec-6ee2476c-2d41-4e95-b004-040ef20c4232
+- shrimp-v3.png: exec-6595fc72-fa55-451e-b032-68f4f1121dba
+- koi-v3.png: exec-0af9c052-60d1-4e8a-bf88-6e2c4dbe6bc7
+- lotus-leaf-v4.png: exec-598f3573-6293-4c94-8cdd-44cf0cc88f63
+- lotus-flower-v4.png: exec-ac414c61-d6c4-4ee1-b2fa-c6520d7beced
+
+Runtime catalogs are POND_PICKUP_VARIANTS in src/reveal/pickups.js. All15 images are preloaded and cached. PondHabitat assigns each spawned object a stable variant0–2 and heading once; turtle/fish/leaf/flower use the full circle, shrimp ±.28rad around their painted forward direction. No appearance reroll per render frame. HUD retains the recognizable baseline image.
+
+Current world order supersedes the previous two-pass notes: fish/shrimp below leaves, turtles may sit on upper leaves, flowers in a final top pass after units and world FX. Small players pass beneath leaves; sufficiently large players cover leaves, which remain inedible. Flower alpha/pickup size and actor core rules remain separate from artwork padding.

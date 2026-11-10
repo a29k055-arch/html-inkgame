@@ -1,0 +1,1031 @@
+{
+  "baseline": "aa2da20",
+  "checkpoint": "checkpoint/v4-before-pond-variety-aa2da20",
+  "releaseKey": "v4-pond-variety-r1",
+  "assets": [
+    {
+      "kind": "shield",
+      "variant": 0,
+      "width": 512,
+      "height": 512,
+      "zero": 169531,
+      "opaque": 957,
+      "semi": 91656
+    },
+    {
+      "kind": "shield",
+      "variant": 1,
+      "width": 512,
+      "height": 512,
+      "zero": 156465,
+      "opaque": 652,
+      "semi": 105027
+    },
+    {
+      "kind": "shield",
+      "variant": 2,
+      "width": 512,
+      "height": 512,
+      "zero": 191412,
+      "opaque": 1412,
+      "semi": 69320
+    },
+    {
+      "kind": "magnet",
+      "variant": 0,
+      "width": 512,
+      "height": 512,
+      "zero": 218481,
+      "opaque": 1179,
+      "semi": 42484
+    },
+    {
+      "kind": "magnet",
+      "variant": 1,
+      "width": 512,
+      "height": 512,
+      "zero": 201895,
+      "opaque": 898,
+      "semi": 59351
+    },
+    {
+      "kind": "magnet",
+      "variant": 2,
+      "width": 512,
+      "height": 512,
+      "zero": 217902,
+      "opaque": 649,
+      "semi": 43593
+    },
+    {
+      "kind": "speed",
+      "variant": 0,
+      "width": 512,
+      "height": 512,
+      "zero": 209596,
+      "opaque": 967,
+      "semi": 51581
+    },
+    {
+      "kind": "speed",
+      "variant": 1,
+      "width": 512,
+      "height": 512,
+      "zero": 216556,
+      "opaque": 1305,
+      "semi": 44283
+    },
+    {
+      "kind": "speed",
+      "variant": 2,
+      "width": 512,
+      "height": 512,
+      "zero": 213430,
+      "opaque": 1294,
+      "semi": 47420
+    },
+    {
+      "kind": "leaf",
+      "variant": 0,
+      "width": 512,
+      "height": 446,
+      "zero": 90085,
+      "opaque": 825,
+      "semi": 137442
+    },
+    {
+      "kind": "leaf",
+      "variant": 1,
+      "width": 512,
+      "height": 512,
+      "zero": 115218,
+      "opaque": 2971,
+      "semi": 143955
+    },
+    {
+      "kind": "leaf",
+      "variant": 2,
+      "width": 512,
+      "height": 506,
+      "zero": 119337,
+      "opaque": 4062,
+      "semi": 135673
+    },
+    {
+      "kind": "flower",
+      "variant": 0,
+      "width": 512,
+      "height": 464,
+      "zero": 106623,
+      "opaque": 1111,
+      "semi": 129834
+    },
+    {
+      "kind": "flower",
+      "variant": 1,
+      "width": 512,
+      "height": 512,
+      "zero": 132697,
+      "opaque": 1378,
+      "semi": 128069
+    },
+    {
+      "kind": "flower",
+      "variant": 2,
+      "width": 512,
+      "height": 505,
+      "zero": 140092,
+      "opaque": 1522,
+      "semi": 116946
+    }
+  ],
+  "browser": [
+    {
+      "device": "pc",
+      "languages": [
+        {
+          "lang": "ja",
+          "settings": "設定",
+          "gallery": "ギャラリー",
+          "cards": 11
+        },
+        {
+          "lang": "zh",
+          "settings": "设定",
+          "gallery": "画廊",
+          "cards": 11
+        },
+        {
+          "lang": "en",
+          "settings": "Settings",
+          "gallery": "Gallery",
+          "cards": 11
+        }
+      ],
+      "initialItems": [
+        {
+          "id": "pond-1",
+          "kind": "leaf",
+          "x": 1594.9513150423177,
+          "y": 3387.390083503179,
+          "r": 111.24910045799098,
+          "age": 0.7321999999523158,
+          "variant": 1,
+          "angle": 1.4682520453001489,
+          "renderSize": 247.22022323997993,
+          "flowerClock": 34.738668970809336,
+          "flowersProduced": 1
+        },
+        {
+          "id": "pond-2",
+          "kind": "flower",
+          "x": 1724.1786659734387,
+          "y": 3367.4999089966864,
+          "r": 30,
+          "age": 0.7321999999523158,
+          "variant": 0,
+          "angle": 5.484267357332561,
+          "renderSize": 95,
+          "parentLeafId": "pond-1"
+        },
+        {
+          "id": "pond-3",
+          "kind": "leaf",
+          "x": 545.094196178357,
+          "y": 3257.1951887526884,
+          "r": 108.72313637755501,
+          "age": 0.7321999999523158,
+          "variant": 0,
+          "angle": 3.738155056614247,
+          "renderSize": 241.60696972790004,
+          "flowerClock": 28.40604073809824,
+          "flowersProduced": 1
+        },
+        {
+          "id": "pond-4",
+          "kind": "flower",
+          "x": 603.1839192690906,
+          "y": 3371.5051042182286,
+          "r": 30,
+          "age": 0.7321999999523158,
+          "variant": 2,
+          "angle": 5.1440774869899135,
+          "renderSize": 95,
+          "parentLeafId": "pond-3"
+        },
+        {
+          "id": "pond-5",
+          "kind": "leaf",
+          "x": 854.441430653162,
+          "y": 1313.7073504618359,
+          "r": 111.11142844668083,
+          "age": 0.7321999999523158,
+          "variant": 1,
+          "angle": 0.7770389524875753,
+          "renderSize": 246.91428543706854,
+          "flowerClock": 29.64909090758084,
+          "flowersProduced": 1
+        },
+        {
+          "id": "pond-6",
+          "kind": "flower",
+          "x": 863.9823927248001,
+          "y": 1183.444864366913,
+          "r": 30,
+          "age": 0.7321999999523158,
+          "variant": 0,
+          "angle": 2.849633866113424,
+          "renderSize": 95,
+          "parentLeafId": "pond-5"
+        },
+        {
+          "id": "pond-7",
+          "kind": "leaf",
+          "x": 1382.5195790253774,
+          "y": 2125.330530867466,
+          "r": 103.67982082350713,
+          "age": 0.7321999999523158,
+          "variant": 1,
+          "angle": 2.9367756395615543,
+          "renderSize": 230.39960183001585,
+          "flowerClock": 27.92042416042601,
+          "flowersProduced": 1
+        },
+        {
+          "id": "pond-8",
+          "kind": "flower",
+          "x": 1384.4479032547197,
+          "y": 2248.4952572455077,
+          "r": 30,
+          "age": 0.7321999999523158,
+          "variant": 2,
+          "angle": 3.6633432025130177,
+          "renderSize": 95,
+          "parentLeafId": "pond-7"
+        },
+        {
+          "id": "pond-9",
+          "kind": "magnet",
+          "x": 390.82818210383516,
+          "y": 356.47928275910004,
+          "r": 8,
+          "age": 0.7321999999523158,
+          "variant": 2,
+          "angle": 0.17958995525948573,
+          "renderSize": 36
+        },
+        {
+          "id": "pond-10",
+          "kind": "speed",
+          "x": 1288.1844306608589,
+          "y": 1368.4822344445272,
+          "r": 24,
+          "age": 0.7321999999523158,
+          "variant": 0,
+          "angle": 6.189388076562235,
+          "renderSize": 78
+        },
+        {
+          "id": "pond-11",
+          "kind": "shield",
+          "x": 2244.5251756753555,
+          "y": 2267.9453933064538,
+          "r": 34,
+          "age": 0.7321999999523158,
+          "variant": 1,
+          "angle": 4.786413148422435,
+          "renderSize": 90
+        },
+        {
+          "id": "pond-12",
+          "kind": "magnet",
+          "x": 1269.2304122263895,
+          "y": 2990.9018599074416,
+          "r": 8,
+          "age": 0.7321999999523158,
+          "variant": 1,
+          "angle": -0.03700546725315018,
+          "renderSize": 36
+        },
+        {
+          "id": "pond-13",
+          "kind": "speed",
+          "x": 1569.1373105552927,
+          "y": 1582.0203793348353,
+          "r": 24,
+          "age": 0.7321999999523158,
+          "variant": 2,
+          "angle": 1.2122093906441738,
+          "renderSize": 78
+        },
+        {
+          "id": "pond-14",
+          "kind": "shield",
+          "x": 2426.7757994457534,
+          "y": 918.1952350795428,
+          "r": 34,
+          "age": 0.7321999999523158,
+          "variant": 2,
+          "angle": 3.616578743460082,
+          "renderSize": 90
+        },
+        {
+          "id": "pond-15",
+          "kind": "magnet",
+          "x": 733.5285561564814,
+          "y": 1290.8707578532226,
+          "r": 8,
+          "age": 0.7321999999523158,
+          "variant": 1,
+          "angle": -0.19603137171657775,
+          "renderSize": 36
+        },
+        {
+          "id": "pond-16",
+          "kind": "speed",
+          "x": 1597.4403566302071,
+          "y": 2257.059253886564,
+          "r": 24,
+          "age": 0.7321999999523158,
+          "variant": 1,
+          "angle": 5.654729609535833,
+          "renderSize": 78
+        }
+      ],
+      "naturalFoodPickups": 4,
+      "variants": {
+        "magnet": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": -0.2779116249281076,
+          "max": 0.27931479486750366,
+          "quadrants": [
+            -1,
+            0
+          ]
+        },
+        "speed": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": 0.1135430489862602,
+          "max": 6.218742812198241,
+          "quadrants": [
+            1,
+            0,
+            3,
+            2
+          ]
+        },
+        "shield": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": 0.03932979340992511,
+          "max": 6.163734218550204,
+          "quadrants": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "flower": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": 0.029042707026607224,
+          "max": 6.266499384024463,
+          "quadrants": [
+            1,
+            2,
+            3,
+            0
+          ]
+        },
+        "leaf": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": 0.013071883377056493,
+          "max": 6.269414908185226,
+          "quadrants": [
+            2,
+            1,
+            3,
+            0
+          ]
+        }
+      },
+      "pickup": {
+        "before": 0,
+        "after": 1,
+        "remaining": false,
+        "effect": 3
+      },
+      "layers": [
+        {
+          "scenario": "small",
+          "gpu": true,
+          "order": [
+            {
+              "kind": "leaf",
+              "pass": "upper"
+            },
+            {
+              "kind": "worldFX",
+              "pass": "afterStone"
+            }
+          ],
+          "meanLuminance": 155.36054421768716
+        },
+        {
+          "scenario": "large",
+          "gpu": true,
+          "order": [
+            {
+              "kind": "leaf",
+              "pass": "lower"
+            },
+            {
+              "kind": "worldFX",
+              "pass": "afterStone"
+            }
+          ],
+          "meanLuminance": 13.476190476190487
+        },
+        {
+          "scenario": "turtleLeaf",
+          "gpu": true,
+          "order": [
+            {
+              "kind": "leaf",
+              "pass": "upper"
+            },
+            {
+              "kind": "shield",
+              "pass": "upper"
+            },
+            {
+              "kind": "worldFX",
+              "pass": "afterStone"
+            }
+          ],
+          "meanLuminance": 115.08163265306119
+        },
+        {
+          "scenario": "all",
+          "gpu": true,
+          "order": [
+            {
+              "kind": "magnet",
+              "pass": "lower"
+            },
+            {
+              "kind": "speed",
+              "pass": "upper"
+            },
+            {
+              "kind": "leaf",
+              "pass": "upper"
+            },
+            {
+              "kind": "shield",
+              "pass": "upper"
+            },
+            {
+              "kind": "worldFX",
+              "pass": "afterStone"
+            },
+            {
+              "kind": "flower",
+              "pass": "top"
+            }
+          ],
+          "meanLuminance": 108.72789115646255
+        }
+      ],
+      "errors": []
+    },
+    {
+      "device": "mobile",
+      "languages": [
+        {
+          "lang": "ja",
+          "settings": "設定",
+          "gallery": "ギャラリー",
+          "cards": 11
+        },
+        {
+          "lang": "zh",
+          "settings": "设定",
+          "gallery": "画廊",
+          "cards": 11
+        },
+        {
+          "lang": "en",
+          "settings": "Settings",
+          "gallery": "Gallery",
+          "cards": 11
+        }
+      ],
+      "initialItems": [
+        {
+          "id": "pond-1",
+          "kind": "leaf",
+          "x": 1506.2965004578805,
+          "y": 2987.351226729836,
+          "r": 107.09179242223232,
+          "age": 0.7328000000476842,
+          "variant": 0,
+          "angle": 4.81133862918098,
+          "renderSize": 237.98176093829403,
+          "flowerClock": 30.337819605290402,
+          "flowersProduced": 1
+        },
+        {
+          "id": "pond-2",
+          "kind": "flower",
+          "x": 1632.339538900751,
+          "y": 2975.5769170361577,
+          "r": 30,
+          "age": 0.7328000000476842,
+          "variant": 1,
+          "angle": 4.6024682801462795,
+          "renderSize": 95,
+          "parentLeafId": "pond-1"
+        },
+        {
+          "id": "pond-3",
+          "kind": "leaf",
+          "x": 705.8264952398408,
+          "y": 3037.5624446925067,
+          "r": 114.27678723679323,
+          "age": 0.7328000000476842,
+          "variant": 1,
+          "angle": 5.356305915453278,
+          "renderSize": 253.9484160817627,
+          "flowerClock": 28.423599314835275,
+          "flowersProduced": 1
+        },
+        {
+          "id": "pond-4",
+          "kind": "flower",
+          "x": 742.6239498578636,
+          "y": 3166.178836093575,
+          "r": 30,
+          "age": 0.7328000000476842,
+          "variant": 1,
+          "angle": 5.338114964970104,
+          "renderSize": 95,
+          "parentLeafId": "pond-3"
+        },
+        {
+          "id": "pond-5",
+          "kind": "leaf",
+          "x": 1586.7473352530124,
+          "y": 760.8517815439881,
+          "r": 97.38355566821426,
+          "age": 0.7328000000476842,
+          "variant": 1,
+          "angle": 2.8787147422871677,
+          "renderSize": 216.40790148492056,
+          "flowerClock": 38.101399237670066,
+          "flowersProduced": 1
+        },
+        {
+          "id": "pond-6",
+          "kind": "flower",
+          "x": 1696.1688620815744,
+          "y": 801.9455164941091,
+          "r": 30,
+          "age": 0.7328000000476842,
+          "variant": 1,
+          "angle": 6.1630352716620616,
+          "renderSize": 95,
+          "parentLeafId": "pond-5"
+        },
+        {
+          "id": "pond-7",
+          "kind": "leaf",
+          "x": 1966.9931877562476,
+          "y": 1460.8625788457648,
+          "r": 111.4589227162572,
+          "age": 0.7328000000476842,
+          "variant": 0,
+          "angle": 0.23852494762629348,
+          "renderSize": 247.68649492501604,
+          "flowerClock": 31.80781016118643,
+          "flowersProduced": 1
+        },
+        {
+          "id": "pond-8",
+          "kind": "flower",
+          "x": 2024.8618667848464,
+          "y": 1578.3421746336617,
+          "r": 30,
+          "age": 0.7328000000476842,
+          "variant": 1,
+          "angle": 4.317147886545685,
+          "renderSize": 95,
+          "parentLeafId": "pond-7"
+        },
+        {
+          "id": "pond-9",
+          "kind": "magnet",
+          "x": 2524.327634416973,
+          "y": 3117.9107252979607,
+          "r": 8,
+          "age": 0.7328000000476842,
+          "variant": 0,
+          "angle": -0.19031958809772428,
+          "renderSize": 36
+        },
+        {
+          "id": "pond-10",
+          "kind": "speed",
+          "x": 1090.0303910539228,
+          "y": 3827.1907482644783,
+          "r": 24,
+          "age": 0.7328000000476842,
+          "variant": 0,
+          "angle": 2.1335873713889666,
+          "renderSize": 78
+        },
+        {
+          "id": "pond-11",
+          "kind": "shield",
+          "x": 1577.8910829385823,
+          "y": 570.3630440690865,
+          "r": 34,
+          "age": 0.7328000000476842,
+          "variant": 0,
+          "angle": 4.655423206577557,
+          "renderSize": 90
+        },
+        {
+          "id": "pond-12",
+          "kind": "magnet",
+          "x": 1435.4010178764656,
+          "y": 3715.9643151552264,
+          "r": 8,
+          "age": 0.7328000000476842,
+          "variant": 2,
+          "angle": -0.05032108664271312,
+          "renderSize": 36
+        },
+        {
+          "id": "pond-13",
+          "kind": "speed",
+          "x": 1872.4881005824016,
+          "y": 2856.5725194337383,
+          "r": 24,
+          "age": 0.7328000000476842,
+          "variant": 0,
+          "angle": 0.2526505125061692,
+          "renderSize": 78
+        },
+        {
+          "id": "pond-14",
+          "kind": "shield",
+          "x": 2396.2110630691986,
+          "y": 3264.0222839642547,
+          "r": 34,
+          "age": 0.7328000000476842,
+          "variant": 1,
+          "angle": 1.6831610732676854,
+          "renderSize": 90
+        },
+        {
+          "id": "pond-15",
+          "kind": "magnet",
+          "x": 1997.2066860266486,
+          "y": 2457.4337166643218,
+          "r": 8,
+          "age": 0.7328000000476842,
+          "variant": 0,
+          "angle": 0.039892358579311865,
+          "renderSize": 36
+        },
+        {
+          "id": "pond-16",
+          "kind": "speed",
+          "x": 580.0381120588986,
+          "y": 733.2630726967423,
+          "r": 24,
+          "age": 0.7328000000476842,
+          "variant": 0,
+          "angle": 5.650076622310294,
+          "renderSize": 78
+        }
+      ],
+      "naturalFoodPickups": 3,
+      "variants": {
+        "magnet": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": -0.27762145363372887,
+          "max": 0.275917709626523,
+          "quadrants": [
+            0,
+            -1
+          ]
+        },
+        "speed": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": 0.019222274776533793,
+          "max": 6.235853358455093,
+          "quadrants": [
+            0,
+            3,
+            1,
+            2
+          ]
+        },
+        "shield": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": 0.02483604265353765,
+          "max": 6.2206033245055234,
+          "quadrants": [
+            3,
+            2,
+            1,
+            0
+          ]
+        },
+        "flower": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": 0.0021561549213233427,
+          "max": 6.2548803748058335,
+          "quadrants": [
+            3,
+            2,
+            1,
+            0
+          ]
+        },
+        "leaf": {
+          "variants": [
+            0,
+            1,
+            2
+          ],
+          "min": 0.03408179561477848,
+          "max": 6.262550508507532,
+          "quadrants": [
+            1,
+            3,
+            0,
+            2
+          ]
+        }
+      },
+      "pickup": {
+        "before": 0,
+        "after": 1,
+        "remaining": false,
+        "effect": 3
+      },
+      "layers": [
+        {
+          "scenario": "small",
+          "gpu": true,
+          "order": [
+            {
+              "kind": "leaf",
+              "pass": "upper"
+            },
+            {
+              "kind": "worldFX",
+              "pass": "afterStone"
+            }
+          ],
+          "meanLuminance": 155.36054421768716
+        },
+        {
+          "scenario": "large",
+          "gpu": true,
+          "order": [
+            {
+              "kind": "leaf",
+              "pass": "lower"
+            },
+            {
+              "kind": "worldFX",
+              "pass": "afterStone"
+            }
+          ],
+          "meanLuminance": 13.476190476190487
+        },
+        {
+          "scenario": "turtleLeaf",
+          "gpu": true,
+          "order": [
+            {
+              "kind": "leaf",
+              "pass": "upper"
+            },
+            {
+              "kind": "shield",
+              "pass": "upper"
+            },
+            {
+              "kind": "worldFX",
+              "pass": "afterStone"
+            }
+          ],
+          "meanLuminance": 115.08163265306119
+        },
+        {
+          "scenario": "all",
+          "gpu": true,
+          "order": [
+            {
+              "kind": "magnet",
+              "pass": "lower"
+            },
+            {
+              "kind": "speed",
+              "pass": "upper"
+            },
+            {
+              "kind": "leaf",
+              "pass": "upper"
+            },
+            {
+              "kind": "shield",
+              "pass": "upper"
+            },
+            {
+              "kind": "worldFX",
+              "pass": "afterStone"
+            },
+            {
+              "kind": "flower",
+              "pass": "top"
+            }
+          ],
+          "meanLuminance": 108.72789115646255
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "audio": {
+    "offline": {
+      "peak": 0.22453592717647552,
+      "rms": 0.022843761581512897,
+      "maxSampleJump": 0.017704916186630726,
+      "tail": 0,
+      "seconds": 1.5
+    },
+    "live": {
+      "state": "running",
+      "peak": 0.05333971977233887,
+      "voices": 1
+    },
+    "muted": {
+      "played": false,
+      "gain": 0,
+      "voices": 0
+    },
+    "flood": {
+      "played": 1,
+      "voices": 1
+    },
+    "errors": []
+  },
+  "namesAndActualFoodSound": {
+    "titles": {
+      "ja": [
+        "蓮の葉に宿る露",
+        "浅瀬を泳ぐ魚",
+        "葦と岩の秋景",
+        "泳ぐ海老",
+        "蓮陰の蟹",
+        "葦辺の蟹",
+        "蓮池のそよ風",
+        "冬枝に憩う鳥",
+        "淡い竹の影",
+        "竹林を渡る風",
+        "青緑の連山"
+      ],
+      "zh": [
+        "荷露清圆",
+        "游鱼浅塘",
+        "芦石秋影",
+        "墨虾游影",
+        "荷荫蟹趣",
+        "芦汀蟹影",
+        "荷塘清风",
+        "寒枝栖禽",
+        "疏竹清影",
+        "竹林听风",
+        "青绿叠嶂"
+      ],
+      "en": [
+        "Dew on Lotus Leaves",
+        "Fish in the Shallows",
+        "Autumn Reeds and Rocks",
+        "Swimming Shrimp",
+        "Crab beneath the Lotus",
+        "Crabs among the Reeds",
+        "Lotus Pond Breeze",
+        "Bird on Winter Branches",
+        "Soft Bamboo Shadows",
+        "Wind through Bamboo",
+        "Blue-Green Mountain Ranges"
+      ]
+    },
+    "live": {
+      "food": 3,
+      "enemies": 0,
+      "oscillators": 6,
+      "peak": 0.07259490340948105,
+      "audioStates": [
+        "running"
+      ]
+    },
+    "baseline": 0,
+    "errors": []
+  },
+  "releaseSmoke": [
+    {
+      "mobile": false,
+      "imports": 77,
+      "version": "v4-pond-variety-r1",
+      "before": {
+        "x": 1303.3333333333333,
+        "y": 1955
+      },
+      "after": {
+        "x": 1493.307002188733,
+        "y": 1955
+      },
+      "fallback": false,
+      "errors": []
+    },
+    {
+      "mobile": true,
+      "imports": 77,
+      "version": "v4-pond-variety-r1",
+      "before": {
+        "x": 1303.3333333333333,
+        "y": 1955
+      },
+      "after": {
+        "x": 1496.3654548128434,
+        "y": 1955
+      },
+      "fallback": false,
+      "errors": []
+    }
+  ],
+  "mechanics": {
+    "lifecycleMinutes": 30,
+    "flowersExpire": false,
+    "trappedNpcSeconds": 20,
+    "trappedTravelLessThan": 1,
+    "naturalEcologySeconds": 180,
+    "aiCount": 22,
+    "coreLeafChecks": 337326,
+    "npcSwallows": 10,
+    "npcFood": 6259,
+    "coreLeafOverlaps": 0,
+    "npcProjections": 30,
+    "finalLeaves": 5,
+    "finalFlowers": 9,
+    "finalObjects": 28,
+    "autonomousGrowthWithoutPickups": true
+  },
+  "limitations": [
+    "Official painting titles and authors are not verifiable from numbered source files; localized descriptive titles retained",
+    "Natural complete rounds, physical phones/Safari and mobile65% difficulty not reaccepted in this visual/object update"
+  ]
+}

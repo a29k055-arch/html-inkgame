@@ -4,7 +4,7 @@
 
 | 版本 | 直接游玩 | 冻结引用与来源 |
 |---|---|---|
-| **V4｜最新版水墨涂色游戏** | **[打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/)** | main 持续维护；本轮标签 v4-pace-20261110 |
+| **V4｜最新版水墨涂色游戏** | **[打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/)** | main 持续维护；本轮标签 v4-pond-variety-20261110 |
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |
 | V2｜更早期原版游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-original → 1bb0250（原版入口重定向至 outputs/ink_demo_v2.html） |
 
@@ -21,6 +21,8 @@
 V4已发布至main，十一幅原画可选关，一局显现一幅画：移动显画、吞敌大落墨、敌人柔和侵蚀，完成后进入Gallery。V4将短时美术墨尾、随体型与墨量28–60秒临时显画和吞敌永久落墨分开；Boss/碎片/抽卡停用，旧流程在V3固定入口保留；卷轴首页、三语言、Settings与冻结视觉参考继续保留。
 
 本轮更新：正式J缓游墨云保留I高速表现，九候选可对照；仅使用指定目录11张无题字裁图。总绘画65%或有墨区域90%可完成，临时显画每250墨额外+1秒（最多12秒）；开局两个不同水墨转场连续播放。接续调整NPC侵蚀节奏后，PC真实831秒达到65%并完成画廊刷新解锁，保留840秒时限；逐画人工难度与实体手机反馈仍待补。参数与实际发布结果见最新Handoff。
+
+荷塘物件已各有3种水墨样式，花持续保留且缓慢生长，NPC稳定绕叶；拾取统一轻水滴音色。画作支持独立中日英展示名，正式题名/作者仍需原始目录核实。此轮验证范围与素材来源见Handoff及assets/pond/README.md。
 
 - [Reveal Painting Preview](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/)（上一版涂色快照兼容地址，不是本轮定义的V3）
 - [Preserved Campaign](https://a29k055-arch.github.io/html-inkgame/previews/reveal-scroll/classic.html)（保留旧流程）
