@@ -1,0 +1,93 @@
+{
+  "baseline": "53c55b5",
+  "checkpoint": "checkpoint/v4-before-pace-53c55b5",
+  "config": {
+    "completion": 0.65,
+    "inkCompletion": 0.9,
+    "duration": 840,
+    "erosionPerSecond": 0.22,
+    "erosionMovingFactor": 0.06
+  },
+  "diagnosis": {
+    "oldMapArea": 7026794.340302812,
+    "currentDefaultMapArea": 10192066.666666666,
+    "requiredAreaIncrease": 0.88559477124183
+  },
+  "firstCandidate": {
+    "erosionPerSecond": 0.26,
+    "erosionMovingFactor": 0.08,
+    "results": [
+      {
+        "device": "pc",
+        "completed": false,
+        "scene": "finished",
+        "elapsed": 840.0181999997968,
+        "area": 0.5386473360833176,
+        "maxArea": 0.6016519650493395,
+        "enemies": 56,
+        "eroded": 0.21850122203929045,
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "completed": false,
+        "scene": "finished",
+        "elapsed": 840.0081999997875,
+        "area": 0.07947233153057214,
+        "maxArea": 0.1651130598977348,
+        "enemies": 22,
+        "eroded": 0.08390308842581227,
+        "errors": []
+      }
+    ]
+  },
+  "pcAccepted": {
+    "elapsed": 831.1946999998074,
+    "goal": "area",
+    "completed": true,
+    "galleryReloadUnlocked": true,
+    "deaths": 0,
+    "enemies": 55,
+    "eroded": 0.1419871618833362,
+    "errors": []
+  },
+  "whiteningFixture": {
+    "fixture": "controlled NPC stationarity, actual V4 painter and cropped artwork",
+    "before": {
+      "visible": 0.6000000238418579,
+      "permanent": 0.6000000238418579,
+      "brightness": 229.16313786008217,
+      "fogDistance": 21.607053080535998,
+      "center": 0.6000000238418579
+    },
+    "after": {
+      "visible": 0.5507531985361129,
+      "permanent": 0.5507531985361129,
+      "brightness": 226.4545267489785,
+      "fogDistance": 5.360860721479214,
+      "center": 0.09399999678134918
+    },
+    "left": {
+      "visible": 0.5507531985361129,
+      "permanent": 0.5507531985361129,
+      "brightness": 226.4545267489785,
+      "fogDistance": 5.360860721479214,
+      "center": 0.09399999678134918
+    }
+  },
+  "tests": [
+    "v4-pace",
+    "v4-nov7-mechanics",
+    "v4-pond-habitat",
+    "v4-nov10-mechanics",
+    "v4-start-lifecycle",
+    "v4-levels",
+    "reveal-save",
+    "v4-slow-ink",
+    "v4-cropped-artworks"
+  ],
+  "limitations": [
+    "Physical phone and per-art human difficulty not certified",
+    "Earlier final-config parallel runs cut off by harness while still playing, not counted as complete rounds"
+  ]
+}
