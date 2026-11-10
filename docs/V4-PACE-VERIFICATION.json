@@ -88,6 +88,52 @@
   ],
   "limitations": [
     "Physical phone and per-art human difficulty not certified",
-    "Earlier final-config parallel runs cut off by harness while still playing, not counted as complete rounds"
-  ]
+    "Earlier final-config parallel runs cut off by harness while still playing, not counted as complete rounds",
+    "Mobile controls work, but the completed automated mobile routes did not win; touch difficulty still needs targeted calibration"
+  ],
+  "mobileRuns": [
+    {
+      "route": "pace-accept",
+      "completed": false,
+      "scene": "finished",
+      "elapsed": 840.0482999997913,
+      "area": 0.3724716476878855,
+      "ink": 0.34091081336577383,
+      "deaths": 14,
+      "enemies": 29,
+      "regrips": null,
+      "errors": []
+    },
+    {
+      "route": "pace-cautious",
+      "completed": false,
+      "scene": "finished",
+      "elapsed": 840.0329999997878,
+      "area": 0.5270002117390062,
+      "ink": 0.4681821853130638,
+      "deaths": 0,
+      "enemies": 27,
+      "regrips": 98,
+      "errors": []
+    },
+    {
+      "route": "pace-tactical",
+      "completed": false,
+      "scene": "finished",
+      "elapsed": 840.0088999997841,
+      "area": 0.3662107094197415,
+      "ink": 0.5821134297995992,
+      "deaths": 0,
+      "enemies": 20,
+      "regrips": 108,
+      "errors": []
+    }
+  ],
+  "publication": {
+    "codeCommit": "9d46308",
+    "firstRun": 42751216293,
+    "firstConclusion": "failure",
+    "reason": "Pages syncing_files timeout; build and upload succeeded",
+    "retry": "normal push; integration rerun API lacked permission"
+  }
 }
