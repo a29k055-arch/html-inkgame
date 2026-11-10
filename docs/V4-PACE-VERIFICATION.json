@@ -134,6 +134,81 @@
     "firstRun": 42751216293,
     "firstConclusion": "failure",
     "reason": "Pages syncing_files timeout; build and upload succeeded",
-    "retry": "normal push; integration rerun API lacked permission"
+    "retry": {
+      "run": 42752901957,
+      "conclusion": "success",
+      "runtimeCommit": "34096e220acf36168e1d2516ecffeacdc7293bdd"
+    }
+  },
+  "online": {
+    "manifest": {
+      "root": "34096e220acf36168e1d2516ecffeacdc7293bdd",
+      "versions": {
+        "v2": {
+          "ref": "v2-original",
+          "sha": "1bb02502f68b6fd99e28338ef183825711054443"
+        },
+        "v3": {
+          "ref": "v3-roguelike",
+          "sha": "d882581af3ea15193e7cd880017cd2295a6fad21"
+        },
+        "v4": {
+          "ref": "HEAD",
+          "sha": "34096e220acf36168e1d2516ecffeacdc7293bdd"
+        }
+      }
+    },
+    "checks": [
+      {
+        "version": "v2",
+        "mobile": false,
+        "errors": [
+          "https://a29k055-arch.github.io/html-inkgame/v2/outputs/assets/ink-mattes/transitions/transition-v1-03.mov net::ERR_ABORTED"
+        ]
+      },
+      {
+        "version": "v3",
+        "mobile": false,
+        "errors": [],
+        "targets": 12,
+        "scene": "normal"
+      },
+      {
+        "version": "v4",
+        "mobile": false,
+        "errors": [],
+        "hero": "drift",
+        "targets": 12,
+        "scene": "playing",
+        "transitions": {
+          "id": "start-06",
+          "ids": [
+            "start-04",
+            "start-06"
+          ],
+          "phase": "idle",
+          "switches": 1
+        }
+      },
+      {
+        "version": "v4",
+        "mobile": true,
+        "errors": [],
+        "hero": "drift",
+        "targets": 12,
+        "scene": "playing",
+        "transitions": {
+          "id": "start-05",
+          "ids": [
+            "start-06",
+            "start-05"
+          ],
+          "phase": "idle",
+          "switches": 1
+        }
+      }
+    ],
+    "visualErrors": [],
+    "legacyNote": "V2 existing MOV abort has HTTP200 and gameplay works; exact frozen index hashes verified"
   }
 }
