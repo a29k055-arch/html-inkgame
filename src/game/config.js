@@ -2,7 +2,7 @@ export const GAME_CONFIG={
  // Legacy WORLD_W/WORLD_H, FOOD_TARGET, START_RADIUS and movement curve.
  world:{width:3400,height:3400},inkstoneDuration:300,paperDuration:180,
  aiCount:32,foodTarget:760,foodSpawnRate:25,initialRadius:18,respawnRadius:8,
- respawnDelay:1.2,respawnProtection:2.5,deathInkRetention:.65,
+ respawnDelay:1.2,respawnProtection:3.5,deathInkRetention:.65,
  consumeRatio:1.06,consumeOverlap:.32,npcGain:.62,foodGain:.84,
  maxRadius:170,waterRingStart:.36,waterRingEndRadius:1050,waterRingExponent:1.45,waterDecay:.10,
  itemSpawnInterval:10,maxItems:6,
@@ -23,7 +23,7 @@ export function settlement(ink,elapsed,rank,config=GAME_CONFIG){const full=elaps
 export const CAMPAIGN_CONFIG={duration:360,thresholds:[100,250,450],earliest:[60,180,300],maxBosses:3,energyScale:.12,specialReward:2,specialAI:12,bossTimeLimit:140,bossInkReward:180,bossRadius:115,spawnSeparation:500,bossContactInterval:.8,bossHitProtection:.45,enemyBulletLife:7,npcBulletDamage:40,bulletSpeed:850,bulletLife:2.6,bulletDamage:16,maxShots:96,maxEnemyShots:100,bossHealth:[2700,4300,6200],bossSpeed:[82,98,116],bossStandoff:100,bossSteerRange:100,bossRetreat:.8,bossOrbit:28,bossWarningSlow:.58,repairThreshold:.72,artworkId:'ink-04'};
 
 // Per-round reserve is the only player growth currency; NPC legacy mass remains unchanged.
-export const INK_RESERVE_CONFIG={startInk:65,humanFoodGainScale:.65,playerNpcGainScale:.55,playerNpcGainCap:900,maxInk:1000000,respawnSizeRetention:.45,minimumRespawnInk:65,sizeMassPerInk:4,sizeSmoothing:3.4,preservePeakOnDeath:true,shotCostRatio:.025,maximumShotCost:55,shotReserveFloor:20,minimumShotCost:2,shotInterval:.38,powerSaturationLevel:8,levelThresholds:[0,180,600,1500,3200,6200,11000,18000],minimumDamage:13,damageRange:36,minimumShotRadius:4.5,shotRadiusRange:9,normalFoodTarget:950,normalFoodSpawnRate:32,bossFoodTarget:1660,bossFoodSpawnRate:64,recoveryBelow:120,recoveryRadius:220,recoveryMinimumDots:6,recoveryBatch:2,recoveryInterval:1,recoverySpawnNear:55,recoverySpawnFar:150};
+export const INK_RESERVE_CONFIG={startInk:65,humanFoodGainScale:.65,playerNpcGainScale:.55,playerNpcGainCap:900,maxInk:1000000,respawnSizeRetention:.55,minimumRespawnInk:65,sizeMassPerInk:4,sizeSmoothing:3.4,preservePeakOnDeath:true,shotCostRatio:.025,maximumShotCost:55,shotReserveFloor:20,minimumShotCost:2,shotInterval:.38,powerSaturationLevel:8,levelThresholds:[0,180,600,1500,3200,6200,11000,18000],minimumDamage:13,damageRange:36,minimumShotRadius:4.5,shotRadiusRange:9,normalFoodTarget:950,normalFoodSpawnRate:32,bossFoodTarget:1660,bossFoodSpawnRate:64,recoveryBelow:120,recoveryRadius:220,recoveryMinimumDots:6,recoveryBatch:2,recoveryInterval:1,recoverySpawnNear:55,recoverySpawnFar:150};
 
 
 export const CONTACT_CONFIG={coreRatio:.73,spikeBaseRate:.012,spikeReferenceRadius:80,spikeSizeMin:.65,spikeSizeMax:1.65,spikeMaxLossPerSecond:40,spikeInkFloor:10,contactInterval:.10,feedbackInterval:.20,eyeTail:false};
