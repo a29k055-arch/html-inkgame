@@ -1174,5 +1174,30 @@
   "ultrawide": [
     "3840x1080",
     "3440x1440"
-  ]
+  ],
+  "release": {
+    "runtimeCommit": "49df86ca123d6dd04af11e24aaeaf64c4d686c66",
+    "action": 43732204178,
+    "conclusion": "success",
+    "url": "https://a29k055-arch.github.io/html-inkgame/v4/",
+    "onlineDevices": [
+      {
+        "mobile": false,
+        "stage": 1,
+        "radius": 9,
+        "targets": 12,
+        "errors": []
+      },
+      {
+        "mobile": true,
+        "stage": 1,
+        "radius": 9.112544260272148,
+        "targets": 12,
+        "errors": []
+      }
+    ],
+    "visualErrors": [],
+    "v2": "1bb02502f68b6fd99e28338ef183825711054443",
+    "v3": "d882581af3ea15193e7cd880017cd2295a6fad21"
+  }
 }
