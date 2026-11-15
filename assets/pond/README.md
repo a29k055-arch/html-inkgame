@@ -67,3 +67,9 @@ Three independent built-in imagegen calls used the approved baseline images as d
 - lotus-flower-v5.png: exec-f32b4cef-ec92-4975-ac25-c1987f656df1. Based on lotus-flower-v2.png; compact overhead lotus rosette with broad soft rounded overlapping petals and faint dusty rose, no needle/serrated/spiky silhouette. Replaces lotus-flower-v4.png in the runtime catalog.
 
 All requested a single complete subject on true alpha transparency without paper, frame, seal or text. Only delivery resize to512px maximum and PNG compression9 were applied; generated originals remain intact. Browser decode/alpha checks passed. Comparison at150px and36px against both approved originals and removed problem variants was inspected (work/stage-art-review.png); Node v4-pond-visuals still confirms15 distinct live RGBA assets and three randomized variants per class.
+
+## Current orientation/catalog rules — 2026-11-16
+
+No new artwork was generated or deleted in this round. The active filenames are centralized in `POND_ART_FILES` in `src/reveal/pond-rules.js`; both random variant choice and preload/render indexing use each actual catalog length. All15 active files were checked on disk. The unapproved slender turtle-v3, heart-shaped leaf-v4 and spiky flower-v4 remain inactive source drafts, retained untouched.
+
+Fish/turtles use full-circle spawn headings, shrimp use ±27° around the source heading; all may mirror horizontally. Leaves and flowers keep angle0 even during idle animation and may only mirror horizontally. No vertical scale inversion is used. These rules supersede the earlier all-items-random heading notes. Full leaf artwork/visual radius remains independent of the small NPC-blocking stem core.

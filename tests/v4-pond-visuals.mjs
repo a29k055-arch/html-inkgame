@@ -9,7 +9,7 @@ for(const [kind,variants] of Object.entries(POND_PICKUP_VARIANTS)){
  const hashes=variants.map(v=>{const b=fs.readFileSync(new URL(v.src));assert(b.readUInt32BE(16)<=512&&b.readUInt32BE(20)<=512);assert.equal(b[25],6,'RGBA source');return crypto.createHash('sha256').update(b).digest('hex');});
  assert.equal(new Set(hashes).size,3,kind+' must have three distinct image assets');
  const values=new Set(),angles=[];for(let i=0;i<90;i++){const item=assignPondAppearance({kind},()=>((i*37+angles.length*17)%90)/90);values.add(item.variant);angles.push(item.angle);}
- assert.equal(values.size,3);if(kind==='magnet')assert(angles.every(v=>Math.abs(v)<=.28));else assert(Math.max(...angles)-Math.min(...angles)>4);
+ assert.equal(values.size,3);if(kind==='magnet')assert(angles.every(v=>Math.abs(v)<=Math.PI*.15));else if(kind==='leaf'||kind==='flower')assert(angles.every(v=>v===0));else assert(Math.max(...angles)-Math.min(...angles)>4);
 }
 const items=Object.entries(POND_RULES).map(([kind,rule])=>({id:kind,kind,r:rule.r,x:200,y:200})).sort((a,b)=>pondRenderOrder(a)-pondRenderOrder(b));
 assert.deepEqual(items.map(i=>i.kind),['magnet','speed','leaf','shield','flower']);

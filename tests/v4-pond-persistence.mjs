@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {RevealRun} from '../src/reveal/run.js';
-import {POND_CONFIG as C} from '../src/reveal/pond-rules.js';
+import {POND_CONFIG as C,pondCollisionRadius} from '../src/reveal/pond-rules.js';
 import {entity} from '../src/game/inkstone.js';
 
 const make=()=>new RevealRun(()=>{},{aiCount:0,foodTarget:0,foodSpawnRate:0,initialItems:0});
@@ -28,11 +28,11 @@ assert(C.flowerGrowthQuota<=C.flowersPerLeaf,'natural growth cannot require a pl
 // Four separated leaves form a gap too narrow for this large circular core.
 // Accept stable waiting rather than alternate-direction jitter or forced teleportation.
 {const run=make(),g=run.arena;g.player.dead=1000;
- for(const [dx,dy] of [[201,0],[-201,0],[0,201],[0,-201]])g.items.push({id:`leaf-${dx}-${dy}`,kind:'leaf',x:1800+dx,y:900+dy,r:108});
+ for(const [dx,dy] of [[111,0],[-111,0],[0,111],[0,-111]])g.items.push({id:`leaf-${dx}-${dy}`,kind:'leaf',x:1800+dx,y:900+dy,r:108});
  const npc=entity('trapped-core',1800,900,90,{type:'human'});npc.appearance='eye';g.entities.push(npc);
  let travel=0,last={x:npc.x,y:npc.y};
  for(let i=0;i<1200;i++){run.update(1/60,{x:1,y:0});travel+=Math.hypot(npc.x-last.x,npc.y-last.y);last={x:npc.x,y:npc.y};
-  for(const l of run.habitat.leaves)assert(Math.hypot(npc.x-l.x,npc.y-l.y)>=g.radius(npc)+l.r+.98);
+  for(const l of run.habitat.leaves)assert(Math.hypot(npc.x-l.x,npc.y-l.y)>=g.radius(npc)+pondCollisionRadius(l)+.98);
  }
  assert(travel<1,'enclosed core must wait without repeated squeezing');
  assert(Math.hypot(npc.vx,npc.vy)<.01);

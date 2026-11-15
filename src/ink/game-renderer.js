@@ -1,3 +1,4 @@
+import {smoothRelativeSpeed,RELATIVE_INK_MOTION} from './hero-relative-motion.js';
 import {HeroWorldTrail} from './hero-trail.js';
 import {HERO_BODY_CONFIG} from './hero-visual-config.js';
 import {ProjectileTrails} from './projectile-trails.js';
@@ -35,7 +36,7 @@ export class GameRenderer {
  async loadPaper(src){this.paper=new PaperMap(this.output);await this.paper.load(src);}
  // Deliberately accepts ONLY the player. NPC positions/count/skills cannot enter this simulation.
  step(dt,player,started=true){
-  const f=this.fluid;const b=this.bodyVisual;f.bodyHalo=b.smallHalo+(b.largeHalo-b.smallHalo)*Math.min(1,Math.max(0,(player.r-b.haloStartRadius)/(b.haloEndRadius-b.haloStartRadius)));if(started&&!player.dead)this.trail.sample(player.x,player.y,player.r,dt,Math.hypot(player.vx,player.vy));else this.trail.advance(dt);if(started&&!player.dead)this.body.update(this.normalized(player),dt);
+  const f=this.fluid;if(f.preset?.slowWake){const actual=started&&!player.dead?Math.hypot(player.vx,player.vy):0,limit=this.motionSpeedLimit?.(player)||RELATIVE_INK_MOTION.studyMaxSpeed;this.relativeSpeed=smoothRelativeSpeed(this.relativeSpeed||0,actual,limit,dt);f.relativeMotion=this.relativeSpeed;}else f.relativeMotion=null;const b=this.bodyVisual;f.bodyHalo=b.smallHalo+(b.largeHalo-b.smallHalo)*Math.min(1,Math.max(0,(player.r-b.haloStartRadius)/(b.haloEndRadius-b.haloStartRadius)));if(started&&!player.dead)this.trail.sample(player.x,player.y,player.r,dt,Math.hypot(player.vx,player.vy));else this.trail.advance(dt);if(started&&!player.dead)this.body.update(this.normalized(player),dt);
   this.clock+=dt;if(this.clock>=1/QUALITY[f.quality].simulationHz){f.step(Math.min(this.clock,1/30));this.clock=0;}f.draw(this.clock);
  }
  drawStone(game){
@@ -58,7 +59,7 @@ export class GameRenderer {
   c.save();c.globalAlpha=p.effects.water?.28:p.diluted?.58:1;c.drawImage(this.canvas,0,0,w,h);c.restore();
   // Opt-in canopy pass: V4 pond objects can sit above the player; classic ordering stays unchanged.
   if(this.itemLayer){c.save();c.translate(-cam.x*scale,-cam.y*scale);c.scale(scale,scale);this.drawItems(game,'upper',orderedItems);c.restore();}
-  c.save();c.textAlign='center';c.font='12px '+this.fontFamily;for(const e of game.entities){if(e.dead||!this.visible(e,e.r+40))continue;const x=(e.x-cam.x)*scale,y=(e.y-cam.y)*scale,r=e.r*(e.effects.dense?1.32:1)*scale;c.fillStyle=e===p?'#353127':'#585246';c.fillText(entityLabel(e),x,y-r-10);if(e.effects.shield){c.strokeStyle='#a1853c99';c.beginPath();c.arc(x,y,r+4,0,Math.PI*2);c.stroke();}}
+  c.save();c.textAlign='center';c.font='12px '+this.fontFamily;for(const e of game.entities){if(e.dead||!this.visible(e,e.r+40)||(p.revealJourney?.stage===4&&e!==p&&e.r*scale<10))continue;const x=(e.x-cam.x)*scale,y=(e.y-cam.y)*scale,r=e.r*(e.effects.dense?1.32:1)*scale;c.fillStyle=e===p?'#353127':'#585246';c.fillText(entityLabel(e),x,y-r-10);if(e.effects.shield){c.strokeStyle='#a1853c99';c.beginPath();c.arc(x,y,r+4,0,Math.PI*2);c.stroke();}}
   if(p.hitFlash>0){c.strokeStyle='#ad5c4977';c.lineWidth=3;c.beginPath();c.arc((p.x-cam.x)*scale,(p.y-cam.y)*scale,p.r*scale+7,0,Math.PI*2);c.stroke();}c.restore();if(!this.deferTopItems)this.drawTopItems(game);
  }
  drawTopItems(game){if(!this.itemLayer)return;const c=this.ctx,cam=this.camera;c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);this.drawItems(game,'top',this.itemOrder?[...game.items].sort((a,b)=>this.itemOrder(a)-this.itemOrder(b)):game.items);c.restore();}

@@ -1,0 +1,1178 @@
+{
+  "date": "2026-11-16",
+  "scope": "Final four-stage V4. Native input runs use a 3x rAF clock; times are simulated game seconds and FPS is not a device benchmark. One route per device does not prove all paintings/seeds take 5-7 minutes.",
+  "parameters": {
+    "startInk": 17,
+    "radius": 9,
+    "thresholds": [
+      600,
+      3200,
+      12000
+    ],
+    "temporaryNpcReward": 5,
+    "temporaryNpcCap": 120,
+    "temporaryMaximum": 180,
+    "buffDuration": 3,
+    "buffMaximum": 30,
+    "drop": {
+      "factor": 5,
+      "bonus": 2,
+      "radiusCap": 7.5,
+      "absoluteNominalCap": 1000,
+      "duration": 1.4
+    }
+  },
+  "natural": [
+    {
+      "mode": "pc",
+      "stageHistory": [
+        {
+          "stage": 2,
+          "ink": 605.0122758119862,
+          "elapsed": 64.6846999999993
+        },
+        {
+          "stage": 3,
+          "ink": 3308.26154914426,
+          "elapsed": 166.69530000000123
+        },
+        {
+          "stage": 4,
+          "ink": 12444.196129297776,
+          "elapsed": 269.64260000001207
+        }
+      ],
+      "elapsed": 392.34170000004286,
+      "status": "finished",
+      "goal": "area",
+      "ink": 21864.346982430805,
+      "radius": 146.60882928488743,
+      "world": {
+        "width": 2606.6666666666665,
+        "height": 3910
+      },
+      "view": {
+        "width": 8581.357068828866,
+        "height": 5363.34816801804
+      },
+      "camera": 0.16780562659846562,
+      "swallows": 26,
+      "food": 377,
+      "deaths": 0,
+      "formerThreatsBecomePrey": 4,
+      "completion": 1,
+      "errors": [],
+      "nativeInput": true
+    },
+    {
+      "mode": "mobile",
+      "stageHistory": [
+        {
+          "stage": 2,
+          "ink": 611.9345646143863,
+          "elapsed": 48.15239999999961
+        },
+        {
+          "stage": 3,
+          "ink": 3924.4186928939803,
+          "elapsed": 225.16920000000295
+        },
+        {
+          "stage": 4,
+          "ink": 12578.00355761054,
+          "elapsed": 399.06970000004446
+        }
+      ],
+      "elapsed": 597.352900000001,
+      "status": "finished",
+      "goal": "area",
+      "ink": 21777.39287871381,
+      "radius": 199.7655800379427,
+      "world": {
+        "width": 2606.6666666666665,
+        "height": 3910
+      },
+      "view": {
+        "width": 3103.1746031746,
+        "height": 6715.588115588109
+      },
+      "camera": 0.12567774936061393,
+      "swallows": 23,
+      "food": 483,
+      "deaths": 0,
+      "formerThreatsBecomePrey": 8,
+      "completion": 1,
+      "errors": [],
+      "nativeInput": true
+    }
+  ],
+  "beforeBalance": [
+    {
+      "mode": "pc",
+      "stageHistory": [
+        {
+          "stage": 2,
+          "ink": 772.5877885527357,
+          "elapsed": 51.61529999999987
+        },
+        {
+          "stage": 3,
+          "ink": 3377.90231166103,
+          "elapsed": 141.5693999999984
+        },
+        {
+          "stage": 4,
+          "ink": 12318.57701853015,
+          "elapsed": 246.47530000000643
+        }
+      ],
+      "elapsed": 377.4676000000404,
+      "status": "finishing",
+      "goal": "area",
+      "ink": 19737.7151884152,
+      "radius": 182.90866375692522,
+      "world": {
+        "width": 2606.6666666666665,
+        "height": 3910
+      },
+      "view": {
+        "width": 8581.357068828866,
+        "height": 5363.34816801804
+      },
+      "camera": 0.16780562659846562,
+      "swallows": 26,
+      "food": 367,
+      "deaths": 0,
+      "formerThreatsBecomePrey": 5,
+      "completion": 0.9571000556863946,
+      "errors": [],
+      "nativeInput": true
+    },
+    {
+      "mode": "mobile",
+      "stageHistory": [
+        {
+          "stage": 2,
+          "ink": 669.5821617269568,
+          "elapsed": 63.11609999999936
+        },
+        {
+          "stage": 3,
+          "ink": 3888.357775839019,
+          "elapsed": 169.78879999999967
+        },
+        {
+          "stage": 4,
+          "ink": 13148.124813018834,
+          "elapsed": 329.6849000000233
+        }
+      ],
+      "elapsed": 480.58790000006377,
+      "status": "playing",
+      "ink": 19258.637759383488,
+      "radius": 138.95076995304134,
+      "world": {
+        "width": 2606.6666666666665,
+        "height": 3910
+      },
+      "view": {
+        "width": 3103.1746031746,
+        "height": 6715.588115588109
+      },
+      "camera": 0.12567774936061393,
+      "swallows": 24,
+      "food": 438,
+      "deaths": 0,
+      "formerThreatsBecomePrey": 7,
+      "completion": 0.6313196008706685,
+      "errors": [],
+      "nativeInput": true
+    }
+  ],
+  "controlled": {
+    "scope": "Controlled four-stage camera, shared Drop visual/mask, item HUD and win/save checks; not natural progression or a performance benchmark",
+    "devices": [
+      {
+        "mobile": false,
+        "stages": [
+          {
+            "drop": {
+              "targetRadius": 6,
+              "nominal": 30,
+              "permanent": 0.00011325366333501125
+            },
+            "stage": 1,
+            "ink": 17,
+            "radius": 9,
+            "zoomBefore": 3.2,
+            "zoomAfter": 3.2,
+            "worldUnchanged": true,
+            "clear": 0,
+            "targets": 12,
+            "corners": {
+              "left": -3450.6666666666665,
+              "top": -5806,
+              "right": 4890.666666666667,
+              "bottom": 6706
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          {
+            "drop": {
+              "targetRadius": 18,
+              "nominal": 90,
+              "permanent": 0.001021730333697381
+            },
+            "stage": 2,
+            "ink": 600,
+            "radius": 25.768197453450252,
+            "zoomBefore": 3.2,
+            "zoomAfter": 1.6542461394690908,
+            "worldUnchanged": true,
+            "clear": 0,
+            "targets": 12,
+            "corners": {
+              "left": -1436.0341351080485,
+              "top": -2784.0512026620722,
+              "right": 2876.034135108048,
+              "bottom": 3684.0512026620727
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          {
+            "drop": {
+              "targetRadius": 44,
+              "nominal": 241.84324999999998,
+              "permanent": 0.007412359625010533
+            },
+            "stage": 3,
+            "ink": 3200,
+            "radius": 57.1314274283428,
+            "zoomBefore": 1.6542461394690908,
+            "zoomAfter": 0.7225593157462229,
+            "worldUnchanged": true,
+            "clear": 0,
+            "targets": 12,
+            "corners": {
+              "left": -221.73564152257725,
+              "top": -962.6034622838658,
+              "right": 1661.735641522577,
+              "bottom": 1862.6034622838658
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          {
+            "drop": {
+              "targetRadius": 100,
+              "nominal": 700,
+              "permanent": 0.062088865457114936
+            },
+            "stage": 4,
+            "ink": 12000,
+            "radius": 109.83624174196785,
+            "zoomBefore": 0.7225593157462229,
+            "zoomAfter": 0.16932534371789396,
+            "worldUnchanged": true,
+            "clear": 0,
+            "targets": 12,
+            "corners": {
+              "left": 499.31263535434493,
+              "top": 141.862198879836,
+              "right": 940.6873646456552,
+              "bottom": 803.9242928168014
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        ],
+        "items": [
+          {
+            "kind": "shield",
+            "tier": 1,
+            "state": {
+              "tier": 1,
+              "strength": 1.3
+            },
+            "remaining": 3,
+            "title": "墨龟 Lv.1 · 体型 +30% · 3秒"
+          },
+          {
+            "kind": "shield",
+            "tier": 2,
+            "state": {
+              "tier": 2,
+              "strength": 1.4
+            },
+            "remaining": 3,
+            "title": "墨龟 Lv.2 · 体型 +40% · 3秒"
+          },
+          {
+            "kind": "shield",
+            "tier": 3,
+            "state": {
+              "tier": 3,
+              "strength": 1.5
+            },
+            "remaining": 3,
+            "title": "墨龟 Lv.3 · 体型 +50% · 3秒"
+          },
+          {
+            "kind": "magnet",
+            "tier": 1,
+            "state": {
+              "tier": 1,
+              "strength": 1.5
+            },
+            "remaining": 3,
+            "title": "墨虾 Lv.1 · 吸附范围 +50% · 3秒"
+          },
+          {
+            "kind": "magnet",
+            "tier": 2,
+            "state": {
+              "tier": 2,
+              "strength": 1.75
+            },
+            "remaining": 3,
+            "title": "墨虾 Lv.2 · 吸附范围 +75% · 3秒"
+          },
+          {
+            "kind": "magnet",
+            "tier": 3,
+            "state": {
+              "tier": 3,
+              "strength": 2
+            },
+            "remaining": 3,
+            "title": "墨虾 Lv.3 · 吸附范围 +100% · 3秒"
+          },
+          {
+            "kind": "speed",
+            "tier": 1,
+            "state": {
+              "tier": 1,
+              "strength": 0.3
+            },
+            "remaining": 3,
+            "title": "墨鲤 Lv.1 · 移速 +30% · 3秒"
+          },
+          {
+            "kind": "speed",
+            "tier": 2,
+            "state": {
+              "tier": 2,
+              "strength": 0.5
+            },
+            "remaining": 3,
+            "title": "墨鲤 Lv.2 · 移速 +50% · 3秒"
+          },
+          {
+            "kind": "speed",
+            "tier": 3,
+            "state": {
+              "tier": 3,
+              "strength": 0.7
+            },
+            "remaining": 3,
+            "title": "墨鲤 Lv.3 · 移速 +70% · 3秒"
+          }
+        ],
+        "drops": [
+          {
+            "stage": 1,
+            "targetRadius": 6,
+            "nominal": 30,
+            "permanent": 0.08131433166047143
+          },
+          {
+            "stage": 2,
+            "targetRadius": 18,
+            "nominal": 90,
+            "permanent": 0.08131433166047143
+          },
+          {
+            "stage": 3,
+            "targetRadius": 44,
+            "nominal": 241.84324999999998,
+            "permanent": 0.08131686262857218
+          },
+          {
+            "stage": 4,
+            "targetRadius": 100,
+            "nominal": 700,
+            "permanent": 0.08929408331901088
+          }
+        ],
+        "goals": {
+          "ink": "ink",
+          "area": "area",
+          "finished": true,
+          "clip": {
+            "outsideAlpha": 0,
+            "insideAlpha": 9002
+          }
+        },
+        "galleryReload": true,
+        "errors": []
+      },
+      {
+        "mobile": true,
+        "stages": [
+          {
+            "drop": {
+              "targetRadius": 6,
+              "nominal": 30,
+              "permanent": 0.00011325366333501125
+            },
+            "stage": 1,
+            "ink": 17,
+            "radius": 9,
+            "zoomBefore": 3,
+            "zoomAfter": 3,
+            "worldUnchanged": true,
+            "clear": 0,
+            "targets": 12,
+            "corners": {
+              "left": -3715,
+              "top": -5443,
+              "right": 4105,
+              "bottom": 6287.000000000001
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          {
+            "drop": {
+              "targetRadius": 18,
+              "nominal": 90,
+              "permanent": 0.001021730333697381
+            },
+            "stage": 2,
+            "ink": 600,
+            "radius": 25.768197453450252,
+            "zoomBefore": 3,
+            "zoomAfter": 1.5539721949872138,
+            "worldUnchanged": true,
+            "clear": 0,
+            "targets": 12,
+            "corners": {
+              "left": -1830.3437608000015,
+              "top": -2616.015641200003,
+              "right": 2220.3437608000027,
+              "bottom": 3460.015641200003
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          {
+            "drop": {
+              "targetRadius": 44,
+              "nominal": 241.84324999999998,
+              "permanent": 0.007412359625010533
+            },
+            "stage": 3,
+            "ink": 3200,
+            "radius": 57.1314274283428,
+            "zoomBefore": 1.5539721949872138,
+            "zoomAfter": 0.6823941986013052,
+            "worldUnchanged": true,
+            "clear": 0,
+            "targets": 12,
+            "corners": {
+              "left": -694.3871055103676,
+              "top": -912.0806582655517,
+              "right": 1084.387105510368,
+              "bottom": 1756.0806582655518
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          {
+            "drop": {
+              "targetRadius": 100,
+              "nominal": 700,
+              "permanent": 0.062088865457114936
+            },
+            "stage": 4,
+            "ink": 12000,
+            "radius": 109.83624174196785,
+            "zoomBefore": 0.6823941986013052,
+            "zoomAfter": 0.12720284335300938,
+            "worldUnchanged": true,
+            "clear": 0,
+            "targets": 12,
+            "corners": {
+              "left": 29.212294163244486,
+              "top": 196.17654655319416,
+              "right": 360.7877058367556,
+              "bottom": 693.5396640634608
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        ],
+        "items": [
+          {
+            "kind": "shield",
+            "tier": 1,
+            "state": {
+              "tier": 1,
+              "strength": 1.3
+            },
+            "remaining": 3,
+            "title": "墨龟 Lv.1 · 体型 +30% · 3秒"
+          },
+          {
+            "kind": "shield",
+            "tier": 2,
+            "state": {
+              "tier": 2,
+              "strength": 1.4
+            },
+            "remaining": 3,
+            "title": "墨龟 Lv.2 · 体型 +40% · 3秒"
+          },
+          {
+            "kind": "shield",
+            "tier": 3,
+            "state": {
+              "tier": 3,
+              "strength": 1.5
+            },
+            "remaining": 3,
+            "title": "墨龟 Lv.3 · 体型 +50% · 3秒"
+          },
+          {
+            "kind": "magnet",
+            "tier": 1,
+            "state": {
+              "tier": 1,
+              "strength": 1.5
+            },
+            "remaining": 3,
+            "title": "墨虾 Lv.1 · 吸附范围 +50% · 3秒"
+          },
+          {
+            "kind": "magnet",
+            "tier": 2,
+            "state": {
+              "tier": 2,
+              "strength": 1.75
+            },
+            "remaining": 3,
+            "title": "墨虾 Lv.2 · 吸附范围 +75% · 3秒"
+          },
+          {
+            "kind": "magnet",
+            "tier": 3,
+            "state": {
+              "tier": 3,
+              "strength": 2
+            },
+            "remaining": 3,
+            "title": "墨虾 Lv.3 · 吸附范围 +100% · 3秒"
+          },
+          {
+            "kind": "speed",
+            "tier": 1,
+            "state": {
+              "tier": 1,
+              "strength": 0.3
+            },
+            "remaining": 3,
+            "title": "墨鲤 Lv.1 · 移速 +30% · 3秒"
+          },
+          {
+            "kind": "speed",
+            "tier": 2,
+            "state": {
+              "tier": 2,
+              "strength": 0.5
+            },
+            "remaining": 3,
+            "title": "墨鲤 Lv.2 · 移速 +50% · 3秒"
+          },
+          {
+            "kind": "speed",
+            "tier": 3,
+            "state": {
+              "tier": 3,
+              "strength": 0.7
+            },
+            "remaining": 3,
+            "title": "墨鲤 Lv.3 · 移速 +70% · 3秒"
+          }
+        ],
+        "drops": [
+          {
+            "stage": 1,
+            "targetRadius": 6,
+            "nominal": 30,
+            "permanent": 0.08131433166047143
+          },
+          {
+            "stage": 2,
+            "targetRadius": 18,
+            "nominal": 90,
+            "permanent": 0.08131433166047143
+          },
+          {
+            "stage": 3,
+            "targetRadius": 44,
+            "nominal": 241.84324999999998,
+            "permanent": 0.08131686262857218
+          },
+          {
+            "stage": 4,
+            "targetRadius": 100,
+            "nominal": 700,
+            "permanent": 0.08929408331901088
+          }
+        ],
+        "goals": {
+          "ink": "ink",
+          "area": "area",
+          "finished": true,
+          "clip": {
+            "outsideAlpha": 0,
+            "insideAlpha": 9002
+          }
+        },
+        "galleryReload": true,
+        "errors": []
+      }
+    ]
+  },
+  "fluid": [
+    {
+      "file": "relative-ink-report.json",
+      "scope": "Actual GPU same-radius/same-relative-speed fixture; not a real-device FPS benchmark",
+      "errors": [],
+      "cases": [
+        {
+          "radius": 8,
+          "limit": 110,
+          "ratio": 0.12,
+          "scale": 3,
+          "tailLength": 211.65480427046208,
+          "tailDensity": 875.0643128752708,
+          "stoppedTail": 0.006133317947387695,
+          "stoppedCore": 2231.76806640625,
+          "targets": 12
+        },
+        {
+          "radius": 8,
+          "limit": 110,
+          "ratio": 0.6,
+          "scale": 3,
+          "tailLength": 587.4555160142323,
+          "tailDensity": 2738.0372076630592,
+          "stoppedTail": 0.001484990119934082,
+          "stoppedCore": 2245.02294921875,
+          "targets": 12
+        },
+        {
+          "radius": 8,
+          "limit": 110,
+          "ratio": 1,
+          "scale": 3,
+          "tailLength": 699.0213523131684,
+          "tailDensity": 2641.2941877245903,
+          "stoppedTail": 0.0023439526557922363,
+          "stoppedCore": 2250.837890625,
+          "targets": 12
+        },
+        {
+          "radius": 50,
+          "limit": 100,
+          "ratio": 0.12,
+          "scale": 0.8,
+          "tailLength": 164.6797153024977,
+          "tailDensity": 900.9853315353394,
+          "stoppedTail": 0.004166662693023682,
+          "stoppedCore": 5956.37158203125,
+          "targets": 12
+        },
+        {
+          "radius": 50,
+          "limit": 100,
+          "ratio": 0.6,
+          "scale": 0.8,
+          "tailLength": 227.3131672597865,
+          "tailDensity": 2010.2104552984238,
+          "stoppedTail": 0.004061639308929443,
+          "stoppedCore": 5936.46142578125,
+          "targets": 12
+        },
+        {
+          "radius": 50,
+          "limit": 100,
+          "ratio": 1,
+          "scale": 0.8,
+          "tailLength": 313.4341637010622,
+          "tailDensity": 3934.526186466217,
+          "stoppedTail": 0.004904568195343018,
+          "stoppedCore": 5982.5498046875,
+          "targets": 12
+        },
+        {
+          "radius": 140,
+          "limit": 82,
+          "ratio": 0.12,
+          "scale": 0.37,
+          "tailLength": 170.55160142348666,
+          "tailDensity": 370.04479414224625,
+          "stoppedTail": 0.005093991756439209,
+          "stoppedCore": 9607.79150390625,
+          "targets": 12
+        },
+        {
+          "radius": 140,
+          "limit": 82,
+          "ratio": 0.6,
+          "scale": 0.37,
+          "tailLength": 180.3380782918107,
+          "tailDensity": 779.2839758992195,
+          "stoppedTail": 0.01682448387145996,
+          "stoppedCore": 9645.38916015625,
+          "targets": 12
+        },
+        {
+          "radius": 140,
+          "limit": 82,
+          "ratio": 1,
+          "scale": 0.37,
+          "tailLength": 215.56939501778658,
+          "tailDensity": 2168.373322248459,
+          "stoppedTail": 0.004190564155578613,
+          "stoppedCore": 9625.70849609375,
+          "targets": 12
+        }
+      ]
+    },
+    {
+      "file": "relative-ink-far-landscape-report.json",
+      "scope": "Actual GPU same-radius/same-relative-speed fixture; not a real-device FPS benchmark",
+      "errors": [],
+      "cases": [
+        {
+          "radius": 170,
+          "limit": 82,
+          "ratio": 0.12,
+          "scale": 0.06,
+          "tailLength": 55.865371775424705,
+          "tailDensity": 315.5421483516693,
+          "stoppedTail": 0.007865548133850098,
+          "stoppedCore": 950.03125,
+          "targets": 12
+        },
+        {
+          "radius": 170,
+          "limit": 82,
+          "ratio": 0.6,
+          "scale": 0.06,
+          "tailLength": 73.79556904400306,
+          "tailDensity": 632.105638563633,
+          "stoppedTail": 0.0016937255859375,
+          "stoppedCore": 949.14599609375,
+          "targets": 12
+        },
+        {
+          "radius": 170,
+          "limit": 82,
+          "ratio": 1,
+          "scale": 0.06,
+          "tailLength": 87.88358118361293,
+          "tailDensity": 797.3542561531067,
+          "stoppedTail": 0.006242275238037109,
+          "stoppedCore": 952.212890625,
+          "targets": 12
+        }
+      ]
+    },
+    {
+      "file": "relative-ink-far-portrait-report.json",
+      "scope": "Actual GPU same-radius/same-relative-speed fixture; not a real-device FPS benchmark",
+      "errors": [],
+      "cases": [
+        {
+          "radius": 170,
+          "limit": 82,
+          "ratio": 0.12,
+          "scale": 0.126,
+          "tailLength": 121.34754098361148,
+          "tailDensity": 1496.4704518318176,
+          "stoppedTail": 0.013400018215179443,
+          "stoppedCore": 4094.544921875,
+          "targets": 12
+        },
+        {
+          "radius": 170,
+          "limit": 82,
+          "ratio": 0.6,
+          "scale": 0.126,
+          "tailLength": 176.3311475409842,
+          "tailDensity": 2931.640807926655,
+          "stoppedTail": 0.0027808547019958496,
+          "stoppedCore": 4084.3671875,
+          "targets": 12
+        },
+        {
+          "radius": 170,
+          "limit": 82,
+          "ratio": 1,
+          "scale": 0.126,
+          "tailLength": 218.52786885245786,
+          "tailDensity": 3769.2932745814323,
+          "stoppedTail": 0.008952498435974121,
+          "stoppedCore": 4094.90576171875,
+          "targets": 12
+        }
+      ]
+    }
+  ],
+  "pond": [
+    {
+      "mobile": false,
+      "state": {
+        "quadrants": 4,
+        "leaves": 4,
+        "bladeUnchanged": true,
+        "projected": true,
+        "playerFree": true,
+        "plants": [
+          {
+            "kind": "leaf",
+            "angle": 0,
+            "r": 186.5794550681724,
+            "core": 33.58430191227103,
+            "flipX": true
+          },
+          {
+            "kind": "flower",
+            "angle": 0,
+            "r": 30,
+            "core": 0,
+            "flipX": false
+          },
+          {
+            "kind": "leaf",
+            "angle": 0,
+            "r": 217.24461387153676,
+            "core": 39.10403049687662,
+            "flipX": false
+          },
+          {
+            "kind": "flower",
+            "angle": 0,
+            "r": 30,
+            "core": 0,
+            "flipX": false
+          },
+          {
+            "kind": "leaf",
+            "angle": 0,
+            "r": 215.59392954865876,
+            "core": 38.806907318758576,
+            "flipX": false
+          },
+          {
+            "kind": "flower",
+            "angle": 0,
+            "r": 30,
+            "core": 0,
+            "flipX": true
+          },
+          {
+            "kind": "leaf",
+            "angle": 0,
+            "r": 159.84494999853473,
+            "core": 28.77209099973625,
+            "flipX": false
+          },
+          {
+            "kind": "flower",
+            "angle": 0,
+            "r": 30,
+            "core": 0,
+            "flipX": true
+          }
+        ],
+        "animals": [
+          {
+            "kind": "magnet",
+            "angle": -0.22126614954507218,
+            "flipX": false,
+            "tier": 1,
+            "r": 4
+          },
+          {
+            "kind": "speed",
+            "angle": 2.2297155093533974,
+            "flipX": false,
+            "tier": 1,
+            "r": 12
+          },
+          {
+            "kind": "shield",
+            "angle": 0.5157703633280856,
+            "flipX": true,
+            "tier": 1,
+            "r": 17
+          },
+          {
+            "kind": "magnet",
+            "angle": -0.39435938025158673,
+            "flipX": false,
+            "tier": 1,
+            "r": 4
+          },
+          {
+            "kind": "speed",
+            "angle": 1.8405705045570748,
+            "flipX": false,
+            "tier": 1,
+            "r": 12
+          },
+          {
+            "kind": "shield",
+            "angle": 2.78716574679558,
+            "flipX": true,
+            "tier": 1,
+            "r": 17
+          },
+          {
+            "kind": "magnet",
+            "angle": 0.25900844857351685,
+            "flipX": false,
+            "tier": 1,
+            "r": 4
+          },
+          {
+            "kind": "speed",
+            "angle": 0.772295091313727,
+            "flipX": false,
+            "tier": 1,
+            "r": 12
+          }
+        ],
+        "files": {
+          "shield": [
+            "turtle.png",
+            "turtle-v2.png",
+            "turtle-v4.png"
+          ],
+          "magnet": [
+            "shrimp.png",
+            "shrimp-v2.png",
+            "shrimp-v3.png"
+          ],
+          "speed": [
+            "koi.png",
+            "koi-v2.png",
+            "koi-v3.png"
+          ],
+          "leaf": [
+            "lotus-leaf-v2.png",
+            "lotus-leaf-v3.png",
+            "lotus-leaf-v5.png"
+          ],
+          "flower": [
+            "lotus-flower-v2.png",
+            "lotus-flower-v3.png",
+            "lotus-flower-v5.png"
+          ]
+        },
+        "scale": 0.19335038363171364
+      },
+      "errors": []
+    },
+    {
+      "mobile": true,
+      "state": {
+        "quadrants": 4,
+        "leaves": 4,
+        "bladeUnchanged": true,
+        "projected": true,
+        "playerFree": true,
+        "plants": [
+          {
+            "kind": "leaf",
+            "angle": 0,
+            "r": 148.51412847990844,
+            "core": 26.73254312638352,
+            "flipX": true
+          },
+          {
+            "kind": "flower",
+            "angle": 0,
+            "r": 30,
+            "core": 0,
+            "flipX": true
+          },
+          {
+            "kind": "leaf",
+            "angle": 0,
+            "r": 224.91735293062487,
+            "core": 40.48512352751248,
+            "flipX": true
+          },
+          {
+            "kind": "flower",
+            "angle": 0,
+            "r": 30,
+            "core": 0,
+            "flipX": true
+          },
+          {
+            "kind": "leaf",
+            "angle": 0,
+            "r": 157.6907381055264,
+            "core": 28.384332858994753,
+            "flipX": false
+          },
+          {
+            "kind": "flower",
+            "angle": 0,
+            "r": 30,
+            "core": 0,
+            "flipX": false
+          },
+          {
+            "kind": "leaf",
+            "angle": 0,
+            "r": 177.59381087685995,
+            "core": 31.96688595783479,
+            "flipX": true
+          },
+          {
+            "kind": "flower",
+            "angle": 0,
+            "r": 30,
+            "core": 0,
+            "flipX": true
+          }
+        ],
+        "animals": [
+          {
+            "kind": "magnet",
+            "angle": 0.22005232380006012,
+            "flipX": true,
+            "tier": 1,
+            "r": 4
+          },
+          {
+            "kind": "speed",
+            "angle": 1.677507864028915,
+            "flipX": true,
+            "tier": 1,
+            "r": 12
+          },
+          {
+            "kind": "shield",
+            "angle": 4.310572574187846,
+            "flipX": false,
+            "tier": 1,
+            "r": 17
+          },
+          {
+            "kind": "magnet",
+            "angle": 0.4347679161358972,
+            "flipX": true,
+            "tier": 1,
+            "r": 4
+          },
+          {
+            "kind": "speed",
+            "angle": 0.5685796234897571,
+            "flipX": true,
+            "tier": 1,
+            "r": 12
+          },
+          {
+            "kind": "shield",
+            "angle": 5.7473907854482675,
+            "flipX": true,
+            "tier": 1,
+            "r": 17
+          },
+          {
+            "kind": "magnet",
+            "angle": -0.1386313750507051,
+            "flipX": true,
+            "tier": 1,
+            "r": 4
+          },
+          {
+            "kind": "speed",
+            "angle": 1.2806619642769619,
+            "flipX": true,
+            "tier": 1,
+            "r": 12
+          }
+        ],
+        "files": {
+          "shield": [
+            "turtle.png",
+            "turtle-v2.png",
+            "turtle-v4.png"
+          ],
+          "magnet": [
+            "shrimp.png",
+            "shrimp-v2.png",
+            "shrimp-v3.png"
+          ],
+          "speed": [
+            "koi.png",
+            "koi-v2.png",
+            "koi-v3.png"
+          ],
+          "leaf": [
+            "lotus-leaf-v2.png",
+            "lotus-leaf-v3.png",
+            "lotus-leaf-v5.png"
+          ],
+          "flower": [
+            "lotus-flower-v2.png",
+            "lotus-flower-v3.png",
+            "lotus-flower-v5.png"
+          ]
+        },
+        "scale": 0.12567774936061404
+      },
+      "errors": []
+    }
+  ],
+  "unverified": [
+    "5-7 minute pace for touch/multiple paintings/seeds",
+    "physical low-end phones and iOS/Safari performance"
+  ],
+  "notes": [
+    "PC achieved 6.54 minutes; touch sample 9.96 minutes, so touch 5-7 minute goal is not met. Stage gaps vary and are not forced by a clock.",
+    "Native runs reached finished and Gallery remained unlocked after reload.",
+    "Controlled Drops recorded the final 5+2 curve at real stage cameras; camera-only snapshot is before each synthetic bloom."
+  ],
+  "ultrawide": [
+    "3840x1080",
+    "3440x1440"
+  ]
+}
