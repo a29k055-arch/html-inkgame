@@ -39,7 +39,7 @@ V4 opts into lower/upper object passes around the Hero layer. Inedible objects c
 
 Layer validation: work/pond-layer-report.json covers Canvas fallback rendering on PC and mobile; work/pond-layer-gpu-report.json covers actual WebGL rendering with DPR2 on PC1440×900 and mobile390×844. Fixtures compare image pixels and actual lower/Hero/upper draw order, never game completion. Small-player leaf center luminance128.6 versus large-player cover13.0 in WebGL; leaf remains inedible in both states; attached flower sorts above its leaf; classic opt-out order is unchanged. Both contexts report no page errors.
 
-## Current — three variants per kind (2026-11-10)
+## Previous — three variants per kind (2026-11-10)
 
 Added two independently generated paintings per kind, ten separate built-in imagegen calls, matching the existing user-guided shuimo assets. All are true transparent overhead sprites, without frames or coin backings. Different shell/petal/vein/ink patterns and body silhouettes are original variations, not palette swaps. Prompts retained black-gray layered ink washes, restrained rose lotus tips, full subject containment and transparent outside. Only delivery resizing to512px and PNG compression9 was applied; generated originals remain untouched.
 
@@ -57,3 +57,13 @@ Added two independently generated paintings per kind, ten separate built-in imag
 Runtime catalogs are POND_PICKUP_VARIANTS in src/reveal/pickups.js. All15 images are preloaded and cached. PondHabitat assigns each spawned object a stable variant0–2 and heading once; turtle/fish/leaf/flower use the full circle, shrimp ±.28rad around their painted forward direction. No appearance reroll per render frame. HUD retains the recognizable baseline image.
 
 Current world order supersedes the previous two-pass notes: fish/shrimp below leaves, turtles may sit on upper leaves, flowers in a final top pass after units and world FX. Small players pass beneath leaves; sufficiently large players cover leaves, which remain inedible. Flower alpha/pickup size and actor core rules remain separate from artwork padding.
+
+## Current — conservative silhouette corrections (2026-11-15)
+
+Three independent built-in imagegen calls used the approved baseline images as direct style/proportion references. Old problem sprites are retained untouched for comparison, but no longer occupy the third live slot. No API/CLI fallback or third-party asset was used.
+
+- turtle-v4.png: exec-bbe83b3d-cd7b-4a39-af75-6d9d9cc69f3a. Based on turtle.png; broad round-oval shell (not stretched), natural short limbs/head/tail proportions, only slight resting pose/scute/wash variations. Replaces turtle-v3.png in the runtime catalog.
+- lotus-leaf-v5.png: exec-09dd2420-b1f5-4984-9771-3c510298362f. Based on lotus-leaf-v2.png; round overhead disk, small shallow notch, central veins and muted ink patches, no heart silhouette. Replaces lotus-leaf-v4.png in the runtime catalog.
+- lotus-flower-v5.png: exec-f32b4cef-ec92-4975-ac25-c1987f656df1. Based on lotus-flower-v2.png; compact overhead lotus rosette with broad soft rounded overlapping petals and faint dusty rose, no needle/serrated/spiky silhouette. Replaces lotus-flower-v4.png in the runtime catalog.
+
+All requested a single complete subject on true alpha transparency without paper, frame, seal or text. Only delivery resize to512px maximum and PNG compression9 were applied; generated originals remain intact. Browser decode/alpha checks passed. Comparison at150px and36px against both approved originals and removed problem variants was inspected (work/stage-art-review.png); Node v4-pond-visuals still confirms15 distinct live RGBA assets and three randomized variants per class.

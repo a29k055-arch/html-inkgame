@@ -1,0 +1,597 @@
+{
+  "date": "2026-11-15",
+  "scope": "First two stages only. Native inputs use a 3x simulation clock, not a performance benchmark. Goal fixtures are controlled, not natural full wins.",
+  "threshold": 1000,
+  "natural": [
+    {
+      "device": "pc",
+      "clockScale": 3,
+      "nativeInput": true,
+      "initial": {
+        "ink": 80,
+        "radius": 12,
+        "scale": 2.3
+      },
+      "expandedAt": 62.58479999999969,
+      "final": {
+        "elapsed": 107.81059999999827,
+        "ink": 1983.8536114673116,
+        "radius": 45.236297949637745,
+        "scale": 0.9764658583904325,
+        "kills": 9,
+        "deaths": 0,
+        "transitions": 1
+      },
+      "maxFormerPrey": 5,
+      "errors": []
+    },
+    {
+      "device": "mobile",
+      "clockScale": 3,
+      "nativeInput": true,
+      "initial": {
+        "ink": 80,
+        "radius": 12,
+        "scale": 2.2
+      },
+      "expandedAt": 91.36719999999887,
+      "final": {
+        "elapsed": 136.8529999999979,
+        "ink": 1997.2062533113772,
+        "radius": 45.207432375848505,
+        "scale": 0.9423050113196831,
+        "kills": 8,
+        "deaths": 0,
+        "transitions": 1
+      },
+      "maxFormerPrey": 4,
+      "errors": []
+    }
+  ],
+  "controlled": {
+    "scope": "Controlled GPU/camera/mask/goal fixtures plus basic native UI; not natural stage timing or natural whole-round acceptance",
+    "devices": [
+      {
+        "mode": "pc",
+        "ui": [
+          {
+            "lang": "zh",
+            "settings": "设定",
+            "galleryFirst": "荷露清圆"
+          },
+          {
+            "lang": "ja",
+            "settings": "設定",
+            "galleryFirst": "蓮の葉に宿る露"
+          },
+          {
+            "lang": "en",
+            "settings": "Settings",
+            "galleryFirst": "Dew on Lotus Leaves"
+          }
+        ],
+        "initial": {
+          "version": "V4",
+          "heroPreset": "drift",
+          "heroTrailMode": "gpu-cloud",
+          "cloudDensityDecay": 0.12,
+          "heroSlowMix": 1,
+          "contactSamples": 0,
+          "contactMs": 0,
+          "mode": "inkstone",
+          "paused": false,
+          "fps": 34.43187407771765,
+          "quality": "performance",
+          "features": {
+            "campaign": false,
+            "bosses": false,
+            "fragments": false,
+            "cards": false,
+            "buildHud": false,
+            "inventory": false,
+            "reveal": true
+          },
+          "scene": "playing",
+          "growthStage": 1,
+          "growthExpandedAt": null,
+          "growthTransitions": 0,
+          "cameraScale": 2.299706720894068,
+          "visibleWorld": {
+            "width": 626.1668007128162,
+            "height": 391.35425044551016
+          },
+          "completion": 0,
+          "inkCompletion": 0,
+          "artworkId": "ink-01",
+          "startTransition": {
+            "id": "start-03",
+            "ids": [
+              "start-10",
+              "start-03"
+            ],
+            "phase": "idle",
+            "switches": 1
+          },
+          "temporaryLifetime": 28,
+          "temporaryFade": 5,
+          "temporaryMaximumHold": 60,
+          "elapsed": 0.015700000017881393,
+          "ink": 93.83449576298855,
+          "deaths": 0,
+          "radius": 12.029276344466178,
+          "position": {
+            "x": 1303.3333333333333,
+            "y": 1955
+          },
+          "world": {
+            "width": 2606.6666666666665,
+            "height": 3910
+          },
+          "metrics": {
+            "enemyBlooms": 0,
+            "foodPickups": 1,
+            "pickups": 0,
+            "eroded": 0,
+            "habitat": {
+              "flowersExpired": 0,
+              "leavesGrown": 0,
+              "npcProjections": 0
+            }
+          },
+          "ecology": {
+            "npcSwallows": 0,
+            "npcRespawns": 0,
+            "npcFood": 1,
+            "maxRadius": 15.178785953114616
+          },
+          "foodCount": 798,
+          "items": 16,
+          "shield": 0,
+          "boostCooldown": 0,
+          "trailPoints": 1,
+          "trailLifetime": 1.497338306996715,
+          "fallback": false,
+          "targets": 12,
+          "language": "en",
+          "activeBuffs": {
+            "giant": 0,
+            "magnet": 0,
+            "rush": 0,
+            "flower": 0
+          }
+        },
+        "assets": [
+          {
+            "kind": "shield",
+            "count": 3,
+            "srcs": [
+              "turtle.png",
+              "turtle-v2.png",
+              "turtle-v4.png"
+            ]
+          },
+          {
+            "kind": "magnet",
+            "count": 3,
+            "srcs": [
+              "shrimp.png",
+              "shrimp-v2.png",
+              "shrimp-v3.png"
+            ]
+          },
+          {
+            "kind": "speed",
+            "count": 3,
+            "srcs": [
+              "koi.png",
+              "koi-v2.png",
+              "koi-v3.png"
+            ]
+          },
+          {
+            "kind": "leaf",
+            "count": 3,
+            "srcs": [
+              "lotus-leaf-v2.png",
+              "lotus-leaf-v3.png",
+              "lotus-leaf-v5.png"
+            ]
+          },
+          {
+            "kind": "flower",
+            "count": 3,
+            "srcs": [
+              "lotus-flower-v2.png",
+              "lotus-flower-v3.png",
+              "lotus-flower-v5.png"
+            ]
+          }
+        ],
+        "shots": [
+          {
+            "size": "small",
+            "speed": 35,
+            "radius": 12,
+            "mass": 144,
+            "scale": 2.3,
+            "points": 18,
+            "targets": 12,
+            "cloud": true
+          },
+          {
+            "size": "small",
+            "speed": 150,
+            "radius": 12,
+            "mass": 144,
+            "scale": 2.3,
+            "points": 83,
+            "targets": 12,
+            "cloud": true
+          },
+          {
+            "size": "middle",
+            "speed": 35,
+            "radius": 32.61901286060018,
+            "mass": 1064,
+            "scale": 2.081128416244298,
+            "points": 16,
+            "targets": 12,
+            "cloud": true
+          },
+          {
+            "size": "middle",
+            "speed": 150,
+            "radius": 32.61901286060018,
+            "mass": 1064,
+            "scale": 2.081128416244298,
+            "points": 67,
+            "targets": 12,
+            "cloud": true
+          }
+        ],
+        "transition": {
+          "event": {
+            "stage": 2,
+            "ink": 1000,
+            "elapsed": 777
+          },
+          "pigmentBefore": {
+            "x": 1370.042528004602,
+            "y": 1954.8575548351257,
+            "area": 9181.27740323531
+          },
+          "pigmentAfter": {
+            "x": 1376.5486132065766,
+            "y": 1954.808806251728,
+            "area": 9797.244635214414
+          },
+          "worldPigmentDrift": 6.506267830310777,
+          "pigmentAreaRatio": 1.067089491464668,
+          "from": 2.081128416244298,
+          "to": 1.161186396828418,
+          "maxStep": 0.016673429260607442,
+          "visibleAreaGain": 3.212135665090902,
+          "cleared": 0,
+          "reset": 0,
+          "reprojected": 180,
+          "sameHistory": true,
+          "sameWorldState": true,
+          "targets": 12
+        },
+        "painting": {
+          "before": {
+            "visible": 0.0027900929761637766,
+            "persistent": 0.0018372419257928845
+          },
+          "after": {
+            "visible": 0.0022264997277039794,
+            "persistent": 0.0013473791808151377
+          },
+          "left": {
+            "visible": 0.0022264997277039794,
+            "persistent": 0.0013473791808151377
+          },
+          "afterTrail": {
+            "persistent": 0.0013473791808151377,
+            "trailPoints": 0
+          },
+          "persistent": 0.0013473791808151377
+        },
+        "clock": {
+          "text": "0:02",
+          "label": "Time Played",
+          "elapsed": 2.9324000000178794,
+          "finiteDeadline": false
+        },
+        "goals": {
+          "ink": {
+            "kind": "ink",
+            "locked": true,
+            "area": 0.09
+          },
+          "area": {
+            "kind": "area",
+            "locked": true
+          },
+          "finished": true,
+          "artwork": "ink-01"
+        },
+        "refreshedGalleryUnlocked": true,
+        "errors": []
+      },
+      {
+        "mode": "mobile",
+        "ui": [
+          {
+            "lang": "zh",
+            "settings": "设定",
+            "galleryFirst": "荷露清圆"
+          },
+          {
+            "lang": "ja",
+            "settings": "設定",
+            "galleryFirst": "蓮の葉に宿る露"
+          },
+          {
+            "lang": "en",
+            "settings": "Settings",
+            "galleryFirst": "Dew on Lotus Leaves"
+          }
+        ],
+        "initial": {
+          "version": "V4",
+          "heroPreset": "drift",
+          "heroTrailMode": "gpu-cloud",
+          "cloudDensityDecay": 0.12,
+          "heroSlowMix": 1,
+          "contactSamples": 0,
+          "contactMs": 0,
+          "mode": "inkstone",
+          "paused": false,
+          "fps": 60.32436708825202,
+          "quality": "performance",
+          "features": {
+            "campaign": false,
+            "bosses": false,
+            "fragments": false,
+            "cards": false,
+            "buildHud": false,
+            "inventory": false,
+            "reveal": true
+          },
+          "scene": "playing",
+          "growthStage": 1,
+          "growthExpandedAt": null,
+          "growthTransitions": 0,
+          "cameraScale": 2.2,
+          "visibleWorld": {
+            "width": 177.27272727272725,
+            "height": 383.6363636363636
+          },
+          "completion": 0,
+          "inkCompletion": 0,
+          "artworkId": "ink-01",
+          "startTransition": {
+            "id": "start-04",
+            "ids": [
+              "start-01",
+              "start-04"
+            ],
+            "phase": "idle",
+            "switches": 1
+          },
+          "temporaryLifetime": 28,
+          "temporaryFade": 5,
+          "temporaryMaximumHold": 60,
+          "elapsed": 0.01610000001788103,
+          "ink": 80,
+          "deaths": 0,
+          "radius": 12,
+          "position": {
+            "x": 1303.3333333333333,
+            "y": 1955
+          },
+          "world": {
+            "width": 2606.6666666666665,
+            "height": 3910
+          },
+          "metrics": {
+            "enemyBlooms": 0,
+            "foodPickups": 0,
+            "pickups": 0,
+            "eroded": 0,
+            "habitat": {
+              "flowersExpired": 0,
+              "leavesGrown": 0,
+              "npcProjections": 0
+            }
+          },
+          "ecology": {
+            "npcSwallows": 0,
+            "npcRespawns": 0,
+            "npcFood": 1,
+            "maxRadius": 15.08464373160326
+          },
+          "foodCount": 799,
+          "items": 16,
+          "shield": 0,
+          "boostCooldown": 0,
+          "trailPoints": 1,
+          "trailLifetime": 1.4966817029303008,
+          "fallback": false,
+          "targets": 12,
+          "language": "en",
+          "activeBuffs": {
+            "giant": 0,
+            "magnet": 0,
+            "rush": 0,
+            "flower": 0
+          }
+        },
+        "assets": [
+          {
+            "kind": "shield",
+            "count": 3,
+            "srcs": [
+              "turtle.png",
+              "turtle-v2.png",
+              "turtle-v4.png"
+            ]
+          },
+          {
+            "kind": "magnet",
+            "count": 3,
+            "srcs": [
+              "shrimp.png",
+              "shrimp-v2.png",
+              "shrimp-v3.png"
+            ]
+          },
+          {
+            "kind": "speed",
+            "count": 3,
+            "srcs": [
+              "koi.png",
+              "koi-v2.png",
+              "koi-v3.png"
+            ]
+          },
+          {
+            "kind": "leaf",
+            "count": 3,
+            "srcs": [
+              "lotus-leaf-v2.png",
+              "lotus-leaf-v3.png",
+              "lotus-leaf-v5.png"
+            ]
+          },
+          {
+            "kind": "flower",
+            "count": 3,
+            "srcs": [
+              "lotus-flower-v2.png",
+              "lotus-flower-v3.png",
+              "lotus-flower-v5.png"
+            ]
+          }
+        ],
+        "shots": [
+          {
+            "size": "small",
+            "speed": 35,
+            "radius": 12,
+            "mass": 144,
+            "scale": 2.2,
+            "points": 18,
+            "targets": 12,
+            "cloud": true
+          },
+          {
+            "size": "small",
+            "speed": 150,
+            "radius": 12,
+            "mass": 144,
+            "scale": 2.2,
+            "points": 83,
+            "targets": 12,
+            "cloud": true
+          },
+          {
+            "size": "middle",
+            "speed": 35,
+            "radius": 32.61901286060018,
+            "mass": 1064,
+            "scale": 1.9906445720597636,
+            "points": 16,
+            "targets": 12,
+            "cloud": true
+          },
+          {
+            "size": "middle",
+            "speed": 150,
+            "radius": 32.61901286060018,
+            "mass": 1064,
+            "scale": 1.9906445720597636,
+            "points": 67,
+            "targets": 12,
+            "cloud": true
+          }
+        ],
+        "transition": {
+          "event": {
+            "stage": 2,
+            "ink": 1000,
+            "elapsed": 777
+          },
+          "pigmentBefore": {
+            "x": 1394.0350697055312,
+            "y": 1955.1607568651164,
+            "area": 5659.84833720968
+          },
+          "pigmentAfter": {
+            "x": 1383.331731159454,
+            "y": 1955.191242874238,
+            "area": 6736.63106628467
+          },
+          "worldPigmentDrift": 10.703381962197518,
+          "pigmentAreaRatio": 1.1902493962595908,
+          "from": 1.9906445720597636,
+          "to": 1.119023056732687,
+          "maxStep": 0.01579764742897294,
+          "visibleAreaGain": 3.164531172682823,
+          "cleared": 0,
+          "reset": 0,
+          "reprojected": 180,
+          "sameHistory": true,
+          "sameWorldState": true,
+          "targets": 12
+        },
+        "painting": {
+          "before": {
+            "visible": 0.0027900929761637766,
+            "persistent": 0.0018372419257928845
+          },
+          "after": {
+            "visible": 0.0022264451900275515,
+            "persistent": 0.0013473301856687682
+          },
+          "left": {
+            "visible": 0.0022264451900275515,
+            "persistent": 0.0013473301856687682
+          },
+          "afterTrail": {
+            "persistent": 0.0013473301856687682,
+            "trailPoints": 0
+          },
+          "persistent": 0.0013473301856687682
+        },
+        "clock": {
+          "text": "0:02",
+          "label": "Time Played",
+          "elapsed": 2.982600000017879,
+          "finiteDeadline": false
+        },
+        "goals": {
+          "ink": {
+            "kind": "ink",
+            "locked": true,
+            "area": 0.09
+          },
+          "area": {
+            "kind": "area",
+            "locked": true
+          },
+          "finished": true,
+          "artwork": "ink-01"
+        },
+        "refreshedGalleryUnlocked": true,
+        "errors": []
+      }
+    ]
+  },
+  "notCertified": [
+    "natural 5-7 minute full painting",
+    "physical low-end phone and iOS/Safari",
+    "every random seed and every painting"
+  ]
+}

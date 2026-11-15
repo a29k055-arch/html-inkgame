@@ -15,14 +15,14 @@ export function entity(id,x,y,r,controller){
 }
 export class Inkstone {
  constructor(onEvent=()=>{},options={}){
-  this.world={...(options.world||C.world)};this.movement=options.movement;this.behavior=options.behavior;this.growthBalance=options.growthBalance;this.magnetRules=options.magnetRules;this.combatRules=options.combatRules;this.boundarySliding=!!options.boundarySliding;this.npcRespawnSizes=options.npcRespawnSizes;this.npcMaxRadius=options.npcMaxRadius??C.maxRadius;this.npcFoodGainScale=options.npcFoodGainScale??1;this.playerSpeedPenalty=options.playerSpeedPenalty;this.simplePickups=!!options.simplePickups;this.rewardChoices=options.rewardChoices!==false;this.shrink=options.shrink!==false;this.rushSpeed=options.rushSpeed??A.dash.speed;this.duration=options.duration||C.inkstoneDuration;this.autoFinish=options.autoFinish!==false;this.rewardMultiplier=options.rewardMultiplier||1;
+  this.world={...(options.world||C.world)};this.movement=options.movement;this.behavior=options.behavior;this.growthBalance=options.growthBalance;this.magnetRules=options.magnetRules;this.combatRules=options.combatRules;this.boundarySliding=!!options.boundarySliding;this.npcRespawnSizes=options.npcRespawnSizes;this.npcSpawner=options.npcSpawner;this.aiCount=options.aiCount??C.aiCount;this.npcMaxRadius=options.npcMaxRadius??C.maxRadius;this.npcFoodGainScale=options.npcFoodGainScale??1;this.playerSpeedPenalty=options.playerSpeedPenalty;this.simplePickups=!!options.simplePickups;this.rewardChoices=options.rewardChoices!==false;this.shrink=options.shrink!==false;this.rushSpeed=options.rushSpeed??A.dash.speed;this.duration=options.duration||C.inkstoneDuration;this.autoFinish=options.autoFinish!==false;this.rewardMultiplier=options.rewardMultiplier||1;
   this.foodTarget=options.foodTarget??C.foodTarget;this.foodSpawnRate=options.foodSpawnRate??C.foodSpawnRate;this.reserveGrowth=!!options.reserveGrowth;this.onEvent=onEvent;this.elapsed=0;this.finished=false;this.itemClock=C.itemSpawnInterval;this.foodClock=0;this.waves=[];this.ecology={npcSwallows:0,npcRespawns:0,npcFood:0,maxRadius:0};
   this.center={x:this.world.width/2,y:this.world.height/2};
-  this.player=entity('human',this.center.x,this.center.y,C.initialRadius,{type:'human'});this.player.invincible=C.respawnProtection;if(this.reserveGrowth)initReserve(this.player);
+  this.player=entity('human',this.center.x,this.center.y,C.initialRadius,{type:'human'});this.player.invincible=C.respawnProtection;if(options.reserveRules)this.player.reserveRules={...options.reserveRules};if(this.reserveGrowth)initReserve(this.player,options.startInk??R.startInk);
   this.entities=[this.player];
   for(let i=0;i<(options.aiCount??C.aiCount);i++){
-   const point=randomNpcPoint(this.player,this.world),roll=Math.random();
-   const radius=roll>.93?random(78,118):roll>.78?random(42,72):random(14,38);
+   const spawn=this.npcSpawner?.(this,i),point=spawn?.point||randomNpcPoint(this.player,this.world),roll=Math.random();
+   const radius=spawn?.radius??(roll>.93?random(78,118):roll>.78?random(42,72):random(14,38));
    const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i));npc.skinIndex=i;npc.nameIndex=i%names.length;npc.nameNumber=i>=names.length?i+1:'';npc.appearance=i%2?'eye':'thorn';this.entities.push(npc);
   }
   this.foods=Array.from({length:this.foodTarget},()=>this.food());this.items=[];this.ranged=this.reserveGrowth?new RangedCombat(this):null;
@@ -65,7 +65,7 @@ export class Inkstone {
   stopActives(e);this.ranged?.reset(e);e.deaths++;if(!e.growth)e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);return true;
  }
  respawn(e){
-  const roll=!e.growth&&this.npcRespawnSizes?Math.random():0,band=!e.growth&&this.npcRespawnSizes?.find(b=>roll<b[0]),npcRadius=band?random(band[1],band[2]):C.respawnRadius,retained=e.growth?e.r:npcRadius,p=this.spawnPoint(retained+180);Object.assign(e,{x:p.x,y:p.y,vx:0,vy:0,r:retained,mass:retained**2,collisionScale:1,invincible:C.respawnProtection});
+  const spawn=!e.growth?this.npcSpawner?.(this,this.entities.indexOf(e)-1,{respawn:true,entity:e}):null,roll=!e.growth&&this.npcRespawnSizes?Math.random():0,band=!e.growth&&this.npcRespawnSizes?.find(b=>roll<b[0]),npcRadius=spawn?.radius??(band?random(band[1],band[2]):C.respawnRadius),retained=e.growth?e.r:npcRadius,p=spawn?.point||this.spawnPoint(retained+180);Object.assign(e,{x:p.x,y:p.y,vx:0,vy:0,r:retained,mass:retained**2,collisionScale:1,invincible:C.respawnProtection});
   if(e.growth)syncReserve(e,0,true);if(this.boundarySliding)this.constrain(e);e.controller.goal=null;e.controller.think=0;if(e.controller.type==='ai')this.ecology.npcRespawns++;this.onEvent('respawn',e);
  }
  update(dt,input){

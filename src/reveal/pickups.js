@@ -2,7 +2,7 @@
 // Loading is explicit so the home scroll can track real asset readiness.
 import {POND_RULES,pondObjectRadius,pondDisplaySize,pondRenderOrder,canEatPondObject} from './pond-rules.js';
 const descriptor=(kind,filename)=>Object.freeze({src:new URL('../../assets/pond/'+filename,import.meta.url).href,worldSize:POND_RULES[kind].renderSize});
-export const POND_PICKUP_VARIANTS=Object.freeze(Object.fromEntries(Object.entries({shield:['turtle.png','turtle-v2.png','turtle-v3.png'],magnet:['shrimp.png','shrimp-v2.png','shrimp-v3.png'],speed:['koi.png','koi-v2.png','koi-v3.png'],leaf:['lotus-leaf-v2.png','lotus-leaf-v3.png','lotus-leaf-v4.png'],flower:['lotus-flower-v2.png','lotus-flower-v3.png','lotus-flower-v4.png']}).map(([kind,files])=>[kind,Object.freeze(files.map(file=>descriptor(kind,file)))])));
+export const POND_PICKUP_VARIANTS=Object.freeze(Object.fromEntries(Object.entries({shield:['turtle.png','turtle-v2.png','turtle-v4.png'],magnet:['shrimp.png','shrimp-v2.png','shrimp-v3.png'],speed:['koi.png','koi-v2.png','koi-v3.png'],leaf:['lotus-leaf-v2.png','lotus-leaf-v3.png','lotus-leaf-v5.png'],flower:['lotus-flower-v2.png','lotus-flower-v3.png','lotus-flower-v5.png']}).map(([kind,files])=>[kind,Object.freeze(files.map(file=>descriptor(kind,file)))])));
 export const POND_PICKUPS=Object.freeze(Object.fromEntries(Object.entries(POND_PICKUP_VARIANTS).map(([kind,entries])=>[kind,entries[0]])));
 export const POND_PICKUP_URLS=Object.freeze(Object.fromEntries(Object.entries(POND_PICKUPS).map(([kind,entry])=>[kind,entry.src])));
 const images=new Map();

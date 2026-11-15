@@ -1,7 +1,9 @@
 import {DROP_ALPHA,DROP_SHAPE,dropStage,sampleDrop} from './drop-shape.js';
 import {REVEAL_CONFIG as C} from './config.js';
 // Persistent reveal state, never derived from transient Flow Trail pixels.
-export function consumeBloomRadius(radius,config=C){const r=Math.max(0,Number(radius)||0);return Math.min(config.consumeRadiusMax,config.consumeRadiusTargetCap*r,(config.consumeRadius||0)+r*config.consumeRadiusGrowth);}
+// Real source-alpha extent, shared with the on-screen Drops texture (not a circular mask).
+export const DROP_ALPHA_EXTENT=(()=>{let max=0;const n=DROP_SHAPE.size;for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(DROP_ALPHA[y*n+x])max=Math.max(max,Math.hypot((x+.5)/n-.5,(y+.5)/n-.5)*2);return max;})();
+export function consumeBloomRadius(radius,config=C){const r=Math.max(0,Number(radius)||0),u=Math.max(0,Math.min(1,(r-(config.consumeRadiusGrowthStart??18))/Math.max(1,config.consumeRadiusGrowthRange??80))),smooth=u*u*(3-2*u),factor=config.consumeRadiusGrowth+(config.consumeRadiusGrowthBonus||0)*smooth;return Math.min(config.consumeRadiusMax,config.consumeRadiusTargetCap*r/DROP_ALPHA_EXTENT,(config.consumeRadius||0)+r*factor);}
 export class RevealMask {
  constructor(config={}){this.config={...C,...config};const c=this.config;this.width=c.width;this.height=c.height;this.cols=c.columns;this.rows=Math.ceil(this.cols*this.height/this.width);this.cells=new Float32Array(this.cols*this.rows);this.sum=0;this.version=0;this.blooms=[];}
  get completion(){return this.sum/this.cells.length;}
