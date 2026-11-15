@@ -4,7 +4,6 @@ import {REVEAL_CONFIG as C} from '../src/reveal/config.js';
 import {GrowthJourney,followGrowthCamera} from '../src/reveal/growth-stages.js';
 import {reserveRadius,syncReserve} from '../src/game/ink-reserve.js';
 import {ITEM_TIERS,assignItemTier,collectTieredItem,expireItemTiers} from '../src/reveal/item-tiers.js';
-import {temporaryHoldForRadius} from '../src/reveal/temporary.js';
 const g=new RevealRun(()=>{},{aiCount:0,foodTarget:0,initialItems:0,columns:64}),p=g.player;
 assert.equal(p.ink,17);assert.equal(p.r,9);assert.equal(reserveRadius(17),Math.sqrt(132),'classic mapping unchanged');
 g.update(.1);g.elapsed=10000;g.update(.1);assert.equal(g.journey.stage,1,'no timer promotion');
@@ -22,7 +21,7 @@ for(const [effect,kind] of [['giant','shield'],['rush','speed'],['magnet','magne
 }
 const sizes=[1,2,3,4].map(stage=>assignItemTier({kind:'shield',r:34,renderSize:90},stage));assert.deepEqual(sizes.map(a=>a.tier),[1,2,3,3]);assert(sizes[0].r<sizes[1].r&&sizes[1].r<sizes[2].r);
 p.revealJourney=g.journey;p.ink=500;syncReserve(p,0,true);const base=p.ink;collectTieredItem(p,{kind:'shield',tier:3});g.update(.1);p.ink+=100;for(let i=0;i<65;i++)g.update(.1);assert.equal(p.ink,base+100);assert(!p.effects.giant);assert(Math.abs(p.r-reserveRadius(p.ink,p.reserveRules))<.01);
-const temp=g.temporary;temp.stamp(500,500,60,0,9,250,0);const old=Float32Array.from(temp.holdUntil);g.event('consume',{entity:p,kind:'enemy',x:100,y:100,coreRadius:15,r:15});assert.equal(g.temporaryNpcBonus,5);assert.deepEqual(temp.holdUntil,old);temp.stamp(700,700,60,1,9,250,g.temporaryNpcBonus);assert.equal(temporaryHoldForRadius(9,C,250,g.temporaryNpcBonus),34);assert.equal(temporaryHoldForRadius(170,C,1e6,1e6),180);assert.equal(C.completionThreshold,.65);assert.equal(C.inkCompletionThreshold,.9);
+const temp=g.temporary;const old=Float32Array.from(temp.holdUntil);g.event('consume',{entity:p,kind:'enemy',x:100,y:100,coreRadius:15,r:15});assert.equal(g.temporaryNpcBonus,5);assert.deepEqual(temp.holdUntil,old);assert.equal(C.completionThreshold,.65);assert.equal(C.inkCompletionThreshold,.9);
 // Physical speed and attraction use the active tier, not only HUD labels.
 const b=new RevealRun(()=>{},{aiCount:0,foodTarget:0,foodSpawnRate:0,initialItems:0,columns:32}),bp=b.player,normal=b.arena.speed(bp);
 for(let tier=1;tier<=3;tier++){bp.effects={};bp.pondBuffs={};collectTieredItem(bp,{kind:'speed',tier});assert(Math.abs(b.arena.speed(bp)/normal-(1+ITEM_TIERS.rush[tier-1]))<1e-10);b.boost();assert(b.arena.speed(bp)/normal<=1.7+1e-10);b.cooldown=0;}

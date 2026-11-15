@@ -8,6 +8,7 @@ export class GameInput {
   this.listen(window,'keyup',e=>this.keys.delete(e.key.toLowerCase()));this.listen(window,'blur',()=>{this.reset();onAction('blur');});
  }
  get mobile(){return this.controls==='mobile'||(this.controls==='auto'&&matchMedia('(pointer:coarse)').matches);}
+ get boosting(){return this.keys.has('shift');}
  updateStick(e){const x=e.clientX-this.base.x,y=e.clientY-this.base.y,n=Math.max(32,Math.hypot(x,y));this.stick={x:x/n,y:y/n};const el=document.getElementById('joystick');el.style.setProperty('--x',this.stick.x*32+'px');el.style.setProperty('--y',this.stick.y*32+'px');}
  clearPointer(){this.pointer=null;this.painting=false;this.stick={x:0,y:0};const el=document.getElementById('joystick');el.style.left=el.style.top=el.style.bottom='';el.style.setProperty('--x','0px');el.style.setProperty('--y','0px');}
  updateShoot(e){const x=e.clientX-this.shootBase.x,y=e.clientY-this.shootBase.y,n=Math.hypot(x,y);if(n>4){this.shoot={x:x/n,y:y/n};this.hasAimed=true;}const el=document.getElementById('shootJoystick');el.style.setProperty('--x',this.shoot.x*Math.min(32,n)+'px');el.style.setProperty('--y',this.shoot.y*Math.min(32,n)+'px');}

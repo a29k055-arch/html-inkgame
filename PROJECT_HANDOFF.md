@@ -1,5 +1,27 @@
 # 墨—BOKU— Project Handoff
-## 2026-11-16 — V4 四阶段、相对速度墨云与三级拾取 [CURRENT]
+## 2026-11-16 — V4 永久显画、荷叶庇护与四阶段重校 [CURRENT]
+
+基线 `4ee8533`（main 干净），工作分支 `work/v4-audit`，发布键 `v4-permanent-r1`（81 模块）。未生成/删除美术图。
+
+**永久显画（P0-C）**：取消临时层到期/淡出/每250墨+1秒/每吞敌+5秒，删除 8 个 `temporary*` 配置。移动接触、Drop、侵蚀全部写入唯一 `RevealMask`；`completion` 与 `inkCompletion` 改为 O(1) 读取增量 `sum`/`weightedSum`，不再每次全网格扫描。保留防回填簿记（`lastContact`/`erasedContact`/`contactTimes`），站桩不能瞬间刷回被涂白区域。视觉墨云仍独立消散（GPU 流体未改）。
+
+**荷叶庇护（P0-7）**：`run.updateShelter()` 按 `1.06r`/`0.96r` 滞回判定；`Inkstone.kill` 在目标是玩家且处于庇护时直接返回 false。只阻止吞噬，危险红圈、穿越、NPC 茎核避让、尖刺/水化等其他规则不变。
+
+**Shift（P1-5）**：改为按住式，强度复用 `ITEM_TIERS.rush` 三档（30/50/70%），与鱼类 Buff 仍取 `Math.max` 不叠乘；移除 7 秒冷却与 2 秒爆发，触控按钮 pointerdown/up 同一入口。
+
+**四阶段与镜头（P0-2）**：阈值 1400/6500/18000 实际墨量；阶段内 zoom 恒定，按 `stageScreenRadius(.048) × 视口短边 ÷ 阶段进入半径` 推导，因此每阶段玩家从约 9% 视口长到 20–27% 再一次性拉远，PC 与手机相对体型一致。阶段在游戏中只升；死亡复活由 `journey.recalculate` 按实际墨量重判（可降级）。
+
+**NPC 生态（P0-3）**：生态改为「阶段进入半径的倍数」分带（猎物 0.24–0.48、同级 0.74–1.10、威胁 1.9–3.1，上限 280），旧巨人自然变成新同级；22% 重生保留上一阶段小猎物；数量 22→34、食物 800→920、补充 36→46。NPC 互食改为 1.22 体型差 + 3.5–7.5 秒消化冷却；NPC 吃玩家需要 1.28 体型差。
+
+**Drop（P0-4）**：改落在玩家下方 `1.05r`，显画与视觉共用同一坐标与 alpha；名义上限 1000→320，避免单次吞噬涂满 31% 画面。
+
+**水墨（P0-1）**：新增正式预设 `longcloud`（K·游墨长云）——以 I/H 的流动参数为基底，去掉低速堆墨：`slowWake` 改为 `decay .34 / feedReduction .60 / floor .30 / retention 1.0`，`fluidity .35`。`visual-effects/v4.html` 已把 K 置顶并与 J/I/H 并排可切换。
+
+**节奏实测**（离线 `tools/pace-probe.mjs`，路径涂抹近似 8Hz alpha 回读，非真人）：三次样本 65% 分别落在 300s/300s，另一次 180s；末期完成度在 70–85% 区间波动，结束时 0–4 次死亡。脚本行为不代表真实体验，需人工试玩确认。
+
+**已知问题**：13 个旧机制测试仍失败（`deep-reveal`、`reveal-balance`、`reveal-run`、`v4-four-growth`、`v4-growth-ecology`、`v4-nov6/7/9/10`、`v4-pace`、`v4-reveal-layers`、`deep-presets`、`v4-growth-stages`），原因集中在旧临时层 `holdUntil/coverage/capsule/stamp` 已删除、旧阈值/分带常量、以及 Shift 不再返回 false。新契约由 `tests/v4-permanent-reveal.mjs` 覆盖（10 组断言全通过）。`v4-four-growth` 等需专门迁移，不在本轮完成。
+
+## 2026-11-16 — V4 四阶段、相对速度墨云与三级拾取 [PREVIOUS]
 
 基线7eb340e，起始干净，恢复分支checkpoint/v4-before-four-growth-7eb340e。发布键v4-four-growth-r1、81模块；V2/V3冻结引用不动。未生成/删除美术图。
 
