@@ -124,7 +124,7 @@ $('resetData').onclick=()=>$('resetConfirm').showModal();$('cancelReset').onclic
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseGame();last=performance.now();});addEventListener('pagehide',()=>{if(game&&!game.finished)recordRevealRun(game.config.artworkId,game.completion,game.goalReached,game.id);flushSave();input.dispose();renderer?.dispose();homeFluid?.dispose();waterSound.dispose();});
 document.addEventListener('boku:render-error',()=>{if(game&&renderer&&!renderer.fallback){renderer.dispose();renderer=createRevealRenderer($('world'),quality,{world:game.world,ground:painter,TrailClass:CometTrail},true);renderer.mobile=input.mobile;renderer.motionSpeedLimit=player=>game.arena.speed(player);notify('revealFallback');}});
 
-const loading=new LoadingScroll($('loading'),{mattes:2,painting:2,skins:1,artWorks:3,gallery:1,background:1,title:1,startTransitions:2,pickups:1});
+const loading=new LoadingScroll($('loading'),{mattes:2,painting:2,skins:1,gallery:1,background:1,title:1,startTransitions:2,pickups:1});
 // Warm every painting's download so later scene switches and the gallery never stall.
 // Bounded warm-up: never let a slow painting download block the title screen.
 const warmArtworks=async()=>{const work=(async()=>{for(const art of REVEAL_ARTWORKS.slice(0,4)){try{const img=new Image();img.src=art.src;await img.decode();}catch{}}})();
