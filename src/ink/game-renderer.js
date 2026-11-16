@@ -10,10 +10,10 @@ import {QUALITY} from '../../prototypes/ink/src/config.js';
 import {PaperMap} from './paper-map.js';
 import {GAME_CONFIG as C,clamp} from '../game/config.js';
 import {followCamera} from '../game/camera.js';
-import {NpcPainter,paintNpcDanger} from './npc-painter.js';
+import {NpcPainter,paintNpcDanger,npcDangerState} from './npc-painter.js';
 export class GameRenderer {
  constructor(output,quality,mode,visual={}){
-  this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.world=visual.world||C.world;this.ground=visual.ground;this.itemPainter=visual.itemPainter;this.itemLayer=visual.itemLayer;this.itemOrder=visual.itemOrder;this.itemExtent=visual.itemExtent;this.deferTopItems=!!visual.deferTopItems;this.followCamera=visual.cameraFollow||followCamera;this.foodPainter=visual.foodPainter;this.bodyVisual={...HERO_BODY_CONFIG,...visual.body};this.trail=new (visual.TrailClass||HeroWorldTrail)(visual.trail);this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
+  this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.world=visual.world||C.world;this.ground=visual.ground;this.itemPainter=visual.itemPainter;this.itemLayer=visual.itemLayer;this.itemOrder=visual.itemOrder;this.itemExtent=visual.itemExtent;this.deferTopItems=!!visual.deferTopItems;this.drawOrder=[];this.followCamera=visual.cameraFollow||followCamera;this.foodPainter=visual.foodPainter;this.bodyVisual={...HERO_BODY_CONFIG,...visual.body};this.trail=new (visual.TrailClass||HeroWorldTrail)(visual.trail);this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
   this.canvas=document.createElement('canvas');this.canvas.style.cssText='position:fixed;left:-10000px;top:0;pointer-events:none;';document.body.append(this.canvas);
   this.onContextLost=e=>{e.preventDefault();document.dispatchEvent(new Event('boku:render-error'));};this.canvas.addEventListener('webglcontextlost',this.onContextLost);
   this.setBounds();try{this.fluid=new (visual.FluidClass||InkFluid)(this.canvas,quality);}catch(error){this.textAbort.abort();this.canvas.remove();throw error;}this.fluid.materialMode=true;this.fluid.sizeBoundary=visual.bodyDebug??(mode==='inkstone');
@@ -39,6 +39,8 @@ export class GameRenderer {
   const f=this.fluid;if(f.preset?.slowWake){const actual=started&&!player.dead?Math.hypot(player.vx,player.vy):0,limit=this.motionSpeedLimit?.(player)||RELATIVE_INK_MOTION.studyMaxSpeed;this.relativeSpeed=smoothRelativeSpeed(this.relativeSpeed||0,actual,limit,dt);f.relativeMotion=this.relativeSpeed;}else f.relativeMotion=null;const b=this.bodyVisual;f.bodyHalo=b.smallHalo+(b.largeHalo-b.smallHalo)*Math.min(1,Math.max(0,(player.r-b.haloStartRadius)/(b.haloEndRadius-b.haloStartRadius)));if(started&&!player.dead)this.trail.sample(player.x,player.y,player.r,dt,Math.hypot(player.vx,player.vy));else this.trail.advance(dt);if(started&&!player.dead)this.body.update(this.normalized(player),dt);
   this.clock+=dt;if(this.clock>=1/QUALITY[f.quality].simulationHz){f.step(Math.min(this.clock,1/30));this.clock=0;}f.draw(this.clock);
  }
+ // The ink layer is a separate fixed canvas; clipping it keeps stray ink inside the map.
+ setInkClip(rect){const el=this.canvas;if(!el)return;const next=rect?`inset(${Math.round(rect.top)}px ${Math.round(rect.right)}px ${Math.round(rect.bottom)}px ${Math.round(rect.left)}px)`:'none';if(el.style.clipPath!==next)el.style.clipPath=next;}
  drawStone(game){
   const c=this.ctx,w=this.viewW,h=this.viewH,p=game.player,cam=this.camera,scale=cam.scale;
   c.clearRect(0,0,w,h);c.fillStyle='#e7dfcc';c.fillRect(0,0,w,h);c.save();c.translate(-cam.x*scale,-cam.y*scale);c.scale(scale,scale);
@@ -53,13 +55,18 @@ export class GameRenderer {
   this.drawItems(game,'lower',orderedItems);
   // V4 warnings belong to each threatening NPC, under its ink body.
   for(const npc of game.entities.slice(1))if(!npc.dead&&this.visible(npc,npc.r*1.8+25))paintNpcDanger(c,npc,p,scale);
-  game.entities.slice(1).forEach((npc,i)=>{if(!npc.dead&&this.visible(npc,npc.r*1.8+25))this.npcs.draw(c,npc,i,game.entities,game.theme==='boss'?game.player:null);});
+  // Smaller bodies first so a bigger one always covers a smaller one.
+  this.drawOrder.length=0;for(const npc of game.entities)if(npc!==p)this.drawOrder.push(npc);this.drawOrder.sort((a,b)=>a.r-b.r);
+  this.drawOrder.forEach((npc,i)=>{if(!npc.dead&&this.visible(npc,npc.r*1.8+25))this.npcs.draw(c,npc,i,game.entities,game.theme==='boss'?game.player:null);});
   for(const wave of game.waves){c.save();c.translate(wave.x,wave.y);c.rotate(Math.atan2(wave.aim.y,wave.aim.x));c.strokeStyle=`rgba(66,60,45,${.28*(1-wave.age/C.skillDurations.splash)})`;c.lineWidth=16*(1-wave.age/C.skillDurations.splash);c.beginPath();c.arc(0,0,wave.range*wave.age/C.skillDurations.splash,-1,1);c.stroke();c.restore();}
   c.restore();
   c.save();c.globalAlpha=p.effects.water?.28:p.diluted?.58:1;c.drawImage(this.canvas,0,0,w,h);c.restore();
   // Opt-in canopy pass: V4 pond objects can sit above the player; classic ordering stays unchanged.
   if(this.itemLayer){c.save();c.translate(-cam.x*scale,-cam.y*scale);c.scale(scale,scale);this.drawItems(game,'upper',orderedItems);c.restore();}
-  c.save();c.textAlign='center';c.font='12px '+this.fontFamily;for(const e of game.entities){if(e.dead||!this.visible(e,e.r+40)||(p.revealJourney?.stage===4&&e!==p&&e.r*scale<10))continue;const x=(e.x-cam.x)*scale,y=(e.y-cam.y)*scale,r=e.r*(e.effects.dense?1.32:1)*scale;c.fillStyle=e===p?'#353127':'#585246';c.fillText(entityLabel(e),x,y-r-10);if(e.effects.shield){c.strokeStyle='#a1853c99';c.beginPath();c.arc(x,y,r+4,0,Math.PI*2);c.stroke();}}
+  c.save();c.textAlign='center';c.font='12px '+this.fontFamily;for(const e of game.entities){if(e.dead||!this.visible(e,e.r+40)||(p.revealJourney?.stage===4&&e!==p&&e.r*scale<10))continue;const x=(e.x-cam.x)*scale,y=(e.y-cam.y)*scale;
+   // Sit above the warning ring when there is one, so the id never reads inside it.
+   const ring=e===p?0:((npcDangerState(e,p,scale)?.radius||0)*scale);
+   const r=Math.max(e.r*(e.effects.dense?1.32:1)*scale,ring)+4;c.fillStyle=e===p?'#353127':'#585246';c.fillText(entityLabel(e),x,y-r-10);if(e.effects.shield){c.strokeStyle='#a1853c99';c.beginPath();c.arc(x,y,r+4,0,Math.PI*2);c.stroke();}}
   if(p.hitFlash>0){c.strokeStyle='#ad5c4977';c.lineWidth=3;c.beginPath();c.arc((p.x-cam.x)*scale,(p.y-cam.y)*scale,p.r*scale+7,0,Math.PI*2);c.stroke();}c.restore();if(!this.deferTopItems)this.drawTopItems(game);
  }
  drawTopItems(game){if(!this.itemLayer)return;const c=this.ctx,cam=this.camera;c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);this.drawItems(game,'top',this.itemOrder?[...game.items].sort((a,b)=>this.itemOrder(a)-this.itemOrder(b)):game.items);c.restore();}

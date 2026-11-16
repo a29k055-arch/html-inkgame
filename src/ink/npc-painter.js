@@ -15,7 +15,7 @@ export function npcDangerState(enemy,player,scale=1){
  const threat=Math.min(1,(ratio-NPC_DANGER_STYLE.compareRatio)/Math.max(.01,NPC_DANGER_STYLE.lethalRatio-NPC_DANGER_STYLE.compareRatio));
  const lethal=ratio>=NPC_DANGER_STYLE.lethalRatio;
  const lineWidth=lethal?NPC_DANGER_STYLE.lethalLinePixels:NPC_DANGER_STYLE.minLinePixels+(NPC_DANGER_STYLE.maxLinePixels-NPC_DANGER_STYLE.minLinePixels)*threat;
- const distance=Math.hypot(enemy.x-player.x,enemy.y-player.y);return {enemyCore,playerCore,threshold,distance,range:Infinity,ratio,threat,lethal,lineWidth,radius:visualRadius(enemy)*(enemy.appearance==='thorn'?NPC_DANGER_STYLE.thornOutlineScale:NPC_DANGER_STYLE.eyeOutlineScale)+NPC_DANGER_STYLE.gapPixels/scale,alpha:NPC_DANGER_STYLE.minAlpha+(NPC_DANGER_STYLE.maxAlpha-NPC_DANGER_STYLE.minAlpha)*threat};
+ const distance=Math.hypot(enemy.x-player.x,enemy.y-player.y);return {enemyCore,playerCore,threshold,distance,range:Infinity,ratio,threat,lethal,lineWidth,radius:enemyCore+NPC_DANGER_STYLE.gapPixels/scale,alpha:NPC_DANGER_STYLE.minAlpha+(NPC_DANGER_STYLE.maxAlpha-NPC_DANGER_STYLE.minAlpha)*threat};
 }
 export function paintNpcDanger(c,enemy,player,scale=1){const state=npcDangerState(enemy,player,scale);if(!state)return false;c.save();c.strokeStyle='rgba(151,64,43,'+state.alpha+')';c.lineWidth=state.lineWidth/scale;c.beginPath();c.arc(enemy.x,enemy.y,state.radius,0,Math.PI*2);c.stroke();c.restore();return true;}
 
