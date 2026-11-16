@@ -177,3 +177,16 @@ body[data-experience=reveal] #notice{top:clamp(114px,17vh,162px)}
  #inkReserveHud small{display:none}
  .hud-top{top:calc(48px + env(safe-area-inset-top))}
 }
+
+/* Audio rows: slider keeps its value while the speaker only toggles a mute flag. */
+.vol-row{display:flex;align-items:center;gap:10px}
+.vol-row input[type="range"]{flex:1;min-width:90px}
+.vol-out{display:inline-flex;align-items:center;gap:6px;min-width:78px;justify-content:flex-end}
+.mute-btn{width:26px;height:26px;padding:0;border:0;border-radius:8px;background:none;color:inherit;cursor:pointer;display:inline-grid;place-items:center;opacity:.9}
+.mute-btn:hover{background:#00000010}
+.mute-btn svg{width:20px;height:20px;fill:currentColor;stroke:none}
+.mute-btn svg .on,.mute-btn svg .off{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.mute-btn svg .off{display:none}
+.mute-btn[aria-pressed="true"] svg .on{display:none}
+.mute-btn[aria-pressed="true"] svg .off{display:inline}
+.mute-btn[aria-pressed="true"]{opacity:.55}

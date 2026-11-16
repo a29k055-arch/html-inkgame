@@ -12,20 +12,30 @@ export function waterOutput(context,destination=context.destination,volume=1){
  input.threshold.value=-18;input.knee.value=14;input.ratio.value=3;input.attack.value=.003;input.release.value=.08;
  master.gain.value=volume;input.connect(master);master.connect(destination);return {input,master};
 }
-export function waterDrop(context,destination,{kind='food',time=context.currentTime,pitch=1,onended=()=>{}}={}){
- const tone=kind==='enemy'?680:kind==='food'?820:760,duration=kind==='food'?.22:kind==='enemy'?.33:.28,level=kind==='food'?.13:kind==='enemy'?.19:.17,nodes=[];
- const envelope=(peak,end)=>{const g=context.createGain();g.gain.setValueAtTime(.00001,time);g.gain.exponentialRampToValueAtTime(peak,time+.004);g.gain.exponentialRampToValueAtTime(.00001,time+end);g.connect(destination);nodes.push(g);return g;};
- const body=context.createOscillator();body.type='sine';body.frequency.setValueAtTime(tone*.60*pitch,time);body.frequency.exponentialRampToValueAtTime(tone*1.66*pitch,time+.027);body.frequency.exponentialRampToValueAtTime(tone*.91*pitch,time+duration);body.connect(envelope(level,duration));nodes.push(body);
- const ring=context.createOscillator();ring.type='sine';ring.frequency.setValueAtTime(tone*.88*pitch,time);ring.frequency.exponentialRampToValueAtTime(tone*2.30*pitch,time+.019);ring.frequency.exponentialRampToValueAtTime(tone*1.55*pitch,time+.13);ring.connect(envelope(level*.15,.14));nodes.push(ring);
- const splash=context.createBufferSource(),high=context.createBiquadFilter(),low=context.createBiquadFilter();splash.buffer=splashNoise(context);high.type='highpass';high.frequency.value=1200;low.type='lowpass';low.frequency.value=3300;low.Q.value=.4;splash.connect(high);high.connect(low);low.connect(envelope(level*.08,.045));nodes.push(splash,high,low);
- body.onended=()=>{for(const node of nodes)node.disconnect();onended();};
- body.start(time);body.stop(time+duration+.01);ring.start(time);ring.stop(time+duration+.01);splash.start(time);splash.stop(time+.065);
- return {duration};
+// 五声音阶 (宫商角徵羽) in semitones from the root; the run walks this set so pickups stay musical.
+export const PENTATONIC=Object.freeze([0,2,4,7,9]);
+export function pluckNote(context,destination,{semitone=0,root=261.63,time=context.currentTime,level=.16,dur=.85}={}){
+ const freq=root*Math.pow(2,semitone/12),nodes=[];
+ const filter=context.createBiquadFilter();filter.type='lowpass';filter.Q.value=.7;
+ filter.frequency.setValueAtTime(Math.min(9000,freq*7),time);filter.frequency.exponentialRampToValueAtTime(Math.max(260,freq*1.5),time+dur*.7);
+ const gain=context.createGain();gain.gain.setValueAtTime(.00001,time);gain.gain.exponentialRampToValueAtTime(level,time+.005);gain.gain.exponentialRampToValueAtTime(level*.3,time+.14);gain.gain.exponentialRampToValueAtTime(.00001,time+dur);
+ const body=context.createOscillator();body.type='triangle';body.frequency.setValueAtTime(freq,time);
+ const string=context.createOscillator();string.type='sine';string.frequency.setValueAtTime(freq*2.002,time);
+ const stringGain=context.createGain();stringGain.gain.value=.2;
+ body.connect(filter);string.connect(stringGain);stringGain.connect(filter);filter.connect(gain);gain.connect(destination);
+ body.start(time);body.stop(time+dur+.02);string.start(time);string.stop(time+dur+.02);
+ nodes.push(body,string,filter,gain,stringGain);
+ body.onended=()=>{for(const n of nodes)n.disconnect();};return {duration:dur};
 }
 export class WaterPickupAudio {
- constructor(){this.context=null;this.voices=0;this.last=-100;this.lastFood=-100;this.serial=0;}
+ constructor(){this.context=null;this.voices=0;this.last=-100;this.lastFood=-100;this.serial=0;this.level=0;this.muted=false;}
  unlock(volume){if(!volume)return;try{if(!this.context){const Audio=globalThis.AudioContext||globalThis.webkitAudioContext;if(!Audio)return;this.context=new Audio();this.output=waterOutput(this.context,this.context.destination,volume);}if(this.context.state==='suspended')this.context.resume().catch(()=>{});}catch{}}
- setVolume(volume){if(this.output)this.output.master.gain.setTargetAtTime(Math.max(0,Math.min(1,volume)),this.context.currentTime,.012);}
- play(kind,volume){this.setVolume(volume);if(!volume)return false;this.unlock(volume);const c=this.context;if(!c||c.state!=='running')return false;const now=c.currentTime;if(this.voices>=3||now-this.last<.045||(kind==='food'&&now-this.lastFood<.11))return false;this.last=now;if(kind==='food')this.lastFood=now;this.voices++;const pitch=1+((this.serial++%7)-3)*.018;waterDrop(c,this.output.input,{kind,time:now+.001,pitch,onended:()=>this.voices--});return true;}
+ setVolume(volume){this.level=Math.max(0,Math.min(1,volume));if(this.output&&this.context)this.output.master.gain.setTargetAtTime(this.muted?0:this.level,this.context.currentTime,.012);}
+ setMuted(m){this.muted=!!m;this.setVolume(this.level??0);}
+ play(kind,volume){this.level=Math.max(0,this.level||0,volume||0);this.setVolume(volume);if(!volume||this.muted)return false;this.unlock(volume);const c=this.context;if(!c||c.state!=='running')return false;const now=c.currentTime;if(this.voices>=3||now-this.last<.045||(kind==='food'&&now-this.lastFood<.11))return false;this.last=now;if(kind==='food')this.lastFood=now;this.voices++;this.serial++;
+  // food -> 宫/商, enemy -> 角/徵, item -> 羽; successive notes walk the scale upward.
+  const base=kind==='enemy'?3:kind==='food'?0:4,step=PENTATONIC[(base+this.serial)%PENTATONIC.length]+(this.serial%6>=3?12:0);
+  const note=pluckNote(c,this.output.input,{semitone:step,root:261.63,time:now+.001,level:kind==='enemy'?.20:kind==='food'?.15:.18,dur:kind==='enemy'?1.1:.85});
+  setTimeout(()=>{this.voices--;},note.duration*1000);return true;}
  dispose(){this.context?.close().catch(()=>{});}
 }

@@ -5,7 +5,7 @@ import {REVEAL_CONFIG as C} from './config.js';
 export const DROP_ALPHA_EXTENT=(()=>{let max=0;const n=DROP_SHAPE.size;for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(DROP_ALPHA[y*n+x])max=Math.max(max,Math.hypot((x+.5)/n-.5,(y+.5)/n-.5)*2);return max;})();
 export function consumeBloomRadius(radius,config=C){const r=Math.max(0,Number(radius)||0),u=Math.max(0,Math.min(1,(r-(config.consumeRadiusGrowthStart??18))/Math.max(1,config.consumeRadiusGrowthRange??80))),smooth=u*u*(3-2*u),factor=config.consumeRadiusGrowth+(config.consumeRadiusGrowthBonus||0)*smooth;return Math.min(config.consumeRadiusMax,config.consumeRadiusTargetCap*r/DROP_ALPHA_EXTENT,(config.consumeRadius||0)+r*factor);}
 export class RevealMask {
- constructor(config={}){this.config={...C,...config};const c=this.config;this.width=c.width;this.height=c.height;this.cols=c.columns;this.rows=Math.ceil(this.cols*this.height/this.width);this.cells=new Float32Array(this.cols*this.rows);this.sum=0;this.version=0;this.blooms=[];this.weights=null;this.weightTotal=0;this.weightedSum=0;this.surplusArea=0;}
+ constructor(config={}){this.config={...C,...config};const c=this.config;this.width=c.width;this.height=c.height;this.cols=c.columns;this.rows=Math.ceil(this.cols*this.height/this.width);this.cells=new Float32Array(this.cols*this.rows);this.sum=0;this.version=0;this.blooms=[];this.weights=null;this.weightTotal=0;this.weightedSum=0;this.surplusArea=0;this.erasedAmount=new Float32Array(this.cells.length).fill(-1);}
  // Area completion and ink-area completion are O(1): both sums are maintained on every write.
  get completion(){return this.sum/this.cells.length;}
  get weightedCompletion(){return this.weightTotal>1e-6?this.weightedSum/this.weightTotal:0;}
@@ -21,7 +21,10 @@ export class RevealMask {
   for(let j=Math.max(0,Math.floor((y-r*1.12)/sy));j<=Math.min(this.rows-1,Math.ceil((y+r*1.12)/sy));j++)for(let i=Math.max(0,Math.floor((x-r*1.12)/sx));i<=Math.min(this.cols-1,Math.ceil((x+r*1.12)/sx));i++){
    const dx=(i+.5)*sx-x,dy=(j+.5)*sy-y,a=Math.atan2(dy,dx),edge=erase?1:1+.055*Math.sin(a*5+x*.017)+.035*Math.sin(a*9+y*.011),d=Math.hypot(dx,dy)/(r*edge),t=Math.max(0,Math.min(1,(1-d)/.28)),soft=t*t*(3-2*t),k=j*this.cols+i;
    // Linear pigment loss is dt-based, bounded, and soft at the actual body edge.
-   if(this.commit(k,Math.fround(erase?Math.max(0,this.cells[k]-Math.max(0,amount)*soft):Math.max(this.cells[k],Math.min(1,amount)*soft))))changed=true;
+   const next=erase?Math.max(0,this.cells[k]-Math.max(0,amount)*soft):Math.max(this.cells[k],Math.min(1,amount)*soft);
+   // Remember what erosion took, so a resting body cannot instantly paint it back this frame.
+   if(erase&&next<this.cells[k])this.erasedAmount[k]=next;else if(!erase&&next>this.cells[k]&&next>this.erasedAmount[k])this.erasedAmount[k]=-1;
+   if(this.commit(k,Math.fround(next)))changed=true;
   }if(changed)this.version++;
  }
  reveal(x,y,r){this.blooms.push({x,y,r,angle:Math.sin(x*.13+y*.07)*2.8,age:0});if(this.blooms.length>96)this.blooms.shift();}
