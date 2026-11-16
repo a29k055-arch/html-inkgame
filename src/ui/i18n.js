@@ -183,7 +183,9 @@ const npcNames={ja:['澄','雨音','竹影','白露','山月','凪','青嵐','�
 export function entityLabel(e){return e.controller?.type==='human'?t('player'):npcNames[language][e.nameIndex??0]+(e.nameNumber||'');}
 export const LANGUAGES=['ja','zh','en'];
 export const dictionaries=Object.fromEntries(LANGUAGES.map((l,i)=>[l,Object.fromEntries(Object.entries(rows).map(([k,v])=>[k,v[i]]))]));
-let language=LANGUAGES.includes(getSave().settings.language)?getSave().settings.language:'ja';
+// First run follows the browser, not a hard-coded Japanese default; an explicit choice always wins.
+const detectLanguage=()=>{const raw=String(globalThis.navigator?.language||'zh').toLowerCase();return raw.startsWith('ja')?'ja':raw.startsWith('zh')?'zh':raw.startsWith('en')?'en':'zh';};
+let language=LANGUAGES.includes(getSave().settings.language)?getSave().settings.language:detectLanguage();
 export const getLanguage=()=>language;
 export function t(key,values={}){const message=dictionaries[language][key]||dictionaries.ja[key]||dictionaries[language].loadError;return message.replace(/\{(\w+)\}/g,(_,name)=>String(values[name]??'—'));}
 export function artTitle(art){if(art.titles)return art.titles[language]||art.titles.zh||art.title;if(art.title)return art.title;return art.id==='ink-04'?t('painting01'):t('painting',{n:String(Number(art.label.match(/\d+/)?.[0])||1).padStart(2,'0')});}
