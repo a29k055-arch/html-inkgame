@@ -23,7 +23,7 @@ export class Inkstone {
   for(let i=0;i<(options.aiCount??C.aiCount);i++){
    const spawn=this.npcSpawner?.(this,i),point=spawn?.point||randomNpcPoint(this.player,this.world),roll=Math.random();
    const radius=spawn?.radius??(roll>.93?random(78,118):roll>.78?random(42,72):random(14,38));
-   const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i));npc.skinIndex=i;npc.nameIndex=i%names.length;npc.nameNumber=i>=names.length?i+1:'';npc.appearance=i%2?'eye':'thorn';this.entities.push(npc);
+   const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i,spawn?.personality));if(spawn?.personality==='drift'){npc.mass=npc.r*npc.r*10;npc.passive=true;}npc.skinIndex=i;npc.nameIndex=i%names.length;npc.nameNumber=i>=names.length?i+1:'';npc.appearance=i%2?'eye':'thorn';this.entities.push(npc);
   }
   this.foods=Array.from({length:this.foodTarget},()=>this.food());this.items=[];this.ranged=this.reserveGrowth?new RangedCombat(this):null;
  }
@@ -40,7 +40,7 @@ export class Inkstone {
   return best;
  }
  food(){return createFood(this.spawnPoint());}
- speed(e,includeActive=true){const m=this.movement;const base=m?Math.max(m.minimum,m.base*(1-m.penalty*clamp((e.r-m.reference)/(m.maximum-m.reference),0,1)**.85)):(e===this.player&&this.playerSpeedPenalty!==undefined?235*(1-clamp((e.r-18)/152,0,1)*this.playerSpeedPenalty):moveSpeed(e.r));const ai=e.controller.type==='ai'?(m?m.aiBase+e.controller.profile.skill*m.aiSkill:.70+e.controller.profile.skill*.18):1,boost=includeActive?Math.max(e.effects.rush?(e.pondBuffs?.rush?.strength??this.rushSpeed):0,e.effects.manualRush?this.rushSpeed:0,e.effects.escape?(this.combatRules?.escapeBoost||0):0):0;return base*(1+talentValue(e,'haste'))*ai*(e.effects.dense?.65:1)*(1+boost);}
+ speed(e,includeActive=true){const m=this.movement;const base=m?Math.max(m.minimum,m.base*(1-m.penalty*clamp((e.r-m.reference)/(m.maximum-m.reference),0,1)**.85)):(e===this.player&&this.playerSpeedPenalty!==undefined?235*(1-clamp((e.r-18)/152,0,1)*this.playerSpeedPenalty):moveSpeed(e.r));const ai=e.controller.type==='ai'?(m?m.aiBase+e.controller.profile.skill*m.aiSkill:.70+e.controller.profile.skill*.18)*(e.controller.profile.speedScale??1):1,boost=includeActive?Math.max(e.effects.rush?(e.pondBuffs?.rush?.strength??this.rushSpeed):0,e.effects.manualRush?this.rushSpeed:0,e.effects.escape?(this.combatRules?.escapeBoost||0):0):0;return base*(1+talentValue(e,'haste'))*ai*(e.effects.dense?.65:1)*(1+boost);}
  growthFactor(e){const c=this.growthBalance;return c?c.late+(c.early-c.late)/(1+e.ink/c.scale):1;}
  radius(e){return coreRadius(e);}
  drainInk(e,dt,multiplier=1){if(e.dead||e.effects.water)return 0;if(e.growth){const before=e.ink;e.ink=Math.max(Math.min(before,K.spikeInkFloor),before-before*C.waterDecay*multiplier*dt);syncReserve(e);return before-e.ink;}const lost=Math.max(0,Math.min(e.mass-C.respawnRadius**2,e.mass*C.waterDecay*multiplier*dt));e.mass-=lost;e.r=Math.sqrt(e.mass);e.ink=Math.max(0,e.ink-lost);return lost;}
@@ -69,7 +69,7 @@ export class Inkstone {
  }
  respawn(e){
   const spawn=!e.growth?this.npcSpawner?.(this,this.entities.indexOf(e)-1,{respawn:true,entity:e}):null,roll=!e.growth&&this.npcRespawnSizes?Math.random():0,band=!e.growth&&this.npcRespawnSizes?.find(b=>roll<b[0]),npcRadius=spawn?.radius??(band?random(band[1],band[2]):C.respawnRadius),retained=e.growth?e.r:npcRadius,p=spawn?.point||this.spawnPoint(retained+180);Object.assign(e,{x:p.x,y:p.y,vx:0,vy:0,r:retained,mass:retained**2,collisionScale:1,invincible:C.respawnProtection});
-  if(e.growth)syncReserve(e,0,true);if(this.boundarySliding)this.constrain(e);e.controller.goal=null;e.controller.think=0;if(e.controller.type==='ai')this.ecology.npcRespawns++;this.onEvent('respawn',e);
+  if(e.growth)syncReserve(e,0,true);if(this.boundarySliding)this.constrain(e);if(spawn?.personality&&!e.growth)e.controller=aiController(Math.max(0,this.entities.indexOf(e)-1),spawn.personality);e.controller.goal=null;e.controller.think=0;if(e.controller.type==='ai')this.ecology.npcRespawns++;this.onEvent('respawn',e);
  }
  update(dt,input){
   if(this.finished)return;this.elapsed=Math.min(this.duration,this.elapsed+dt);this.updateMagnet(dt);

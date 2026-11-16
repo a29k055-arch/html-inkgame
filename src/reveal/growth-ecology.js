@@ -14,6 +14,8 @@ export const GROWTH_ECOLOGY_CONFIG=Object.freeze({
  nearSmallCount:22,nearSmallMin:80,nearSmallMax:520,closeSmallCount:10,closeSmallMax:220,
  bandRatios:frozenBands([[.50,.22,.62],[.80,.82,1.15],[.95,1.30,1.70],[1,1.9,2.8]]),
  lethalRatio:1.28,
+ // A slice of the prey band becomes passive plankton: tiny, slow, no hunt and no flee.
+ drifterChance:.26,drifterLo:.08,drifterHi:.20,
  nurseryFoodCount:40,nurseryFoodMin:22,nurseryFoodRadius:380,
  mediumSpawnMin:440,largeSpawnMin:900,spawnAttempts:90,unitGap:20,leafGap:2,
  giantRadiusCap:280,minRadius:3
@@ -30,7 +32,8 @@ export class GrowthEcology {
   const base=Math.max(c.minRadius,p.growth?.baseRadius||p.r);
   const rows=c.bandRatios,row=this.band(rows,this.rng());
   const small=row===rows[0],peer=row===rows[1],huge=row===rows[3];
-  const radius=clamp(mix(row[1]*base,row[2]*base,this.rng()),c.minRadius,c.giantRadiusCap);
+  const drifter=small&&this.rng()<c.drifterChance;
+  const radius=drifter?clamp(mix(c.drifterLo*base,c.drifterHi*base,this.rng()),c.minRadius,c.giantRadiusCap):clamp(mix(row[1]*base,row[2]*base,this.rng()),c.minRadius,c.giantRadiusCap);
   const near=!respawn&&small&&index<c.nearSmallCount;
   const min=near?c.nearSmallMin:small?(respawn?140:260):peer?c.mediumSpawnMin:c.largeSpawnMin;
   const max=near?(index<c.closeSmallCount?c.closeSmallMax:c.nearSmallMax):small?900:peer?1250:Math.hypot(w.width,w.height)*.55;
@@ -43,11 +46,11 @@ export class GrowthEcology {
    for(const other of arena.entities||[]){if(other===p||other===entity||other.dead)continue;clearance=Math.min(clearance,Math.hypot(point.x-other.x,point.y-other.y)-radius-other.r-c.unitGap);}
    for(const leaf of arena.items||[]){if(leaf.kind==='leaf')clearance=Math.min(clearance,Math.hypot(point.x-leaf.x,point.y-leaf.y)-radius-pondCollisionRadius(leaf)-c.leafGap);}
    if(clearance>bestScore){best=point;bestScore=clearance;}
-   if(clearance>=0)return {radius,point};
+   if(clearance>=0)return {radius,point,personality:drifter?'drift':undefined};
   }
   // A crowded corner may have no exact ring solution. Returning the safest valid
   // world point leaves final circular/leaf projection to the existing arena hook.
-  return {radius,point:best||{x:clamp(p.x,margin,w.width-margin),y:clamp(p.y,margin,w.height-margin)}};
+  return {radius,point:best||{x:clamp(p.x,margin,w.width-margin),y:clamp(p.y,margin,w.height-margin)},personality:drifter?'drift':undefined};
  }
  seedFood(arena){
   if(this.seeded.has(arena))return 0;this.seeded.add(arena);

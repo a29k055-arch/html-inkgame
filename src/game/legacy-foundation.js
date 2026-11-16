@@ -12,7 +12,7 @@ export function randomNpcPoint(player,world=C.world){
  return randomPoint(world);
 }
 export function createFood(point=randomPoint()){
- const r=random(3,7);return {...point,r,mass:r*r,shape:['circle','square','triangle','pentagon'][Math.floor(random(0,4))],rot:random(0,Math.PI*2),alpha:random(.42,.78)};
+ const r=random(2.2,4.2);return {...point,r,mass:r*r*2.8,shape:['circle','square','triangle','pentagon'][Math.floor(random(0,4))],rot:random(0,Math.PI*2),alpha:random(.42,.78)};
 }
 export function moveSpeed(radius){return 235*(1-clamp((radius-C.initialRadius)/(170-C.initialRadius),0,1)*.38);}
 export function cameraTarget(player,width,height,mobile){

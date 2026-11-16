@@ -54,14 +54,18 @@ import {GROWTH_STAGES_CONFIG,stageEntryRadius} from '../src/reveal/growth-stages
 {
   const r=new RevealRun(()=>{},{aiCount:0,foodTarget:0,foodSpawnRate:0,completionThreshold:2});
   const p=r.player,base=r.arena.speed(p,false);
-  r.boost(true);assert.equal(r.boostHeld,true);
+  r.boost(true);assert.equal(r.boostHeld,true);assert.equal(r.boostPhase,'using');assert.equal(r.boostReady(),false);
+  r.update(1/60);
   assert(Math.abs((r.arena.speed(p)/base)-(1+r.stageBoost()))<1e-9,'stage 1 boost');
   assert.equal(r.stageBoost(),.30);
   p.ink=GROWTH_STAGES_CONFIG.thresholds[0];r.journey.update(p,0,1);assert.equal(r.journey.stage,2);assert.equal(r.stageBoost(),.50);
   p.ink=GROWTH_STAGES_CONFIG.thresholds[1];r.journey.update(p,0,2);assert.equal(r.journey.stage,3);assert.equal(r.stageBoost(),.70);
   p.effects.rush=5;p.pondBuffs={rush:{tier:3,strength:.70}};
   assert(r.arena.speed(p)/base<=1+.70+1e-9,'boost and fish must not multiply');
-  r.boost(false);assert.equal(r.boostHeld,false);
+  // release -> 3 s pause -> 5 s countdown -> ready; a second press is refused meanwhile
+  r.boost(false);assert.equal(r.boostPhase,'delay');assert.equal(r.boostReady(),false);assert.equal(r.boost(true),false);
+  for(let i=0;i<Math.ceil(3*60)+2;i++)r.update(1/60);assert.equal(r.boostPhase,'cooldown');
+  for(let i=0;i<Math.ceil(5*60)+2;i++)r.update(1/60);assert.equal(r.boostPhase,'ready');assert.equal(r.boostReady(),true);
 }
 
 // Stage only rises during play; only a respawn may hand back a smaller stage.

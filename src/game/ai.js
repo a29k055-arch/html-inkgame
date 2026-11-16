@@ -10,7 +10,9 @@ export const AI_PROFILES={
  balanced:{waterTolerance:90,waterSeconds:1.2,risk:.5,hunt:.85,food:1.1,items:1,reaction:.52,skill:.55},
  novice:{waterTolerance:70,waterSeconds:1,risk:.65,hunt:.55,food:.85,items:.65,reaction:.95,skill:.23},
 };
-export function aiController(index){const personality=Object.keys(AI_PROFILES)[index%7],profile=AI_PROFILES[personality];return {type:'ai',personality,profile:{...profile,reaction:profile.reaction*random(.8,1.25),skill:clamp(profile.skill+random(-.08,.08),.1,1)},think:random(0,.7),goal:null,intent:'wander',chaseTime:0,previousDistance:Infinity,routeSeed:random(0,6.28)};}
+// Passive drifters: tiny, slow, never hunt and never flee. Used as living plankton near spawn.
+export const DRIFTER_PROFILE=Object.freeze({waterTolerance:0,waterSeconds:0,risk:0,hunt:0,food:.6,items:0,reaction:.9,skill:.12,speedScale:.34,passive:true});
+export function aiController(index,forced){const personality=forced&&AI_PROFILES[forced]?forced:forced==='drift'?'drift':Object.keys(AI_PROFILES)[index%7],profile=forced==='drift'?DRIFTER_PROFILE:AI_PROFILES[personality];return {type:'ai',personality,profile:{...profile,reaction:profile.reaction*random(.8,1.25),skill:clamp(profile.skill+random(-.08,.08),.1,1)},think:random(0,.7),goal:null,intent:'wander',chaseTime:0,previousDistance:Infinity,routeSeed:random(0,6.28)};}
 function threatCost(point,threats,e,game){let cost=0;for(const t of threats){const d=dist(point,t),reach=game.radius(t)+game.radius(e)+190;if(d<reach)cost+=(reach-d)/reach*(1+game.radius(t)/game.radius(e));}return cost;}
 export function chooseGoal(game,e){
  const world=game.world||C.world,ctrl=e.controller,p=ctrl.profile,own=game.radius(e),perception=C.aiPerceptionRange*(.65+p.skill*.7);

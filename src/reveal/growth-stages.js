@@ -11,7 +11,10 @@ const thresholds=Object.freeze([480,2400,10100]);
 export const GROWTH_STAGES_CONFIG=Object.freeze({
  startInk:17,initialRadius:9,sizeMassPerInk:1,expansionInk:thresholds[0],thresholds,
  // Body radius as a fraction of the viewport short side at stage entry (12% diameter).
- stageScreenRadius:Object.freeze([.06,.06,.06,.06]),
+ stageScreenRadius:Object.freeze([.050,.058,.060,.060]),
+ // How far the camera may slide past the world edge, as a fraction of the viewport.
+ // Stage four gets the full 28%; early stages only a sliver so no bare paper shows.
+ borderOverscanByStage:Object.freeze([.08,.10,.16,.28]),
  // V4 only: the radius ceiling that lets stage four keep growing instead of freezing.
  maxRadius:210,
  framePadding:.08,transitionEase:.82,normalEase:1.8
@@ -42,6 +45,9 @@ export function followGrowthCamera(old,player,width,height,mobile,dt=0,fresh=fal
  // No contain floor: the view can be wider than the world only when the zoom makes it so,
  // and clamping then centres the world instead of shrinking further to show empty paper.
  const tx=player.x,ty=player.y;
- const position=(center,target,extent,view)=>{const pos=center+(target-center)*blend-view/scale/2;return view/scale>=extent?(extent-view/scale)/2:clamp(pos,0,extent-view/scale);};
+ // The camera may leave the map by `borderOverscan` of the screen, so walking up to an edge
+ // keeps the body framed instead of pinning it against the border. Only if the world is much
+ // smaller than the view does it fall back to centring.
+ const position=(center,target,extent,view)=>{const pad=view/scale,over=(c.borderOverscanByStage?.[stage-1]??.28)*pad,pos=center+(target-center)*blend-pad/2,lo=-over,hi=extent-pad+over;return lo>hi?(extent-pad)/2:clamp(pos,lo,hi);};
  return {scale,x:position(cx,tx,world.width,width),y:position(cy,ty,world.height,height)};
 }
