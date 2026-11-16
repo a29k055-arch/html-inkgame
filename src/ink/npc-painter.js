@@ -5,7 +5,7 @@ import {alienBody,alienDetails} from './alien-ink.js';
 // Presentation-only warning: compares the same current core radii as swallowing.
 export const NPC_DANGER_STYLE=Object.freeze({nearMinimum:8,nearMaximum:20,nearPlayerScale:.15,thornOutlineScale:1.50,eyeOutlineScale:1.20,gapPixels:5,linePixels:1.15,minAlpha:.16,maxAlpha:.32,
  // Anything at least this close to the player's size is framed, and the ring thickens with threat.
- compareRatio:.85,lethalRatio:1.28,minLinePixels:.9,maxLinePixels:3.4,lethalLinePixels:4.2});
+ compareRatio:.85,lethalRatio:1.28,minLinePixels:1.1,maxLinePixels:4.4,lethalLinePixels:5.6,contactSlack:6});
 export function npcDangerState(enemy,player,scale=1){
  if(!player||!enemy?.v4Visual||enemy===player||enemy.dead||player?.dead||enemy.effects?.water||player?.effects?.water)return null;
  const enemyCore=coreRadius(enemy),playerCore=coreRadius(player),threshold=playerCore*GAME_CONFIG.consumeRatio;
@@ -15,7 +15,11 @@ export function npcDangerState(enemy,player,scale=1){
  const threat=Math.min(1,(ratio-NPC_DANGER_STYLE.compareRatio)/Math.max(.01,NPC_DANGER_STYLE.lethalRatio-NPC_DANGER_STYLE.compareRatio));
  const lethal=ratio>=NPC_DANGER_STYLE.lethalRatio;
  const lineWidth=lethal?NPC_DANGER_STYLE.lethalLinePixels:NPC_DANGER_STYLE.minLinePixels+(NPC_DANGER_STYLE.maxLinePixels-NPC_DANGER_STYLE.minLinePixels)*threat;
- const distance=Math.hypot(enemy.x-player.x,enemy.y-player.y);return {enemyCore,playerCore,threshold,distance,range:Infinity,ratio,threat,lethal,lineWidth,radius:enemyCore+NPC_DANGER_STYLE.gapPixels/scale,alpha:NPC_DANGER_STYLE.minAlpha+(NPC_DANGER_STYLE.maxAlpha-NPC_DANGER_STYLE.minAlpha)*threat};
+ const distance=Math.hypot(enemy.x-player.x,enemy.y-player.y);
+ // Touching only: a body across the pond is not an immediate threat.
+ if(distance>enemyCore+playerCore+(NPC_DANGER_STYLE.contactSlack||0))return null;
+ // Thickness grows INWARD so the outer edge stays exactly on the collision circle.
+ const radius=Math.max(1,enemyCore-lineWidth*.5/scale);return {enemyCore,playerCore,threshold,distance,range:enemyCore+playerCore,ratio,threat,lethal,lineWidth,radius,alpha:NPC_DANGER_STYLE.minAlpha+(NPC_DANGER_STYLE.maxAlpha-NPC_DANGER_STYLE.minAlpha)*threat};
 }
 export function paintNpcDanger(c,enemy,player,scale=1){const state=npcDangerState(enemy,player,scale);if(!state)return false;c.save();c.strokeStyle='rgba(151,64,43,'+state.alpha+')';c.lineWidth=state.lineWidth/scale;c.beginPath();c.arc(enemy.x,enemy.y,state.radius,0,Math.PI*2);c.stroke();c.restore();return true;}
 

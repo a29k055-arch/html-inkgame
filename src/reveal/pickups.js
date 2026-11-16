@@ -12,6 +12,14 @@ export async function preloadPondPickups(){await Promise.all(Object.entries(POND
 export function drawPondPickup(c,item){const image=pondPickupImage(item.kind,item.variant);if(!image?.complete||!image.naturalWidth)return;const aspect=image.naturalWidth/image.naturalHeight,side=pondDisplaySize(item),w=aspect>=1?side:side*aspect,h=aspect>=1?side/aspect:side,plant=item.kind==='leaf'||item.kind==='flower';c.save();c.translate(item.x,item.y);c.rotate(plant?0:(item.angle||0)+Math.sin((item.age||0)*.6+item.x*.019+item.y*.013)*(item.kind==='magnet'?.018:.025));c.scale(item.flipX?-1:1,1);c.drawImage(image,-w/2,-h/2,w,h);c.restore();}
 
 // Render eligibility uses the exact gameplay core/radius rule, never screen pixels.
-export function pondPickupLayer(item,game){const player=game.player,core=game.radius?game.radius(player):player.r;if(item.kind==='flower')return core>=pondObjectRadius(item)?'lower':'top';if(item.kind==='leaf'){const big=core>=pondObjectRadius(item)||(game.entities||[]).some(e=>e!==player&&!e.dead&&e.r>=pondObjectRadius(item));return big?'lower':'upper';}if(item.kind==='shield'&&game.items.some(leaf=>leaf.kind==='leaf'&&core<pondObjectRadius(leaf)&&Math.hypot(item.x-leaf.x,item.y-leaf.y)<(pondDisplaySize(item)+pondDisplaySize(leaf))*.5))return 'upper';return canEatPondObject(core,item)?'lower':'upper';}
+export function pondPickupLayer(item,game){const player=game.player,core=game.radius?game.radius(player):player.r,size=pondObjectRadius(item);
+ // One rule for every character: the bigger body draws on top. Leaves are the exception.
+ const npcMax=(game.entities||[]).reduce((m,e)=>(e!==player&&!e.dead&&e.r>m?e.r:m),0);
+ const bigger=core>=size||npcMax>=size;
+ if(item.kind==='leaf')return bigger?'lower':'upper';
+ if(item.kind==='flower')return bigger?'lower':'top';
+ if(item.kind==='shield'&&(game.items||[]).some(l=>l.kind==='leaf'&&core<pondObjectRadius(l)&&Math.hypot(item.x-l.x,item.y-l.y)<(pondDisplaySize(item)+pondDisplaySize(l))*.5))return 'upper';
+ return bigger?'lower':'upper';}
+
 export const pondPickupExtent=item=>pondDisplaySize(item)*.55+4;
 export {pondRenderOrder};

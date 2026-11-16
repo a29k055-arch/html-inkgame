@@ -11,6 +11,8 @@ import {PaperMap} from './paper-map.js';
 import {GAME_CONFIG as C,clamp} from '../game/config.js';
 import {followCamera} from '../game/camera.js';
 import {NpcPainter,paintNpcDanger,npcDangerState} from './npc-painter.js';
+import {visualRadius} from '../game/alien-geometry.js';
+import {pondObjectRadius} from '../reveal/pond-rules.js';
 export class GameRenderer {
  constructor(output,quality,mode,visual={}){
   this.fontFamily=getComputedStyle(document.body).fontFamily;this.textAbort=new AbortController();document.addEventListener('boku:language',()=>{this.fontFamily=getComputedStyle(document.body).fontFamily;},{signal:this.textAbort.signal});this.drops=new DropPool();this.output=output;this.ctx=output.getContext('2d');this.mode=mode;this.world=visual.world||C.world;this.ground=visual.ground;this.itemPainter=visual.itemPainter;this.itemLayer=visual.itemLayer;this.itemOrder=visual.itemOrder;this.itemExtent=visual.itemExtent;this.deferTopItems=!!visual.deferTopItems;this.drawOrder=[];this.followCamera=visual.cameraFollow||followCamera;this.foodPainter=visual.foodPainter;this.bodyVisual={...HERO_BODY_CONFIG,...visual.body};this.trail=new (visual.TrailClass||HeroWorldTrail)(visual.trail);this.projectileTrails=new ProjectileTrails();this.clock=0;this.scan=0;this.camera={x:0,y:0,scale:1};this.cameraReady=false;this.mobile=false;
@@ -56,7 +58,7 @@ export class GameRenderer {
   // V4 warnings belong to each threatening NPC, under its ink body.
   for(const npc of game.entities.slice(1))if(!npc.dead&&this.visible(npc,npc.r*1.8+25))paintNpcDanger(c,npc,p,scale);
   // Smaller bodies first so a bigger one always covers a smaller one.
-  this.drawOrder.length=0;for(const npc of game.entities)if(npc!==p)this.drawOrder.push(npc);this.drawOrder.sort((a,b)=>a.r-b.r);
+  this.drawOrder.length=0;for(const npc of game.entities)if(npc!==p)this.drawOrder.push(npc);this.drawOrder.sort((a,b)=>visualRadius(a)-visualRadius(b));
   this.drawOrder.forEach((npc,i)=>{if(!npc.dead&&this.visible(npc,npc.r*1.8+25))this.npcs.draw(c,npc,i,game.entities,game.theme==='boss'?game.player:null);});
   for(const wave of game.waves){c.save();c.translate(wave.x,wave.y);c.rotate(Math.atan2(wave.aim.y,wave.aim.x));c.strokeStyle=`rgba(66,60,45,${.28*(1-wave.age/C.skillDurations.splash)})`;c.lineWidth=16*(1-wave.age/C.skillDurations.splash);c.beginPath();c.arc(0,0,wave.range*wave.age/C.skillDurations.splash,-1,1);c.stroke();c.restore();}
   c.restore();
@@ -70,7 +72,8 @@ export class GameRenderer {
   if(p.hitFlash>0){c.strokeStyle='#ad5c4977';c.lineWidth=3;c.beginPath();c.arc((p.x-cam.x)*scale,(p.y-cam.y)*scale,p.r*scale+7,0,Math.PI*2);c.stroke();}c.restore();if(!this.deferTopItems)this.drawTopItems(game);
  }
  drawTopItems(game){if(!this.itemLayer)return;const c=this.ctx,cam=this.camera;c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);this.drawItems(game,'top',this.itemOrder?[...game.items].sort((a,b)=>this.itemOrder(a)-this.itemOrder(b)):game.items);c.restore();}
- drawItems(game,pass,items=game.items){const c=this.ctx;for(const item of items){if(this.itemLayer?this.itemLayer(item,game)!==pass:pass==='upper')continue;if(!this.visible(item,this.itemExtent?this.itemExtent(item):20))continue;if(this.itemPainter){this.itemPainter(c,item,game,pass);continue;}c.save();c.translate(item.x,item.y);c.rotate(Math.PI/4);c.shadowBlur=10;c.shadowColor='#f7e4a1';c.fillStyle='#b6a16a';c.fillRect(-8,-8,16,16);c.strokeStyle='#faf0cd';c.strokeRect(-6,-6,12,12);c.restore();}}
+ drawItems(game,pass,items=game.items){const c=this.ctx;for(const item of items){if(this.itemLayer?this.itemLayer(item,game)!==pass:pass==='upper')continue;if(!this.visible(item,this.itemExtent?this.itemExtent(item):20))continue;if(this.itemPainter){const under=item.kind==='leaf'&&game.player&&Math.hypot(game.player.x-item.x,game.player.y-item.y)<=pondObjectRadius(item);
+   if(under){c.save();c.globalAlpha*=.42;}this.itemPainter(c,item,game,pass);if(under)c.restore();continue;}c.save();c.translate(item.x,item.y);c.rotate(Math.PI/4);c.shadowBlur=10;c.shadowColor='#f7e4a1';c.fillStyle='#b6a16a';c.fillRect(-8,-8,16,16);c.strokeStyle='#faf0cd';c.strokeRect(-6,-6,12,12);c.restore();}}
  clearTrails(){this.trail.clear();this.projectileTrails.clear();}
  visible(e,margin){const cam=this.camera,x=(e.x-cam.x)*cam.scale,y=(e.y-cam.y)*cam.scale,r=margin*cam.scale;return x>-r&&x<this.viewW+r&&y>-r&&y<this.viewH+r;}
  drawPaper(dt,run){this.scan+=dt;if(run.painting&&this.scan>=.1){this.paper.absorbWorld(this.canvas,this.camera);this.scan=0;}this.paper.draw(this.camera,dt);const c=this.ctx,cam=this.camera;c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);for(const ball of run.projectiles){const r=ball.r*.15,g=c.createRadialGradient(ball.x,ball.y,0,ball.x,ball.y,r);g.addColorStop(0,"#26231de0");g.addColorStop(1,"#26231d00");c.fillStyle=g;c.fillRect(ball.x-r,ball.y-r,r*2,r*2);}c.restore();c.save();c.globalAlpha=.65;c.drawImage(this.canvas,0,0,this.viewW,this.viewH);c.restore();}
