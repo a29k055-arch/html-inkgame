@@ -3,7 +3,7 @@ import {canSwallow} from './phases.js';
 import {RangedCombat} from './ranged-combat.js';
 import {tickActives,stopActives} from './active-items.js';
 import {talentValue,blockHit,grantChoice} from './talents.js';
-import {coreRadius,spikeContact} from './alien-geometry.js';
+import {visualRadius,coreRadius,spikeContact} from './alien-geometry.js';
 import {initReserve,gainReserve,syncReserve,resetReserveOnDeath,advanceRewards} from './ink-reserve.js';
 import {GAME_CONFIG as C,CONTACT_CONFIG as K,INK_RESERVE_CONFIG as R,TALENT_CONFIG as T,ACTIVE_CONFIG as A,SKILLS,clamp,dist,settlement} from './config.js';
 import {random,randomPoint,randomNpcPoint,createFood,moveSpeed} from './legacy-foundation.js';
@@ -15,7 +15,7 @@ export function entity(id,x,y,r,controller){
 }
 export class Inkstone {
  constructor(onEvent=()=>{},options={}){
-  this.world={...(options.world||C.world)};this.movement=options.movement;this.behavior=options.behavior;this.growthBalance=options.growthBalance;this.magnetRules=options.magnetRules;this.combatRules=options.combatRules;this.boundarySliding=!!options.boundarySliding;this.npcRespawnSizes=options.npcRespawnSizes;this.npcSpawner=options.npcSpawner;this.aiCount=options.aiCount??C.aiCount;this.npcMaxRadius=options.npcMaxRadius??C.maxRadius;this.npcFoodGainScale=options.npcFoodGainScale??1;this.playerSpeedPenalty=options.playerSpeedPenalty;this.simplePickups=!!options.simplePickups;this.playerSheltered=options.playerSheltered;this.npcPredation=options.npcPredation;this.playerLethalRatio=options.playerLethalRatio;this.softDown=options.softDown;this.rewardChoices=options.rewardChoices!==false;this.shrink=options.shrink!==false;this.rushSpeed=options.rushSpeed??A.dash.speed;this.duration=options.duration||C.inkstoneDuration;this.autoFinish=options.autoFinish!==false;this.rewardMultiplier=options.rewardMultiplier||1;
+  this.world={...(options.world||C.world)};this.movement=options.movement;this.behavior=options.behavior;this.growthBalance=options.growthBalance;this.magnetRules=options.magnetRules;this.combatRules=options.combatRules;this.boundarySliding=!!options.boundarySliding;this.npcRespawnSizes=options.npcRespawnSizes;this.npcSpawner=options.npcSpawner;this.aiCount=options.aiCount??C.aiCount;this.npcMaxRadius=options.npcMaxRadius??C.maxRadius;this.npcFoodGainScale=options.npcFoodGainScale??1;this.playerSpeedPenalty=options.playerSpeedPenalty;this.simplePickups=!!options.simplePickups;this.playerSheltered=options.playerSheltered;this.npcPredation=options.npcPredation;this.playerLethalRatio=options.playerLethalRatio;this.visualSwallow=!!options.visualSwallow;this.softDown=options.softDown;this.rewardChoices=options.rewardChoices!==false;this.shrink=options.shrink!==false;this.rushSpeed=options.rushSpeed??A.dash.speed;this.duration=options.duration||C.inkstoneDuration;this.autoFinish=options.autoFinish!==false;this.rewardMultiplier=options.rewardMultiplier||1;
   this.foodTarget=options.foodTarget??C.foodTarget;this.foodSpawnRate=options.foodSpawnRate??C.foodSpawnRate;this.reserveGrowth=!!options.reserveGrowth;this.onEvent=onEvent;this.elapsed=0;this.finished=false;this.itemClock=C.itemSpawnInterval;this.foodClock=0;this.waves=[];this.ecology={npcSwallows:0,npcRespawns:0,npcFood:0,maxRadius:0};
   this.center={x:this.world.width/2,y:this.world.height/2};
   this.player=entity('human',this.center.x,this.center.y,C.initialRadius,{type:'human'});this.player.invincible=C.respawnProtection;if(options.reserveRules)this.player.reserveRules={...options.reserveRules};if(this.reserveGrowth)initReserve(this.player,options.startInk??R.startInk);
@@ -101,8 +101,11 @@ export class Inkstone {
   // NPC-vs-NPC uses a stricter size gap and a per-killer digest cooldown so one big body cannot
   // sweep the whole nursery; player swallows keep the original fast rule.
   const pred=this.npcPredation;
-  for(let i=0;i<this.entities.length;i++){const a=this.entities[i];if(a.dead||a.effects.water)continue;for(let j=i+1;j<this.entities.length;j++){const b=this.entities[j];if(b.dead||b.effects.water||!canSwallow(this,a,b))continue;const [big,small]=this.radius(a)>this.radius(b)?[a,b]:[b,a];const npcPair=big.controller?.type==='ai'&&small.controller?.type==='ai';if(npcPair&&pred&&big.digestUntil>this.elapsed)continue;// An NPC must be clearly bigger to swallow the player; the player itself keeps the fast rule.
-   const ratio=small===this.player?(this.playerLethalRatio??C.consumeRatio):npcPair?(pred?.ratio??C.consumeRatio):C.consumeRatio;if(this.radius(big)>this.radius(small)*ratio&&dist(big,small)<this.radius(big)-this.radius(small)*C.consumeOverlap){this.kill(small,big);if(npcPair&&pred)big.digestUntil=this.elapsed+random(pred.cooldownMin,pred.cooldownMax);if(a.dead)break;}}}
+  for(let i=0;i<this.entities.length;i++){const a=this.entities[i];if(a.dead||a.effects.water)continue;for(let j=i+1;j<this.entities.length;j++){const b=this.entities[j];if(b.dead||b.effects.water||!canSwallow(this,a,b))continue;// In V4 compare drawn bodies, so nothing that looks bigger than you can be swallowed;
+ // the classic campaign keeps its original core-radius rule untouched.
+const useVisual=!!this.visualSwallow,sizeOf=useVisual?visualRadius:e=>this.radius(e);
+const [big,small]=sizeOf(a)>sizeOf(b)?[a,b]:[b,a];const npcPair=big.controller?.type==='ai'&&small.controller?.type==='ai';if(npcPair&&pred&&big.digestUntil>this.elapsed)continue;// An NPC must be clearly bigger to swallow the player; the player itself keeps the fast rule.
+   const ratio=(small===this.player||small.controller?.type!=='ai')?(this.playerLethalRatio??C.consumeRatio):npcPair?(pred?.ratio??C.consumeRatio):C.consumeRatio;if(sizeOf(big)>sizeOf(small)*ratio&&dist(big,small)<this.radius(big)-this.radius(small)*C.consumeOverlap){this.kill(small,big);if(npcPair&&pred)big.digestUntil=this.elapsed+random(pred.cooldownMin,pred.cooldownMax);if(a.dead)break;}}}
   // Swallowing wins priority; only surviving contacts receive dt-based spike loss.
   for(const source of this.entities){if(source.dead||source.appearance!=='thorn')continue;for(const target of this.entities){if(source!==target&&canSwallow(this,source,target))this.applySpikes(source,target,dt);}}
   if(this.combatRules)resolveSpikes(this,dt);

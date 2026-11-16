@@ -30,7 +30,9 @@ export class GrowthEcology {
   // The reference is the body radius WITHOUT item inflation, so a temporary turtle cannot
   // change the ecology the player is actually matched against.
   const base=Math.max(c.minRadius,p.growth?.baseRadius||p.r);
-  const rows=c.bandRatios,row=this.band(rows,this.rng());
+  const rows=c.bandRatios,picked=this.band(rows,this.rng());
+  // Later arrivals are never giants: the big bodies you meet were placed when the level began.
+  const row=(respawn&&rows.indexOf(picked)>=2)?rows[1]:picked;
   const small=row===rows[0],peer=row===rows[1],huge=row===rows[3];
   const drifter=small&&this.rng()<c.drifterChance;
   const radius=drifter?clamp(mix(c.drifterLo*base,c.drifterHi*base,this.rng()),c.minRadius,c.giantRadiusCap):clamp(mix(row[1]*base,row[2]*base,this.rng()),c.minRadius,c.giantRadiusCap);

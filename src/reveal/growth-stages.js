@@ -7,11 +7,11 @@ import {reserveRadius} from '../game/ink-reserve.js';
 // The final stage keeps the framing the old third stage had (z ~= .53 on a 900px viewport).
 // There is NO whole-painting "contain" view: the camera follows the body and simply clamps at
 // the world edge, so the border comes into frame only when the player walks up to it.
-const thresholds=Object.freeze([846,2720,6950]);
+const thresholds=Object.freeze([846,4200,9000]);
 export const GROWTH_STAGES_CONFIG=Object.freeze({
  startInk:17,initialRadius:12,sizeMassPerInk:1,expansionInk:thresholds[0],thresholds,
  // Body radius as a fraction of the viewport short side at stage entry (12% diameter).
- stageScreenRadius:Object.freeze([.050,.058,.060,.085]),
+ stageScreenRadius:Object.freeze([.050,.058,.075,.098]),
  // How far the camera may slide past the world edge, as a fraction of the viewport.
  // Only stage four may look past the map. Earlier stages clamp hard so the border never shows.
  borderOverscanByStage:Object.freeze([0,0,0,.17]),
