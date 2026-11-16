@@ -99,7 +99,7 @@ import {GROWTH_STAGES_CONFIG,stageEntryRadius} from '../src/reveal/growth-stages
   const seen=[],r=new RevealRun((t,d)=>{if(t==='bloom')seen.push(d)},{aiCount:0,foodTarget:0,foodSpawnRate:0,completionThreshold:2});
   const p=r.player;r.event('consume',{entity:p,x:100,y:100,r:20,coreRadius:20,kind:'enemy'});
   const b=seen[0];
-  assert.equal(b.x,p.x);assert(b.y>p.y,'bloom sits below the player');
+  assert.equal(b.x,100);assert.equal(b.y,100,'bloom lands exactly where the prey died');
   assert(b.revealRadius>0&&b.revealRadius<=C.consumeRadiusMax);
   assert.equal(r.mask.blooms.at(-1).y,b.y,'visual and mask share coordinates');
   assert(consumeBloomRadius(20)<consumeBloomRadius(60),'bigger prey paints more');

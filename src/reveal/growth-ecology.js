@@ -11,11 +11,11 @@ import {pondCollisionRadius} from './pond-rules.js';
 const frozenBands=rows=>Object.freeze(rows.map(row=>Object.freeze(row)));
 export const GROWTH_ECOLOGY_CONFIG=Object.freeze({
  // Close nursery: prey plus food is deliberately dense around the body.
- nearSmallCount:22,nearSmallMin:80,nearSmallMax:520,closeSmallCount:10,closeSmallMax:220,
+ nearSmallCount:34,nearSmallMin:46,nearSmallMax:520,closeSmallCount:16,closeSmallMax:190,
  bandRatios:frozenBands([[.50,.22,.62],[.80,.82,1.15],[.95,1.30,1.70],[1,1.9,2.8]]),
  lethalRatio:1.28,
  // A slice of the prey band becomes passive plankton: tiny, slow, no hunt and no flee.
- drifterChance:.26,drifterLo:.08,drifterHi:.20,
+ drifterChance:.42,drifterLo:.08,drifterHi:.20,
  nurseryFoodCount:40,nurseryFoodMin:22,nurseryFoodRadius:380,
  mediumSpawnMin:440,largeSpawnMin:900,spawnAttempts:90,unitGap:20,leafGap:2,
  giantRadiusCap:280,minRadius:3

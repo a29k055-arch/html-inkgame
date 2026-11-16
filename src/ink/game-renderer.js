@@ -50,8 +50,7 @@ export class GameRenderer {
   if(this.ground)this.ground.draw(c,game);else {const center=game.center,wash=c.createRadialGradient(center.x,center.y,Math.max(1,game.safeRadius-60),center.x,center.y,game.safeRadius+130);
   wash.addColorStop(0,game.theme==='boss'?'#d9d8cc':'#e8e0cc');wash.addColorStop(.45,game.theme==='boss'?'#bfc4b8':'#d9ddcf');wash.addColorStop(1,game.theme==='boss'?'#aeb7aa':'#edf0e6');c.fillStyle=wash;c.fillRect(0,0,this.world.width,this.world.height);
   if(game.theme==='boss'){const inkWash=c.createRadialGradient(center.x,center.y,80,center.x,center.y,1500);inkWash.addColorStop(0,'#faf8e218');inkWash.addColorStop(.65,'#727b6509');inkWash.addColorStop(1,'#4a53402b');c.fillStyle=inkWash;c.fillRect(0,0,this.world.width,this.world.height);}
-  }c.strokeStyle='#887d6455';c.lineWidth=3;c.strokeRect(1,1,this.world.width-2,this.world.height-2);
-  this.trail.draw(c,'ink',{...cam,width:w,height:h});
+  }this.trail.draw(c,'ink',{...cam,width:w,height:h});
   for(const food of game.foods){if(!this.visible(food,12))continue;if(this.foodPainter){this.foodPainter(c,food);continue;}c.save();c.translate(food.x,food.y);c.rotate(food.rot);c.fillStyle=`rgba(39,35,27,${food.alpha})`;c.beginPath();if(food.shape==='circle'){c.arc(0,0,food.r,0,Math.PI*2);}else{const sides=food.shape==='square'?4:food.shape==='triangle'?3:5;for(let i=0;i<sides;i++){const a=i/sides*Math.PI*2-Math.PI/2;c.lineTo(Math.cos(a)*food.r,Math.sin(a)*food.r);}c.closePath();}c.fill();c.restore();}
   const orderedItems=this.itemOrder?[...game.items].sort((a,b)=>this.itemOrder(a)-this.itemOrder(b)):game.items;
   this.drawItems(game,'lower',orderedItems);
@@ -61,6 +60,8 @@ export class GameRenderer {
   this.drawOrder.length=0;for(const npc of game.entities)if(npc!==p)this.drawOrder.push(npc);this.drawOrder.sort((a,b)=>visualRadius(a)-visualRadius(b));
   this.drawOrder.forEach((npc,i)=>{if(!npc.dead&&this.visible(npc,npc.r*1.8+25))this.npcs.draw(c,npc,i,game.entities,game.theme==='boss'?game.player:null);});
   for(const wave of game.waves){c.save();c.translate(wave.x,wave.y);c.rotate(Math.atan2(wave.aim.y,wave.aim.x));c.strokeStyle=`rgba(66,60,45,${.28*(1-wave.age/C.skillDurations.splash)})`;c.lineWidth=16*(1-wave.age/C.skillDurations.splash);c.beginPath();c.arc(0,0,wave.range*wave.age/C.skillDurations.splash,-1,1);c.stroke();c.restore();}
+ // Frame last: it is the top-most world element and hides any ink that reaches the edge.
+ c.strokeStyle='#887d64aa';c.lineWidth=4;c.strokeRect(2,2,this.world.width-4,this.world.height-4);
   c.restore();
   c.save();c.globalAlpha=p.effects.water?.28:p.diluted?.58:1;c.drawImage(this.canvas,0,0,w,h);c.restore();
   // Opt-in canopy pass: V4 pond objects can sit above the player; classic ordering stays unchanged.

@@ -162,3 +162,18 @@ body[data-experience=reveal] #notice{top:clamp(114px,17vh,162px)}
 @media(max-height:600px){
  .tutorial-shell{max-height:94vh}
 }
+
+/* Phone HUD: two flat full-width strips instead of stacked cards, so the pond stays visible. */
+@media(max-width:700px){
+ #revealMeter{position:fixed;top:calc(6px + env(safe-area-inset-top));left:10px;right:10px;width:auto;transform:none;padding:0;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none}
+ #revealMeter header{justify-content:flex-start;gap:8px;font-size:10px;line-height:1;margin:0 0 3px;opacity:.82}
+ #revealMeter strong{font-size:10px}
+ #revealMeter progress{display:block;width:100%;height:6px;border-radius:3px}
+ #revealMeter small{display:none}
+ #inkReserveHud{position:fixed;top:calc(30px + env(safe-area-inset-top));left:10px;right:10px;padding:0;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none}
+ #inkReserveHud header{font-size:10px;line-height:1;margin:0 0 3px;opacity:.82;gap:6px}
+ #inkReserveHud strong{font-size:10px}
+ #inkReserveHud progress{display:block;width:100%;height:6px;border-radius:3px}
+ #inkReserveHud small{display:none}
+ .hud-top{top:calc(48px + env(safe-area-inset-top))}
+}

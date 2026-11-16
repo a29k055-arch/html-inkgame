@@ -22,7 +22,7 @@ export class RevealRun {
  applyInkContact(image,camera,w,h){if(this.state==='playing'){this.temporary.applyContact(image,camera,w,h,this.elapsed);this.checkGoal();}return this.completion;}
  get finished(){return this.state==='finished';}
  event(type,data){if(type==='consume'&&data.entity===this.player){if(data.kind==='enemy'){const radius=consumeBloomRadius(data.coreRadius??data.r,this.config);// Ink falls from the body, so the bloom lands below the player and shares the mask/visual source.
-const dx=this.player.x,dy=Math.min(this.world.height-1,this.player.y+this.player.r*(this.config.dropBelowOffset??1.05));this.mask.reveal(dx,dy,radius);this.metrics.enemyBlooms++;this.onEvent('bloom',{...data,x:dx,y:dy,revealRadius:radius});}else {this.metrics.foodPickups++;this.onEvent('food-ink',data);}}if(type==='respawn'){delete data.erasePrevious;if(data!==this.player)data.v4Visual=true;}if(type==='respawn'&&data===this.player){this.lastPaint={x:data.x,y:data.y};this.sheltered=false;this.boostPhase='ready';this.boostHeld=false;this.boostTimer=0;const moved=this.journey.recalculate(data);if(moved)this.onEvent('growth-stage',moved);}this.onEvent(type,data);}
+const dx=clamp(data.x,0,this.world.width-1),dy=clamp(data.y,0,this.world.height-1);this.mask.reveal(dx,dy,radius);this.metrics.enemyBlooms++;this.onEvent('bloom',{...data,x:dx,y:dy,revealRadius:radius});}else {this.metrics.foodPickups++;this.onEvent('food-ink',data);}}if(type==='respawn'){delete data.erasePrevious;if(data!==this.player)data.v4Visual=true;}if(type==='respawn'&&data===this.player){this.lastPaint={x:data.x,y:data.y};this.sheltered=false;this.boostPhase='ready';this.boostHeld=false;this.boostTimer=0;const moved=this.journey.recalculate(data);if(moved)this.onEvent('growth-stage',moved);}this.onEvent(type,data);}
  // Held boost. Strength reuses the three fish tiers, so stage 1/2/3-4 map to +30/50/70%.
  stageBoost(){const tiers=ITEM_TIERS.rush,stage=this.journey?.stage||1;return stage<=1?tiers[0]:stage===2?tiers[1]:tiers[2];}
  setBoostHeld(held){return this.boost(held);}
@@ -49,17 +49,26 @@ const dx=this.player.x,dy=Math.min(this.world.height-1,this.player.y+this.player
   if(this.boostPhase==='using'){
    this.boostActive=(this.boostActive||0)+dt;this.player.effects.manualRush=Math.max(this.player.effects.manualRush||0,.12);
    // A small body pays little, a large body pays a lot, so the early game is never drained dry.
-   const c=this.config.inkSkill||{},ref=c.drainRadiusRef||140,scale=Math.min(1.8,Math.max(.3,this.player.r/ref)),loss=Math.max(0,Math.min(this.player.ink*.4,this.player.ink*(c.drainPerSecond||.16)*scale*dt));
-   if(loss>0&&spendReserve(this.player,loss))this.chargeInk=(this.chargeInk||0)+loss;return;
+   const c=this.config.inkSkill||{},ref=c.drainRadiusRef||140,scale=Math.min(1.8,Math.max(.3,this.player.r/ref)),rampCurve=c.rampSeconds||3;
+   // Cheap for the first second, then the cost climbs: holding long is a real decision.
+   const rampFactor=Math.min(1,.28+.72*Math.min(1,(this.boostActive||0)/rampCurve)),loss=Math.max(0,Math.min(this.player.ink*.4,this.player.ink*(c.drainPerSecond||.1)*scale*rampFactor*dt));
+   if(loss>0&&spendReserve(this.player,loss))this.chargeInk=(this.chargeInk||0)+loss;
+   if((this.boostActive||0)>=(c.maxHold||5))this.finishBoost();return;
   }
   if(this.boostPhase==='cooldown'){this.boostTimer-=dt;if(this.boostTimer<=0){this.boostPhase='ready';this.boostTimer=0;}}
  }
  updateShelter(){const p=this.player;if(p.dead){this.sheltered=false;this.shelterFrames=0;return;}const pad=this.sheltered?.06:-.04;let inside=false;for(const leaf of this.arena.items){if(leaf.kind!=='leaf')continue;const r=leaf.r*(1+pad);if((p.x-leaf.x)**2+(p.y-leaf.y)**2<=r*r){inside=true;break;}}this.sheltered=inside;this.shelterFrames=inside?(this.shelterFrames||0)+1:0;}
  update(dt,input={x:0,y:0}){if(this.finished)return;dt=Math.max(0,Math.min(.1,dt));if(this.state==='finishing'){this.finalTime+=dt;this.tickMask(dt);if(this.finalTime>=this.config.finaleDuration*.6){const k=Math.min(1,dt*4);for(let i=0;i<this.mask.cells.length;i++){const a=this.mask.cells[i];this.mask.commit(i,Math.fround(a+(1-a)*k));}this.mask.version++;}if(this.finalTime>=this.config.finaleDuration){this.mask.fill(1);this.finish('complete');}return;}
-  this.elapsed+=dt;this.updateShelter();this.arena.rushSpeed=this.stageBoost();this.tickBoost(dt);this.arena.update(dt,input);const p=this.player,c=this.config;expireItemTiers(p);
+  this.elapsed+=dt;this.updateShelter();this.arena.rushSpeed=this.stageBoost();this.tickBoost(dt);this.arena.update(dt,input);const p=this.player,c=this.config;expireItemTiers(p);if(!p.effects.giant&&p.turtleInk){spendReserve(p,p.turtleInk);p.turtleInk=0;}
   this.tickMask(dt);this.collectDropSurplus();this.erosionClock+=dt;if(this.erosionClock>=1/c.erosionHz){const step=this.erosionClock;this.erosionClock=0;const before=this.completion;for(const e of this.arena.entities.slice(1))if(!e.dead){const radius=this.arena.radius(e),a=e.erasePrevious||{x:e.x,y:e.y},distance=Math.hypot(e.x-a.x,e.y-a.y),n=Math.max(1,Math.ceil(distance/Math.max(3,radius*.4))),rate=(e.appearance==='eye'?c.erosionEyeFactor:1)*(c.erosionMovingFactor+(1-c.erosionMovingFactor)*Math.exp(-Math.hypot(e.vx||0,e.vy||0)/c.erosionSpeedScale)**2);for(let j=1;j<=n;j++){const x=a.x+(e.x-a.x)*j/n,y=a.y+(e.y-a.y)*j/n;this.mask.erode(x,y,radius,step*rate/n);this.temporary.noteErosion(x,y,radius);}e.erasePrevious={x:e.x,y:e.y};}this.metrics.eroded+=Math.max(0,before-this.completion);}
   this.habitat.update(dt);
-  for(let i=this.arena.items.length-1;i>=0;i--){const item=this.arena.items[i];if(!p.dead&&touchingEdiblePondObject(p,item,this.arena.radius(p))){this.arena.items.splice(i,1);const effect=POND_RULES[item.kind].effect,duration=item.kind==='shield'?c.items.giantDuration:item.kind==='magnet'?c.items.magnetDuration:item.kind==='flower'?c.items.flowerDuration:c.pickupBoostDuration;if(!collectTieredItem(p,item))p.effects[effect]=Math.max(0,p.effects[effect]||0)+duration;this.metrics.pickups++;this.onEvent('pickup',{kind:item.kind,tier:item.tier||1,entity:p});}}
+  for(let i=this.arena.items.length-1;i>=0;i--){const item=this.arena.items[i];if(!p.dead&&touchingEdiblePondObject(p,item,this.arena.radius(p))){this.arena.items.splice(i,1);const effect=POND_RULES[item.kind].effect,duration=item.kind==='shield'?c.items.giantDuration:item.kind==='magnet'?c.items.magnetDuration:item.kind==='flower'?c.items.flowerDuration:c.pickupBoostDuration;if(!collectTieredItem(p,item))p.effects[effect]=Math.max(0,p.effects[effect]||0)+duration;
+   // The turtle grows the body, so it hands over the ink that growth represents - temporarily.
+   if(item.kind==='shield'&&c.growthStages?.sizeLinear){const scale=p.pondBuffs?.giant?.strength||1,bonus=Math.max(0,p.r*(scale-1))/(c.growthStages.sizeLinear);if(bonus>0){gainReserve(p,bonus,true,false);p.turtleInk=(p.turtleInk||0)+bonus;}}
+   if(item.kind==='shield'){const sc=p.pondBuffs?.giant?.strength||1,lin=c.growthStages?.sizeLinear||0;
+    // The turtle hands over the ink that its temporary growth stands for, and takes it back later.
+    if(lin>0){const bonus=Math.max(0,p.r*(sc-1))/lin;gainReserve(p,bonus,true,false);p.turtleInk=(p.turtleInk||0)+bonus;}}
+   this.metrics.pickups++;this.onEvent('pickup',{kind:item.kind,tier:item.tier||1,entity:p});}}
   const expanded=this.journey.update(p,dt,this.elapsed);if(expanded)this.onEvent('growth-stage',expanded);if(!this.checkGoal()&&Number.isFinite(c.duration)&&c.duration>0&&this.elapsed>=c.duration)this.finish('timeout');
  }
  // A drop that lands mostly on finished painting still pays out, so late kills keep growing you.
