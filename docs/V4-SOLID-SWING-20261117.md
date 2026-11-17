@@ -33,3 +33,7 @@
 ```
 
 截图与完整报告在本地work/solid-swing、work/npc-solid、work/solid-live、work/system-repair，原始PNG不纳入Git。已人工观察大体型曲线、急转、低速和停止截图；美术观感仍需用户验收。没有将受控测试当作真机或自然完整局证明。
+
+## 发布
+
+发布复验：运行提交ead62f16c65624fe0524700997d77939b2fddcc2已进入main；Pages任务44020041865成功，公开versions.json的root/V4均为该SHA。线上实际游戏PC/触控视口×18/90/170/280半径共8组通过，core与投影还原半径误差小于1e-8，正式swing、12FBO、mask/paint同步，页面/资源错误为空。V2/V3冻结SHA保持不变。此补记仅文档，跳过CI，线上运行SHA保持ead62f1。
