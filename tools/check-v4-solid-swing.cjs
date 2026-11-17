@@ -1,0 +1,26 @@
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright'),fs=require('node:fs'),assert=require('node:assert/strict');
+const deps='C:/Users/Nine/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules',sharp=require(deps+'/sharp');
+const base=process.argv[2]||'http://127.0.0.1:4191/',quick=process.argv.includes('--quick'),out=quick?'work/solid-swing-preview':'work/solid-swing';fs.mkdirSync(out,{recursive:true});
+(async()=>{const browser=await chromium.launch({channel:'msedge',headless:true}),report={bodies:[],motion:[],errors:[]};
+try{for(const mobile of (quick?[]:[false,true])){
+ const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1200,height:900}}),page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));
+ await page.goto(new URL('visual-effects/v4.html',base).href);await page.waitForFunction(()=>window.v4Study);await page.selectOption('#preset','swing');await page.evaluate(()=>v4Study.seek(0));
+ for(const [radius,scale] of [[18,3],[90,1],[170,.55],[280,.4],[170,.85]]){
+  const result=await page.evaluate(async({radius,scale})=>{const r=v4Study.renderer;r.camera={x:2000-innerWidth/scale/2,y:1500-innerHeight/scale/2,scale};r.cameraReady=true;r.fluid.clear();r.body.reset();r.trail.clear();r.relativeSpeed=0;const e={id:'human',x:2000,y:1500,r:radius,collisionScale:.96,vx:0,vy:0,effects:{},dead:0,controller:{type:'human'}};
+   for(let i=0;i<90;i++){r.step(1/60,e);if(i%30===29)await new Promise(requestAnimationFrame);}return {image:r.canvas.toDataURL(),width:r.viewW,height:r.viewH,expected:radius*.96*scale,targets:r.fluid.targets.length};},{radius,scale});
+  const input=Buffer.from(result.image.split(',')[1],'base64'),{data,info}=await sharp(input).ensureAlpha().raw().toBuffer({resolveWithObject:true}),factor=info.width/result.width,cx=info.width/2,cy=info.height/2,expected=result.expected*factor,ratios=[];
+  for(let i=0;i<24;i++){const angle=i/24*Math.PI*2;let last=0;for(let d=0;d<expected*1.3;d+=.5){const x=Math.round(cx+Math.cos(angle)*d),y=Math.round(cy+Math.sin(angle)*d),k=(y*info.width+x)*4;if(data[k+3]>=230&&data[k]<70)last=d;}ratios.push(last/expected);}
+  assert.equal(result.targets,12);assert(Math.min(...ratios)>.94,`solid core too small ${radius} ${scale}: ${ratios}`);assert(Math.max(...ratios)<1.10,`solid core too large ${radius} ${scale}: ${ratios}`);
+  fs.writeFileSync(`${out}/${mobile?'mobile':'pc'}-solid-${radius}-${scale}.png`,await sharp(input).flatten({background:'#eee5d1'}).png().toBuffer());report.bodies.push({mobile,radius,scale,expectedPixels:result.expected,minSolidRatio:Math.min(...ratios),maxSolidRatio:Math.max(...ratios)});
+ }await context.close();
+}
+ const page=await browser.newPage({viewport:{width:1200,height:900}});page.on('pageerror',e=>report.errors.push(e.message));await page.goto(new URL('visual-effects/v4.html',base).href);await page.waitForFunction(()=>window.v4Study);
+ for(const size of (quick?['170','280']:['18','90','170','280']))for(const speed of (quick?['30','100']:['30','100','220']))for(const route of (quick?['curve','stop']:['straight','curve','corner','stop'])){
+  await page.selectOption('#preset','swing');await page.selectOption('#size',size);await page.selectOption('#speed',speed);await page.selectOption('#path',route);const scale=Number(size)<=18?2.6:Number(size)<=90?.9:Number(size)<=170?.55:.42;const time=route==='stop'?7:route==='corner'?Math.min(440,1200*.4)/Number(speed)+1.6:route==='curve'?4:5;await page.evaluate(({time,scale})=>v4Study.seek(time,{cameraScale:scale}),{time,scale});
+  const state=await page.evaluate(()=>({targets:v4Study.renderer.fluid.targets.length,preset:v4StudyState.preset,profile:v4Study.renderer.fluid.motionProfile(),entity:v4StudyState.entity,camera:v4Study.renderer.camera,viewW:v4Study.renderer.viewW,viewH:v4Study.renderer.viewH,trail:{life:v4Study.renderer.trail.config.trailLifetime,length:v4Study.renderer.trail.config.trailMaxWorldLength},image:v4Study.renderer.canvas.toDataURL()}));assert.equal(state.targets,12);
+  if(Number(size)>=170){const buffer=Buffer.from(state.image.split(',')[1],'base64'),raw=await sharp(buffer).ensureAlpha().raw().toBuffer({resolveWithObject:true}),sx=raw.info.width/state.viewW,sy=raw.info.height/state.viewH,cx=(state.entity.x-state.camera.x)*state.camera.scale*sx,cy=(state.entity.y-state.camera.y)*state.camera.scale*sy,rx=Number(size)*state.camera.scale*sx,ry=Number(size)*state.camera.scale*sy;let distantAlpha=0,farPeak=0,dense=0;for(let y=0;y<raw.info.height;y++)for(let x=0;x<raw.info.width;x++){const rho=Math.hypot((x-cx)/rx,(y-cy)/ry),a=raw.data[(y*raw.info.width+x)*4+3]/255;if(rho>1.4)distantAlpha+=a;if(rho>2)farPeak=Math.max(farPeak,a);if(rho>1.15&&a>.9)dense++;}state.tailPixels={distantAlpha,farPeak,dense};assert.equal(dense,0,'large wet tail must not become another solid black body');}await page.screenshot({path:`${out}/swing-${size}-${speed}-${route}.png`});delete state.image;report.motion.push({size:Number(size),speed:Number(speed),route,...state});
+ }
+ assert.deepEqual(report.errors,[]);
+}finally{await browser.close();fs.writeFileSync(out+'/report.json',JSON.stringify(report,null,2));}
+console.log(JSON.stringify({bodyCases:report.bodies,motionCases:report.motion.length,errors:report.errors}));
+})().catch(e=>{console.error(e);process.exitCode=1;});
