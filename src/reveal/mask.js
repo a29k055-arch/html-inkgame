@@ -1,8 +1,8 @@
-import {DROP_ALPHA,DROP_SHAPE,dropStage,sampleDrop} from './drop-shape.js';
+import {DROP_ALPHA,DROP_SHAPE,DROP_VARIANTS,dropSilhouette,dropStage,sampleDrop} from './drop-shape.js';
 import {REVEAL_CONFIG as C} from './config.js';
 // Persistent reveal state, never derived from transient Flow Trail pixels.
 // Real source-alpha extent, shared with the on-screen Drops texture (not a circular mask).
-export const DROP_ALPHA_EXTENT=(()=>{let max=0;const n=DROP_SHAPE.size;for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(DROP_ALPHA[y*n+x])max=Math.max(max,Math.hypot((x+.5)/n-.5,(y+.5)/n-.5)*2);return max;})();
+export const DROP_ALPHA_EXTENT=(()=>{let max=0;const n=DROP_SHAPE.size;for(let v=0;v<DROP_VARIANTS;v++){const alpha=dropSilhouette(v);for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(alpha[y*n+x])max=Math.max(max,Math.hypot((x+.5)/n-.5,(y+.5)/n-.5)*2);}return max;})();
 export function consumeBloomRadius(radius,config=C){const r=Math.max(0,Number(radius)||0),u=Math.max(0,Math.min(1,(r-(config.consumeRadiusGrowthStart??18))/Math.max(1,config.consumeRadiusGrowthRange??80))),smooth=u*u*(3-2*u),factor=config.consumeRadiusGrowth+(config.consumeRadiusGrowthBonus||0)*smooth;return Math.min(config.consumeRadiusMax,config.consumeRadiusTargetCap*r/DROP_ALPHA_EXTENT,(config.consumeRadius||0)+r*factor);}
 export class RevealMask {
  constructor(config={}){this.config={...C,...config};const c=this.config;this.width=c.width;this.height=c.height;this.cols=c.columns;this.rows=Math.ceil(this.cols*this.height/this.width);this.cells=new Float32Array(this.cols*this.rows);this.sum=0;this.version=0;this.blooms=[];this.weights=null;this.weightTotal=0;this.weightedSum=0;this.surplusArea=0;this.erasedAmount=new Float32Array(this.cells.length).fill(-1);}
@@ -27,12 +27,12 @@ export class RevealMask {
    if(this.commit(k,Math.fround(next)))changed=true;
   }if(changed)this.version++;
  }
- reveal(x,y,r){this.blooms.push({x,y,r,angle:Math.sin(x*.13+y*.07)*2.8,age:0});if(this.blooms.length>96)this.blooms.shift();}
+ reveal(x,y,r,{kind='enemy'}={}){this.dropSequence=(this.dropSequence||0)+1;this.recentVariants??=[];const choices=Array.from({length:DROP_VARIANTS},(_,i)=>i).filter(i=>!this.recentVariants.includes(i)),hash=Math.abs(Math.sin(x*.137+y*.071+this.dropSequence*12.9898)*43758.5453),variant=choices[Math.floor((hash%1)*choices.length)];this.recentVariants.push(variant);if(this.recentVariants.length>2)this.recentVariants.shift();const b={x,y,r,kind,variant,angle:Math.sin(x*.13+y*.07+this.dropSequence*2.3)*2.8,age:0};this.blooms.push(b);if(this.blooms.length>96)this.blooms.shift();return b;}
  consume(event){if(event.kind!=='enemy')return false;this.reveal(event.x,event.y,consumeBloomRadius(event.coreRadius??event.r,this.config));return true;}
  erode(x,y,r,dt){const cap=this.config.erosionMaxRadius||Infinity;this.brush(x,y,Math.min(cap,Math.max(1,r*this.config.erosionRadiusScale)),this.config.erosionPerSecond*Math.max(0,dt),true);}
  get cellArea(){return (this.width/this.cols)*(this.height/this.rows);}
  takeSurplus(){const v=this.surplusArea;this.surplusArea=0;return v;}
- stampDrop(b){const t=Math.min(1,b.age/this.config.bloomDuration),r=b.r,stage=dropStage(t),previousStage=b.previousAge===undefined?null:dropStage(b.previousAge/this.config.bloomDuration),sx=this.width/this.cols,sy=this.height/this.rows,co=Math.cos(b.angle),si=Math.sin(b.angle),n=DROP_SHAPE.size;let changed=false;for(let y=Math.max(0,Math.floor((b.y-r*1.42)/sy));y<=Math.min(this.rows-1,Math.ceil((b.y+r*1.42)/sy));y++)for(let x=Math.max(0,Math.floor((b.x-r*1.42)/sx));x<=Math.min(this.cols-1,Math.ceil((b.x+r*1.42)/sx));x++){const dx=(x+.5)*sx-b.x,dy=(y+.5)*sy-b.y,u=(dx*co+dy*si)/(r*2)+.5,v=(-dx*si+dy*co)/(r*2)+.5;if(u<0||v<0||u>=1||v>=1)continue;const alpha=sampleDrop(stage,u,v)/255,previous=previousStage?sampleDrop(previousStage,u,v)/255:0,k=y*this.cols+x,add=Math.max(0,alpha-previous);
+ stampDrop(b){const t=Math.min(1,b.age/this.config.bloomDuration),r=b.r,stage=dropStage(t,b.variant),previousStage=b.previousAge===undefined?null:dropStage(b.previousAge/this.config.bloomDuration,b.variant),sx=this.width/this.cols,sy=this.height/this.rows,co=Math.cos(b.angle),si=Math.sin(b.angle);let changed=false;for(let y=Math.max(0,Math.floor((b.y-r*1.42)/sy));y<=Math.min(this.rows-1,Math.ceil((b.y+r*1.42)/sy));y++)for(let x=Math.max(0,Math.floor((b.x-r*1.42)/sx));x<=Math.min(this.cols-1,Math.ceil((b.x+r*1.42)/sx));x++){const dx=(x+.5)*sx-b.x,dy=(y+.5)*sy-b.y,u=(dx*co+dy*si)/(r*2)+.5,v=(-dx*si+dy*co)/(r*2)+.5;if(u<0||v<0||u>=1||v>=1)continue;const alpha=sampleDrop(stage,u,v)/255,previous=previousStage?sampleDrop(previousStage,u,v)/255:0,k=y*this.cols+x,add=Math.max(0,alpha-previous);
  // Pigment that lands on already-painted ground is returned as surplus instead of vanishing.
  if(add>0&&this.cells[k]>=.999)this.surplusArea+=add*this.cellArea;
  else if(this.cells[k]+add>1)this.surplusArea+=(this.cells[k]+add-1)*this.cellArea;

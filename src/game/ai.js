@@ -10,9 +10,10 @@ export const AI_PROFILES={
  balanced:{waterTolerance:90,waterSeconds:1.2,risk:.5,hunt:.85,food:1.1,items:1,reaction:.52,skill:.55},
  novice:{waterTolerance:70,waterSeconds:1,risk:.65,hunt:.55,food:.85,items:.65,reaction:.95,skill:.23},
 };
+export const COMPETITOR_PROFILE=Object.freeze({waterTolerance:0,waterSeconds:0,risk:.35,hunt:1.9,food:2.6,items:0,reaction:.22,skill:.95,playerSpeedRatio:.93});
 // Passive drifters: tiny, slow, never hunt and never flee. Used as living plankton near spawn.
 export const DRIFTER_PROFILE=Object.freeze({waterTolerance:0,waterSeconds:0,risk:0,hunt:0,food:.6,items:0,reaction:.9,skill:.12,speedScale:.34,passive:true});
-export function aiController(index,forced){const personality=forced&&AI_PROFILES[forced]?forced:forced==='drift'?'drift':Object.keys(AI_PROFILES)[index%7],profile=forced==='drift'?DRIFTER_PROFILE:AI_PROFILES[personality];return {type:'ai',personality,profile:{...profile,reaction:profile.reaction*random(.8,1.25),skill:clamp(profile.skill+random(-.08,.08),.1,1)},think:random(0,.7),goal:null,intent:'wander',chaseTime:0,previousDistance:Infinity,routeSeed:random(0,6.28)};}
+export function aiController(index,forced){const personality=forced&&AI_PROFILES[forced]?forced:forced==='competitor'?'competitor':forced==='drift'?'drift':Object.keys(AI_PROFILES)[index%7],profile=forced==='competitor'?COMPETITOR_PROFILE:forced==='drift'?DRIFTER_PROFILE:AI_PROFILES[personality];return {type:'ai',personality,profile:{...profile,reaction:profile.reaction*random(.8,1.25),skill:clamp(profile.skill+random(-.08,.08),.1,1)},think:random(0,.7),goal:null,intent:'wander',chaseTime:0,previousDistance:Infinity,routeSeed:random(0,6.28)};}
 function threatCost(point,threats,e,game){let cost=0;for(const t of threats){const d=dist(point,t),reach=game.radius(t)+game.radius(e)+190;if(d<reach)cost+=(reach-d)/reach*(1+game.radius(t)/game.radius(e));}return cost;}
 export function chooseGoal(game,e){
  const world=game.world||C.world,ctrl=e.controller,p=ctrl.profile,own=game.radius(e),perception=C.aiPerceptionRange*(.65+p.skill*.7);
@@ -34,7 +35,7 @@ export function chooseGoal(game,e){
   const sizeRatio=own/game.radius(prey),distance=dist(e,prey);if(sizeRatio<1.12||prey.invincible||p.hunt<.15||dist(prey,center)>game.safeRadius-e.r+waterLimit)continue;
   const speedRatio=game.speed(e)/game.speed(prey),closing=distance/Math.max(25,game.speed(e));
   if(speedRatio<.86&&distance>own+140)continue;
-  if(e.v4Visual&&ctrl.v4IgnoreId===prey.id&&game.elapsed<ctrl.v4IgnoreUntil)continue;const previous=ctrl.goal?.id===prey.id;if(previous&&ctrl.chaseTime>4.5&&distance>own+100&&distance>=ctrl.previousDistance-8)continue;
+  if(e.v4Visual&&ctrl.v4IgnoreId===prey.id&&game.elapsed<ctrl.v4IgnoreUntil)continue;const previous=ctrl.goal?.id===prey.id;if(previous&&ctrl.personality!=='competitor'&&ctrl.chaseTime>4.5&&distance>own+100&&distance>=ctrl.previousDistance-8)continue;
   const reward=prey.mass*C.npcGain/(e.mass+200),risk=threatCost(prey,threats,e,game);
   const score=p.hunt*(reward+1.1)/(1+closing*.65)-risk*(2-p.risk)-Math.max(0,dist(prey,center)+e.r-game.safeRadius)/Math.max(1,waterLimit)*.8;
   if(score>best){best=score;goal={id:prey.id,x:prey.x+prey.vx*.3*p.skill,y:prey.y+prey.vy*.3*p.skill};intent='hunt';ctrl.prey=prey;}

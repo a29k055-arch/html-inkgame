@@ -59,7 +59,7 @@ import {GROWTH_STAGES_CONFIG,stageEntryRadius} from '../src/reveal/growth-stages
   assert(Math.abs((r.arena.speed(p)/r.arena.speed(p,false))-(1+r.stageBoost()))<1e-9,'stage 1 boost');
   assert.equal(r.stageBoost(),.30);
   p.ink=GROWTH_STAGES_CONFIG.thresholds[0];r.journey.update(p,0,1);assert.equal(r.journey.stage,2);assert.equal(r.stageBoost(),.50);
-  p.ink=GROWTH_STAGES_CONFIG.thresholds[1];r.journey.update(p,0,2);assert.equal(r.journey.stage,3);assert.equal(r.stageBoost(),.70);
+  p.ink=GROWTH_STAGES_CONFIG.thresholds[1];r.journey.update(p,GROWTH_STAGES_CONFIG.stageTransitionSeconds,4);assert.equal(r.journey.stage,3);assert.equal(r.stageBoost(),.70);
   p.effects.rush=5;p.pondBuffs={rush:{tier:3,strength:.70}};
   assert(r.arena.speed(p)/base<=1+.70+1e-6,'boost and fish must not multiply');
   // A tap shorter than one second spends a little ink and leaves no cooldown.
@@ -74,7 +74,7 @@ import {GROWTH_STAGES_CONFIG,stageEntryRadius} from '../src/reveal/growth-stages
 // Stage only rises during play; only a respawn may hand back a smaller stage.
 {
   const r=new RevealRun(()=>{},{aiCount:0,foodTarget:0,foodSpawnRate:0,completionThreshold:2});
-  const p=r.player;p.ink=GROWTH_STAGES_CONFIG.thresholds[1]+100;r.journey.update(p,0,10);assert.equal(r.journey.stage,3);
+  const p=r.player;p.ink=GROWTH_STAGES_CONFIG.thresholds[1]+100;r.journey.update(p,0,10);assert.equal(r.journey.stage,2);r.journey.update(p,GROWTH_STAGES_CONFIG.stageTransitionSeconds,13);assert.equal(r.journey.stage,3);
   p.ink=20;r.journey.update(p,0,11);assert.equal(r.journey.stage,3,'no downgrade while alive');
   assert.equal(r.journey.recalculate(p).stage,1,'respawn re-derives from real ink');
 }

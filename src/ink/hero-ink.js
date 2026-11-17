@@ -1,12 +1,12 @@
 import {cloudPrograms} from './hero-cloud-shaders.js';
-import {HERO_PRESETS,DEFAULT_HERO_PRESET,heroMotionProfile} from './hero-presets.js';
+import {HERO_PRESETS,DEFAULT_HERO_PRESET,heroMotionProfile,heroSizeProfile} from './hero-presets.js';
 import {relativeInkProfile} from './hero-relative-motion.js';
 // The same solver/material as the frozen player study, without modifying its archive.
 import {InkFluid as StudyFluid} from '../../visual-effects/reference-2d00e16/src/fluid.js';
 export {MaterialInk as HeroInkBody} from '../../visual-effects/reference-2d00e16/src/material.js';
 
 export class HeroInkFluid extends StudyFluid {
- motionProfile(){const source=this.preset||HERO_PRESETS[DEFAULT_HERO_PRESET],speed=Number.isFinite(this.relativeMotion)?this.relativeMotion:this.core?.speed||0,relative=Number.isFinite(this.relativeMotion);if(this.motionSource!==source||this.motionSpeed!==speed||this.motionRelative!==relative){this.motionSource=source;this.motionSpeed=speed;this.motionRelative=relative;this.motionValue=relative?relativeInkProfile(source,speed):heroMotionProfile(source,speed);}return this.motionValue;}
+ motionProfile(){const source=this.preset||HERO_PRESETS[DEFAULT_HERO_PRESET],speed=Number.isFinite(this.relativeMotion)?this.relativeMotion:this.core?.speed||0,relative=Number.isFinite(this.relativeMotion);if(this.motionSource!==source||this.motionSpeed!==speed||this.motionRelative!==relative||this.motionRadius!==this.worldRadius){this.motionRadius=this.worldRadius;this.motionSource=source;this.motionSpeed=speed;this.motionRelative=relative;this.motionValue=heroSizeProfile(relative?relativeInkProfile(source,speed):heroMotionProfile(source,speed),this.worldRadius);}return this.motionValue;}
  prepareCloud(){return cloudPrograms(this);}
  dispose(){if(this.cloudPrograms)for(const p of Object.values(this.cloudPrograms))this.gl.deleteProgram(p);super.dispose();}
  inject(ink){
@@ -17,11 +17,12 @@ export class HeroInkFluid extends StudyFluid {
   if(profile.wakeFloor&&ink.vx===0&&ink.vy===0)ink={...ink,intensity:ink.intensity*(1-.25*moving*Math.max(0,1-(core?.speed||0)/.36))};
   if(profile.fluidity&&ink.vx===0&&ink.vy===0)ink={...ink,intensity:ink.intensity*(1-.24*profile.fluidity*moving)};
   if(profile.feedReduction&&ink.vx===0&&ink.vy===0)ink={...ink,intensity:ink.intensity*(1-profile.feedReduction*moving)};
+  if(profile.bigBody&&ink.vx===0&&ink.vy===0)ink={...ink,radius:ink.radius*profile.bodyFeedRadius,intensity:ink.intensity*profile.bodyFeed};
   return super.inject(ink);
  }
  pass(name,target,uniforms={}){
   // A short-lived wake. Continual body feeding keeps the live core stable at rest.
   const decay=(this.motionProfile()).decay;if(name==='correct'&&decay!==null)uniforms={...uniforms,decay};
-  const profile=this.motionProfile();if(name==='confine'&&profile.vorticity){const k=Math.min(1,Math.max(0,((this.core?.radius||0)-.065)/.28));uniforms={...uniforms,amount:uniforms.amount*(1+(profile.vorticity-1)*k)};}if(profile.jet&&(name==='material'||name==='contain')){uniforms={...uniforms,wakeFloor:profile.wakeFloor||0,fluidity:profile.fluidity||0,wakeRetention:profile.wakeRetention??1,relativeActivity:profile.relative?profile.moving:0,tailFade:profile.tailFade||0,slowMotion:(profile.slowMix||0)*(profile.relative?profile.moving:Math.min(1,(this.core?.speed||0)/.01)),cloudBlend:profile.adaptive?Math.min(.85,Math.max(profile.cloudFloor||0,(profile.wakeBlend||0)*Math.max(0,1-(profile.relative?profile.relativeSpeed/1.2:(this.core?.speed||0)/.36)),((this.core?.radius||0)-.065)/.28)):1};const programs=cloudPrograms(this),old=this.programs[name],cache=this.uniforms[name];this.programs[name]=programs[name];this.cloudUniforms??={};this.uniforms[name]=this.cloudUniforms[name]??={};try{return super.pass(name,target,uniforms);}finally{this.programs[name]=old;this.uniforms[name]=cache;}}return super.pass(name,target,uniforms);
+  const profile=this.motionProfile();if(name==='confine'&&profile.vorticity){const k=Math.min(1,Math.max(0,((this.core?.radius||0)-.065)/.28));uniforms={...uniforms,amount:uniforms.amount*(1+(profile.vorticity-1)*k)};}if(profile.jet&&(name==='material'||name==='contain')){uniforms={...uniforms,bigBody:profile.bigBody||0,wakeFloor:profile.wakeFloor||0,fluidity:profile.fluidity||0,wakeRetention:profile.wakeRetention??1,relativeActivity:profile.relative?profile.moving:0,tailFade:profile.tailFade||0,slowMotion:(profile.slowMix||0)*(profile.relative?profile.moving:Math.min(1,(this.core?.speed||0)/.01)),cloudBlend:profile.adaptive?(1-(1-Math.min(.85,Math.max(profile.cloudFloor||0,(profile.wakeBlend||0)*Math.max(0,1-(profile.relative?profile.relativeSpeed/1.2:(this.core?.speed||0)/.36)),((this.core?.radius||0)-.065)/.28)))*(1-(profile.bigBody||0))):1};const programs=cloudPrograms(this),old=this.programs[name],cache=this.uniforms[name];this.programs[name]=programs[name];this.cloudUniforms??={};this.uniforms[name]=this.cloudUniforms[name]??={};try{return super.pass(name,target,uniforms);}finally{this.programs[name]=old;this.uniforms[name]=cache;}}return super.pass(name,target,uniforms);
  }
 }

@@ -1,24 +1,18 @@
 import {pondCollisionRadius} from './pond-rules.js';
-// Spawn weights only. Existing entities, AI personalities and collisions are never rewritten,
-// so the world stays one continuous ecology across growth.
-//
-// Bands are measured against the PLAYER'S CURRENT RADIUS, not a stage constant:
-//   50% clearly smaller  -> food that keeps growth moving
-//   30% about the same   -> rivals that can be raced or eaten
-//   15% noticeably bigger-> the reference target for the next stage
-//    5% far bigger       -> landmarks you route around
-// Anything at or above lethalRatio can swallow the player, so the 30% band stops just below it.
+// Four birth layers coexist from the first frame. Slots retain birth tier across deaths;
+// feeding can grow every layer to the shared radius ceiling without resetting the world.
 const frozenBands=rows=>Object.freeze(rows.map(row=>Object.freeze(row)));
 export const GROWTH_ECOLOGY_CONFIG=Object.freeze({
  // Close nursery: prey plus food is deliberately dense around the body.
- nearSmallCount:34,nearSmallMin:46,nearSmallMax:520,closeSmallCount:16,closeSmallMax:190,
+ nearSmallCount:18,nearSmallMin:62,nearSmallMax:520,closeSmallCount:10,closeSmallMax:210,
+ tiers:Object.freeze([[3.5,10,5.5],[18,38,23],[55,100,65],[240,360,260]].map(row=>Object.freeze(row))),
  bandRatios:frozenBands([[.50,.22,.62],[.80,.82,1.15],[.95,1.30,1.70],[1,1.9,2.8]]),
  lethalRatio:1.28,
  // A slice of the prey band becomes passive plankton: tiny, slow, no hunt and no flee.
- drifterChance:.42,drifterLo:.08,drifterHi:.20,
+ drifterChance:.28,drifterLo:.08,drifterHi:.20,
  nurseryFoodCount:40,nurseryFoodMin:22,nurseryFoodRadius:380,
- mediumSpawnMin:440,largeSpawnMin:900,spawnAttempts:90,unitGap:20,leafGap:2,
- giantRadiusCap:280,minRadius:3
+ mediumSpawnMin:440,largeSpawnMin:900,spawnAttempts:120,unitGap:20,leafGap:2,
+ giantRadiusCap:420,minRadius:3
 });
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const mix=(a,b,t)=>a+(b-a)*t;
@@ -27,18 +21,14 @@ export class GrowthEcology {
  band(rows,roll){return rows.find(row=>roll<row[0])||rows.at(-1);}
  spawn(arena,index=0,{respawn=false,entity=null}={}){
   const c=this.config,p=arena.player,w=arena.world;
-  // The reference is the body radius WITHOUT item inflation, so a temporary turtle cannot
-  // change the ecology the player is actually matched against.
-  const base=Math.max(c.minRadius,p.growth?.baseRadius||p.r);
-  const rows=c.bandRatios,picked=this.band(rows,this.rng());
-  // Later arrivals are never giants: the big bodies you meet were placed when the level began.
-  const row=(respawn&&rows.indexOf(picked)>=2)?rows[1]:picked;
-  const small=row===rows[0],peer=row===rows[1],huge=row===rows[3];
-  const drifter=small&&this.rng()<c.drifterChance;
-  const radius=drifter?clamp(mix(c.drifterLo*base,c.drifterHi*base,this.rng()),c.minRadius,c.giantRadiusCap):clamp(mix(row[1]*base,row[2]*base,this.rng()),c.minRadius,c.giantRadiusCap);
+  // Birth tier belongs to a slot across deaths; it never limits later feeding or growth.
+  const fraction=index/Math.max(1,arena.aiCount||30),ecologyTier=entity?.ecologyTier||(fraction<.60?1:fraction<.80?2:fraction<.90?3:4),band=c.tiers[ecologyTier-1];
+  const small=ecologyTier===1,peer=ecologyTier===2,huge=ecologyTier===4;
+  const drifter=small&&(respawn?entity?.passive===true:this.rng()<c.drifterChance);
+  const radius=clamp(mix(band[0],respawn?band[2]:band[1],this.rng()),c.minRadius,c.giantRadiusCap);
   const near=!respawn&&small&&index<c.nearSmallCount;
-  const min=near?c.nearSmallMin:small?(respawn?140:260):peer?c.mediumSpawnMin:c.largeSpawnMin;
-  const max=near?(index<c.closeSmallCount?c.closeSmallMax:c.nearSmallMax):small?900:peer?1250:Math.hypot(w.width,w.height)*.55;
+  const min=near?c.nearSmallMin:respawn?Math.max(230,p.r+radius+180):small?260:peer?c.mediumSpawnMin:c.largeSpawnMin;
+  const max=near?(index<c.closeSmallCount?c.closeSmallMax:c.nearSmallMax):Math.hypot(w.width,w.height)*.75;
   const margin=radius+3,playerClearance=Math.max(min,p.r+radius+(small?30:huge?220:120));
   let best=null,bestScore=-Infinity;
   for(let attempt=0;attempt<c.spawnAttempts;attempt++){
@@ -48,11 +38,11 @@ export class GrowthEcology {
    for(const other of arena.entities||[]){if(other===p||other===entity||other.dead)continue;clearance=Math.min(clearance,Math.hypot(point.x-other.x,point.y-other.y)-radius-other.r-c.unitGap);}
    for(const leaf of arena.items||[]){if(leaf.kind==='leaf')clearance=Math.min(clearance,Math.hypot(point.x-leaf.x,point.y-leaf.y)-radius-pondCollisionRadius(leaf)-c.leafGap);}
    if(clearance>bestScore){best=point;bestScore=clearance;}
-   if(clearance>=0)return {radius,point,personality:drifter?'drift':undefined};
+   if(clearance>=0)return {radius,point,ecologyTier,personality:drifter?'drift':undefined};
   }
   // A crowded corner may have no exact ring solution. Returning the safest valid
   // world point leaves final circular/leaf projection to the existing arena hook.
-  return {radius,point:best||{x:clamp(p.x,margin,w.width-margin),y:clamp(p.y,margin,w.height-margin)},personality:drifter?'drift':undefined};
+  return {radius,ecologyTier,point:best||{x:clamp(p.x,margin,w.width-margin),y:clamp(p.y,margin,w.height-margin)},personality:drifter?'drift':undefined};
  }
  seedFood(arena){
   if(this.seeded.has(arena))return 0;this.seeded.add(arena);

@@ -1,0 +1,296 @@
+{
+  "date": "2026-11-17",
+  "release": "v4-system-r12",
+  "baseline": "1fbdaf2",
+  "scope": "V4 only; frozen V2/V3 refs unchanged",
+  "node": {
+    "passed": 49,
+    "total": 49,
+    "detail": "Final complete sweep; per-file results in work/system-repair/all-tests.json"
+  },
+  "browser": [
+    {
+      "case": "pc-ink-01",
+      "errors": [],
+      "contactWrites": 190,
+      "contactAndPainterSameFrame": true,
+      "stages": [
+        {
+          "stage": 2,
+          "scale": 1.9474792238034013,
+          "fallback": false,
+          "targets": 12
+        },
+        {
+          "stage": 3,
+          "scale": 0.7895282307256335,
+          "fallback": false,
+          "targets": 12
+        },
+        {
+          "stage": 4,
+          "scale": 0.5022228255166026,
+          "fallback": false,
+          "targets": 12
+        }
+      ],
+      "finalePhases": [
+        {
+          "phase": "hidden",
+          "matte": "idle"
+        },
+        {
+          "phase": "hidden",
+          "matte": "covering"
+        },
+        {
+          "phase": "hidden",
+          "matte": "covered"
+        },
+        {
+          "phase": "prepared",
+          "matte": "covered"
+        },
+        {
+          "phase": "prepared",
+          "matte": "revealing"
+        },
+        {
+          "phase": "framing",
+          "matte": "idle"
+        },
+        {
+          "phase": "flash",
+          "matte": "idle"
+        }
+      ],
+      "viewerInteraction": true,
+      "gallerySaved": true
+    },
+    {
+      "case": "pc-ink-13",
+      "errors": [],
+      "contactWrites": 142,
+      "contactAndPainterSameFrame": true,
+      "stages": [
+        {
+          "stage": 2,
+          "scale": 1.9474815425848517,
+          "fallback": false,
+          "targets": 12
+        },
+        {
+          "stage": 3,
+          "scale": 0.7895302685768951,
+          "fallback": false,
+          "targets": 12
+        },
+        {
+          "stage": 4,
+          "scale": 0.473064537032877,
+          "fallback": false,
+          "targets": 12
+        }
+      ],
+      "finalePhases": [
+        {
+          "phase": "hidden",
+          "matte": "idle"
+        },
+        {
+          "phase": "hidden",
+          "matte": "covering"
+        },
+        {
+          "phase": "hidden",
+          "matte": "covered"
+        },
+        {
+          "phase": "prepared",
+          "matte": "covered"
+        },
+        {
+          "phase": "prepared",
+          "matte": "revealing"
+        },
+        {
+          "phase": "framing",
+          "matte": "idle"
+        },
+        {
+          "phase": "flash",
+          "matte": "idle"
+        }
+      ],
+      "viewerInteraction": true,
+      "gallerySaved": true
+    },
+    {
+      "case": "mobile-ink-01",
+      "errors": [],
+      "contactWrites": 228,
+      "contactAndPainterSameFrame": true,
+      "stages": [
+        {
+          "stage": 2,
+          "scale": 0.8439086644654303,
+          "fallback": false,
+          "targets": 12
+        },
+        {
+          "stage": 3,
+          "scale": 0.3421297806439756,
+          "fallback": false,
+          "targets": 12
+        },
+        {
+          "stage": 4,
+          "scale": 0.20499463291826014,
+          "fallback": false,
+          "targets": 12
+        }
+      ],
+      "finalePhases": [
+        {
+          "phase": "hidden",
+          "matte": "idle"
+        },
+        {
+          "phase": "hidden",
+          "matte": "covering"
+        },
+        {
+          "phase": "hidden",
+          "matte": "covered"
+        },
+        {
+          "phase": "prepared",
+          "matte": "covered"
+        },
+        {
+          "phase": "prepared",
+          "matte": "revealing"
+        },
+        {
+          "phase": "framing",
+          "matte": "idle"
+        },
+        {
+          "phase": "flash",
+          "matte": "idle"
+        }
+      ],
+      "viewerInteraction": true,
+      "gallerySaved": true
+    },
+    {
+      "case": "mobile-ink-13",
+      "errors": [],
+      "contactWrites": 172,
+      "contactAndPainterSameFrame": true,
+      "stages": [
+        {
+          "stage": 2,
+          "scale": 0.8439086564907351,
+          "fallback": false,
+          "targets": 12
+        },
+        {
+          "stage": 3,
+          "scale": 0.4791852623646014,
+          "fallback": false,
+          "targets": 12
+        },
+        {
+          "stage": 4,
+          "scale": 0.41095311058641043,
+          "fallback": false,
+          "targets": 12
+        }
+      ],
+      "finalePhases": [
+        {
+          "phase": "hidden",
+          "matte": "idle"
+        },
+        {
+          "phase": "hidden",
+          "matte": "covering"
+        },
+        {
+          "phase": "hidden",
+          "matte": "covered"
+        },
+        {
+          "phase": "prepared",
+          "matte": "covered"
+        },
+        {
+          "phase": "prepared",
+          "matte": "revealing"
+        },
+        {
+          "phase": "framing",
+          "matte": "idle"
+        },
+        {
+          "phase": "flash",
+          "matte": "idle"
+        }
+      ],
+      "viewerInteraction": true,
+      "gallerySaved": true
+    }
+  ],
+  "clipping": {
+    "cases": 8,
+    "outsideInkPixels": 0,
+    "gpuAndFallback": true,
+    "dpr": 2
+  },
+  "visual": [
+    {
+      "speed": 220,
+      "cases": 36,
+      "errors": []
+    },
+    {
+      "speed": 100,
+      "cases": 36,
+      "errors": []
+    }
+  ],
+  "ecology": {
+    "seed": 8419,
+    "gameSeconds": 180,
+    "stepSeconds": 0.05,
+    "identityAndBirthTierChecks": 3600,
+    "exactlyOneLivingCompetitor": true,
+    "birthTiersUnchanged": true,
+    "naturalIdentityTransfers": 0,
+    "forcedIdentityTransferTest": "tests/v4-system-mechanics.mjs",
+    "npcSwallows": 23,
+    "npcRespawns": 24,
+    "npcFood": 12476,
+    "maxNpcRadius": 321.5505299914149,
+    "playerDeaths": 3,
+    "notes": [
+      "Carrier survived the 180 second sample; death transfer is asserted in a separate forced model test.",
+      "This is an ecological model check, not a visual or human pacing acceptance."
+    ]
+  },
+  "limits": [
+    "Controlled ink/goal/browser emulation fixtures are not natural human playthroughs.",
+    "5–7 minute active human pacing remains unverified with the final ecology.",
+    "No physical iOS Safari / low-end Android certification.",
+    "Visual improvement observed; final artistic approval remains with user."
+  ],
+  "evidence": [
+    "work/system-repair/browser-report.json",
+    "work/system-repair/clip-report.json",
+    "work/system-repair/all-tests.json",
+    "work/v4-ink-repair/comparison-straight.png",
+    "work/v4-ink-repair/comparison-corner.png",
+    "work/v4-ink-repair-100/comparison-straight.png"
+  ]
+}
