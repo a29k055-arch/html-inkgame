@@ -292,5 +292,74 @@
     "work/v4-ink-repair/comparison-straight.png",
     "work/v4-ink-repair/comparison-corner.png",
     "work/v4-ink-repair-100/comparison-straight.png"
-  ]
+  ],
+  "publication": {
+    "runtimeSha": "6479e056a62922c3e3d370394b0c5762dcaf22e8",
+    "workflowRun": 43996640245,
+    "conclusion": "success",
+    "online": "https://a29k055-arch.github.io/html-inkgame/v4/",
+    "publicManifest": {
+      "root": "6479e056a62922c3e3d370394b0c5762dcaf22e8",
+      "versions": {
+        "v2": {
+          "ref": "v2-original",
+          "sha": "1bb02502f68b6fd99e28338ef183825711054443"
+        },
+        "v3": {
+          "ref": "v3-roguelike",
+          "sha": "d882581af3ea15193e7cd880017cd2295a6fad21"
+        },
+        "v4": {
+          "ref": "HEAD",
+          "sha": "6479e056a62922c3e3d370394b0c5762dcaf22e8"
+        }
+      }
+    },
+    "onlineBrowserCases": [
+      {
+        "case": "pc-ink-01",
+        "errors": [],
+        "immediateContact": true,
+        "stages": [
+          2,
+          3,
+          4
+        ],
+        "paintingWheelOrPinchAndDragResetExitGalleryPassed": true
+      },
+      {
+        "case": "pc-ink-13",
+        "errors": [],
+        "immediateContact": true,
+        "stages": [
+          2,
+          3,
+          4
+        ],
+        "paintingWheelOrPinchAndDragResetExitGalleryPassed": true
+      },
+      {
+        "case": "mobile-ink-01",
+        "errors": [],
+        "immediateContact": true,
+        "stages": [
+          2,
+          3,
+          4
+        ],
+        "paintingWheelOrPinchAndDragResetExitGalleryPassed": true
+      },
+      {
+        "case": "mobile-ink-13",
+        "errors": [],
+        "immediateContact": true,
+        "stages": [
+          2,
+          3,
+          4
+        ],
+        "paintingWheelOrPinchAndDragResetExitGalleryPassed": true
+      }
+    ]
+  }
 }

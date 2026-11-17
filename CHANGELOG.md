@@ -2,6 +2,8 @@
 
 ## 2026-11-17 — V4 系统修复与大体型轻墨
 
+发布验收补记：运行代码 `6479e05` 已推送main；Pages运行43996640245成功，公开versions.json的root/V4均为6479e056a62922c3e3d370394b0c5762dcaf22e8。线上PC/触控×横竖画四组阶段、即时显画、完成动画/缩放/拖动/重置/结算/Gallery保存复验通过，页面与游戏资源错误均为空。V2=1bb0250、V3=d882581不变。此补记仅文档并跳过CI，线上运行SHA保持6479e05。
+
 发布键 `v4-system-r12`。接续 WorkBuddy `1fbdaf2`，当前工作目录 `D:/ink_game_codex/html-inkgame-workbuddy`，分支 `work/v4-audit`；旧 main 工作目录仍停在4ee8533，不要误在旧目录继续开发。仅 V4，冻结 V2/V3 引用不变。
 
 - 显画：修复接触写入未更新mask.version的主因，顺序为流体step→真实alpha采样→绘画draw；30Hz/快速位移触发、512px采样，永久显画与NPC侵蚀防回填保留。
