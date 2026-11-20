@@ -3,7 +3,7 @@ import {HERO_PRESETS,DEFAULT_HERO_PRESET,heroSizeProfile} from '../src/ink/hero-
 import {relativeInkProfile,smoothRelativeSpeed} from '../src/ink/hero-relative-motion.js';
 import {CometTrail} from '../src/reveal/trail.js';
 
-assert.equal(DEFAULT_HERO_PRESET,'swing');
+assert.equal(DEFAULT_HERO_PRESET,'restored');
 for(const radius of [18,90,110]){
  const old=new CometTrail({preset:'airflow'}),now=new CometTrail({preset:'swing'});
  old.sample(100,100,radius,.02,90,.9);now.sample(100,100,radius,.02,90,.9);
