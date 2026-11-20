@@ -1,0 +1,369 @@
+{
+  "version": 1,
+  "id": "shrimp_07",
+  "source": "source.png",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "spine": [
+    [
+      982,
+      434
+    ],
+    [
+      905,
+      488
+    ],
+    [
+      819,
+      550
+    ],
+    [
+      740,
+      604
+    ],
+    [
+      661,
+      648
+    ],
+    [
+      579,
+      692
+    ],
+    [
+      501,
+      738
+    ],
+    [
+      429,
+      789
+    ],
+    [
+      350,
+      847
+    ],
+    [
+      259,
+      915
+    ],
+    [
+      202,
+      950
+    ]
+  ],
+  "nominalLength": 936.6133005199044,
+  "layers": [
+    {
+      "name": "shrimp_07_antenna_l",
+      "file": "shrimp_07_antenna_l.png",
+      "croppedFile": "textures/shrimp_07_antenna_l.png",
+      "bbox": [
+        98,
+        181,
+        945,
+        473
+      ],
+      "kind": "antenna",
+      "pivot": [
+        932,
+        382
+      ],
+      "side": -1,
+      "phase": 0,
+      "order": 12,
+      "bounds": [
+        107,
+        191,
+        1032,
+        628
+      ],
+      "pixelCount": 22479
+    },
+    {
+      "name": "shrimp_07_antenna_r",
+      "file": "shrimp_07_antenna_r.png",
+      "croppedFile": "textures/shrimp_07_antenna_r.png",
+      "bbox": [
+        940,
+        22,
+        526,
+        415
+      ],
+      "kind": "antenna",
+      "pivot": [
+        938,
+        378
+      ],
+      "side": 1,
+      "phase": 2.199114857512855,
+      "order": 12,
+      "bounds": [
+        949,
+        32,
+        1452,
+        428
+      ],
+      "pixelCount": 15858
+    },
+    {
+      "name": "shrimp_07_forearm_l",
+      "file": "shrimp_07_forearm_l.png",
+      "croppedFile": "textures/shrimp_07_forearm_l.png",
+      "bbox": [
+        890,
+        320,
+        531,
+        256
+      ],
+      "kind": "leg",
+      "pivot": [
+        912,
+        552
+      ],
+      "side": -1,
+      "phase": 4.39822971502571,
+      "order": 8,
+      "bounds": [
+        898,
+        330,
+        1411,
+        566
+      ],
+      "pixelCount": 15075
+    },
+    {
+      "name": "shrimp_07_forearm_r",
+      "file": "shrimp_07_forearm_r.png",
+      "croppedFile": "textures/shrimp_07_forearm_r.png",
+      "bbox": [
+        808,
+        591,
+        546,
+        136
+      ],
+      "kind": "leg",
+      "pivot": [
+        830,
+        614
+      ],
+      "side": 1,
+      "phase": 6.5973445725385655,
+      "order": 8,
+      "bounds": [
+        816,
+        600,
+        1342,
+        716
+      ],
+      "pixelCount": 14499
+    },
+    {
+      "name": "shrimp_07_legs_l",
+      "file": "shrimp_07_legs_l.png",
+      "croppedFile": "textures/shrimp_07_legs_l.png",
+      "bbox": [
+        151,
+        552,
+        812,
+        389
+      ],
+      "kind": "leg",
+      "pivot": [
+        810,
+        624
+      ],
+      "side": -1,
+      "phase": 8.79645943005142,
+      "order": 4,
+      "bounds": [
+        457,
+        560,
+        952,
+        807
+      ],
+      "pixelCount": 21745
+    },
+    {
+      "name": "shrimp_07_head_chest",
+      "file": "shrimp_07_head_chest.png",
+      "croppedFile": "textures/shrimp_07_head_chest.png",
+      "bbox": [
+        685,
+        203,
+        718,
+        470
+      ],
+      "kind": "head",
+      "pivot": [
+        862.125,
+        519
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 10,
+      "bounds": [
+        695,
+        337,
+        1354,
+        655
+      ],
+      "pixelCount": 49071,
+      "spineRange": [
+        0,
+        0.31
+      ]
+    },
+    {
+      "name": "shrimp_07_abdomen_01",
+      "file": "shrimp_07_abdomen_01.png",
+      "croppedFile": "textures/shrimp_07_abdomen_01.png",
+      "bbox": [
+        544,
+        512,
+        216,
+        216
+      ],
+      "kind": "body",
+      "pivot": [
+        671.0185546875,
+        642.568359375
+      ],
+      "side": 0,
+      "phase": 0.7,
+      "order": 6,
+      "bounds": [
+        552,
+        520,
+        751,
+        677
+      ],
+      "pixelCount": 20660,
+      "spineRange": [
+        0.31,
+        0.47
+      ]
+    },
+    {
+      "name": "shrimp_07_abdomen_02",
+      "file": "shrimp_07_abdomen_02.png",
+      "croppedFile": "textures/shrimp_07_abdomen_02.png",
+      "bbox": [
+        424,
+        556,
+        200,
+        212
+      ],
+      "kind": "body",
+      "pivot": [
+        549.193359375,
+        708.8837890625
+      ],
+      "side": 0,
+      "phase": 1.4,
+      "order": 6,
+      "bounds": [
+        432,
+        566,
+        615,
+        727
+      ],
+      "pixelCount": 17652,
+      "spineRange": [
+        0.47,
+        0.61
+      ]
+    },
+    {
+      "name": "shrimp_07_abdomen_03",
+      "file": "shrimp_07_abdomen_03.png",
+      "croppedFile": "textures/shrimp_07_abdomen_03.png",
+      "bbox": [
+        325,
+        626,
+        172,
+        191
+      ],
+      "kind": "body",
+      "pivot": [
+        438.2939453125,
+        782.255859375
+      ],
+      "side": 0,
+      "phase": 2.0999999999999996,
+      "order": 6,
+      "bounds": [
+        334,
+        636,
+        488,
+        807
+      ],
+      "pixelCount": 15428,
+      "spineRange": [
+        0.61,
+        0.77
+      ]
+    },
+    {
+      "name": "shrimp_07_abdomen_04",
+      "file": "shrimp_07_abdomen_04.png",
+      "croppedFile": "textures/shrimp_07_abdomen_04.png",
+      "bbox": [
+        232,
+        752,
+        144,
+        192
+      ],
+      "kind": "body",
+      "pivot": [
+        315.259765625,
+        873.2177734375
+      ],
+      "side": 0,
+      "phase": 2.8,
+      "order": 6,
+      "bounds": [
+        240,
+        760,
+        366,
+        935
+      ],
+      "pixelCount": 9271,
+      "spineRange": [
+        0.77,
+        0.9
+      ]
+    },
+    {
+      "name": "shrimp_07_tail",
+      "file": "shrimp_07_tail.png",
+      "croppedFile": "textures/shrimp_07_tail.png",
+      "bbox": [
+        145,
+        833,
+        170,
+        164
+      ],
+      "kind": "tail",
+      "pivot": [
+        224.8125,
+        936.75
+      ],
+      "side": 0,
+      "phase": 3.5,
+      "order": 6,
+      "bounds": [
+        155,
+        841,
+        304,
+        987
+      ],
+      "pixelCount": 12569,
+      "spineRange": [
+        0.9,
+        1
+      ]
+    }
+  ],
+  "notes": "Source-space layers exactly partition original source pixels. No generative repaint or style change. Hidden anatomy behind joints is not present in original and must be restored for extreme articulation; use modest limb angles. Continuous body deformation is preferred to separately rotating body bands."
+}

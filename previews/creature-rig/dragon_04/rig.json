@@ -1,0 +1,491 @@
+{
+  "version": 1,
+  "id": "dragon_04",
+  "source": "source.png",
+  "sourceSize": [
+    1024,
+    1536
+  ],
+  "spine": [
+    [
+      517,
+      95
+    ],
+    [
+      522,
+      189
+    ],
+    [
+      528,
+      285
+    ],
+    [
+      545,
+      385
+    ],
+    [
+      550,
+      465
+    ],
+    [
+      507,
+      536
+    ],
+    [
+      445,
+      602
+    ],
+    [
+      415,
+      659
+    ],
+    [
+      431,
+      711
+    ],
+    [
+      483,
+      761
+    ],
+    [
+      545,
+      818
+    ],
+    [
+      585,
+      873
+    ],
+    [
+      600,
+      927
+    ],
+    [
+      584,
+      985
+    ],
+    [
+      545,
+      1042
+    ],
+    [
+      496,
+      1100
+    ],
+    [
+      467,
+      1161
+    ],
+    [
+      475,
+      1222
+    ],
+    [
+      501,
+      1283
+    ],
+    [
+      519,
+      1340
+    ],
+    [
+      514,
+      1403
+    ],
+    [
+      494,
+      1466
+    ]
+  ],
+  "nominalLength": 1540.548048223455,
+  "layers": [
+    {
+      "name": "dragon_04_whisker_l",
+      "file": "dragon_04_whisker_l.png",
+      "croppedFile": "textures/dragon_04_whisker_l.png",
+      "bbox": [
+        234,
+        91,
+        263,
+        173
+      ],
+      "kind": "antenna",
+      "pivot": [
+        476,
+        111
+      ],
+      "side": -1,
+      "phase": 0,
+      "order": 12,
+      "bounds": [
+        243,
+        99,
+        488,
+        253
+      ],
+      "pixelCount": 3445
+    },
+    {
+      "name": "dragon_04_whisker_r",
+      "file": "dragon_04_whisker_r.png",
+      "croppedFile": "textures/dragon_04_whisker_r.png",
+      "bbox": [
+        526,
+        85,
+        259,
+        158
+      ],
+      "kind": "antenna",
+      "pivot": [
+        546,
+        105
+      ],
+      "side": 1,
+      "phase": 2.199114857512855,
+      "order": 12,
+      "bounds": [
+        534,
+        93,
+        772,
+        231
+      ],
+      "pixelCount": 3549
+    },
+    {
+      "name": "dragon_04_horn_l",
+      "file": "dragon_04_horn_l.png",
+      "croppedFile": "textures/dragon_04_horn_l.png",
+      "bbox": [
+        368,
+        221,
+        121,
+        133
+      ],
+      "kind": "detail",
+      "pivot": [
+        473,
+        278
+      ],
+      "side": -1,
+      "phase": 4.39822971502571,
+      "order": 11,
+      "bounds": [
+        377,
+        231,
+        480,
+        343
+      ],
+      "pixelCount": 6189
+    },
+    {
+      "name": "dragon_04_horn_r",
+      "file": "dragon_04_horn_r.png",
+      "croppedFile": "textures/dragon_04_horn_r.png",
+      "bbox": [
+        546,
+        222,
+        118,
+        132
+      ],
+      "kind": "detail",
+      "pivot": [
+        573,
+        273
+      ],
+      "side": 1,
+      "phase": 6.5973445725385655,
+      "order": 11,
+      "bounds": [
+        554,
+        231,
+        654,
+        341
+      ],
+      "pixelCount": 5938
+    },
+    {
+      "name": "dragon_04_leg_fl",
+      "file": "dragon_04_leg_fl.png",
+      "croppedFile": "textures/dragon_04_leg_fl.png",
+      "bbox": [
+        290,
+        438,
+        242,
+        134
+      ],
+      "kind": "leg",
+      "pivot": [
+        503,
+        526
+      ],
+      "side": -1,
+      "phase": 8.79645943005142,
+      "order": 3,
+      "bounds": [
+        300,
+        447,
+        523,
+        563
+      ],
+      "pixelCount": 13227
+    },
+    {
+      "name": "dragon_04_leg_fr",
+      "file": "dragon_04_leg_fr.png",
+      "croppedFile": "textures/dragon_04_leg_fr.png",
+      "bbox": [
+        554,
+        449,
+        179,
+        117
+      ],
+      "kind": "leg",
+      "pivot": [
+        585,
+        516
+      ],
+      "side": 1,
+      "phase": 10.995574287564276,
+      "order": 3,
+      "bounds": [
+        562,
+        457,
+        722,
+        553
+      ],
+      "pixelCount": 9572
+    },
+    {
+      "name": "dragon_04_leg_bl",
+      "file": "dragon_04_leg_bl.png",
+      "croppedFile": "textures/dragon_04_leg_bl.png",
+      "bbox": [
+        323,
+        933,
+        244,
+        106
+      ],
+      "kind": "leg",
+      "pivot": [
+        561,
+        988
+      ],
+      "side": -1,
+      "phase": 13.194689145077131,
+      "order": 3,
+      "bounds": [
+        333,
+        943,
+        558,
+        1030
+      ],
+      "pixelCount": 11937
+    },
+    {
+      "name": "dragon_04_leg_br",
+      "file": "dragon_04_leg_br.png",
+      "croppedFile": "textures/dragon_04_leg_br.png",
+      "bbox": [
+        589,
+        932,
+        168,
+        99
+      ],
+      "kind": "leg",
+      "pivot": [
+        617,
+        988
+      ],
+      "side": 1,
+      "phase": 15.393804002589984,
+      "order": 3,
+      "bounds": [
+        597,
+        942,
+        746,
+        1020
+      ],
+      "pixelCount": 8493
+    },
+    {
+      "name": "dragon_04_head",
+      "file": "dragon_04_head.png",
+      "croppedFile": "textures/dragon_04_head.png",
+      "bbox": [
+        236,
+        57,
+        406,
+        267
+      ],
+      "kind": "head",
+      "pivot": [
+        523.693359375,
+        224.677734375
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 10,
+      "bounds": [
+        434,
+        65,
+        591,
+        311
+      ],
+      "pixelCount": 25024,
+      "spineRange": [
+        0,
+        0.135
+      ]
+    },
+    {
+      "name": "dragon_04_neck",
+      "file": "dragon_04_neck.png",
+      "croppedFile": "textures/dragon_04_neck.png",
+      "bbox": [
+        423,
+        288,
+        216,
+        222
+      ],
+      "kind": "body",
+      "pivot": [
+        550,
+        465
+      ],
+      "side": 0,
+      "phase": 0.7,
+      "order": 6,
+      "bounds": [
+        433,
+        296,
+        617,
+        501
+      ],
+      "pixelCount": 26009,
+      "spineRange": [
+        0.135,
+        0.25
+      ]
+    },
+    {
+      "name": "dragon_04_body_01",
+      "file": "dragon_04_body_01.png",
+      "croppedFile": "textures/dragon_04_body_01.png",
+      "bbox": [
+        316,
+        448,
+        292,
+        320
+      ],
+      "kind": "body",
+      "pivot": [
+        414.552734375,
+        665.7529296875
+      ],
+      "side": 0,
+      "phase": 1.4,
+      "order": 6,
+      "bounds": [
+        326,
+        456,
+        599,
+        759
+      ],
+      "pixelCount": 38411,
+      "spineRange": [
+        0.25,
+        0.43
+      ]
+    },
+    {
+      "name": "dragon_04_body_02",
+      "file": "dragon_04_body_02.png",
+      "croppedFile": "textures/dragon_04_body_02.png",
+      "bbox": [
+        334,
+        680,
+        318,
+        264
+      ],
+      "kind": "body",
+      "pivot": [
+        585,
+        873
+      ],
+      "side": 0,
+      "phase": 2.0999999999999996,
+      "order": 6,
+      "bounds": [
+        344,
+        688,
+        642,
+        935
+      ],
+      "pixelCount": 38964,
+      "spineRange": [
+        0.43,
+        0.62
+      ]
+    },
+    {
+      "name": "dragon_04_body_03",
+      "file": "dragon_04_body_03.png",
+      "croppedFile": "textures/dragon_04_body_03.png",
+      "bbox": [
+        392,
+        920,
+        261,
+        304
+      ],
+      "kind": "body",
+      "pivot": [
+        491.1650390625,
+        1107.4814453125
+      ],
+      "side": 0,
+      "phase": 2.8,
+      "order": 6,
+      "bounds": [
+        401,
+        928,
+        642,
+        1215
+      ],
+      "pixelCount": 29413,
+      "spineRange": [
+        0.62,
+        0.82
+      ]
+    },
+    {
+      "name": "dragon_04_tail",
+      "file": "dragon_04_tail.png",
+      "croppedFile": "textures/dragon_04_tail.png",
+      "bbox": [
+        411,
+        1192,
+        171,
+        315
+      ],
+      "kind": "tail",
+      "pivot": [
+        519.578125,
+        1347.587890625
+      ],
+      "side": 0,
+      "phase": 3.5,
+      "order": 6,
+      "bounds": [
+        421,
+        1200,
+        571,
+        1497
+      ],
+      "pixelCount": 23193,
+      "spineRange": [
+        0.82,
+        1
+      ]
+    }
+  ],
+  "notes": "Source-space layers exactly partition original source pixels. No generative repaint or style change. Hidden anatomy behind joints is not present in original and must be restored for extreme articulation; use modest limb angles. Continuous body deformation is preferred to separately rotating body bands."
+}

@@ -1,0 +1,233 @@
+{
+  "version": 1,
+  "id": "turtle_02",
+  "source": "source.png",
+  "sourceSize": [
+    1218,
+    1292
+  ],
+  "spine": [
+    [
+      593,
+      98
+    ],
+    [
+      594,
+      220
+    ],
+    [
+      596,
+      360
+    ],
+    [
+      600,
+      540
+    ],
+    [
+      605,
+      740
+    ],
+    [
+      603,
+      960
+    ],
+    [
+      598,
+      1127
+    ],
+    [
+      581,
+      1211
+    ]
+  ],
+  "nominalLength": 1115.0803686050212,
+  "layers": [
+    {
+      "name": "turtle_02_head",
+      "file": "turtle_02_head.png",
+      "croppedFile": "textures/turtle_02_head.png",
+      "bbox": [
+        483,
+        32,
+        227,
+        308
+      ],
+      "kind": "head",
+      "pivot": [
+        594,
+        322
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 11,
+      "bounds": [
+        491,
+        43,
+        701,
+        331
+      ],
+      "pixelCount": 58493
+    },
+    {
+      "name": "turtle_02_leg_fl",
+      "file": "turtle_02_leg_fl.png",
+      "croppedFile": "textures/turtle_02_leg_fl.png",
+      "bbox": [
+        172,
+        291,
+        209,
+        207
+      ],
+      "kind": "leg",
+      "pivot": [
+        369,
+        467
+      ],
+      "side": -1,
+      "phase": 2.199114857512855,
+      "order": 3,
+      "bounds": [
+        182,
+        302,
+        372,
+        489
+      ],
+      "pixelCount": 23161
+    },
+    {
+      "name": "turtle_02_leg_fr",
+      "file": "turtle_02_leg_fr.png",
+      "croppedFile": "textures/turtle_02_leg_fr.png",
+      "bbox": [
+        801,
+        297,
+        232,
+        201
+      ],
+      "kind": "leg",
+      "pivot": [
+        817,
+        470
+      ],
+      "side": 1,
+      "phase": 4.39822971502571,
+      "order": 3,
+      "bounds": [
+        809,
+        307,
+        1022,
+        489
+      ],
+      "pixelCount": 23468
+    },
+    {
+      "name": "turtle_02_leg_bl",
+      "file": "turtle_02_leg_bl.png",
+      "croppedFile": "textures/turtle_02_leg_bl.png",
+      "bbox": [
+        176,
+        975,
+        227,
+        212
+      ],
+      "kind": "leg",
+      "pivot": [
+        351,
+        1025
+      ],
+      "side": -1,
+      "phase": 6.5973445725385655,
+      "order": 3,
+      "bounds": [
+        186,
+        983,
+        394,
+        1177
+      ],
+      "pixelCount": 25189
+    },
+    {
+      "name": "turtle_02_leg_br",
+      "file": "turtle_02_leg_br.png",
+      "croppedFile": "textures/turtle_02_leg_br.png",
+      "bbox": [
+        786,
+        975,
+        226,
+        214
+      ],
+      "kind": "leg",
+      "pivot": [
+        843,
+        1027
+      ],
+      "side": 1,
+      "phase": 8.79645943005142,
+      "order": 3,
+      "bounds": [
+        794,
+        983,
+        1001,
+        1180
+      ],
+      "pixelCount": 24434
+    },
+    {
+      "name": "turtle_02_tail",
+      "file": "turtle_02_tail.png",
+      "croppedFile": "textures/turtle_02_tail.png",
+      "bbox": [
+        525,
+        1090,
+        130,
+        178
+      ],
+      "kind": "tail",
+      "pivot": [
+        590,
+        1119
+      ],
+      "side": 0,
+      "phase": 10.995574287564276,
+      "order": 2,
+      "bounds": [
+        533,
+        1098,
+        646,
+        1258
+      ],
+      "pixelCount": 10827
+    },
+    {
+      "name": "turtle_02_shell",
+      "file": "turtle_02_shell.png",
+      "croppedFile": "textures/turtle_02_shell.png",
+      "bbox": [
+        229,
+        297,
+        723,
+        866
+      ],
+      "kind": "body",
+      "pivot": [
+        602.875,
+        637.5
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 6,
+      "bounds": [
+        239,
+        306,
+        937,
+        1150
+      ],
+      "pixelCount": 578583,
+      "spineRange": [
+        0,
+        1
+      ]
+    }
+  ],
+  "notes": "Source-space layers exactly partition original source pixels. No generative repaint or style change. Hidden anatomy behind joints is not present in original and must be restored for extreme articulation; use modest limb angles. Continuous body deformation is preferred to separately rotating body bands."
+}

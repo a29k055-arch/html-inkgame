@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "creatures": [
+    {
+      "id": "fish_04",
+      "rig": "fish_04/rig.json"
+    },
+    {
+      "id": "dragon_04",
+      "rig": "dragon_04/rig.json"
+    },
+    {
+      "id": "turtle_02",
+      "rig": "turtle_02/rig.json"
+    },
+    {
+      "id": "shrimp_07",
+      "rig": "shrimp_07/rig.json"
+    }
+  ]
+}

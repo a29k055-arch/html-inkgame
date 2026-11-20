@@ -1,0 +1,231 @@
+{
+  "version": 1,
+  "id": "fish_04",
+  "source": "source.png",
+  "sourceSize": [
+    1218,
+    1292
+  ],
+  "spine": [
+    [
+      252,
+      163
+    ],
+    [
+      290,
+      260
+    ],
+    [
+      332,
+      370
+    ],
+    [
+      373,
+      485
+    ],
+    [
+      420,
+      600
+    ],
+    [
+      492,
+      712
+    ],
+    [
+      597,
+      810
+    ],
+    [
+      703,
+      875
+    ],
+    [
+      797,
+      946
+    ],
+    [
+      876,
+      1046
+    ],
+    [
+      910,
+      1120
+    ]
+  ],
+  "nominalLength": 1197.2947410242916,
+  "layers": [
+    {
+      "name": "fish_04_fin_l",
+      "file": "fish_04_fin_l.png",
+      "croppedFile": "textures/fish_04_fin_l.png",
+      "bbox": [
+        92,
+        422,
+        222,
+        279
+      ],
+      "kind": "fin",
+      "pivot": [
+        284,
+        470
+      ],
+      "side": -1,
+      "phase": 0,
+      "order": 4,
+      "bounds": [
+        102,
+        430,
+        305,
+        690
+      ],
+      "pixelCount": 28570
+    },
+    {
+      "name": "fish_04_fin_r",
+      "file": "fish_04_fin_r.png",
+      "croppedFile": "textures/fish_04_fin_r.png",
+      "bbox": [
+        472,
+        302,
+        318,
+        158
+      ],
+      "kind": "fin",
+      "pivot": [
+        477,
+        361
+      ],
+      "side": 1,
+      "phase": 2.199114857512855,
+      "order": 4,
+      "bounds": [
+        480,
+        311,
+        781,
+        449
+      ],
+      "pixelCount": 28158
+    },
+    {
+      "name": "fish_04_head",
+      "file": "fish_04_head.png",
+      "croppedFile": "textures/fish_04_head.png",
+      "bbox": [
+        169,
+        100,
+        319,
+        348
+      ],
+      "kind": "head",
+      "pivot": [
+        295.0654296875,
+        273.09375
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 10,
+      "bounds": [
+        180,
+        110,
+        479,
+        439
+      ],
+      "pixelCount": 67140,
+      "spineRange": [
+        0,
+        0.23
+      ]
+    },
+    {
+      "name": "fish_04_body_01",
+      "file": "fish_04_body_01.png",
+      "croppedFile": "textures/fish_04_body_01.png",
+      "bbox": [
+        281,
+        368,
+        300,
+        416
+      ],
+      "kind": "body",
+      "pivot": [
+        406.3515625,
+        571.4609375
+      ],
+      "side": 0,
+      "phase": 0.7,
+      "order": 6,
+      "bounds": [
+        289,
+        376,
+        570,
+        775
+      ],
+      "pixelCount": 71080,
+      "spineRange": [
+        0.23,
+        0.51
+      ]
+    },
+    {
+      "name": "fish_04_body_02",
+      "file": "fish_04_body_02.png",
+      "croppedFile": "textures/fish_04_body_02.png",
+      "bbox": [
+        421,
+        648,
+        418,
+        335
+      ],
+      "kind": "body",
+      "pivot": [
+        677.3203125,
+        859.1015625
+      ],
+      "side": 0,
+      "phase": 1.4,
+      "order": 6,
+      "bounds": [
+        430,
+        656,
+        825,
+        967
+      ],
+      "pixelCount": 40387,
+      "spineRange": [
+        0.51,
+        0.83
+      ]
+    },
+    {
+      "name": "fish_04_tail",
+      "file": "fish_04_tail.png",
+      "croppedFile": "textures/fish_04_tail.png",
+      "bbox": [
+        766,
+        912,
+        378,
+        308
+      ],
+      "kind": "tail",
+      "pivot": [
+        882.6357421875,
+        1057
+      ],
+      "side": 0,
+      "phase": 2.0999999999999996,
+      "order": 6,
+      "bounds": [
+        776,
+        920,
+        1134,
+        1210
+      ],
+      "pixelCount": 46689,
+      "spineRange": [
+        0.83,
+        1
+      ]
+    }
+  ],
+  "notes": "Source-space layers exactly partition original source pixels. No generative repaint or style change. Hidden anatomy behind joints is not present in original and must be restored for extreme articulation; use modest limb angles. Continuous body deformation is preferred to separately rotating body bands."
+}
