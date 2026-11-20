@@ -31,8 +31,12 @@ r13增加的solidBody display解析圆包络将主体与流体割裂，r14在圆
 
 {
   "cases": 44,
-  "minCoverage": 0.8131059337089488,
+  "minCoverage": 0.8133089690878635,
   "errors": []
 }
 
 原r14的check-v4-body-wash以及M圆片的黑像素半径测试是历史对照，不能作为N正式美术验收。正式测试需要实际观察主体尾部连接、转弯和停止，不通过噪声方差代替艺术判断。截图/JSON在本地work/restore-flow和work/solid-live，不提交大幅二进制。
+
+## 发布
+
+发布复验：最终运行SHA=58b6efb7f832a2b1577ccda50fac806e5404ad1b，Pages任务44704743012成功；线上versions.json的root/V4均匹配，V2/V3冻结SHA不变。线上44组原生流体场景＋8组实际游戏core/显画/加载检查通过，页面与资源错误为空。保留远端2e981d7独立动画演示。8个针对性Node脚本通过。此文档补记跳过CI，线上运行SHA保持58b6efb。
