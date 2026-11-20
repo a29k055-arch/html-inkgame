@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>墨 · 生灵动画试验场</title><link rel="stylesheet" href="./style.css"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>墨 · 生灵动画试验场</title><link rel="stylesheet" href="./style.css?rev=rig-r2-art-motion-20261120"></head>
 <body>
 <main>
   <header><div><span class="eyebrow">INK / MOTION STUDY</span><h1>一池生灵</h1><p>水墨分层 · 实时操控试验场</p></div><span class="seal" aria-hidden="true">墨</span></header>
   <section class="workbench" aria-label="动画素材演示">
     <div class="toolbar">
       <label>生灵 <select id="creature"><option value="fish_04">鱼 · fish_04</option><option value="dragon_04">中国龙 · dragon_04</option><option value="shrimp_07">虾 · shrimp_07</option><option value="turtle_02">乌龟 · turtle_02</option></select></label>
-      <label>状态 <select id="mode"><option value="manual">手动游动</option><option value="auto">自动巡游</option><option value="idle">静止微动</option><option value="straight">拉直中性姿态</option><option value="rest">查看原画</option></select></label>
+      <label>状态 <select id="mode"><option value="manual">手动游动</option><option value="auto">自动巡游</option><option value="idle">静止微动</option><option value="straight">拉直检查（非游动态）</option><option value="rest">查看原画</option></select></label>
       <label class="speed-control">速度 <input id="speed" type="range" min="30" max="220" value="110" aria-label="移动速度"></label>
       <label class="check"><input id="debug" type="checkbox">骨架</label><button id="reset" type="button">归位</button>
     </div>
     <div class="stage-wrap"><canvas id="stage" aria-label="水墨生物方向操控画布" tabindex="0"></canvas><div id="status" role="status">正在载入分层素材…</div><div class="stage-caption"><span id="species-note">身体摆动 · 尾鳍推进</span><span id="telemetry"></span></div><div id="joystick" role="group" aria-label="拖动摇杆控制方向"><div id="knob"></div><span>方向</span></div></div>
     <footer><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / 方向键 · 或拖动右下摇杆</span><span id="layer-count"></span></footer>
   </section>
-  <section class="notes"><p><strong>方向驱动，而非逐帧播放。</strong>鱼与龙的身体沿连续骨架变形，转向逐段传到尾部；虾保持克制，乌龟以头、四肢和尾部活动。</p><p>选择“拉直中性姿态”检查龙身展开；选择“查看原画”对照所选素材。此演示独立运行，未更改游戏机制。</p></section>
-</main><script type="module" src="./demo.mjs"></script>
+  <section class="notes"><p><strong>方向驱动，而非逐帧播放。</strong>龙默认保持持续 S 形蛇行波，转向逐段传到尾部；鱼柔和转向，虾左右镜像，乌龟缓慢间歇划肢。</p><p>“拉直检查”只检查分层展开，不代表龙的游动姿态；“查看原画”可对照选定素材。此演示独立运行，未更改游戏机制。</p></section>
+</main><script type="module" src="./demo.mjs?rev=rig-r2-art-motion-20261120"></script>
 </body></html>

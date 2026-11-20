@@ -1,0 +1,49 @@
+{
+  "status": "applied",
+  "paintFile": "../repair-plates/fish_04_repair.png",
+  "plateSize": [
+    1218,
+    1292
+  ],
+  "sourceSize": [
+    1218,
+    1292
+  ],
+  "registration": "same-pose source canvas; fit only if dimensions differ",
+  "hostRaisedPixels": 30488,
+  "hostRecoveredSourcePixels": 1068,
+  "rootAddedPixels": 12208,
+  "cleanupPixels": 0,
+  "roots": [
+    {
+      "part": "fin_l",
+      "addedPixels": 5433,
+      "underHostPixels": 4430,
+      "outer": [
+        270,
+        458
+      ],
+      "inner": [
+        365,
+        494
+      ],
+      "radius": 26
+    },
+    {
+      "part": "fin_r",
+      "addedPixels": 6775,
+      "underHostPixels": 5806,
+      "outer": [
+        505,
+        365
+      ],
+      "inner": [
+        385,
+        420
+      ],
+      "radius": 29
+    }
+  ],
+  "assembledChangedPixels": 39495,
+  "changedOutsideApprovedMask": 0
+}

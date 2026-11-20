@@ -1,0 +1,91 @@
+{
+  "status": "applied",
+  "paintFile": "../repair-plates/shrimp_07_repair.png",
+  "plateSize": [
+    1536,
+    1024
+  ],
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "registration": "same-pose source canvas; fit only if dimensions differ",
+  "hostRaisedPixels": 1340,
+  "hostRecoveredSourcePixels": 0,
+  "rootAddedPixels": 4982,
+  "cleanupPixels": 0,
+  "roots": [
+    {
+      "part": "forearm_l",
+      "addedPixels": 1322,
+      "underHostPixels": 1190,
+      "outer": [
+        916,
+        553
+      ],
+      "inner": [
+        856,
+        530
+      ],
+      "radius": 13
+    },
+    {
+      "part": "forearm_r",
+      "addedPixels": 1266,
+      "underHostPixels": 1019,
+      "outer": [
+        831,
+        615
+      ],
+      "inner": [
+        802,
+        575
+      ],
+      "radius": 15
+    },
+    {
+      "part": "antenna_l",
+      "addedPixels": 547,
+      "underHostPixels": 427,
+      "outer": [
+        935,
+        376
+      ],
+      "inner": [
+        927,
+        422
+      ],
+      "radius": 6
+    },
+    {
+      "part": "antenna_r",
+      "addedPixels": 429,
+      "underHostPixels": 297,
+      "outer": [
+        960,
+        379
+      ],
+      "inner": [
+        952,
+        427
+      ],
+      "radius": 6
+    },
+    {
+      "part": "legs_l",
+      "addedPixels": 1418,
+      "underHostPixels": 812,
+      "outer": [
+        817,
+        622
+      ],
+      "inner": [
+        799,
+        581
+      ],
+      "radius": 14
+    }
+  ],
+  "assembledChangedPixels": 4901,
+  "changedOutsideApprovedMask": 0
+}

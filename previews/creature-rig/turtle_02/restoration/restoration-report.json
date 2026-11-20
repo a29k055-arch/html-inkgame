@@ -1,0 +1,105 @@
+{
+  "status": "applied",
+  "paintFile": "../repair-plates/turtle_02_repair.png",
+  "plateSize": [
+    1218,
+    1292
+  ],
+  "sourceSize": [
+    1218,
+    1292
+  ],
+  "registration": "same-pose source canvas; fit only if dimensions differ",
+  "hostRaisedPixels": 0,
+  "hostRecoveredSourcePixels": 0,
+  "rootAddedPixels": 64577,
+  "cleanupPixels": 25209,
+  "roots": [
+    {
+      "part": "head",
+      "addedPixels": 15700,
+      "underHostPixels": 15700,
+      "outer": [
+        594,
+        307
+      ],
+      "inner": [
+        594,
+        385
+      ],
+      "radius": 84
+    },
+    {
+      "part": "leg_fl",
+      "addedPixels": 12317,
+      "underHostPixels": 12166,
+      "outer": [
+        332,
+        421
+      ],
+      "inner": [
+        431,
+        490
+      ],
+      "radius": 49
+    },
+    {
+      "part": "leg_fr",
+      "addedPixels": 10865,
+      "underHostPixels": 10337,
+      "outer": [
+        858,
+        421
+      ],
+      "inner": [
+        760,
+        490
+      ],
+      "radius": 49
+    },
+    {
+      "part": "leg_bl",
+      "addedPixels": 10351,
+      "underHostPixels": 10147,
+      "outer": [
+        315,
+        1060
+      ],
+      "inner": [
+        430,
+        995
+      ],
+      "radius": 53
+    },
+    {
+      "part": "leg_br",
+      "addedPixels": 11149,
+      "underHostPixels": 10676,
+      "outer": [
+        869,
+        1060
+      ],
+      "inner": [
+        755,
+        995
+      ],
+      "radius": 53
+    },
+    {
+      "part": "tail",
+      "addedPixels": 4195,
+      "underHostPixels": 4195,
+      "outer": [
+        589,
+        1126
+      ],
+      "inner": [
+        589,
+        1068
+      ],
+      "radius": 32
+    }
+  ],
+  "assembledChangedPixels": 56937,
+  "changedOutsideApprovedMask": 0
+}

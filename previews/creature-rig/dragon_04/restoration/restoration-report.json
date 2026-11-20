@@ -1,0 +1,133 @@
+{
+  "status": "applied",
+  "paintFile": "../repair-plates/dragon_04_repair.png",
+  "plateSize": [
+    1024,
+    1536
+  ],
+  "sourceSize": [
+    1024,
+    1536
+  ],
+  "registration": "same-pose source canvas; fit only if dimensions differ",
+  "hostRaisedPixels": 10390,
+  "hostRecoveredSourcePixels": 6859,
+  "rootAddedPixels": 21667,
+  "cleanupPixels": 0,
+  "roots": [
+    {
+      "part": "leg_fl",
+      "addedPixels": 6122,
+      "underHostPixels": 6054,
+      "outer": [
+        456,
+        528
+      ],
+      "inner": [
+        546,
+        521
+      ],
+      "radius": 33
+    },
+    {
+      "part": "leg_fr",
+      "addedPixels": 2887,
+      "underHostPixels": 2083,
+      "outer": [
+        617,
+        526
+      ],
+      "inner": [
+        548,
+        521
+      ],
+      "radius": 32
+    },
+    {
+      "part": "leg_bl",
+      "addedPixels": 4768,
+      "underHostPixels": 4105,
+      "outer": [
+        485,
+        992
+      ],
+      "inner": [
+        583,
+        987
+      ],
+      "radius": 34
+    },
+    {
+      "part": "leg_br",
+      "addedPixels": 3799,
+      "underHostPixels": 3315,
+      "outer": [
+        645,
+        990
+      ],
+      "inner": [
+        581,
+        987
+      ],
+      "radius": 34
+    },
+    {
+      "part": "horn_l",
+      "addedPixels": 2000,
+      "underHostPixels": 1975,
+      "outer": [
+        471,
+        278
+      ],
+      "inner": [
+        513,
+        291
+      ],
+      "radius": 19
+    },
+    {
+      "part": "horn_r",
+      "addedPixels": 1559,
+      "underHostPixels": 1324,
+      "outer": [
+        579,
+        280
+      ],
+      "inner": [
+        539,
+        291
+      ],
+      "radius": 19
+    },
+    {
+      "part": "whisker_l",
+      "addedPixels": 254,
+      "underHostPixels": 210,
+      "outer": [
+        477,
+        110
+      ],
+      "inner": [
+        496,
+        133
+      ],
+      "radius": 6
+    },
+    {
+      "part": "whisker_r",
+      "addedPixels": 278,
+      "underHostPixels": 209,
+      "outer": [
+        550,
+        108
+      ],
+      "inner": [
+        535,
+        133
+      ],
+      "radius": 6
+    }
+  ],
+  "assembledChangedPixels": 25500,
+  "changedOutsideApprovedMask": 0
+}

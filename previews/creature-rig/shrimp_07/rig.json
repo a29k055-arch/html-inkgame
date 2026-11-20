@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "id": "shrimp_07",
   "source": "source.png",
   "sourceSize": [
@@ -12,47 +12,47 @@
       434
     ],
     [
-      905,
-      488
+      900,
+      482
     ],
     [
-      819,
-      550
+      820,
+      530
     ],
     [
       740,
-      604
+      570
     ],
     [
-      661,
-      648
+      657,
+      589
     ],
     [
-      579,
-      692
+      569,
+      630
     ],
     [
-      501,
-      738
+      474,
+      675
     ],
     [
-      429,
-      789
+      398,
+      729
     ],
     [
-      350,
-      847
+      336,
+      784
     ],
     [
-      259,
-      915
+      294,
+      828
     ],
     [
-      202,
-      950
+      248,
+      914
     ]
   ],
-  "nominalLength": 936.6133005199044,
+  "nominalLength": 900.250354820765,
   "layers": [
     {
       "name": "shrimp_07_antenna_l",
@@ -66,19 +66,32 @@
       ],
       "kind": "antenna",
       "pivot": [
-        932,
-        382
+        927,
+        422
       ],
       "side": -1,
       "phase": 0,
-      "order": 12,
+      "order": 3,
       "bounds": [
         107,
         191,
         1032,
         628
       ],
-      "pixelCount": 22479
+      "pixelCount": 23015,
+      "rootRepair": {
+        "outer": [
+          935,
+          376
+        ],
+        "inner": [
+          927,
+          422
+        ],
+        "radius": 6,
+        "paintFile": "../repair-plates/shrimp_07_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "shrimp_07_antenna_r",
@@ -88,75 +101,114 @@
         940,
         22,
         526,
-        415
+        416
       ],
       "kind": "antenna",
       "pivot": [
-        938,
-        378
+        952,
+        427
       ],
       "side": 1,
       "phase": 2.199114857512855,
-      "order": 12,
+      "order": 3,
       "bounds": [
-        949,
+        948,
         32,
         1452,
-        428
+        429
       ],
-      "pixelCount": 15858
+      "pixelCount": 16287,
+      "rootRepair": {
+        "outer": [
+          960,
+          379
+        ],
+        "inner": [
+          952,
+          427
+        ],
+        "radius": 6,
+        "paintFile": "../repair-plates/shrimp_07_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "shrimp_07_forearm_l",
       "file": "shrimp_07_forearm_l.png",
       "croppedFile": "textures/shrimp_07_forearm_l.png",
       "bbox": [
-        890,
+        841,
         320,
-        531,
-        256
+        580,
+        257
       ],
       "kind": "leg",
       "pivot": [
-        912,
-        552
+        856,
+        530
       ],
       "side": -1,
       "phase": 4.39822971502571,
-      "order": 8,
+      "order": 3,
       "bounds": [
-        898,
+        850,
         330,
         1411,
-        566
+        568
       ],
-      "pixelCount": 15075
+      "pixelCount": 16286,
+      "rootRepair": {
+        "outer": [
+          916,
+          553
+        ],
+        "inner": [
+          856,
+          530
+        ],
+        "radius": 13,
+        "paintFile": "../repair-plates/shrimp_07_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "shrimp_07_forearm_r",
       "file": "shrimp_07_forearm_r.png",
       "croppedFile": "textures/shrimp_07_forearm_r.png",
       "bbox": [
-        808,
-        591,
-        546,
-        136
+        782,
+        557,
+        572,
+        170
       ],
       "kind": "leg",
       "pivot": [
-        830,
-        614
+        802,
+        575
       ],
       "side": 1,
       "phase": 6.5973445725385655,
-      "order": 8,
+      "order": 3,
       "bounds": [
-        816,
-        600,
+        791,
+        566,
         1342,
         716
       ],
-      "pixelCount": 14499
+      "pixelCount": 15621,
+      "rootRepair": {
+        "outer": [
+          831,
+          615
+        ],
+        "inner": [
+          802,
+          575
+        ],
+        "radius": 15,
+        "paintFile": "../repair-plates/shrimp_07_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "shrimp_07_legs_l",
@@ -170,45 +222,58 @@
       ],
       "kind": "leg",
       "pivot": [
-        810,
-        624
+        799,
+        581
       ],
       "side": -1,
       "phase": 8.79645943005142,
-      "order": 4,
+      "order": 3,
       "bounds": [
         457,
         560,
         952,
         807
       ],
-      "pixelCount": 21745
+      "pixelCount": 22612,
+      "rootRepair": {
+        "outer": [
+          817,
+          622
+        ],
+        "inner": [
+          799,
+          581
+        ],
+        "radius": 14,
+        "paintFile": "../repair-plates/shrimp_07_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "shrimp_07_head_chest",
       "file": "shrimp_07_head_chest.png",
       "croppedFile": "textures/shrimp_07_head_chest.png",
       "bbox": [
-        685,
+        704,
         203,
-        718,
-        470
+        699,
+        477
       ],
       "kind": "head",
       "pivot": [
-        862.125,
-        519
+        859.875,
+        506.5
       ],
       "side": 0,
       "phase": 0,
       "order": 10,
       "bounds": [
-        695,
+        713,
         337,
         1354,
-        655
+        671
       ],
-      "pixelCount": 49071,
+      "pixelCount": 47830,
       "spineRange": [
         0,
         0.31
@@ -219,26 +284,26 @@
       "file": "shrimp_07_abdomen_01.png",
       "croppedFile": "textures/shrimp_07_abdomen_01.png",
       "bbox": [
-        544,
-        512,
-        216,
-        216
+        568,
+        493,
+        192,
+        235
       ],
       "kind": "body",
       "pivot": [
-        671.0185546875,
-        642.568359375
+        667.634765625,
+        585.7158203125
       ],
       "side": 0,
       "phase": 0.7,
       "order": 6,
       "bounds": [
-        552,
-        520,
+        576,
+        504,
         751,
-        677
+        666
       ],
-      "pixelCount": 20660,
+      "pixelCount": 19684,
       "spineRange": [
         0.31,
         0.47
@@ -249,26 +314,26 @@
       "file": "shrimp_07_abdomen_02.png",
       "croppedFile": "textures/shrimp_07_abdomen_02.png",
       "bbox": [
-        424,
-        556,
-        200,
-        212
+        456,
+        553,
+        184,
+        227
       ],
       "kind": "body",
       "pivot": [
-        549.193359375,
-        708.8837890625
+        533.052734375,
+        646.1865234375
       ],
       "side": 0,
       "phase": 1.4,
       "order": 6,
       "bounds": [
-        432,
-        566,
-        615,
-        727
+        464,
+        563,
+        631,
+        715
       ],
-      "pixelCount": 17652,
+      "pixelCount": 16640,
       "spineRange": [
         0.47,
         0.61
@@ -279,26 +344,26 @@
       "file": "shrimp_07_abdomen_03.png",
       "croppedFile": "textures/shrimp_07_abdomen_03.png",
       "bbox": [
-        325,
-        626,
-        172,
-        191
+        337,
+        604,
+        183,
+        186
       ],
       "kind": "body",
       "pivot": [
-        438.2939453125,
-        782.255859375
+        406.7001953125,
+        722.140625
       ],
       "side": 0,
       "phase": 2.0999999999999996,
       "order": 6,
       "bounds": [
-        334,
-        636,
-        488,
-        807
+        349,
+        614,
+        511,
+        779
       ],
-      "pixelCount": 15428,
+      "pixelCount": 16136,
       "spineRange": [
         0.61,
         0.77
@@ -309,26 +374,26 @@
       "file": "shrimp_07_abdomen_04.png",
       "croppedFile": "textures/shrimp_07_abdomen_04.png",
       "bbox": [
-        232,
-        752,
-        144,
-        192
+        263,
+        720,
+        145,
+        144
       ],
       "kind": "body",
       "pivot": [
-        315.259765625,
-        873.2177734375
+        318.9609375,
+        799.4599609375
       ],
       "side": 0,
       "phase": 2.8,
       "order": 6,
       "bounds": [
-        240,
-        760,
-        366,
-        935
+        271,
+        728,
+        399,
+        855
       ],
-      "pixelCount": 9271,
+      "pixelCount": 7893,
       "spineRange": [
         0.77,
         0.9
@@ -340,30 +405,121 @@
       "croppedFile": "textures/shrimp_07_tail.png",
       "bbox": [
         145,
-        833,
-        170,
-        164
+        817,
+        185,
+        180
       ],
       "kind": "tail",
       "pivot": [
-        224.8125,
-        936.75
+        268.375,
+        873.75
       ],
       "side": 0,
       "phase": 3.5,
       "order": 6,
       "bounds": [
         155,
-        841,
-        304,
+        828,
+        320,
         987
       ],
-      "pixelCount": 12569,
+      "pixelCount": 17480,
       "spineRange": [
         0.9,
         1
       ]
     }
   ],
-  "notes": "Source-space layers exactly partition original source pixels. No generative repaint or style change. Hidden anatomy behind joints is not present in original and must be restored for extreme articulation; use modest limb angles. Continuous body deformation is preferred to separately rotating body bands."
+  "restoration": {
+    "status": "applied",
+    "paintFile": "../repair-plates/shrimp_07_repair.png",
+    "plateSize": [
+      1536,
+      1024
+    ],
+    "sourceSize": [
+      1536,
+      1024
+    ],
+    "registration": "same-pose source canvas; fit only if dimensions differ",
+    "hostRaisedPixels": 1340,
+    "hostRecoveredSourcePixels": 0,
+    "rootAddedPixels": 4982,
+    "cleanupPixels": 0,
+    "roots": [
+      {
+        "part": "forearm_l",
+        "addedPixels": 1322,
+        "underHostPixels": 1190,
+        "outer": [
+          916,
+          553
+        ],
+        "inner": [
+          856,
+          530
+        ],
+        "radius": 13
+      },
+      {
+        "part": "forearm_r",
+        "addedPixels": 1266,
+        "underHostPixels": 1019,
+        "outer": [
+          831,
+          615
+        ],
+        "inner": [
+          802,
+          575
+        ],
+        "radius": 15
+      },
+      {
+        "part": "antenna_l",
+        "addedPixels": 547,
+        "underHostPixels": 427,
+        "outer": [
+          935,
+          376
+        ],
+        "inner": [
+          927,
+          422
+        ],
+        "radius": 6
+      },
+      {
+        "part": "antenna_r",
+        "addedPixels": 429,
+        "underHostPixels": 297,
+        "outer": [
+          960,
+          379
+        ],
+        "inner": [
+          952,
+          427
+        ],
+        "radius": 6
+      },
+      {
+        "part": "legs_l",
+        "addedPixels": 1418,
+        "underHostPixels": 812,
+        "outer": [
+          817,
+          622
+        ],
+        "inner": [
+          799,
+          581
+        ],
+        "radius": 14
+      }
+    ],
+    "assembledChangedPixels": 4901,
+    "changedOutsideApprovedMask": 0
+  },
+  "notes": "Selected source silhouettes and pigment preserved outside bounded anatomical repair regions. AI repair paint supplies hidden root extensions and restored host coverage. Layers intentionally overlap at joints; draw attached limbs beneath host torso. Continuous body bands share one mesh. Source remains the original approval reference."
 }

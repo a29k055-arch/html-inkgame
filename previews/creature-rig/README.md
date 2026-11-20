@@ -1,5 +1,7 @@
 # 水墨生物分层动画测试
 
+当前修正版：**rig-r2-art-motion-20261120**（2026-11-21 续完）。四类都已补齐身体底图和隐藏关节：鱼急转柔化、胸鳍根部连续蒙皮；龙默认保持持续 S 形；虾向左时水平镜像；乌龟重抠后腿并改为慢速间歇划动。详情见 [本轮修正说明](MOTION_REPAIR_R2.md)。
+
 **[直接在线打开](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/)**
 
 这是独立的素材动画试验场，基于用户选定的 fish_04、dragon_04、shrimp_07、turtle_02。此测试不改变现有 V4 游戏机制。

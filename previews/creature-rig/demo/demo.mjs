@@ -1,10 +1,10 @@
-import {InkCreature,damp} from '../runtime/ink-creature.mjs';
+import {InkCreature,damp} from '../runtime/ink-creature.mjs?rev=rig-r2-art-motion-20261120';
 const $=id=>document.getElementById(id),canvas=$('stage'),ctx=canvas.getContext('2d'),keys=new Set();
 const state={rig:null,selected:'fish_04',mode:'manual',width:1000,height:600,camera:{x:0,y:0},joystick:{x:0,y:0},loading:0,frames:0,fps:0,lastTelemetry:0};
-const profiles={fish_04:{length:320,note:'身体摆动 · 尾鳍推进'},dragon_04:{length:430,note:'多段扭动 · 转向延迟 · 龙身可拉直'},shrimp_07:{length:230,note:'腹节轻动 · 触须缓摆'},turtle_02:{length:245,note:'龟壳稳定 · 头尾与四肢活动'}};
+const profiles={fish_04:{length:320,note:'柔和转向 · 身体摆动 · 尾鳍推进'},dragon_04:{length:430,note:'持续 S 形蛇行波 · 头尾延迟跟随'},shrimp_07:{length:230,note:'腹节轻动 · 左右镜像 · 触须缓摆'},turtle_02:{length:245,note:'缓慢游动 · 间歇划肢 · 龟壳稳定'}};
 function displayLength(id){return Math.min(profiles[id].length,state.height*(id==='shrimp_07'?.48:.72),state.width*(id==='shrimp_07'?.48:.7));}
 function size(){const r=canvas.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,2);state.width=r.width;state.height=r.height;canvas.width=Math.round(r.width*ratio);canvas.height=Math.round(r.height*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);if(state.rig){state.rig.length=displayLength(state.selected);center();}}
-function center(){const r=state.rig;if(!r)return;state.camera.x=state.camera.y=0;r.reset(state.width/2,state.height/2-r.length*.4,-Math.PI/2);}
+function center(){const r=state.rig;if(!r)return;state.camera.x=state.camera.y=0;const heading=r.species==='shrimp'?0:-Math.PI/2;r.reset(state.width/2+Math.cos(heading)*r.length*.35,state.height/2+Math.sin(heading)*r.length*.35,heading);}
 async function selectCreature(id){if(!profiles[id])throw Error('Unknown creature');const ticket=++state.loading;$('status').hidden=false;$('status').textContent='正在载入分层素材…';const old=state.rig;state.rig=null;
  try {const rig=await InkCreature.load(`../${id}/rig.json`,{length:displayLength(id),speed:Number($('speed').value)});if(ticket!==state.loading){rig.dispose();return;}old?.dispose();state.rig=rig;state.selected=id;$('creature').value=id;rig.setMode(state.mode);center();$('species-note').textContent=profiles[id].note;$('layer-count').textContent=`${rig.rig.layers.length} 层 · PNG + 连续骨架`;$('status').hidden=true;
  } catch(error){old?.dispose();$('status').textContent='素材载入失败：'+error.message;console.error(error);throw error;}}

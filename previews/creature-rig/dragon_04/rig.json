@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "id": "dragon_04",
   "source": "source.png",
   "sourceSize": [
@@ -104,51 +104,77 @@
       "croppedFile": "textures/dragon_04_whisker_l.png",
       "bbox": [
         234,
-        91,
-        263,
-        173
+        90,
+        275,
+        174
       ],
       "kind": "antenna",
       "pivot": [
-        476,
-        111
+        496,
+        133
       ],
       "side": -1,
       "phase": 0,
-      "order": 12,
+      "order": 3,
       "bounds": [
         243,
         99,
-        488,
+        499,
         253
       ],
-      "pixelCount": 3445
+      "pixelCount": 3667,
+      "rootRepair": {
+        "outer": [
+          477,
+          110
+        ],
+        "inner": [
+          496,
+          133
+        ],
+        "radius": 6,
+        "paintFile": "../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "dragon_04_whisker_r",
       "file": "dragon_04_whisker_r.png",
       "croppedFile": "textures/dragon_04_whisker_r.png",
       "bbox": [
-        526,
+        523,
         85,
-        259,
+        262,
         158
       ],
       "kind": "antenna",
       "pivot": [
-        546,
-        105
+        535,
+        133
       ],
       "side": 1,
       "phase": 2.199114857512855,
-      "order": 12,
+      "order": 3,
       "bounds": [
-        534,
+        531,
         93,
         772,
         231
       ],
-      "pixelCount": 3549
+      "pixelCount": 3758,
+      "rootRepair": {
+        "outer": [
+          550,
+          108
+        ],
+        "inner": [
+          535,
+          133
+        ],
+        "radius": 6,
+        "paintFile": "../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "dragon_04_horn_l",
@@ -157,50 +183,76 @@
       "bbox": [
         368,
         221,
-        121,
+        163,
         133
       ],
       "kind": "detail",
       "pivot": [
-        473,
-        278
+        513,
+        291
       ],
       "side": -1,
       "phase": 4.39822971502571,
-      "order": 11,
+      "order": 3,
       "bounds": [
         377,
         231,
-        480,
+        521,
         343
       ],
-      "pixelCount": 6189
+      "pixelCount": 7368,
+      "rootRepair": {
+        "outer": [
+          471,
+          278
+        ],
+        "inner": [
+          513,
+          291
+        ],
+        "radius": 19,
+        "paintFile": "../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "dragon_04_horn_r",
       "file": "dragon_04_horn_r.png",
       "croppedFile": "textures/dragon_04_horn_r.png",
       "bbox": [
-        546,
+        522,
         222,
-        118,
+        142,
         132
       ],
       "kind": "detail",
       "pivot": [
-        573,
-        273
+        539,
+        291
       ],
       "side": 1,
       "phase": 6.5973445725385655,
-      "order": 11,
+      "order": 3,
       "bounds": [
-        554,
+        531,
         231,
         654,
         341
       ],
-      "pixelCount": 5938
+      "pixelCount": 6584,
+      "rootRepair": {
+        "outer": [
+          579,
+          280
+        ],
+        "inner": [
+          539,
+          291
+        ],
+        "radius": 19,
+        "paintFile": "../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "dragon_04_leg_fl",
@@ -209,13 +261,13 @@
       "bbox": [
         290,
         438,
-        242,
-        134
+        276,
+        132
       ],
       "kind": "leg",
       "pivot": [
-        503,
-        526
+        546,
+        521
       ],
       "side": -1,
       "phase": 8.79645943005142,
@@ -223,36 +275,62 @@
       "bounds": [
         300,
         447,
-        523,
-        563
+        556,
+        561
       ],
-      "pixelCount": 13227
+      "pixelCount": 16405,
+      "rootRepair": {
+        "outer": [
+          456,
+          528
+        ],
+        "inner": [
+          546,
+          521
+        ],
+        "radius": 33,
+        "paintFile": "../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "dragon_04_leg_fr",
       "file": "dragon_04_leg_fr.png",
       "croppedFile": "textures/dragon_04_leg_fr.png",
       "bbox": [
-        554,
+        529,
         449,
-        179,
+        204,
         117
       ],
       "kind": "leg",
       "pivot": [
-        585,
-        516
+        548,
+        521
       ],
       "side": 1,
       "phase": 10.995574287564276,
       "order": 3,
       "bounds": [
-        562,
+        538,
         457,
         722,
-        553
+        554
       ],
-      "pixelCount": 9572
+      "pixelCount": 11727,
+      "rootRepair": {
+        "outer": [
+          617,
+          526
+        ],
+        "inner": [
+          548,
+          521
+        ],
+        "radius": 32,
+        "paintFile": "../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "dragon_04_leg_bl",
@@ -261,13 +339,13 @@
       "bbox": [
         323,
         933,
-        244,
+        280,
         106
       ],
       "kind": "leg",
       "pivot": [
-        561,
-        988
+        583,
+        987
       ],
       "side": -1,
       "phase": 13.194689145077131,
@@ -275,36 +353,62 @@
       "bounds": [
         333,
         943,
-        558,
+        593,
         1030
       ],
-      "pixelCount": 11937
+      "pixelCount": 15279,
+      "rootRepair": {
+        "outer": [
+          485,
+          992
+        ],
+        "inner": [
+          583,
+          987
+        ],
+        "radius": 34,
+        "paintFile": "../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "dragon_04_leg_br",
       "file": "dragon_04_leg_br.png",
       "croppedFile": "textures/dragon_04_leg_br.png",
       "bbox": [
-        589,
+        562,
         932,
-        168,
+        195,
         99
       ],
       "kind": "leg",
       "pivot": [
-        617,
-        988
+        581,
+        987
       ],
       "side": 1,
       "phase": 15.393804002589984,
       "order": 3,
       "bounds": [
-        597,
+        571,
         942,
         746,
         1020
       ],
-      "pixelCount": 8493
+      "pixelCount": 10738,
+      "rootRepair": {
+        "outer": [
+          645,
+          990
+        ],
+        "inner": [
+          581,
+          987
+        ],
+        "radius": 34,
+        "paintFile": "../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
     },
     {
       "name": "dragon_04_head",
@@ -314,7 +418,7 @@
         236,
         57,
         406,
-        267
+        268
       ],
       "kind": "head",
       "pivot": [
@@ -325,12 +429,12 @@
       "phase": 0,
       "order": 10,
       "bounds": [
-        434,
+        379,
         65,
-        591,
-        311
+        631,
+        316
       ],
-      "pixelCount": 25024,
+      "pixelCount": 26413,
       "spineRange": [
         0,
         0.135
@@ -342,9 +446,9 @@
       "croppedFile": "textures/dragon_04_neck.png",
       "bbox": [
         423,
-        288,
-        216,
-        222
+        287,
+        218,
+        223
       ],
       "kind": "body",
       "pivot": [
@@ -356,11 +460,11 @@
       "order": 6,
       "bounds": [
         433,
-        296,
-        617,
+        295,
+        632,
         501
       ],
-      "pixelCount": 26009,
+      "pixelCount": 26379,
       "spineRange": [
         0.135,
         0.25
@@ -390,7 +494,7 @@
         599,
         759
       ],
-      "pixelCount": 38411,
+      "pixelCount": 41889,
       "spineRange": [
         0.25,
         0.43
@@ -420,7 +524,7 @@
         642,
         935
       ],
-      "pixelCount": 38964,
+      "pixelCount": 39705,
       "spineRange": [
         0.43,
         0.62
@@ -450,7 +554,7 @@
         642,
         1215
       ],
-      "pixelCount": 29413,
+      "pixelCount": 32124,
       "spineRange": [
         0.62,
         0.82
@@ -480,12 +584,145 @@
         571,
         1497
       ],
-      "pixelCount": 23193,
+      "pixelCount": 24036,
       "spineRange": [
         0.82,
         1
       ]
     }
   ],
-  "notes": "Source-space layers exactly partition original source pixels. No generative repaint or style change. Hidden anatomy behind joints is not present in original and must be restored for extreme articulation; use modest limb angles. Continuous body deformation is preferred to separately rotating body bands."
+  "restoration": {
+    "status": "applied",
+    "paintFile": "../repair-plates/dragon_04_repair.png",
+    "plateSize": [
+      1024,
+      1536
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "registration": "same-pose source canvas; fit only if dimensions differ",
+    "hostRaisedPixels": 10390,
+    "hostRecoveredSourcePixels": 6859,
+    "rootAddedPixels": 21667,
+    "cleanupPixels": 0,
+    "roots": [
+      {
+        "part": "leg_fl",
+        "addedPixels": 6122,
+        "underHostPixels": 6054,
+        "outer": [
+          456,
+          528
+        ],
+        "inner": [
+          546,
+          521
+        ],
+        "radius": 33
+      },
+      {
+        "part": "leg_fr",
+        "addedPixels": 2887,
+        "underHostPixels": 2083,
+        "outer": [
+          617,
+          526
+        ],
+        "inner": [
+          548,
+          521
+        ],
+        "radius": 32
+      },
+      {
+        "part": "leg_bl",
+        "addedPixels": 4768,
+        "underHostPixels": 4105,
+        "outer": [
+          485,
+          992
+        ],
+        "inner": [
+          583,
+          987
+        ],
+        "radius": 34
+      },
+      {
+        "part": "leg_br",
+        "addedPixels": 3799,
+        "underHostPixels": 3315,
+        "outer": [
+          645,
+          990
+        ],
+        "inner": [
+          581,
+          987
+        ],
+        "radius": 34
+      },
+      {
+        "part": "horn_l",
+        "addedPixels": 2000,
+        "underHostPixels": 1975,
+        "outer": [
+          471,
+          278
+        ],
+        "inner": [
+          513,
+          291
+        ],
+        "radius": 19
+      },
+      {
+        "part": "horn_r",
+        "addedPixels": 1559,
+        "underHostPixels": 1324,
+        "outer": [
+          579,
+          280
+        ],
+        "inner": [
+          539,
+          291
+        ],
+        "radius": 19
+      },
+      {
+        "part": "whisker_l",
+        "addedPixels": 254,
+        "underHostPixels": 210,
+        "outer": [
+          477,
+          110
+        ],
+        "inner": [
+          496,
+          133
+        ],
+        "radius": 6
+      },
+      {
+        "part": "whisker_r",
+        "addedPixels": 278,
+        "underHostPixels": 209,
+        "outer": [
+          550,
+          108
+        ],
+        "inner": [
+          535,
+          133
+        ],
+        "radius": 6
+      }
+    ],
+    "assembledChangedPixels": 25500,
+    "changedOutsideApprovedMask": 0
+  },
+  "notes": "Selected source silhouettes and pigment preserved outside bounded anatomical repair regions. AI repair paint supplies hidden root extensions and restored host coverage. Layers intentionally overlap at joints; draw attached limbs beneath host torso. Continuous body bands share one mesh. Source remains the original approval reference."
 }
