@@ -72,6 +72,9 @@ body[data-experience=reveal] #inkReserveHud,body[data-experience=reveal] #modeLa
 #boostBtn small,#boostBtn kbd{font-size:9px;line-height:1;opacity:.72;white-space:nowrap}#boostBtn[data-boost="using"]{box-shadow:0 0 0 2px #f4efdfaa,0 7px 24px #51452a26}
 #boostBtn[data-boost="delay"],#boostBtn[data-boost="cooldown"]{opacity:.55}
 #boostBtn:disabled{opacity:.65}body.mobile #boostBtn kbd{display:none}#resultPainting{width:100%;height:auto;max-height:220px;object-fit:contain;display:block;border-radius:8px}body[data-experience=reveal] #resultStats{text-align:center;font-size:14px}.result-actions #playAgain{min-height:45px}body[data-experience=reveal] .result-panel{width:min(560px,94vw)}
+#boostBtn[data-boost="using"]::after{content:"";position:absolute;bottom:0;left:0;height:3px;width:calc(var(--charge,0)*100%);background:#c8d4b8;pointer-events:none;transition:width .1s linear}
+#boostBtn[data-charge="charged"]{box-shadow:0 0 0 2px #b8c7a5aa,0 0 16px #d3ddbd55}
+#boostBtn[data-charge="charged"] small{opacity:1;color:#e0e9d0}
 @media(max-width:700px){#revealMeter{left:64px;transform:none;top:72px;width:calc(100vw - 166px);padding:9px 12px}#revealMeter header{font-size:12px}#revealInk{font-size:9px}#boostBtn{right:16px;bottom:30px;width:82px;min-height:80px}body[data-experience=reveal] #mapWrap{width:76px}body[data-experience=reveal] #timer{font-size:20px}}@media(max-height:500px) and (min-width:500px){#revealMeter{top:12px;left:50%;transform:translateX(-50%);width:230px}#boostBtn{min-height:62px;width:80px;bottom:18px;font-size:16px}}
 
 body[data-experience=reveal] .dash-icon{width:28px;height:28px;justify-self:center;filter:brightness(0) invert(.88)}body[data-experience=reveal] #boostBtn{gap:2px}

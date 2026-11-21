@@ -1,4 +1,5 @@
 import {markSpike,resolveSpikes} from './reveal-combat.js';
+import {beginPondGravity,applyPondGravity,pondMagnetField} from './pond-gravity.js';
 import {canSwallow} from './phases.js';
 import {RangedCombat} from './ranged-combat.js';
 import {tickActives,stopActives} from './active-items.js';
@@ -75,7 +76,7 @@ export class Inkstone {
   if(e===this.player&&this.softDown){const win=this.softDown.window||20;
    if(this.elapsed-(e.lastDownAt??-1e9)>win){e.lastDownAt=this.elapsed;const before=e.ink;e.ink=Math.max(e.reserveRules?.minimumRespawnInk??0,before*(this.softDown.retain??.65));syncReserve(e,0,true);e.invincible=Math.max(e.invincible,this.softDown.grace??2.2);this.onEvent('soft-down',{entity:e,x:e.x,y:e.y,ink:before-e.ink});return true;}
   }
-  if(killer){const rawGain=e.mass*C.npcGain*this.rewardMultiplier;let gain=killer.growth?Math.min(this.growthBalance?.npcGainCap??R.playerNpcGainCap,rawGain*R.playerNpcGainScale):rawGain;if(killer.growth){const before=killer.ink;gain*=this.growthFactor(killer);gainReserve(killer,gain,true,this.rewardChoices&&this.theme!=='boss');gain=killer.ink-before;}else{const before=killer.mass;killer.mass=Math.min(this.npcMaxRadius**2,killer.mass+gain);gain=killer.mass-before;killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}if(killer.controller.type==='ai'&&e.controller.type==='ai'){this.ecology.npcSwallows++;this.ecology.maxRadius=Math.max(this.ecology.maxRadius,killer.r);}killer.swallowed++;if(this.staticConstraint&&killer!==this.player)this.constrain(killer);this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,coreRadius:this.radius(e),kind:'enemy'});}
+  if(killer){const killerCoreRadius=this.radius(killer),rawGain=e.mass*C.npcGain*this.rewardMultiplier;let gain=killer.growth?Math.min(this.growthBalance?.npcGainCap??R.playerNpcGainCap,rawGain*R.playerNpcGainScale):rawGain;if(killer.growth){const before=killer.ink;gain*=this.growthFactor(killer);gainReserve(killer,gain,true,this.rewardChoices&&this.theme!=='boss');gain=killer.ink-before;}else{const before=killer.mass;killer.mass=Math.min(this.npcMaxRadius**2,killer.mass+gain);gain=killer.mass-before;killer.r=Math.sqrt(killer.mass);killer.ink+=gain;}if(killer.controller.type==='ai'&&e.controller.type==='ai'){this.ecology.npcSwallows++;this.ecology.maxRadius=Math.max(this.ecology.maxRadius,killer.r);}killer.swallowed++;if(this.staticConstraint&&killer!==this.player)this.constrain(killer);this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,killerCoreRadius,coreRadius:this.radius(e),kind:'enemy'});}
   stopActives(e);this.ranged?.reset(e);e.deaths++;if(!e.growth)e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);if(e.competitor){e.competitor=false;e.controller=e.ordinaryController||aiController(e.skinIndex);delete e.ordinaryController;this.ensureCompetitor();}return true;
  }
  respawn(e){
@@ -83,7 +84,7 @@ export class Inkstone {
   if(!e.growth&&this.npcSpawner){e.ink=0;e.ecologyTier=spawn?.ecologyTier||e.ecologyTier;e.digestUntil=0;e.passive=spawn?.personality==='drift';}if(e.growth)syncReserve(e,0,true);if(this.boundarySliding)this.constrain(e);if(spawn?.personality&&!e.growth)e.controller=aiController(Math.max(0,this.entities.indexOf(e)-1),spawn.personality);e.controller.goal=null;e.controller.think=0;if(e.controller.type==='ai')this.ecology.npcRespawns++;this.onEvent('respawn',e);
  }
  update(dt,input){
-  if(this.finished)return;this.elapsed=Math.min(this.duration,this.elapsed+dt);this.updateMagnet(dt);
+  if(this.finished)return;this.elapsed=Math.min(this.duration,this.elapsed+dt);this.updateMagnet(dt);beginPondGravity(this);
   for(const e of this.entities){
    tickActives(e,dt);e.hitFlash=Math.max(0,(e.hitFlash||0)-dt);e.visualTime=this.elapsed;e.spikeContact=false;
    if(e.dead>0){e.dead=Math.max(0,e.dead-dt);if(!e.dead)this.respawn(e);continue;}
@@ -93,6 +94,7 @@ export class Inkstone {
    const speed=this.speed(e),blend=1-Math.exp(-dt*(e.controller.type==='human'?4:2.2));
    e.vx+=(v.x*speed-e.vx)*blend;e.vy+=(v.y*speed-e.vy)*blend;
    if(this.boundarySliding){const oldX=e.x,oldY=e.y;e.x+=e.vx*dt;e.y+=e.vy*dt;this.constrain(e);const blocked=Math.hypot(e.x-oldX,e.y-oldY)<speed*dt*.12&&Math.hypot(v.x,v.y)>.2;e.controller.blockedTime=blocked?(e.controller.blockedTime||0)+dt:0;if(e.controller.type==='ai'&&e.controller.blockedTime>.65){e.controller.goal=null;e.controller.think=0;e.controller.escapeUntil=this.elapsed+1.3;e.controller.blockedTime=0;}}else {e.x=clamp(e.x+e.vx*dt,e.r,this.world.width-e.r);e.y=clamp(e.y+e.vy*dt,e.r,this.world.height-e.r);}
+   applyPondGravity(this,e,dt);
    const velocity=Math.hypot(e.vx,e.vy);if(velocity>3)e.aim={x:e.vx/velocity,y:e.vy/velocity};
    // Collision stays stable in world units, entirely independent of camera and visual deformation.
    const t=clamp((velocity/1200-.08)/.72,0,1),target=1-.12*t*t*(3-2*t);
@@ -120,6 +122,7 @@ const [big,small]=sizeOf(a)>sizeOf(b)?[a,b]:[b,a];const npcPair=big.controller?.
   this.itemClock-=dt;if(this.itemClock<=0){this.itemClock=C.itemSpawnInterval;if(!this.simplePickups&&this.theme!=='boss'&&this.items.length<C.maxItems)this.items.push({...this.spawnPoint(),r:10});}
   this.ranged?.update(dt);
   for(const wave of this.waves)wave.age+=dt;this.waves=this.waves.filter(w=>w.age<C.skillDurations.splash);
+  if(this.magnetRules?.npcAttraction)this.magnetField=pondMagnetField(this);
   if(this.autoFinish&&this.elapsed>=this.duration)this.finish();
  }
  finish(){if(this.finished)return this.result;this.finished=true;this.result=settlement(this.player.ink,this.elapsed,this.rank,{...C,inkstoneDuration:this.duration});this.onEvent('finish',this.result);return this.result;}

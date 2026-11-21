@@ -1,4 +1,4 @@
-import {assignItemTier,collectTieredItem,expireItemTiers,ITEM_TIERS} from './item-tiers.js';
+import {assignItemTier,collectTieredItem,expireItemTiers,ITEM_TIERS,MANUAL_RUSH_TIERS} from './item-tiers.js';
 import {GrowthJourney} from './growth-stages.js';
 import {GrowthEcology} from './growth-ecology.js';
 import {Inkstone} from '../game/inkstone.js';
@@ -23,8 +23,8 @@ export class RevealRun {
  get finished(){return this.state==='finished';}
  event(type,data){if(type==='consume'&&data.entity===this.player){if(data.kind==='enemy'){const radius=consumeBloomRadius(data.coreRadius??data.r,this.config);// The consumed body owns the drop center, shared by the mask and visual source.
 const dx=clamp(data.x,0,this.world.width-1),dy=clamp(data.y,0,this.world.height-1);this.mask.reveal(dx,dy,radius,{kind:'enemy'});this.metrics.enemyBlooms++;this.onEvent('bloom',{...data,x:dx,y:dy,revealRadius:radius});}else {this.metrics.foodPickups++;this.onEvent('food-ink',data);}}if(type==='respawn'){delete data.erasePrevious;if(data!==this.player)data.v4Visual=true;}if(type==='respawn'&&data===this.player){this.lastPaint={x:data.x,y:data.y};this.sheltered=false;this.boostPhase='ready';this.boostHeld=false;this.boostTimer=0;const moved=this.journey.recalculate(data);if(moved)this.onEvent('growth-stage',moved);}this.onEvent(type,data);}
- // Held boost. Strength reuses the three fish tiers, so stage 1/2/3-4 map to +30/50/70%.
- stageBoost(){const tiers=ITEM_TIERS.rush,stage=this.journey?.stage||1;return stage<=1?tiers[0]:stage===2?tiers[1]:tiers[2];}
+ // Manual bloom keeps its original stage strength, independently of stronger fish.
+ stageBoost(){const tiers=MANUAL_RUSH_TIERS,stage=this.journey?.stage||1;return stage<=1?tiers[0]:stage===2?tiers[1]:tiers[2];}
  setBoostHeld(held){return this.boost(held);}
  // Ready -> using -> short release cooldown. A sub-second tap has no drop or cooldown.
  boostReady(){return this.boostPhase==='ready';}

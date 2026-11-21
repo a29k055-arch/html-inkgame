@@ -21,7 +21,7 @@ export class HeroInkFluid extends StudyFluid {
   const profile=this.motionProfile();if(profile.relative)moving=profile.moving;else if(profile.slowMix&&(core?.speed||0)>.002)moving=Math.max(moving,profile.slowMix*.8);if(size&&profile.feed&&ink.vx===0&&ink.vy===0)ink={...ink,radius:ink.radius*(1-profile.feed*size*moving),intensity:ink.intensity*(1-.20*size)};
   // The live density source, not a display disk, determines the visible body.
   // Keep its physical footprint at every size; only dilute large-body pigment.
-  if(profile.restoredFlow&&ink.vx===0&&ink.vy===0)return super.inject({...ink,radius:this.solidCore?.radius?this.solidCore.radius*.88:ink.radius,intensity:ink.intensity*(1-.25*(profile.bigBody||0))});
+  if(profile.restoredFlow&&ink.vx===0&&ink.vy===0)return super.inject({...ink,radius:this.solidCore?.radius?this.solidCore.radius*.88:ink.radius,intensity:ink.intensity*(1-.25*(profile.bigBody||0))*(1+Math.min(.8,Math.max(0,(this.sourceMotionRatio||0)-1.5)*.8))});
   if(profile.wakeFloor&&ink.vx===0&&ink.vy===0)ink={...ink,intensity:ink.intensity*(1-.25*moving*Math.max(0,1-(core?.speed||0)/.36))};
   if(profile.fluidity&&ink.vx===0&&ink.vy===0)ink={...ink,intensity:ink.intensity*(1-.24*profile.fluidity*moving)};
   if(profile.feedReduction&&ink.vx===0&&ink.vy===0)ink={...ink,intensity:ink.intensity*(1-profile.feedReduction*moving)};

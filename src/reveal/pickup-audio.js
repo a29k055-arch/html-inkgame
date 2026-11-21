@@ -4,6 +4,7 @@
 //   pipa    - hard plectrum transient, bright harmonics, quick decay
 // The style setting only chooses the voice for EVENTS (enemy, item, bloom drop).
 // Ordinary floaters always answer with the water drop, whatever the style is.
+import {EnemySoundSequence} from './feedback-state.js';
 export const SFX_STYLES=Object.freeze([
  {id:'water',label:'sfxStyleWater'},
  {id:'guzheng',label:'sfxStyleGuzheng'},
@@ -106,7 +107,7 @@ export function pipaNote(context,destination,{root=261.63,semitone=0,time=contex
 // Event -> musical position (degree in 五声). Food never reaches this table.
 const EVENTS={enemy:{degree:3,dur:1.5,level:.2},item:{degree:4,dur:1.1,level:.18},drop:{degree:0,dur:2.2,level:.2}};
 export class WaterPickupAudio {
- constructor(){this.context=null;this.voices=0;this.last=-100;this.lastFood=-100;this.serial=0;this.level=0;this.muted=false;this.style='water';}
+ constructor(){this.context=null;this.voices=0;this.last=-100;this.lastFood=-100;this.serial=0;this.level=0;this.muted=false;this.style='water';this.enemyNotes=new EnemySoundSequence();this.lastCue=null;}
  unlock(volume=this.level){
   if(!volume)return;
   try{
@@ -118,13 +119,19 @@ export class WaterPickupAudio {
  setMuted(m){this.muted=!!m;this.setVolume(this.level);}
  setStyle(style){if(SFX_STYLES.some(s=>s.id===style))this.style=style;}
  // Ordinary food always keeps the water voice; every other event follows the chosen style.
- voice(event,time,level){
+ voice(event,time,level,cue=null){
+  if(event==='enemy'&&cue){
+   const root=261.63,semitone=cue.semitone;
+   if(this.style==='water')return waterDrop(this.context,this.output.input,{time,pitch:.55*Math.pow(2,semitone/12),level,dur:cue.waterDuration});
+   if(this.style==='pipa')return pipaNote(this.context,this.output.input,{root,semitone,time,level,dur:cue.pluckDuration});
+   return guzhengNote(this.context,this.output.input,{root,semitone,time,level,dur:cue.stringDuration});
+  }
   const root=261.63,table=EVENTS[event],degree=table?table.degree:0,walk=this.serial%5,step=PENTATONIC[degree]+(walk>=3?12:0);
   if(event==='food'||this.style==='water')return waterDrop(this.context,this.output.input,{time,pitch:1+((this.serial%7)-3)*.02,level,dur:event==='food'?.24:.32});
   if(this.style==='pipa')return pipaNote(this.context,this.output.input,{root,semitone:step,time,level,dur:table?Math.min(.95,table.dur):.8});
   return guzhengNote(this.context,this.output.input,{root,semitone:step,time,level,dur:table?table.dur:1.6});
  }
- play(event='food',volume){
+ play(event='food',volume,detail={}){
   if(typeof volume==='number')this.level=volume;
   this.setVolume(this.level);
   if(!this.level||this.muted)return false;
@@ -135,8 +142,10 @@ export class WaterPickupAudio {
   if(event==='food'&&now-this.lastFood<.09)return false;
   this.last=now;if(event==='food')this.lastFood=now;
   this.voices++;this.serial++;
-  const level=event==='food'?.15:(EVENTS[event]?.level??.18);
-  const note=this.voice(event,now+.001,level);
+  const cue=event==='enemy'?this.enemyNotes.next(detail,now):null;
+  const level=cue?.level??(event==='food'?.15:(EVENTS[event]?.level??.18));
+  this.lastCue={event,...cue};
+  const note=this.voice(event,now+.001,level,cue);
   setTimeout(()=>{this.voices=Math.max(0,this.voices-1);},(note?.duration??.3)*1000);
   return true;
  }
