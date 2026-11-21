@@ -10,9 +10,9 @@
     1024
   ],
   "registration": "same-pose source canvas; fit only if dimensions differ",
-  "hostRaisedPixels": 1340,
+  "hostRaisedPixels": 1464,
   "hostRecoveredSourcePixels": 0,
-  "rootAddedPixels": 4982,
+  "rootAddedPixels": 5110,
   "cleanupPixels": 0,
   "roots": [
     {
@@ -44,32 +44,46 @@
       "radius": 15
     },
     {
-      "part": "antenna_l",
-      "addedPixels": 547,
-      "underHostPixels": 427,
+      "part": "antenna_01",
+      "addedPixels": 303,
+      "underHostPixels": 157,
       "outer": [
-        935,
-        376
+        932,
+        383
       ],
       "inner": [
-        927,
-        422
+        930,
+        410
       ],
-      "radius": 6
+      "radius": 5
     },
     {
-      "part": "antenna_r",
-      "addedPixels": 429,
-      "underHostPixels": 297,
+      "part": "antenna_02",
+      "addedPixels": 541,
+      "underHostPixels": 233,
       "outer": [
-        960,
-        379
+        939,
+        360
       ],
       "inner": [
-        952,
-        427
+        930,
+        410
       ],
-      "radius": 6
+      "radius": 5
+    },
+    {
+      "part": "antenna_03",
+      "addedPixels": 260,
+      "underHostPixels": 170,
+      "outer": [
+        968,
+        405
+      ],
+      "inner": [
+        966,
+        426
+      ],
+      "radius": 5
     },
     {
       "part": "legs_l",
@@ -86,6 +100,44 @@
       "radius": 14
     }
   ],
-  "assembledChangedPixels": 4901,
+  "antennaSplit": {
+    "version": 1,
+    "source": "source.png",
+    "method": "Three source-ink ridge traces, narrow independent mattes and local same-strand crossing reconstruction",
+    "strands": [
+      {
+        "name": "antenna_01",
+        "points": 1192,
+        "visiblePixels": 3255,
+        "repairedGapPixels": 276,
+        "pivot": [
+          930,
+          410
+        ]
+      },
+      {
+        "name": "antenna_02",
+        "points": 1759,
+        "visiblePixels": 4742,
+        "repairedGapPixels": 1000,
+        "pivot": [
+          930,
+          410
+        ]
+      },
+      {
+        "name": "antenna_03",
+        "points": 1621,
+        "visiblePixels": 4355,
+        "repairedGapPixels": 657,
+        "pivot": [
+          966,
+          426
+        ]
+      }
+    ],
+    "shortFilaments": "Retained on head_chest; do not move with independent long antennae"
+  },
+  "assembledChangedPixels": 19709,
   "changedOutsideApprovedMask": 0
 }

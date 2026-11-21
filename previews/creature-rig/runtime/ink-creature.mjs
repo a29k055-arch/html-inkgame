@@ -1,6 +1,6 @@
 /** Canvas 2D ink puppet runtime. Coordinates/input are CSS pixels, seconds and radians. */
-import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r2-art-motion-20261120';
-export const INK_CREATURE_REV='rig-r2-art-motion-20261120';
+import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r3-shrimp-turtle-20261121';
+export const INK_CREATURE_REV='rig-r3-shrimp-turtle-20261121';
 const TAU = Math.PI * 2;
 const RESOURCE_CACHE=new Map();
 const revisionURL=(value,base)=>{const url=new URL(value,base);url.searchParams.set('inkRigRev',INK_CREATURE_REV);return url;};
@@ -18,6 +18,17 @@ export function steeringStep(angle,velocity,target,profile,dt) {
 export function shrimpPresentation(facing,ix,iy) {
   if(ix<-.22)facing=-1;else if(ix>.22)facing=1;
   return {facing,inclination:Math.atan2(iy,Math.abs(ix))};
+}
+export function stepShrimpTurn(progress,velocity,target,dt) {
+  // A full turn uses a .1 s acceleration, .2 s cruise, .1 s braking profile.
+  // Retargeting keeps the current progress AND velocity instead of restarting a flip.
+  const acceleration=100/3,maxVelocity=10/3,distance=target-progress;
+  const desired=Math.sign(distance)*Math.min(maxVelocity,Math.sqrt(2*acceleration*Math.abs(distance)));
+  const nextVelocity=velocity+clamp(desired-velocity,-acceleration*dt,acceleration*dt);
+  let next=progress+(velocity+nextVelocity)*.5*dt;
+  if(distance!==0&&distance*(target-next)<=0)return{progress:target,velocity:0};
+  if(next<=0)return{progress:0,velocity:0};if(next>=1)return{progress:1,velocity:0};
+  return{progress:next,velocity:nextVelocity};
 }
 export function turtleStroke(phase) {
   const cycle=((phase/TAU)%1+1)%1,duty=.58;if(cycle>=duty)return 0;
@@ -128,7 +139,7 @@ export class InkCreature {
     if(!this.profile)throw Error('Unknown creature profile');
     this.sourceCurve=makeCurve(rig.spine);this.length=length;this.maxSpeed=speed;this.x=x;this.y=y;
     this.heading=this.species==='shrimp'?0:-Math.PI/2;this.targetHeading=this.heading;this.angularVelocity=0;this.angularAcceleration=0;
-    this.facing=1;this.inclination=0;this.inclinationVelocity=0;
+    this.facing=1;this.desiredFacing=1;this.shrimpTurnProgress=0;this.shrimpTurnVelocity=0;this.inclination=0;this.inclinationVelocity=0;
     this.vx=0;this.vy=0;this.input={x:0,y:0};this.time=0;this.drive=0;this.locomotion=0;this.wavePhase=this.species==='dragon'?Math.PI*.4:0;this.finPhase=0;this.gaitPhase=0;
     this.mode='manual';this.history=[{t:-10,a:this.heading},{t:0,a:this.heading}];this.layers=[];this.offsets=new Map();this.finSurfaces=new Map();
     this.pose=this.buildPose();this.targetCurve=makeCurve(this.pose,false);this.disposed=false;
@@ -173,6 +184,7 @@ export class InkCreature {
   reset(x=this.x,y=this.y,heading=this.species==='shrimp'?0:-Math.PI/2) {
     this.x=x;this.y=y;this.heading=heading;this.targetHeading=heading;this.angularVelocity=0;this.angularAcceleration=0;
     this.facing=Math.cos(heading)<-.22?-1:1;this.inclination=this.facing===1?wrapAngle(heading):wrapAngle(Math.PI-heading);this.inclinationVelocity=0;
+    this.desiredFacing=this.facing;this.shrimpTurnProgress=this.facing===1?0:1;this.shrimpTurnVelocity=0;
     this.vx=0;this.vy=0;this.drive=0;this.locomotion=0;this.history=[{t:this.time-10,a:heading},{t:this.time,a:heading}];this.pose=this.buildPose();this.targetCurve=makeCurve(this.pose,false);return this;
   }
   angleAt(t) {const h=this.history;for(let i=h.length-1;i>0;i--)if(h[i-1].t<=t){const f=clamp((t-h[i-1].t)/(h[i].t-h[i-1].t||1),0,1);return h[i-1].a+wrapAngle(h[i].a-h[i-1].a)*f;}return h[0].a;}
@@ -201,10 +213,13 @@ export class InkCreature {
     const mag=Math.min(1,Math.hypot(ix,iy));
     if(this.species==='shrimp') {
       if(mag>.02) {
-        const present=shrimpPresentation(this.facing,ix/mag,iy/mag);this.facing=present.facing;
+        const present=shrimpPresentation(this.desiredFacing,ix/mag,iy/mag);this.desiredFacing=present.facing;
         const state=steeringStep(this.inclination,this.inclinationVelocity,present.inclination,this.profile,dt);
         this.inclination=clamp(state.angle,-Math.PI/2,Math.PI/2);this.inclinationVelocity=state.velocity;this.angularAcceleration=state.acceleration;
       } else this.inclinationVelocity=damp(this.inclinationVelocity,0,6,dt);
+      const turn=stepShrimpTurn(this.shrimpTurnProgress,this.shrimpTurnVelocity,this.desiredFacing===1?0:1,dt);
+      this.shrimpTurnProgress=turn.progress;this.shrimpTurnVelocity=turn.velocity;
+      this.facing=this.shrimpTurnProgress<=.5?1:-1;
       this.heading=this.facing===1?this.inclination:Math.PI-this.inclination;this.angularVelocity=this.inclinationVelocity;
     } else {
       if(mag>.02)this.targetHeading=Math.atan2(iy,ix);
@@ -221,7 +236,9 @@ export class InkCreature {
     this.history.push({t:this.time,a:this.heading});while(this.history.length>2&&this.history[1].t<this.time-3)this.history.shift();
   }
   get handedness(){return this.species==='shrimp'?this.facing:1;}
-  mapPoint(s,t) {const p=sampleCurve(this.targetCurve,s),sign=this.handedness;return{x:p.x-p.ty*t*this.length*sign,y:p.y+p.tx*t*this.length*sign};}
+  get presentationWidth(){return this.species==='shrimp'?Math.abs(Math.cos(Math.PI*this.shrimpTurnProgress)):1;}
+  presentationPoint(p){return this.species==='shrimp'?{x:this.x+(p.x-this.x)*this.presentationWidth,y:p.y}:p;}
+  mapPoint(s,t) {const p=sampleCurve(this.targetCurve,s),sign=this.handedness;return this.presentationPoint({x:p.x-p.ty*t*this.length*sign,y:p.y+p.tx*t*this.length*sign});}
   layerMotion(layer) {
     if(this.mode==='straight'||this.mode==='rest')return 0;
     const {kind,side=1,phase=0}=layer;const t=this.time;
@@ -243,7 +260,8 @@ export class InkCreature {
   }
   rigidTransform(anchor,targetAngle,sourceAngle,rotation=0) {
     const q=rotation-sourceAngle,C=Math.cos(targetAngle),S=Math.sin(targetAngle),c=Math.cos(q),s=Math.sin(q),h=this.handedness,k=this.length/this.sourceCurve.length;
-    return {a:k*(C*c-S*h*s),b:k*(S*c+C*h*s),c:k*(-C*s-S*h*c),d:k*(-S*s+C*h*c),x:anchor.x,y:anchor.y};
+    const width=this.presentationWidth;
+    return {a:width*k*(C*c-S*h*s),b:k*(S*c+C*h*s),c:width*k*(-C*s-S*h*c),d:k*(-S*s+C*h*c),x:anchor.x,y:anchor.y};
   }
   attachmentPivots() {return this.layers.map(l=>{const m=this.layerTransform(l);return{name:l.name,kind:l.kind,x:m.x,y:m.y,rotation:m.rotation,handedness:this.handedness};});}
   mapFinVertex(layer,v) {
@@ -309,10 +327,11 @@ export class InkCreature {
     return {minX:Math.min(...points.map(p=>p.x)),minY:Math.min(...points.map(p=>p.y)),maxX:Math.max(...points.map(p=>p.x)),maxY:Math.max(...points.map(p=>p.y))};
   }
   drawDebug(ctx) {
-    ctx.save();ctx.lineWidth=1.5;ctx.strokeStyle='#a7482c';ctx.fillStyle='#a7482c';ctx.beginPath();this.pose.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
-    this.pose.forEach(([x,y],i)=>{if(i%4===0){ctx.beginPath();ctx.arc(x,y,3,0,TAU);ctx.fill();}});ctx.restore();
+    const points=this.pose.map(([x,y])=>this.presentationPoint({x,y}));
+    ctx.save();ctx.lineWidth=1.5;ctx.strokeStyle='#a7482c';ctx.fillStyle='#a7482c';ctx.beginPath();points.forEach(({x,y},i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
+    points.forEach(({x,y},i)=>{if(i%4===0){ctx.beginPath();ctx.arc(x,y,3,0,TAU);ctx.fill();}});ctx.restore();
   }
-  snapshot() {return{revision:INK_CREATURE_REV,id:this.id,position:{x:this.x,y:this.y},heading:this.heading,angularVelocity:this.angularVelocity,angularAcceleration:this.angularAcceleration,speed:Math.hypot(this.vx,this.vy),drive:this.drive,mode:this.mode,wavePhase:this.wavePhase,gaitPhase:this.gaitPhase,finPhase:this.finPhase,mirrorX:this.handedness<0,facing:this.facing,inclination:this.inclination,profile:{...this.profile},attachments:this.attachmentPivots(),spine:this.pose.map(([x,y])=>({x,y})),loaded:!!this.bodyImage,triangles:this.mesh?.triangles.length||0,renderer:this.species==='turtle'?'canvas-rigid':this.gpuSurface?'webgl-mesh':'canvas-fallback'};}
+  snapshot() {return{revision:INK_CREATURE_REV,id:this.id,position:{x:this.x,y:this.y},heading:this.heading,angularVelocity:this.angularVelocity,angularAcceleration:this.angularAcceleration,speed:Math.hypot(this.vx,this.vy),drive:this.drive,mode:this.mode,wavePhase:this.wavePhase,gaitPhase:this.gaitPhase,finPhase:this.finPhase,mirrorX:this.handedness<0,facing:this.facing,desiredFacing:this.desiredFacing,turnProgress:this.shrimpTurnProgress,presentationWidth:this.presentationWidth,inclination:this.inclination,profile:{...this.profile},attachments:this.attachmentPivots(),spine:this.pose.map(([x,y])=>this.presentationPoint({x,y})),loaded:!!this.bodyImage,triangles:this.mesh?.triangles.length||0,renderer:this.species==='turtle'?'canvas-rigid':this.gpuSurface?'webgl-mesh':'canvas-fallback'};}
   dispose() {
     if(this.disposed)return;this.disposed=true;
     for(const surface of this.finSurfaces.values())surface?.dispose();this.finSurfaces.clear();

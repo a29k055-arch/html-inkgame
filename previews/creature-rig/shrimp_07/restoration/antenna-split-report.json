@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "source": "source.png",
+  "method": "Three source-ink ridge traces, narrow independent mattes and local same-strand crossing reconstruction",
+  "strands": [
+    {
+      "name": "antenna_01",
+      "points": 1192,
+      "visiblePixels": 3255,
+      "repairedGapPixels": 276,
+      "pivot": [
+        930,
+        410
+      ]
+    },
+    {
+      "name": "antenna_02",
+      "points": 1759,
+      "visiblePixels": 4742,
+      "repairedGapPixels": 1000,
+      "pivot": [
+        930,
+        410
+      ]
+    },
+    {
+      "name": "antenna_03",
+      "points": 1621,
+      "visiblePixels": 4355,
+      "repairedGapPixels": 657,
+      "pivot": [
+        966,
+        426
+      ]
+    }
+  ],
+  "shortFilaments": "Retained on head_chest; do not move with independent long antennae"
+}

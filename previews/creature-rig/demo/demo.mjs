@@ -1,7 +1,7 @@
-import {InkCreature,damp} from '../runtime/ink-creature.mjs?rev=rig-r2-art-motion-20261120';
+import {InkCreature,damp} from '../runtime/ink-creature.mjs?rev=rig-r3-shrimp-turtle-20261121';
 const $=id=>document.getElementById(id),canvas=$('stage'),ctx=canvas.getContext('2d'),keys=new Set();
 const state={rig:null,selected:'fish_04',mode:'manual',width:1000,height:600,camera:{x:0,y:0},joystick:{x:0,y:0},loading:0,frames:0,fps:0,lastTelemetry:0};
-const profiles={fish_04:{length:320,note:'柔和转向 · 身体摆动 · 尾鳍推进'},dragon_04:{length:430,note:'持续 S 形蛇行波 · 头尾延迟跟随'},shrimp_07:{length:230,note:'腹节轻动 · 左右镜像 · 触须缓摆'},turtle_02:{length:245,note:'缓慢游动 · 间歇划肢 · 龟壳稳定'}};
+const profiles={fish_04:{length:320,note:'柔和转向 · 身体摆动 · 尾鳍推进'},dragon_04:{length:430,note:'持续 S 形蛇行波 · 头尾延迟跟随'},shrimp_07:{length:230,note:'纸片转身 · 三根长须独立轻摆'},turtle_02:{length:245,note:'缓慢游动 · 间歇划肢 · 龟壳稳定'}};
 function displayLength(id){return Math.min(profiles[id].length,state.height*(id==='shrimp_07'?.48:.72),state.width*(id==='shrimp_07'?.48:.7));}
 function size(){const r=canvas.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,2);state.width=r.width;state.height=r.height;canvas.width=Math.round(r.width*ratio);canvas.height=Math.round(r.height*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);if(state.rig){state.rig.length=displayLength(state.selected);center();}}
 function center(){const r=state.rig;if(!r)return;state.camera.x=state.camera.y=0;const heading=r.species==='shrimp'?0:-Math.PI/2;r.reset(state.width/2+Math.cos(heading)*r.length*.35,state.height/2+Math.sin(heading)*r.length*.35,heading);}

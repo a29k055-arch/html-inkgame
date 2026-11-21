@@ -281,10 +281,10 @@
       "file": "turtle_02_shell.png",
       "croppedFile": "textures/turtle_02_shell.png",
       "bbox": [
-        229,
+        230,
         292,
-        723,
-        859
+        720,
+        850
       ],
       "kind": "body",
       "pivot": [
@@ -295,12 +295,12 @@
       "phase": 0,
       "order": 6,
       "bounds": [
-        239,
+        238,
         300,
-        937,
-        1132
+        941,
+        1133
       ],
-      "pixelCount": 570475,
+      "pixelCount": 560905,
       "spineRange": [
         0,
         1
@@ -319,7 +319,7 @@
       1292
     ],
     "registration": "same-pose source canvas; fit only if dimensions differ",
-    "hostRaisedPixels": 0,
+    "hostRaisedPixels": 158767,
     "hostRecoveredSourcePixels": 0,
     "rootAddedPixels": 64577,
     "cleanupPixels": 25209,
@@ -409,7 +409,19 @@
         "radius": 32
       }
     ],
-    "assembledChangedPixels": 56937,
+    "shellRim": {
+      "paintFile": "../repair-plates/turtle_02_shell-r3.png",
+      "alignedFile": "../repair-plates/turtle_02_shell-r3-aligned.png",
+      "registeredBounds": [
+        238,
+        300,
+        704,
+        834
+      ],
+      "rimPixels": 158767,
+      "method": "Complete continuous shell-only AI rim, feathered to original inner scutes; independent limbs behind shell"
+    },
+    "assembledChangedPixels": 152014,
     "changedOutsideApprovedMask": 0
   },
   "notes": "Selected source silhouettes and pigment preserved outside bounded anatomical repair regions. AI repair paint supplies hidden root extensions and restored host coverage. Layers intentionally overlap at joints; draw attached limbs beneath host torso. Continuous body bands share one mesh. Source remains the original approval reference."

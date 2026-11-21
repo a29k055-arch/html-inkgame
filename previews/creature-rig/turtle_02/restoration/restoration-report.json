@@ -10,7 +10,7 @@
     1292
   ],
   "registration": "same-pose source canvas; fit only if dimensions differ",
-  "hostRaisedPixels": 0,
+  "hostRaisedPixels": 158767,
   "hostRecoveredSourcePixels": 0,
   "rootAddedPixels": 64577,
   "cleanupPixels": 25209,
@@ -100,6 +100,18 @@
       "radius": 32
     }
   ],
-  "assembledChangedPixels": 56937,
+  "shellRim": {
+    "paintFile": "../repair-plates/turtle_02_shell-r3.png",
+    "alignedFile": "../repair-plates/turtle_02_shell-r3-aligned.png",
+    "registeredBounds": [
+      238,
+      300,
+      704,
+      834
+    ],
+    "rimPixels": 158767,
+    "method": "Complete continuous shell-only AI rim, feathered to original inner scutes; independent limbs behind shell"
+  },
+  "assembledChangedPixels": 152014,
   "changedOutsideApprovedMask": 0
 }
