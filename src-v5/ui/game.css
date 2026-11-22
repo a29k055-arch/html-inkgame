@@ -219,3 +219,36 @@ body[data-experience=reveal] #notice{top:clamp(114px,17vh,162px)}
 }
 
 @media(max-width:700px){body[data-version="v5"] .hud-top{position:static;display:block;left:auto;top:auto;padding:0;height:0}body[data-version="v5"] #pauseBtn,body[data-version="v5"] #timer{position:absolute}body[data-version="v5"] #modeLabel,body[data-version="v5"] #inkMetric,body[data-version="v5"] #rankMetric{display:none}}
+
+/* V5 r3: a shallow information strip on desktop as well as touch. */
+@media(min-width:701px){
+ body[data-version="v5"] #revealMeter{top:12px;left:140px;right:92px;width:auto;max-width:none;transform:none;padding:6px 12px;border-radius:10px;display:grid;grid-template-columns:150px minmax(0,1fr) 105px;grid-template-rows:18px 3px;gap:4px 16px;min-height:0;height:41px;box-sizing:border-box}
+ body[data-version="v5"] #revealMeter header{grid-column:1;grid-row:1;font-size:11px;line-height:18px}
+ body[data-version="v5"] #revealPercent{font-size:15px;line-height:18px}
+ body[data-version="v5"] #revealProgress{grid-column:1/-1;grid-row:2;height:3px;margin:0;width:100%}
+ body[data-version="v5"] #inkContentProgress{grid-column:3;grid-row:1;position:static;font-size:9px;line-height:18px;margin:0;text-align:right;white-space:nowrap}
+ body[data-version="v5"] .reveal-meter-footer{grid-column:2;grid-row:1;min-height:0;height:18px;margin:0;gap:8px;overflow:hidden;flex-wrap:nowrap}
+ body[data-version="v5"] #revealInk{font-size:10px;line-height:18px;white-space:nowrap;margin:0;overflow:hidden;text-overflow:ellipsis}
+ body[data-version="v5"] #livingForm{font-size:10px;line-height:18px}
+ body[data-version="v5"] .reveal-buff img{width:16px;height:16px}
+ body[data-version="v5"] .reveal-buff time{font-size:9px}
+ body[data-version="v5"] #mapWrap{width:60px;top:12px;right:12px;padding:4px}
+ body[data-version="v5"] #mapWrap small{display:none}
+ body[data-version="v5"] #pauseBtn{width:36px;min-height:36px;height:36px;padding:5px;border-radius:10px}
+ body[data-version="v5"] #timer{font-size:13px;min-height:36px;height:36px;padding:7px 9px;box-sizing:border-box}
+ body[data-version="v5"] .hud-top{top:12px;left:12px;padding:0;gap:6px}
+ body[data-version="v5"] #notice{top:100px}
+}
+body[data-version="v5"] #chargeHint{position:absolute;z-index:12;top:66px;left:50%;transform:translateX(-50%);padding:5px 12px;border-radius:18px;background:#f3eddbd9;border:1px solid #a29b7a44;color:#514c3c;font-size:12px;line-height:18px;pointer-events:none;white-space:nowrap;letter-spacing:.06em}
+body[data-version="v5"] #chargeHint[hidden]{display:none}
+@media(max-width:700px){body[data-version="v5"] #chargeHint{top:60px;font-size:10px;padding:3px 9px}body[data-version="v5"] #notice{top:94px}}
+
+body[data-version="v5"] #preyHint{font-size:9px;color:#6c7256;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}body[data-version="v5"] #preyHint[hidden]{display:none}
+@media(max-width:700px){body[data-version="v5"] #preyHint{position:absolute;top:calc(100% + 3px);left:0;max-width:100%;padding:1px 5px;border-radius:5px;font-size:8px;background:#f3eddbcc}}
+
+/* Legacy touch rules hid every small element; the target hint is intentional. */
+body[data-version="v5"] #preyHint{display:block}
+body[data-version="v5"] #preyHint[hidden]{display:none}
+@media(max-width:700px){body[data-version="v5"] #revealMeter{overflow:visible}}
+
+body[data-version="v5"] #revealInk{display:block}

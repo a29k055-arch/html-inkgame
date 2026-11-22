@@ -8,9 +8,9 @@ export const GROWTH_STAGES_CONFIG=Object.freeze({
  stageScreenRadius:Object.freeze([.050,.058,.075,.098]),
  // How far the camera may slide past the world edge, as a fraction of the viewport.
  // Only stage four may look past the map. Earlier stages clamp hard so the border never shows.
- borderOverscanByStage:Object.freeze([0,0,0,.17]),
+ borderOverscanByStage:Object.freeze([0,0,0,.03]),
  // V4 only: the radius ceiling that lets stage four keep growing instead of freezing.
- maxRadius:280,sizeLinear:.0175,stageTransitionSeconds:2.8,finalViewExpansion:1.1,
+ maxRadius:280,sizeLinear:.0175,stageTransitionSeconds:2.8,finalViewExpansion:1.02,
  framePadding:.08,transitionEase:1.65,normalEase:2.2
 });
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -34,17 +34,17 @@ export function growthCameraTarget(player,width=1440,height=900,world={width:391
  const journey=player.revealJourney,c=journey?.config||GROWTH_STAGES_CONFIG,stage=clamp(journey?.stage||1,1,4);
  const base=c.stageScreenRadius[stage-1]*Math.min(width,height)/Math.max(1,stageEntryRadius(stage,c)),inside=Math.max(width/world.width,height/world.height);
  // Rectangular portrait/landscape worlds need an aspect-aware floor before the final stage.
- return stage<4?Math.max(base,inside*1.06):Math.max(base/c.finalViewExpansion,inside/c.finalViewExpansion);
+ return stage<4?Math.max(base,inside*1.06):Math.max(base/c.finalViewExpansion,inside*.96);
 }
 export function followGrowthCamera(old,player,width,height,mobile,dt=0,fresh=false,focus=null,world){
  const stage=clamp(player.revealJourney?.stage||1,1,4),c=player.revealJourney?.config||GROWTH_STAGES_CONFIG;
  const goal=growthCameraTarget(player,width,height,world);
  const ease=player.revealJourney?.transitionAge<c.stageTransitionSeconds?c.transitionEase:c.normalEase;
- const interpolated=old.scale+(goal-old.scale)*(fresh?1:1-Math.exp(-Math.max(0,dt)*ease)),scale=stage<4?Math.max(interpolated,Math.max(width/world.width,height/world.height)*1.06):interpolated;
+ const interpolated=old.scale+(goal-old.scale)*(fresh?1:1-Math.exp(-Math.max(0,dt)*ease)),scale=stage<4?Math.max(interpolated,Math.max(width/world.width,height/world.height)*1.06):Math.max(interpolated,Math.max(width/world.width,height/world.height)*.96);
  const blend=fresh?1:1-Math.exp(-Math.max(0,dt)*5),cx=old.x+width/old.scale/2,cy=old.y+height/old.scale/2;
  // No contain floor: the view can be wider than the world only when the zoom makes it so,
  // and clamping then centres the world instead of shrinking further to show empty paper.
- const tx=player.x,ty=player.y;
+ const tx=focus?.x??player.x,ty=focus?.y??player.y;
  // The camera may leave the map by `borderOverscan` of the screen, so walking up to an edge
  // keeps the body framed instead of pinning it against the border. Only if the world is much
  // smaller than the view does it fall back to centring.

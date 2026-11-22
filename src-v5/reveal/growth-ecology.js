@@ -1,5 +1,5 @@
+import {pondEntry} from '../game/pond-entry.js';
 import {livingSlot} from './living-world.js';
-import {pondCollisionRadius} from './pond-rules.js';
 // Small pond species coexist; species bands and unique large slots stay stable across deaths.
 const frozenBands=rows=>Object.freeze(rows.map(row=>Object.freeze(row)));
 export const GROWTH_ECOLOGY_CONFIG=Object.freeze({
@@ -20,29 +20,14 @@ export class GrowthEcology {
  constructor(stage=()=>1,config={},rng=Math.random){this.stage=stage;this.config={...GROWTH_ECOLOGY_CONFIG,...config};this.rng=rng;this.seeded=new WeakSet();}
  band(rows,roll){return rows.find(row=>roll<row[0])||rows.at(-1);}
  spawn(arena,index=0,{respawn=false,entity=null}={}){
-  const c=this.config,p=arena.player,w=arena.world;
+  const c=this.config;
   // A birth slot owns its species band; respawns restart near the lower end.
-  const slot=livingSlot(entity?.birthSlot??index),ecologyTier=entity?.ecologyTier||slot.tier,band=[slot.min,slot.max,slot.low],metadata={species:slot.species,rewardKind:slot.rewardKind,rewardGlow:false,rewardTier:Math.min(3,ecologyTier),birthSlot:entity?.birthSlot??index,appearance:'living'};
-  const small=ecologyTier===1,peer=ecologyTier===2,huge=ecologyTier===4;
-  const drifter=small&&(respawn?entity?.passive===true:this.rng()<c.drifterChance);
-  const radius=clamp(mix(band[0],respawn?band[2]:band[1],this.rng()),c.minRadius,c.giantRadiusCap);
-  const near=!respawn&&small&&index<c.nearSmallCount;
-  const min=near?c.nearSmallMin:respawn?Math.max(230,p.r+radius+180):small?260:peer?c.mediumSpawnMin:c.largeSpawnMin;
-  const max=near?(index<c.closeSmallCount?c.closeSmallMax:c.nearSmallMax):Math.hypot(w.width,w.height)*.75;
-  const margin=radius+3,playerClearance=Math.max(min,p.r+radius+(small?30:huge?220:120));
-  let best=null,bestScore=-Infinity;
-  for(let attempt=0;attempt<c.spawnAttempts;attempt++){
-   const angle=(index*2.399963+this.rng()*Math.PI*2),distance=mix(playerClearance,Math.max(playerClearance,max),this.rng());
-   const point={x:clamp(p.x+Math.cos(angle)*distance,margin,w.width-margin),y:clamp(p.y+Math.sin(angle)*distance,margin,w.height-margin)};
-   let clearance=Math.hypot(point.x-p.x,point.y-p.y)-playerClearance;
-   for(const other of arena.entities||[]){if(other===p||other===entity||other.dead)continue;clearance=Math.min(clearance,Math.hypot(point.x-other.x,point.y-other.y)-radius-other.r-c.unitGap);}
-   for(const leaf of arena.items||[]){if(leaf.kind==='leaf')clearance=Math.min(clearance,Math.hypot(point.x-leaf.x,point.y-leaf.y)-radius-pondCollisionRadius(leaf)-c.leafGap);}
-   if(clearance>bestScore){best=point;bestScore=clearance;}
-   if(clearance>=0)return {...metadata,radius,point,ecologyTier,personality:drifter?'drift':undefined};
-  }
-  // A crowded corner may have no exact ring solution. Returning the safest valid
-  // world point leaves final circular/leaf projection to the existing arena hook.
-  return {...metadata,radius,ecologyTier,point:best||{x:clamp(p.x,margin,w.width-margin),y:clamp(p.y,margin,w.height-margin)},personality:drifter?'drift':undefined};
+  const slot=livingSlot(entity?.birthSlot??index),ecologyTier=entity?.ecologyTier||slot.tier,metadata={species:slot.species,rewardKind:slot.rewardKind,rewardGlow:false,rewardTier:Math.min(3,ecologyTier),birthSlot:entity?.birthSlot??index,appearance:'living'};
+  const stage=Math.max(1,Math.min(4,this.stage())),bands={shrimp:[[3,4.5],[3.5,6.5],[4,7.5],[5,8]],fish:[[6.5,9],[8,14],[10,18],[12,18]],turtle:[[28,34],[30,42],[34,48],[38,50]]};
+  const selected=slot.big?[slot.min,slot.max]:bands[slot.species][stage-1],upper=respawn?Math.min(selected[1],slot.big?slot.low:selected[0]+(selected[1]-selected[0])*.65):selected[1];
+  const roll=this.rng()**(stage>=3?.6:1),radius=clamp(mix(selected[0],upper,roll),c.minRadius,c.giantRadiusCap),drifter=slot.species==='shrimp'&&this.rng()<c.drifterChance;
+  const entry=pondEntry(arena,slot.species,radius,index,this.rng);
+  return {...metadata,...entry,radius,ecologyTier,ecologyStage:stage,personality:drifter?'drift':undefined};
  }
  seedFood(arena){
   if(this.seeded.has(arena))return 0;this.seeded.add(arena);

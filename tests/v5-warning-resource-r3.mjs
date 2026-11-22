@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {npcDangerState} from '../src-v5/ink/npc-painter.js';
+const p={id:'human',controller:{type:'human'},ink:600,r:20,x:0,y:0,effects:{}};
+const e={id:'fish',species:'fish',mass:225,r:15,x:3,y:0,effects:{},v4Visual:true,controller:{type:'ai',intent:'hunt',goal:{id:'human'}}};
+assert.equal(npcDangerState(e,p),null,'lower-ink fish is not a lethal threat regardless of silhouette');
+p.ink=100;p.r=30;assert(npcDangerState(e,p),'higher-ink threat remains dangerous even if its torso is thinner');
+e.entering=true;assert.equal(npcDangerState(e,p),null);delete e.entering;
+e.controller.intent='wander';assert.equal(npcDangerState(e,p),null);
+e.controller.intent='hunt';e.x=500;assert.equal(npcDangerState(e,p),null);
+console.log('PASS danger warnings share real ink eligibility and exclude entry, distant and nonattacking NPCs');

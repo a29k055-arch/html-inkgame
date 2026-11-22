@@ -1,3 +1,5 @@
+import {pondEntry} from '../game/pond-entry.js';
+import {syncLivingInk} from '../game/living-resource.js';
 import {entity} from '../game/inkstone.js';
 import {aiController} from '../game/ai.js';
 
@@ -17,22 +19,22 @@ export const LIVING_INITIAL_COUNT=10;
 export const livingSlot=index=>LIVING_SLOTS[((index%LIVING_SLOTS.length)+LIVING_SLOTS.length)%LIVING_SLOTS.length];
 export const REWARD_SPECIES=Object.freeze({magnet:'shrimp',speed:'fish',shield:'turtle',dragon:'dragon'});
 export const SPECIES_REWARDS=Object.freeze({shrimp:'magnet',fish:'speed',turtle:'shield',dragon:'dragon'});
-export function livingRadiusLimit(e){
+export function livingRadiusLimit(e,stage=4){
  if(e?.eventDragon||e?.species==='dragon')return 26;
  const big=Number.isInteger(e?.birthSlot)&&livingSlot(e.birthSlot).big;
- return e?.species==='shrimp'?8:e?.species==='fish'?(big?30:18):e?.species==='turtle'?(big?88:50):88;
+ const at=Math.max(0,Math.min(3,stage-1));return e?.species==='shrimp'?[4.5,6.5,7.5,8][at]:e?.species==='fish'?(big?30:[9,14,18,18][at]):e?.species==='turtle'?(big?88:[34,42,48,50][at]):88;
 }
 export const LIVING_WORLD_CONFIG=Object.freeze({formDuration:5,dragonFirst:60,dragonRespawn:30,dragonEnabled:true});
 
 export class LivingWorld {
  constructor(run,config={},rng=Math.random){this.run=run;this.config={...LIVING_WORLD_CONFIG,...config};this.rng=rng;this.nextDragon=this.config.dragonFirst;this.serial=0;this.dragon=null;this.largeUnlocked=false;}
- recordForm(species,effect){const p=this.run.player;p.formOrder=(p.formOrder||[]).filter(q=>q.effect!==effect);p.formOrder.push({species,effect});this.refreshForm('reward');}
+ recordForm(species,effect,rigId=null){const p=this.run.player;p.formOrder=(p.formOrder||[]).filter(q=>q.effect!==effect);p.formOrder.push({species,effect,rigId});this.refreshForm('reward');}
  clearForm(){const p=this.run.player,previous=p.form?.species;delete p.form;p.formOrder=[];if(previous)this.run.onEvent('creature-form-end',{entity:p,species:previous});}
  refreshForm(reason='elapsed'){
   const g=this.run,p=g.player;if(p.dead){this.clearForm();return;}
   p.formOrder=(p.formOrder||[]).filter(q=>(p.effects[q.effect]||0)>0);const next=p.formOrder.at(-1),previous=p.form?.species;
   if(!next){if(previous)this.clearForm();return;}
-  p.form={species:next.species,effect:next.effect,remaining:p.effects[next.effect]};
+  p.form={species:next.species,effect:next.effect,remaining:p.effects[next.effect],rigId:next.rigId};
   if(reason==='reward'||previous!==next.species)g.onEvent('creature-form',{entity:p,species:next.species,remaining:p.form.remaining,reason});
  }
  tick(dt){
@@ -52,25 +54,16 @@ export class LivingWorld {
   for(let index=LIVING_INITIAL_COUNT;index<LIVING_SLOTS.length;index++){
    if(a.entities.some(e=>e.birthSlot===index&&!e.eventDragon))continue;
    const spawn=g.ecology.spawn(a,index),p=spawn.point,n=entity('living-large-'+index,p.x,p.y,spawn.radius,aiController(index,spawn.personality));
-   Object.assign(n,{...spawn,r:spawn.radius,mass:spawn.radius**2,birthSlot:index,skinIndex:index,v4Visual:true,invincible:.8});delete n.point;delete n.radius;a.entities.push(n);a.constrain(n);
+   Object.assign(n,{...spawn,r:spawn.radius,mass:spawn.radius**2,birthSlot:index,skinIndex:index,v4Visual:true,invincible:.8});delete n.point;delete n.radius;syncLivingInk(n);a.entities.push(n);a.constrain(n);
   }
   g.onEvent('large-living-arrival',{count:2});
  }
  spawnDragon(){
   if(this.dragon&&!this.dragon.dead)return this.dragon;
-  const g=this.run,a=g.arena,p=g.player,w=a.world,r=Math.min(26,18+p.r*.04,Math.min(w.width,w.height)*.08),margin=r+12;
-  let point=null,best=-Infinity;
-  // Spawn at a distant boundary, never beside the player or overlapping another core.
-  for(let i=0;i<32;i++){
-   const edge=i%4,t=this.rng(),q=edge===0?{x:margin,y:margin+t*(w.height-2*margin)}:edge===1?{x:w.width-margin,y:margin+t*(w.height-2*margin)}:edge===2?{x:margin+t*(w.width-2*margin),y:margin}:{x:margin+t*(w.width-2*margin),y:w.height-margin};
-   let clearance=Math.hypot(q.x-p.x,q.y-p.y)-r-a.radius(p)-320;
-   for(const e of a.entities)if(e!==p&&!e.dead)clearance=Math.min(clearance,Math.hypot(q.x-e.x,q.y-e.y)-r-a.radius(e)-40);
-   if(clearance>best){best=clearance;point=q;}
-  }
-  if(!point||best<0){this.nextDragon=g.elapsed+5;return null;}
+  const g=this.run,a=g.arena,p=g.player,r=Math.min(26,18+p.r*.04),spawn=pondEntry(a,'dragon',r,50+this.serial,this.rng),point=spawn.point;
   const d=entity('dragon-event-'+(++this.serial),point.x,point.y,r,aiController(50+this.serial,'wander'));
-  Object.assign(d,{species:'dragon',appearance:'living',rewardKind:'dragon',rewardGlow:false,rewardTier:3,eventDragon:true,v4Visual:true,ecologyTier:4,skinIndex:50+this.serial,invincible:.8});
-  d.controller.goal={x:w.width-point.x,y:w.height-point.y};a.entities.push(d);a.constrain(d);this.dragon=d;
+  Object.assign(d,{species:'dragon',appearance:'living',rewardKind:'dragon',rewardGlow:false,rewardTier:3,eventDragon:true,v4Visual:true,ecologyTier:4,skinIndex:50+this.serial,invincible:.8,entering:true,entry:spawn.entry});
+  d.controller.goal={...spawn.entry.target};syncLivingInk(d);a.entities.push(d);a.constrain(d);this.dragon=d;
   g.metrics.living.dragonArrivals++;
   this.nextDragon=Infinity;
   g.onEvent('dragon-arrival',{entity:d,persistent:true});return d;

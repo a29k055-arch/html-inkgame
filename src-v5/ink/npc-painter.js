@@ -1,3 +1,5 @@
+import {hasInkAdvantage} from '../game/living-resource.js';
+import {livingBodyContains,traceLivingBody} from '../game/living-contact.js';
 import {CONTACT_CONFIG as VISUAL,GAME_CONFIG} from '../game/config.js';
 import {coreRadius,visualRadius} from '../game/alien-geometry.js';
 import {alienBody,alienDetails} from './alien-ink.js';
@@ -5,14 +7,14 @@ import {alienBody,alienDetails} from './alien-ink.js';
 // Presentation-only warning: compares the same current core radii as swallowing.
 export const NPC_DANGER_STYLE=Object.freeze({nearMinimum:8,nearMaximum:20,nearPlayerScale:.15,linePixels:1.1,minAlpha:.16,maxAlpha:.28,lethalRatio:1.28});
 export function npcDangerState(enemy,player,scale=1){
- if(!player||!enemy?.v4Visual||enemy===player||enemy.dead||player.dead||enemy.effects?.water||player.effects?.water)return null;
+ if(!player||!enemy?.v4Visual||enemy===player||enemy.dead||enemy.entering||player.dead||enemy.effects?.water||player.effects?.water)return null;
  const enemyCore=coreRadius(enemy),playerCore=coreRadius(player),ratio=enemyCore/Math.max(.01,playerCore),ctrl=enemy.controller;
- if(ratio<NPC_DANGER_STYLE.lethalRatio||ctrl?.intent!=='hunt'||(ctrl.goal?.id!==player.id&&ctrl.prey!==player))return null;
+ if(!hasInkAdvantage(enemy,player)||ctrl?.intent!=='hunt'||(ctrl.goal?.id!==player.id&&ctrl.prey!==player))return null;
  const distance=Math.hypot(enemy.x-player.x,enemy.y-player.y),range=enemyCore+playerCore+Math.max(NPC_DANGER_STYLE.nearMinimum,Math.min(NPC_DANGER_STYLE.nearMaximum,playerCore*NPC_DANGER_STYLE.nearPlayerScale));
- if(distance>range)return null;
- return {enemyCore,playerCore,threshold:playerCore*NPC_DANGER_STYLE.lethalRatio,distance,range,ratio,lethal:true,lineWidth:NPC_DANGER_STYLE.linePixels,radius:enemyCore,bodyRadius:enemyCore,alpha:NPC_DANGER_STYLE.minAlpha+(NPC_DANGER_STYLE.maxAlpha-NPC_DANGER_STYLE.minAlpha)*(1-distance/range)};
+ if(enemy.livingBody?!livingBodyContains(enemy,player.x,player.y,playerCore+NPC_DANGER_STYLE.nearMaximum):distance>range)return null;
+ return {enemyCore,playerCore,threshold:playerCore*NPC_DANGER_STYLE.lethalRatio,distance,range,ratio,lethal:true,lineWidth:NPC_DANGER_STYLE.linePixels,radius:enemyCore,bodyRadius:enemyCore,alpha:NPC_DANGER_STYLE.minAlpha+(NPC_DANGER_STYLE.maxAlpha-NPC_DANGER_STYLE.minAlpha)*Math.max(0,1-distance/range)};
 }
-export function paintNpcDanger(c,enemy,player,scale=1){const state=npcDangerState(enemy,player,scale);if(!state)return false;c.save();c.strokeStyle='rgba(151,64,43,'+state.alpha+')';c.lineWidth=state.lineWidth/scale;c.beginPath();c.arc(enemy.x,enemy.y,state.radius,0,Math.PI*2);c.stroke();c.restore();return true;}
+export function paintNpcDanger(c,enemy,player,scale=1){const state=npcDangerState(enemy,player,scale);if(!state)return false;c.save();c.strokeStyle='rgba(151,64,43,'+state.alpha+')';c.lineWidth=state.lineWidth/scale;traceLivingBody(c,enemy);c.stroke();c.restore();return true;}
 
 // Sprite coordinates expose their measured solid radius; blank image padding never sets gameplay size.
 export const EYE_SPRITE_GEOMETRY=Object.freeze({center:80,coreRadius:67,logicalSize:160});

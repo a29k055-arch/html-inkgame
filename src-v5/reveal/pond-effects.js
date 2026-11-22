@@ -19,10 +19,10 @@ export class PondEffects {
   const speed=Math.hypot(p.vx||0,p.vy||0),base=arena.speed?.(p,false)||110,fish=alive&&!!p.effects?.rush,manual=alive&&!!p.effects?.manualRush;
   // Actual motion is mandatory: a stopped fish never leaves a screen full of lines.
   const moving=clamp((speed/base-.30)/.9),target=(fish?1:manual?.38:0)*moving;this.rushMix=approach(this.rushMix,target,target>this.rushMix?7:6,dt);
-  const cap=mobile?12:22,wanted=this.rushMix<.008?0:Math.ceil(cap*this.rushMix);while(this.lines.length>cap)this.lines.pop();
+  const cap=mobile?4:8,wanted=this.rushMix<.008?0:Math.ceil(cap*this.rushMix);while(this.lines.length>cap)this.lines.pop();
   const dx=speed>1?(p.vx||0)/speed:1,dy=speed>1?(p.vy||0)/speed:0,screenSpeed=Math.min(Math.max(width,height)*1.7,Math.max(120,speed*(camera.scale||1)*1.15));
   for(let i=0;i<cap;i++){let line=this.lines[i];if(!line){line={age:99,life:0};this.lines.push(line);}line.age+=dt;if(i>=wanted)continue;
-   if(line.age>=line.life||line.x<-width*.25||line.x>width*1.25||line.y<-height*.25||line.y>height*1.25){const seed=++this.serial,angle=Math.atan2(dy,dx)+(noise(seed+3)-.5)*.08;line={age:0,life:.28+noise(seed+11)*.33,x:noise(seed+19)*width,y:noise(seed+29)*height,dx:Math.cos(angle),dy:Math.sin(angle),length:Math.min(width,height)*(.055+noise(seed+37)*.12),weight:.55+noise(seed+41)*.45};this.lines[i]=line;}
+   if(line.age>=line.life||line.x<-width*.25||line.x>width*1.25||line.y<-height*.25||line.y>height*1.25){const seed=++this.serial,angle=Math.atan2(dy,dx)+(noise(seed+3)-.5)*.08;line={age:0,life:.28+noise(seed+11)*.33,x:noise(seed+19)*width,y:noise(seed+29)*height,dx:Math.cos(angle),dy:Math.sin(angle),length:Math.min(width,height)*(.018+noise(seed+37)*.027),weight:.55+noise(seed+41)*.45};const edge=.025+noise(seed+47)*.08;if(Math.abs(dx)>=Math.abs(dy))line.y=noise(seed+53)<.5?height*edge:height*(1-edge);else line.x=noise(seed+53)<.5?width*edge:width*(1-edge);this.lines[i]=line;}
    // Heading belongs to this stroke's birth. Turning never rotates existing strokes.
    line.x-=line.dx*screenSpeed*dt;line.y-=line.dy*screenSpeed*dt;
   }
@@ -46,7 +46,7 @@ export class PondEffects {
  }
  drawScreen(c,player,viewport=this.viewport,camera=this.camera){if(!player||player.dead||this.rushMix<.008){this.metrics.rush.drawn=0;return;}const {width,height}=viewport||{width:1200,height:900},cx=(player.x-(camera?.x||0))*(camera?.scale||1),cy=(player.y-(camera?.y||0))*(camera?.scale||1),safeX=Math.max(width*.18,coreRadius(player)*(camera?.scale||1)*1.35),safeY=Math.max(height*.17,coreRadius(player)*(camera?.scale||1)*1.35);let drawn=0;
   c.save();c.lineCap='round';for(let i=0;i<this.metrics.rush.lineCount;i++){const line=this.lines[i];if(!line||line.age>=line.life)continue;const mx=line.x+line.dx*line.length*.5,my=line.y+line.dy*line.length*.5;if(((mx-cx)/safeX)**2+((my-cy)/safeY)**2<1)continue;if(my<125&&mx>width*.25&&mx<width*.75)continue;
-   const envelope=Math.sin(Math.PI*clamp(line.age/line.life)),alpha=envelope*.32*this.rushMix*this.strength*line.weight,g=c.createLinearGradient(line.x,line.y,line.x+line.dx*line.length,line.y+line.dy*line.length);g.addColorStop(0,'rgba(91,91,78,0)');g.addColorStop(.55,`rgba(91,91,78,${alpha})`);g.addColorStop(1,'rgba(91,91,78,0)');c.strokeStyle=g;c.lineWidth=.8+line.weight*.9;c.beginPath();c.moveTo(line.x,line.y);c.lineTo(line.x+line.dx*line.length,line.y+line.dy*line.length);c.stroke();drawn++;
+   if(mx>width*.14&&mx<width*.86&&my>height*.14&&my<height*.86)continue;const envelope=Math.sin(Math.PI*clamp(line.age/line.life)),alpha=envelope*.13*this.rushMix*this.strength*line.weight,g=c.createLinearGradient(line.x,line.y,line.x+line.dx*line.length,line.y+line.dy*line.length);g.addColorStop(0,'rgba(91,91,78,0)');g.addColorStop(.55,`rgba(91,91,78,${alpha})`);g.addColorStop(1,'rgba(91,91,78,0)');c.strokeStyle=g;c.lineWidth=.5+line.weight*.4;c.beginPath();c.moveTo(line.x,line.y);c.lineTo(line.x+line.dx*line.length,line.y+line.dy*line.length);c.stroke();drawn++;
   }c.restore();this.metrics.rush.drawn=drawn;
  }
 }

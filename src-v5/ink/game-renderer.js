@@ -38,7 +38,7 @@ export class GameRenderer {
  async loadPaper(src){this.paper=new PaperMap(this.output);await this.paper.load(src);}
  // Deliberately accepts ONLY the player. NPC positions/count/skills cannot enter this simulation.
  step(dt,player,started=true){
-  this.fluid.livingForm=player.form?.species||null;this.fluid.livingPose=this.npcs?.playerPose?.(player);this.fluid.livingCamera={...this.camera,width:this.viewW,height:this.viewH};this.fluid.worldRadius=player.r;
+  this.fluid.livingBody=player.livingBody;this.fluid.livingForm=player.form?.species||null;this.fluid.livingPose=this.npcs?.playerPose?.(player);this.fluid.livingCamera={...this.camera,width:this.viewW,height:this.viewH};this.fluid.worldRadius=player.r;
   this.fluid.solidCore={point:[(player.x-this.camera.x)*this.camera.scale/this.viewW,1-(player.y-this.camera.y)*this.camera.scale/this.viewH],radius:started&&!player.dead?coreRadius(player)*this.camera.scale/this.viewH:0};
   const f=this.fluid;if(f.preset?.slowWake){const actual=started&&!player.dead?Math.hypot(player.vx,player.vy):0,limit=this.motionSpeedLimit?.(player)||RELATIVE_INK_MOTION.studyMaxSpeed;this.relativeSpeed=smoothRelativeSpeed(this.relativeSpeed||0,actual,limit,dt);f.relativeMotion=this.relativeSpeed;f.sourceMotionRatio=actual/Math.max(1,limit);}else f.relativeMotion=null;const b=this.bodyVisual;f.bodyHalo=b.smallHalo+(b.largeHalo-b.smallHalo)*Math.min(1,Math.max(0,(player.r-b.haloStartRadius)/(b.haloEndRadius-b.haloStartRadius)));if(started&&!player.dead)this.trail.sample(player.x,player.y,player.r,dt,Math.hypot(player.vx,player.vy),this.relativeSpeed);else this.trail.advance(dt);if(started&&!player.dead)this.body.update(this.normalized(player),dt);
   this.clock+=dt;if(this.clock>=1/QUALITY[f.quality].simulationHz){f.step(Math.min(this.clock,1/30));this.clock=0;}f.draw(this.clock);
@@ -47,7 +47,7 @@ export class GameRenderer {
  beginWorldClip(){const c=this.ctx,cam=this.camera;c.save();c.beginPath();c.rect(-cam.x*cam.scale,-cam.y*cam.scale,this.world.width*cam.scale,this.world.height*cam.scale);c.clip();}
  endWorldClip(){this.ctx.restore();}
  drawWorldFrame(){const c=this.ctx,cam=this.camera;c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);c.strokeStyle='#887d64aa';c.lineWidth=2/cam.scale;c.strokeRect(0,0,this.world.width,this.world.height);c.restore();}
- drawCollisionOutline(player){if(!this.collisionOutline?.enabled||player.dead)return;const c=this.ctx,cam=this.camera;c.save();c.strokeStyle=this.collisionOutline.color||'rgba(65,61,48,.16)';c.lineWidth=(this.collisionOutline.width||.7)/cam.scale;c.setLineDash([3/cam.scale,4.5/cam.scale]);c.beginPath();c.arc(player.x,player.y,coreRadius(player),0,Math.PI*2);c.stroke();c.restore();}
+ drawCollisionOutline(player){if(!this.collisionOutline?.enabled||player.dead||player.form)return;const c=this.ctx,cam=this.camera;c.save();c.strokeStyle=this.collisionOutline.color||'rgba(65,61,48,.16)';c.lineWidth=(this.collisionOutline.width||.7)/cam.scale;c.setLineDash([3/cam.scale,4.5/cam.scale]);c.beginPath();c.arc(player.x,player.y,coreRadius(player),0,Math.PI*2);c.stroke();c.restore();}
  setInkClip(rect){const el=this.canvas;if(!el)return;const next=rect?`inset(${Math.round(rect.top)}px ${Math.round(rect.right)}px ${Math.round(rect.bottom)}px ${Math.round(rect.left)}px)`:'none';if(el.style.clipPath!==next)el.style.clipPath=next;}
  drawStone(game){
   const c=this.ctx,w=this.viewW,h=this.viewH,p=game.player,cam=this.camera,scale=cam.scale;

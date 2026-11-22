@@ -4,8 +4,8 @@ import {prefetchV5Resources,creatureResourceURL,resourceBytes} from '../src-v5/r
 import {V5_CREATURE_RESOURCES} from '../src-v5/reveal/resource-manifest.js';
 import {LoadingScroll,formatResourceProgress} from '../src-v5/ui/loading-scroll.js';
 
-assert.equal(V5_CREATURE_RESOURCES.length,55);
-assert.equal(resourceBytes,9535583);
+assert.equal(V5_CREATURE_RESOURCES.length,124);
+assert.equal(resourceBytes,25301802);
 for(const file of V5_CREATURE_RESOURCES)assert.equal(fs.statSync(new URL('../'+file.path,import.meta.url)).size,file.bytes,file.path+' manifest matches runtime file');
 assert(V5_CREATURE_RESOURCES.every(file=>!file.path.includes('masters/')&&!file.path.includes('evidence/')));
 const url=new URL(creatureResourceURL(V5_CREATURE_RESOURCES[0],'https://example.test/game/src-v5/reveal/resource-loader.js'));
@@ -29,4 +29,4 @@ assert.match(formatResourceProgress({loadedBytes:5e6,totalBytes:10e6,progress:.5
 const fixture=()=>({done:new Set(),partials:new Map(),weights:{creatures:1},total:1,target:0,updateTarget:LoadingScroll.prototype.updateTarget});
 const loader=fixture();let resolve;const pending=LoadingScroll.prototype.track.call(loader,'creatures',new Promise(r=>resolve=r),{required:true,timeoutMs:1});await new Promise(r=>setTimeout(r,5));assert.equal(loader.done.size,0,'required startup never times out into gameplay');resolve();await pending;assert(loader.done.has('creatures'));
 const broken=fixture();await assert.rejects(LoadingScroll.prototype.track.call(broken,'creatures',Promise.reject(Error('critical animation failed')),{required:true}),/critical animation failed/);assert.equal(broken.done.size,0);
-console.log('PASS accurate 55-file/9.54MB runtime manifest, streamed cache-compatible bytes, localized progress, changed-size fallback and strict animation startup gate');
+console.log('PASS accurate 124-file/25.30MB runtime manifest, streamed cache-compatible bytes, localized progress, changed-size fallback and strict animation startup gate');

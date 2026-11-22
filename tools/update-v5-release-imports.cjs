@@ -3,6 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),release=process.argv[2];
 if(!/^[a-zA-Z0-9_-]+$/.test(release||''))throw Error('Invalid V5 release key');
 const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 const files=[...walk('src-v5'),...walk('prototypes/ink/src')].filter(p=>p.endsWith('.js')).sort();
+files.push('previews/creature-rig/runtime/ink-creature.mjs');
 const imports=Object.fromEntries(files.map(p=>{const url='./'+p.replaceAll('\\','/');return[url,url+'?v='+release];}));
 let html=fs.readFileSync('v5.html','utf8').replace(/<script type="importmap"[\s\S]*?<\/script>/,'<script type="importmap">'+JSON.stringify({imports})+'</script>');
 html=html.replace(/src-v5\/ui\/game\.css(?:\?v=[^" ]+)?/,'src-v5/ui/game.css?v='+release);
