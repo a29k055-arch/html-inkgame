@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "master": false,
+      "zoom": 1,
+      "stats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 73386,
+        "vertexCount": 546,
+        "triangleCount": 732,
+        "surfacePixels": 147456,
+        "viewportPixels": 3840000
+      }
+    },
+    {
+      "master": true,
+      "zoom": 4,
+      "stats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 726171,
+        "vertexCount": 568,
+        "triangleCount": 772,
+        "surfacePixels": 1261568,
+        "viewportPixels": 3840000
+      }
+    },
+    {
+      "master": true,
+      "zoom": 6,
+      "stats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 1205048,
+        "vertexCount": 568,
+        "triangleCount": 772,
+        "surfacePixels": 2088960,
+        "viewportPixels": 3840000
+      }
+    }
+  ],
+  "note": "Final asset trim retains same vertices/triangles/batches as accepted performance run; no redundant complete benchmark required."
+}

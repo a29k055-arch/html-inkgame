@@ -1,0 +1,178 @@
+{
+  "baseline": false,
+  "revision": "rig-r8-dragon-joints-horns-whiskers-20261123",
+  "browser": "158.0.4370.33",
+  "conditions": {
+    "viewport": [
+      1440,
+      1080
+    ],
+    "dpr": 1,
+    "rafSampleMs": 2400,
+    "warmupMs": 700,
+    "cpuSamples": 60,
+    "source": "D:\\InkGame Unity\\BOKU_ASSETS\\09_ANIMATED_CREATURES"
+  },
+  "rows": [
+    {
+      "id": "dragon_04",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665972222222223,
+        "p50": 16.699999999999818,
+        "p95": 16.800000000000182,
+        "max": 17
+      },
+      "fps": 60.002500104171006,
+      "longFrames": 0,
+      "taskMs": 130.158,
+      "taskPerFrame": 0.9038749999999999,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.020000000794728596,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.20000001788139343
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.2916666661699613,
+        "p50": 0.29999998211860657,
+        "p95": 0.5999999940395355,
+        "max": 0.9000000059604645
+      },
+      "textureSize": [
+        1024,
+        1536
+      ],
+      "displayLengthPx": 430,
+      "renderer": "webgl-mesh",
+      "renderStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 101824,
+        "vertexCount": 546,
+        "triangleCount": 732,
+        "surfacePixels": 344064,
+        "viewportPixels": 1557400
+      }
+    },
+    {
+      "id": "dragon_04",
+      "mode": "master",
+      "zoom": 4,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.664583333333333,
+        "p50": 16.699999999999818,
+        "p95": 16.899999999999636,
+        "max": 17
+      },
+      "fps": 60.0075009376172,
+      "longFrames": 0,
+      "taskMs": 139.70199999999988,
+      "taskPerFrame": 0.970152777777777,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.01833333323399226,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.30000001192092896
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.2416666661699613,
+        "p50": 0.20000001788139343,
+        "p95": 0.30000001192092896,
+        "max": 0.5
+      },
+      "textureSize": [
+        2731,
+        4096
+      ],
+      "displayLengthPx": 1720,
+      "renderer": "webgl-mesh",
+      "renderStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 822543,
+        "vertexCount": 568,
+        "triangleCount": 772,
+        "surfacePixels": 1557400,
+        "viewportPixels": 1557400
+      }
+    },
+    {
+      "id": "dragon_04",
+      "mode": "master",
+      "zoom": 6,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.66458333333334,
+        "p50": 16.69999999999891,
+        "p95": 16.80000000000109,
+        "max": 17
+      },
+      "fps": 60.00750093761718,
+      "longFrames": 0,
+      "taskMs": 138.31799999999993,
+      "taskPerFrame": 0.9605416666666662,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.010000000397364298,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.2649999996026357,
+        "p50": 0.29999998211860657,
+        "p95": 0.5,
+        "max": 0.9000000059604645
+      },
+      "textureSize": [
+        2731,
+        4096
+      ],
+      "displayLengthPx": 2580,
+      "renderer": "webgl-mesh",
+      "renderStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 842180,
+        "vertexCount": 568,
+        "triangleCount": 772,
+        "surfacePixels": 1557400,
+        "viewportPixels": 1557400
+      }
+    }
+  ],
+  "motion": [
+    {
+      "id": "dragon_04",
+      "maxStep": 0.012258364456363746,
+      "maxOmega": 1.471006760006899,
+      "maxAcceleration": 4.200000000000004,
+      "finite": true,
+      "profile": {
+        "amplitude": 1,
+        "idle": 0.88,
+        "hz": 0.42,
+        "idleHz": 0.16,
+        "waves": 1.9,
+        "delay": 0.95,
+        "stiffness": 3.6,
+        "maxAngularVelocity": 1.65,
+        "maxAngularAcceleration": 4.2,
+        "maxAngularJerk": 18,
+        "appendage": 0.09,
+        "speedScale": 0.82
+      }
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-22T20:09:01.430Z"
+}

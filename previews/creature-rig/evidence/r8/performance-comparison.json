@@ -1,0 +1,110 @@
+{
+  "conditions": {
+    "viewport": [
+      1440,
+      1080
+    ],
+    "dpr": 1,
+    "rafSampleMs": 2400,
+    "warmupMs": 700,
+    "cpuSamples": 60,
+    "source": "D:\\InkGame Unity\\BOKU_ASSETS\\09_ANIMATED_CREATURES"
+  },
+  "rows": [
+    {
+      "id": "dragon_04",
+      "mode": "working",
+      "zoom": 1,
+      "oldTask": 0.7378194444444445,
+      "newTask": 0.9038749999999999,
+      "deltaTask": 0.1660555555555554,
+      "oldDraw": 0.09000000009934107,
+      "newDraw": 0.2916666661699613,
+      "oldFps": 60.0075009376172,
+      "newFps": 60.002500104171006,
+      "newLongFrames": 0,
+      "oldStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 88560,
+        "vertexCount": 280,
+        "triangleCount": 422,
+        "surfacePixels": 172032,
+        "viewportPixels": 778700
+      },
+      "newStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 101824,
+        "vertexCount": 546,
+        "triangleCount": 732,
+        "surfacePixels": 344064,
+        "viewportPixels": 1557400
+      }
+    },
+    {
+      "id": "dragon_04",
+      "mode": "master",
+      "zoom": 4,
+      "oldTask": 0.8027569444444441,
+      "newTask": 0.970152777777777,
+      "deltaTask": 0.16739583333333286,
+      "oldDraw": 0.05333333313465118,
+      "newDraw": 0.2416666661699613,
+      "oldFps": 60.00250010417102,
+      "newFps": 60.0075009376172,
+      "newLongFrames": 0,
+      "oldStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 735150,
+        "vertexCount": 290,
+        "triangleCount": 438,
+        "surfacePixels": 778700,
+        "viewportPixels": 778700
+      },
+      "newStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 822543,
+        "vertexCount": 568,
+        "triangleCount": 772,
+        "surfacePixels": 1557400,
+        "viewportPixels": 1557400
+      }
+    },
+    {
+      "id": "dragon_04",
+      "mode": "master",
+      "zoom": 6,
+      "oldTask": 0.6585416666666665,
+      "newTask": 0.9605416666666662,
+      "deltaTask": 0.3019999999999997,
+      "oldDraw": 0.0766666665673256,
+      "newDraw": 0.2649999996026357,
+      "oldFps": 60.00750093761718,
+      "newFps": 60.00750093761718,
+      "newLongFrames": 0,
+      "oldStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 778700,
+        "vertexCount": 290,
+        "triangleCount": 438,
+        "surfacePixels": 778700,
+        "viewportPixels": 778700
+      },
+      "newStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 842180,
+        "vertexCount": 568,
+        "triangleCount": 772,
+        "surfacePixels": 1557400,
+        "viewportPixels": 1557400
+      }
+    }
+  ],
+  "acceptedFeatureCost": true,
+  "note": "Final continuous-frame version, N42 retained. Flexible whiskers cost measurable CPU; no CPU-neutral claim. Tested desktop near60fps; not real-phone assurance."
+}

@@ -1,4 +1,6 @@
-本轮见 [R7 柔和游动与绘制优化](MOTION_REPAIR_R7.md)：全部素材转向缓入，鱼龙摆动与绘制重点优化。
+本轮见 [R8 龙关节与角须修订](MOTION_REPAIR_R8.md)：四肢/身体连接补绘、刚性双角、柔性双须。
+
+上一轮见 [R7 柔和游动与绘制优化](MOTION_REPAIR_R7.md)：全部素材转向缓入，鱼龙摆动与绘制重点优化。
 
 本轮见 [R6 修订说明](MOTION_REPAIR_R6.md)：0.25～6倍缩放、拖动查看、工作/4K切换，鱼01头部、虾04朝向及龟08颈部修复。
 
@@ -10,7 +12,7 @@
 
 上一轮修正版：**rig-r2-art-motion-20261120**。四类已增加限定补图与隐藏根部，鱼转向柔化、龙持续 S 形、虾左向镜像、乌龟慢速间歇划腿。详见 [本轮修正说明](MOTION_REPAIR_R2.md)。
 
-**[在线演示（GitHub Pages）](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/?rev=rig-r7-smooth-performance-20261123)**。2026-11-20 已上传到原 html-inkgame 仓库，并在其 README 的测试链接区增加入口；在线查看无需启动本机服务。
+**[在线演示（GitHub Pages）](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/?rev=rig-r8-dragon-joints-horns-whiskers-20261123&creature=dragon_04)**。2026-11-20 已上传到原 html-inkgame 仓库，并在其 README 的测试链接区增加入口；在线查看无需启动本机服务。
 
 运行 **StartDemo.ps1**，打开输出的本地网页地址。默认演示：[http://127.0.0.1:8912/demo/](http://127.0.0.1:8912/demo/)。方向键 / WASD / 右下角摇杆控制；下拉框可选自动游动、静止、原图和拉直姿态。
 

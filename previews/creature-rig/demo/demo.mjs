@@ -1,13 +1,13 @@
-import {InkCreature,damp,sampleCurve,makeCurve,INK_CREATURE_REV} from '../runtime/ink-creature.mjs?rev=rig-r7-smooth-performance-20261123';
+import {InkCreature,damp,sampleCurve,makeCurve,INK_CREATURE_REV} from '../runtime/ink-creature.mjs?rev=rig-r8-dragon-joints-horns-whiskers-20261123';
 const $=id=>document.getElementById(id),canvas=$('stage'),ctx=canvas.getContext('2d',{alpha:false}),keys=new Set();
-$('build-label').textContent=INK_CREATURE_REV.startsWith('rig-r7-')?'11月23日修订 R7 · 柔和游动 / 绘制优化':'素材动画 · 版本待核对';
+$('build-label').textContent=INK_CREATURE_REV.startsWith('rig-r8-')?'11月23日修订 R8 · 龙爪补绘 / 刚性龙角 / 柔性龙须':'素材动画 · 版本待核对';
 const state={rig:null,selected:'fish_04',mode:'manual',width:1000,height:600,camera:{x:0,y:0},pan:{x:0,y:0},joystick:{x:0,y:0},loading:0,pendingId:null,pendingTextureMode:null,textureMode:'working',rigURL:null,zoom:1,clipped:false,frames:0,fps:0,lastTelemetry:0};
 const profiles={
  fish_04:{label:'鱼 04 · 实体衔接版',length:320,note:'柔和转向 · 身体摆动 · 尾鳍推进'},
  fish_01:{label:'鱼 01',length:320,note:'水墨锦鲤 · 尾鳍推进'},
  fish_02:{label:'鱼 02',length:320,note:'舒展锦鲤 · 身体摆动'},
  fish_04_special:{label:'鱼 04 · 原始留白特别版',length:320,note:'保留原画透明墨白洞 · 鳍根衔接保留'},
- dragon_04:{label:'中国龙 04',length:430,note:'持续 S 形蛇行波 · 头尾延迟跟随'},
+ dragon_04:{label:'中国龙 04',length:430,note:'S 形游动 · 刚性龙角 · 龙须惯性拖曳'},
  shrimp_07:{label:'虾 07',length:230,note:'纸片转身 · 三根长须独立轻摆'},
  shrimp_04:{label:'虾 04',length:230,note:'减笔水墨 · 平滑纸片转身'},
  shrimp_05:{label:'虾 05',length:230,note:'轻淡水墨 · 须臂轻摆'},
@@ -52,7 +52,7 @@ function setPan(x,y){state.pan={x:Number.isFinite(Number(x))?Number(x):0,y:Numbe
 function centerView(){return setPan(0,0);}
 function resetZoom(){setZoom(1);centerView();}
 function transferMotion(from,to){
- for(const key of ['x','y','heading','targetHeading','angularVelocity','angularAcceleration','facing','desiredFacing','shrimpTurnProgress','shrimpTurnVelocity','inclination','targetInclination','inclinationVelocity','vx','vy','time','drive','locomotion','wavePhase','finPhase','gaitPhase','mode','length','maxSpeed'])to[key]=from[key];
+ for(const key of ['x','y','heading','targetHeading','angularVelocity','angularAcceleration','facing','desiredFacing','shrimpTurnProgress','shrimpTurnVelocity','inclination','targetInclination','inclinationVelocity','vx','vy','time','drive','locomotion','wavePhase','finPhase','gaitPhase','strandLag','strandLagVelocity','mode','length','maxSpeed'])to[key]=from[key];
  to.input={...from.input};to.history=from.history.map(item=>({...item}));to.offsets=new Map(from.offsets);to.pose=to.buildPose();to.targetCurve=makeCurve(to.pose,false);
 }
 async function loadCreature(id,textureMode,preserveMotion=false){
@@ -106,4 +106,4 @@ canvas.addEventListener('pointermove',event=>{if(panPointer===event.pointerId&&p
 for(const name of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(name,event=>{if(panPointer===event.pointerId)releasePan();});
 new ResizeObserver(size).observe(canvas);size();
 const api={get rig(){return state.rig;},get selected(){return state.selected;},selectCreature,setCreature:selectCreature,setMode,setZoom,setTextureMode,setPan,centerView,resetZoom,screenPoint,reset:center,snapshot(){return state.rig?{...state.rig.snapshot(),selected:state.selected,camera:{...state.camera},cameraConvention:'world-center',viewport:{width:state.width,height:state.height},zoom:state.zoom,pan:{...state.pan},panCoordinateSpace:'css-pixels',panning:panPointer!==null,textureMode:state.textureMode,pendingTextureMode:state.pendingTextureMode,loading:state.pendingId!==null,textureSize:[state.rig.bodyImage.width,state.rig.bodyImage.height],displayLengthPx:state.rig.length*state.zoom,length:state.rig.length,simulationTime:state.rig.time,input:{...state.rig.input},viewCenter:viewCenter(),viewCenterScreen:screenPoint(viewCenter()),clipped:state.clipped,rigURL:state.rigURL}:{loaded:false,id:state.selected,mode:state.mode,loading:state.pendingId!==null,zoom:state.zoom,pan:{...state.pan}};}};
-window.inkDemo=api;window.inkRigDemo=api;renderCatalog();requestAnimationFrame(frame);loadCatalog().then(()=>selectCreature('fish_04')).catch(()=>{});
+window.inkDemo=api;window.inkRigDemo=api;renderCatalog();requestAnimationFrame(frame);loadCatalog().then(()=>{const id=new URLSearchParams(location.search).get('creature');return selectCreature(Object.hasOwn(profiles,id)?id:'fish_04');}).catch(()=>{});

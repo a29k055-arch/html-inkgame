@@ -1,0 +1,8 @@
+{
+  "transparent_background": true,
+  "mode": "builtin-imagegen-edit",
+  "output": "repair-plates/dragon_04_joints-r8.png",
+  "prompt": "Edit target: the supplied top-down Chinese ink dragon PNG, exact same complete S-shaped dragon on the exact same 1024×1536 transparent canvas, head at top and tail at bottom. Produce a technical animation-repair paint plate. Preserve its chosen silhouette, all four paws, antlers, face, black central spine marks, pale gray ink wash, brush texture, S curve, pose, spacing, and scale very closely. ONLY repair anatomy at the four limb-to-torso junctions: give each forelimb and hindlimb a complete, natural softly tapered muscular upper arm reaching well inside the torso, with uninterrupted gray ink pigment through the shoulder/hip. Fill missing body pigment at receiving shoulder/hip areas with continuous pale gray watercolor ink and matching darker boundary strokes, no blank cutouts or floating claws. The limbs must still look slim and traditional, not bulky tubes. These complete hidden underlaps are needed for rotating separate puppet arms. Also ensure continuous gray neck skin behind the two antler bases without black square tabs. Keep the slender long whiskers and all other art unchanged. Flat isolated game sprite. Real transparent alpha in all blank areas. No background color, no shadow, no glow, no checkerboard, no paper rectangle, no scenery, no text. This is a local restoration of the original art, not a redesigned dragon.",
+  "reference": "dragon_04/source.png",
+  "integration": "Bounded four shoulder/hip root restoration only; accepted alpha silhouette; original paw tips, body outside masks, face and source reference retained."
+}

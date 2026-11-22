@@ -104,9 +104,9 @@
       "croppedFile": "textures/dragon_04_whisker_l.png",
       "bbox": [
         633,
-        250,
+        273,
         716,
-        446
+        423
       ],
       "kind": "antenna",
       "pivot": [
@@ -115,14 +115,14 @@
       ],
       "side": -1,
       "phase": 0,
-      "order": 3,
+      "order": 12,
       "bounds": [
         645,
-        262,
+        285,
         1336,
         683
       ],
-      "pixelCount": 3667,
+      "pixelCount": 3240,
       "rootRepair": {
         "outer": [
           1272.1552734375,
@@ -136,6 +136,82 @@
         "paintFile": "../../repair-plates/dragon_04_repair.png",
         "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
       },
+      "headAttachment": true,
+      "strand": {
+        "sourceTrace": [
+          [
+            1322.828125,
+            354.66666666666663
+          ],
+          [
+            1272.1552734375,
+            296
+          ],
+          [
+            1221.482421875,
+            317.3333333333333
+          ],
+          [
+            1184.14453125,
+            349.3333333333333
+          ],
+          [
+            1146.806640625,
+            389.3333333333333
+          ],
+          [
+            1114.802734375,
+            429.3333333333333
+          ],
+          [
+            1069.4638671875,
+            469.3333333333333
+          ],
+          [
+            1021.4580078125,
+            493.3333333333333
+          ],
+          [
+            970.78515625,
+            504
+          ],
+          [
+            920.1123046875,
+            498.66666666666663
+          ],
+          [
+            872.1064453125,
+            490.66666666666663
+          ],
+          [
+            818.7666015625,
+            490.66666666666663
+          ],
+          [
+            768.09375,
+            498.66666666666663
+          ],
+          [
+            722.7548828125,
+            517.3333333333333
+          ],
+          [
+            688.083984375,
+            552
+          ],
+          [
+            666.748046875,
+            594.6666666666666
+          ],
+          [
+            650.74609375,
+            653.3333333333333
+          ]
+        ],
+        "rootPinned": true,
+        "mode": "inertial-flexible-whisker",
+        "preserveSourceInk": true
+      },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/dragon_04_whisker_l.png"
     },
@@ -145,9 +221,9 @@
       "croppedFile": "textures/dragon_04_whisker_r.png",
       "bbox": [
         1404,
-        235,
+        257,
         682,
-        405
+        383
       ],
       "kind": "antenna",
       "pivot": [
@@ -156,14 +232,14 @@
       ],
       "side": 1,
       "phase": 2.199114857512855,
-      "order": 3,
+      "order": 12,
       "bounds": [
         1416,
-        247,
+        269,
         2073,
         627
       ],
-      "pixelCount": 3758,
+      "pixelCount": 3191,
       "rootRepair": {
         "outer": [
           1466.845703125,
@@ -177,6 +253,78 @@
         "paintFile": "../../repair-plates/dragon_04_repair.png",
         "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
       },
+      "headAttachment": true,
+      "strand": {
+        "sourceTrace": [
+          [
+            1426.8408203125,
+            354.66666666666663
+          ],
+          [
+            1456.177734375,
+            280
+          ],
+          [
+            1504.18359375,
+            298.66666666666663
+          ],
+          [
+            1541.521484375,
+            341.3333333333333
+          ],
+          [
+            1573.525390625,
+            389.3333333333333
+          ],
+          [
+            1616.197265625,
+            429.3333333333333
+          ],
+          [
+            1664.203125,
+            469.3333333333333
+          ],
+          [
+            1717.54296875,
+            498.66666666666663
+          ],
+          [
+            1768.2158203125,
+            514.6666666666666
+          ],
+          [
+            1816.2216796875,
+            514.6666666666666
+          ],
+          [
+            1866.89453125,
+            501.3333333333333
+          ],
+          [
+            1920.234375,
+            488
+          ],
+          [
+            1965.5732421875,
+            493.3333333333333
+          ],
+          [
+            2002.9111328125,
+            520
+          ],
+          [
+            2032.248046875,
+            565.3333333333333
+          ],
+          [
+            2053.583984375,
+            616
+          ]
+        ],
+        "rootPinned": true,
+        "mode": "inertial-flexible-whisker",
+        "preserveSourceInk": true
+      },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/dragon_04_whisker_r.png"
     },
@@ -186,38 +334,27 @@
       "croppedFile": "textures/dragon_04_horn_l.png",
       "bbox": [
         991,
-        599,
-        417,
-        336
+        585,
+        338,
+        350
       ],
-      "kind": "detail",
+      "kind": "horn",
       "pivot": [
-        1368.1669921875,
-        776
+        1293.4912109375,
+        674.6666666666666
       ],
       "side": -1,
       "phase": 4.39822971502571,
-      "order": 3,
+      "order": 11,
       "bounds": [
         1003,
-        611,
-        1395,
+        597,
+        1316,
         922
       ],
-      "pixelCount": 7368,
-      "rootRepair": {
-        "outer": [
-          1256.1533203125,
-          741.3333333333333
-        ],
-        "inner": [
-          1368.1669921875,
-          776
-        ],
-        "radius": 50.666666666666664,
-        "paintFile": "../../repair-plates/dragon_04_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
-      },
+      "pixelCount": 4493,
+      "headAttachment": true,
+      "rigid": true,
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/dragon_04_horn_l.png"
     },
@@ -226,39 +363,28 @@
       "file": "textures/dragon_04_horn_r.png",
       "croppedFile": "textures/dragon_04_horn_r.png",
       "bbox": [
-        1403,
-        603,
-        358,
-        331
+        1427,
+        595,
+        334,
+        339
       ],
-      "kind": "detail",
+      "kind": "horn",
       "pivot": [
-        1437.5087890625,
-        776
+        1466.845703125,
+        674.6666666666666
       ],
       "side": 1,
       "phase": 6.5973445725385655,
-      "order": 3,
+      "order": 11,
       "bounds": [
-        1415,
-        615,
+        1439,
+        607,
         1748,
         921
       ],
-      "pixelCount": 6584,
-      "rootRepair": {
-        "outer": [
-          1544.1884765625,
-          746.6666666666666
-        ],
-        "inner": [
-          1437.5087890625,
-          776
-        ],
-        "radius": 50.666666666666664,
-        "paintFile": "../../repair-plates/dragon_04_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
-      },
+      "pixelCount": 4313,
+      "headAttachment": true,
+      "rigid": true,
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/dragon_04_horn_r.png"
     },
@@ -269,13 +395,13 @@
       "bbox": [
         783,
         1179,
-        718,
-        333
+        692,
+        311
       ],
       "kind": "leg",
       "pivot": [
-        1456.177734375,
-        1389.3333333333333
+        1421.5068359375,
+        1386.6666666666665
       ],
       "side": -1,
       "phase": 8.79645943005142,
@@ -283,22 +409,27 @@
       "bounds": [
         795,
         1191,
-        1488,
-        1499
+        1462,
+        1477
       ],
-      "pixelCount": 16405,
+      "pixelCount": 13090,
       "rootRepair": {
         "outer": [
-          1216.1484375,
+          1210.814453125,
           1408
         ],
         "inner": [
-          1456.177734375,
-          1389.3333333333333
+          1421.5068359375,
+          1386.6666666666665
         ],
-        "radius": 88,
-        "paintFile": "../../repair-plates/dragon_04_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+        "innerTip": [
+          1437.5087890625,
+          1384
+        ],
+        "radius": 66.66666666666666,
+        "paintFile": "../../repair-plates/dragon_04_joints-r8.png",
+        "extension": "R8 complete rounded painted upper arm extends past pivot beneath repaired torso",
+        "coverageMask": "../../dragon_04/restoration/r8-host-mask.png"
       },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/dragon_04_leg_fl.png"
@@ -308,38 +439,43 @@
       "file": "textures/dragon_04_leg_fr.png",
       "croppedFile": "textures/dragon_04_leg_fr.png",
       "bbox": [
-        1421,
+        1377,
         1207,
-        525,
-        293
+        569,
+        278
       ],
       "kind": "leg",
       "pivot": [
-        1461.51171875,
-        1389.3333333333333
+        1426.8408203125,
+        1386.6666666666665
       ],
       "side": 1,
       "phase": 10.995574287564276,
       "order": 3,
       "bounds": [
-        1433,
+        1389,
         1219,
         1933,
-        1487
+        1472
       ],
-      "pixelCount": 11727,
+      "pixelCount": 9828,
       "rootRepair": {
         "outer": [
           1645.5341796875,
           1402.6666666666665
         ],
         "inner": [
-          1461.51171875,
-          1389.3333333333333
+          1426.8408203125,
+          1386.6666666666665
         ],
-        "radius": 85.33333333333333,
-        "paintFile": "../../repair-plates/dragon_04_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+        "innerTip": [
+          1410.8388671875,
+          1384
+        ],
+        "radius": 66.66666666666666,
+        "paintFile": "../../repair-plates/dragon_04_joints-r8.png",
+        "extension": "R8 complete rounded painted upper arm extends past pivot beneath repaired torso",
+        "coverageMask": "../../dragon_04/restoration/r8-host-mask.png"
       },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/dragon_04_leg_fr.png"
@@ -351,13 +487,13 @@
       "bbox": [
         872,
         2498,
-        728,
-        265
+        726,
+        254
       ],
       "kind": "leg",
       "pivot": [
-        1554.8564453125,
-        2632
+        1544.1884765625,
+        2629.333333333333
       ],
       "side": -1,
       "phase": 13.194689145077131,
@@ -365,22 +501,27 @@
       "bounds": [
         884,
         2510,
-        1587,
-        2750
+        1585,
+        2739
       ],
-      "pixelCount": 15279,
+      "pixelCount": 11753,
       "rootRepair": {
         "outer": [
           1293.4912109375,
           2645.333333333333
         ],
         "inner": [
-          1554.8564453125,
-          2632
+          1544.1884765625,
+          2629.333333333333
         ],
-        "radius": 90.66666666666666,
-        "paintFile": "../../repair-plates/dragon_04_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+        "innerTip": [
+          1560.1904296875,
+          2626.6666666666665
+        ],
+        "radius": 69.33333333333333,
+        "paintFile": "../../repair-plates/dragon_04_joints-r8.png",
+        "extension": "R8 complete rounded painted upper arm extends past pivot beneath repaired torso",
+        "coverageMask": "../../dragon_04/restoration/r8-host-mask.png"
       },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/dragon_04_leg_bl.png"
@@ -390,38 +531,43 @@
       "file": "textures/dragon_04_leg_br.png",
       "croppedFile": "textures/dragon_04_leg_br.png",
       "bbox": [
-        1509,
+        1494,
         2495,
-        501,
+        516,
         245
       ],
       "kind": "leg",
       "pivot": [
-        1549.5224609375,
-        2632
+        1544.1884765625,
+        2629.333333333333
       ],
       "side": 1,
       "phase": 15.393804002589984,
       "order": 3,
       "bounds": [
-        1521,
+        1506,
         2507,
         1997,
         2727
       ],
-      "pixelCount": 10738,
+      "pixelCount": 8680,
       "rootRepair": {
         "outer": [
           1720.2099609375,
           2640
         ],
         "inner": [
-          1549.5224609375,
-          2632
+          1544.1884765625,
+          2629.333333333333
         ],
-        "radius": 90.66666666666666,
-        "paintFile": "../../repair-plates/dragon_04_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+        "innerTip": [
+          1528.1865234375,
+          2626.6666666666665
+        ],
+        "radius": 66.66666666666666,
+        "paintFile": "../../repair-plates/dragon_04_joints-r8.png",
+        "extension": "R8 complete rounded painted upper arm extends past pivot beneath repaired torso",
+        "coverageMask": "../../dragon_04/restoration/r8-host-mask.png"
       },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/dragon_04_leg_br.png"
@@ -433,8 +579,8 @@
       "bbox": [
         640,
         161,
-        1064,
-        698
+        1045,
+        715
       ],
       "kind": "head",
       "pivot": [
@@ -447,10 +593,10 @@
       "bounds": [
         652,
         173,
-        1691,
-        846
+        1672,
+        863
       ],
-      "pixelCount": 26413,
+      "pixelCount": 27993,
       "spineRange": [
         0,
         0.135
@@ -463,10 +609,10 @@
       "file": "textures/dragon_04_neck.png",
       "croppedFile": "textures/dragon_04_neck.png",
       "bbox": [
-        1138,
-        774,
-        564,
-        578
+        1063,
+        773,
+        689,
+        573
       ],
       "kind": "body",
       "pivot": [
@@ -477,12 +623,12 @@
       "phase": 0.7,
       "order": 6,
       "bounds": [
-        1150,
-        786,
-        1689,
-        1339
+        1075,
+        785,
+        1739,
+        1333
       ],
-      "pixelCount": 26379,
+      "pixelCount": 27533,
       "spineRange": [
         0.135,
         0.25
@@ -497,7 +643,7 @@
       "bbox": [
         852,
         1203,
-        762,
+        776,
         837
       ],
       "kind": "body",
@@ -511,10 +657,10 @@
       "bounds": [
         864,
         1215,
-        1601,
+        1615,
         2027
       ],
-      "pixelCount": 41889,
+      "pixelCount": 44511,
       "spineRange": [
         0.25,
         0.43
@@ -530,7 +676,7 @@
         900,
         1822,
         830,
-        688
+        690
       ],
       "kind": "body",
       "pivot": [
@@ -544,9 +690,9 @@
         912,
         1834,
         1717,
-        2497
+        2499
       ],
-      "pixelCount": 39705,
+      "pixelCount": 39723,
       "spineRange": [
         0.43,
         0.62
@@ -561,7 +707,7 @@
       "bbox": [
         1055,
         2462,
-        677,
+        695,
         794
       ],
       "kind": "body",
@@ -575,10 +721,10 @@
       "bounds": [
         1067,
         2474,
-        1719,
+        1737,
         3243
       ],
-      "pixelCount": 32124,
+      "pixelCount": 33849,
       "spineRange": [
         0.62,
         0.82
@@ -753,7 +899,14 @@
     "changedOutsideApprovedMask": 0
   },
   "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
+  "headFrame": {
+    "s": 0.065,
+    "rigidUntil": 0.14,
+    "blendUntil": 0.2
+  },
+  "artRevision": "r8-dragon-joints-head-strands",
   "sourceFile": "../../dragon_04/source.png",
+  "bodyTexture": "continuous-body.png",
   "resolution": {
     "id": "dragon_04",
     "nativeSize": [
@@ -774,6 +927,5 @@
     "recommendedCssLongEdgeAtDpr2": 768,
     "smoothPreviewCssLongEdgeAtDpr2": 2048,
     "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
-  },
-  "bodyTexture": "continuous-body.png"
+  }
 }

@@ -1,5 +1,6 @@
 {
-  "signature": "6a0e83a48cf00ac795c02138d4570d1e28834cea391b078312919d7911698c68",
+  "signature": "f66a30e744899a63d5411a09f8b21b7b7e7e13102a77acd3e5202e3fe4d266dc",
+  "bodyTextureSignature": "f66a30e744899a63d5411a09f8b21b7b7e7e13102a77acd3e5202e3fe4d266dc",
   "resolution": {
     "id": "dragon_04",
     "nativeSize": [
@@ -20,6 +21,5 @@
     "recommendedCssLongEdgeAtDpr2": 768,
     "smoothPreviewCssLongEdgeAtDpr2": 2048,
     "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
-  },
-  "bodyTextureSignature": "6a0e83a48cf00ac795c02138d4570d1e28834cea391b078312919d7911698c68"
+  }
 }

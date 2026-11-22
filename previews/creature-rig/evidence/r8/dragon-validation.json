@@ -1,0 +1,4472 @@
+{
+  "passed": true,
+  "geometry": [
+    {
+      "master": false,
+      "size": [
+        1024,
+        1536
+      ],
+      "rootError": 1.464821375527116e-14,
+      "hornScaleError": 1.1102230246251565e-16,
+      "hornOrthogonality": 0,
+      "basisDifference": 0,
+      "traceRootError": 1.0048591735576161e-14,
+      "lengthRelativeError": 5.329070518200751e-15,
+      "maxLag": 0.4452692147046659,
+      "maxLagStep": 0.00751059825742556,
+      "maxTipDeviation": 22.3907231022783,
+      "samples": [
+        {
+          "t": 0,
+          "frame": {
+            "x": -27.950000000000006,
+            "y": 3.422887803616853e-15,
+            "angle": -3.1401740235088647,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": 0,
+              "root": {
+                "x": -10.26360445449804,
+                "y": -6.373421280408475
+              },
+              "tip": {
+                "x": -38.9718176797786,
+                "y": -77.78341505323297
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": 0,
+              "root": {
+                "x": -10.869315013225272,
+                "y": 4.4948861674091205
+              },
+              "tip": {
+                "x": -42.33972190854129,
+                "y": 68.40091675041968
+              }
+            }
+          ]
+        },
+        {
+          "t": 1,
+          "frame": {
+            "x": -27.949999999870496,
+            "y": -0.00006492290784430136,
+            "angle": 3.140416489252498,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.00000109375,
+              "root": {
+                "x": -10.280201694620391,
+                "y": -6.419357256280431
+              },
+              "tip": {
+                "x": -45.348407585398355,
+                "y": -74.06488572292119
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.00000109375,
+              "root": {
+                "x": -10.857709222381775,
+                "y": 4.450485296241661
+              },
+              "tip": {
+                "x": -49.3443081923445,
+                "y": 64.14491151849376
+              }
+            }
+          ]
+        },
+        {
+          "t": 2,
+          "frame": {
+            "x": -14.124777731554406,
+            "y": -24.117864101700523,
+            "angle": -2.111856228117719,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.4404679057127179,
+              "root": {
+                "x": 0.46440589086755235,
+                "y": -12.261017664271623
+              },
+              "tip": {
+                "x": 26.86455928642937,
+                "y": -80.08304405881493
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.4404679057127179,
+              "root": {
+                "x": -9.156261927850084,
+                "y": -7.168892097955339
+              },
+              "tip": {
+                "x": -79.69988186099243,
+                "y": 6.449833881713284
+              }
+            }
+          ]
+        },
+        {
+          "t": 3,
+          "frame": {
+            "x": 21.057254346700503,
+            "y": -18.378816794333545,
+            "angle": -0.7265609122347743,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.3919702613244433,
+              "root": {
+                "x": 12.094638378266428,
+                "y": -1.8530611017219059
+              },
+              "tip": {
+                "x": 84.18478795896192,
+                "y": 13.92491394826816
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.3919702613244433,
+              "root": {
+                "x": 5.315447396420861,
+                "y": -10.369490030146356
+              },
+              "tip": {
+                "x": -20.94678567589114,
+                "y": -77.17050031667712
+              }
+            }
+          ]
+        },
+        {
+          "t": 4,
+          "frame": {
+            "x": 22.495492123338543,
+            "y": 16.587301655659836,
+            "angle": 0.6240074455399617,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.414606964833466,
+              "root": {
+                "x": 4.410969657100189,
+                "y": 11.451239606031175
+              },
+              "tip": {
+                "x": 6.680978970371783,
+                "y": 84.9977487080342
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.414606964833466,
+              "root": {
+                "x": 11.240778570265526,
+                "y": 2.975350138200181
+              },
+              "tip": {
+                "x": 70.1750742478106,
+                "y": -38.20672296835034
+              }
+            }
+          ]
+        },
+        {
+          "t": 5,
+          "frame": {
+            "x": 3.3366670084121863,
+            "y": 27.7501016010966,
+            "angle": 1.450099652640231,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.1575152336934913,
+              "root": {
+                "x": -5.143708344895572,
+                "y": 10.971772718978276
+              },
+              "tip": {
+                "x": -63.89381145943002,
+                "y": 58.14507508092678
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.1575152336934913,
+              "root": {
+                "x": 5.717447684101465,
+                "y": 10.249082069376104
+              },
+              "tip": {
+                "x": 72.7869999568473,
+                "y": 35.67513892379368
+              }
+            }
+          ]
+        },
+        {
+          "t": 6,
+          "frame": {
+            "x": -21.95468032972811,
+            "y": 17.29687370470988,
+            "angle": 2.4637301850843643,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.38299025866152886,
+              "root": {
+                "x": -12.198229327702284,
+                "y": 1.2270028261189534
+              },
+              "tip": {
+                "x": -83.11328904835007,
+                "y": -16.050185879829417
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.38299025866152886,
+              "root": {
+                "x": -5.841648240270482,
+                "y": 10.063340808572171
+              },
+              "tip": {
+                "x": 14.687372499477911,
+                "y": 79.04990624785297
+              }
+            }
+          ]
+        },
+        {
+          "t": 7,
+          "frame": {
+            "x": -27.889757422508364,
+            "y": 1.834008972167527,
+            "angle": 3.0757493914093423,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.0986428201384593,
+              "root": {
+                "x": -10.67172006234598,
+                "y": -5.7137241758423984
+              },
+              "tip": {
+                "x": -51.51811370951064,
+                "y": -69.45181011936037
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.0986428201384593,
+              "root": {
+                "x": -10.545589132922057,
+                "y": 5.170718072150087
+              },
+              "tip": {
+                "x": -41.66643523581215,
+                "y": 69.23895659521997
+              }
+            }
+          ]
+        },
+        {
+          "t": 8,
+          "frame": {
+            "x": -16.974496475572227,
+            "y": -22.20487726263139,
+            "angle": -2.233026133008023,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.3805870424931489,
+              "root": {
+                "x": -1.0591022272107153,
+                "y": -12.198413745047525
+              },
+              "tip": {
+                "x": 19.72224207289714,
+                "y": -83.10814140159897
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.3805870424931489,
+              "root": {
+                "x": -9.99372675710718,
+                "y": -5.980739214243144
+              },
+              "tip": {
+                "x": -78.47096384426654,
+                "y": 15.517425937329254
+              }
+            }
+          ]
+        },
+        {
+          "t": 9,
+          "frame": {
+            "x": -1.7686206766413421,
+            "y": -27.893980763552857,
+            "angle": -1.6356670530044148,
+            "sourceAngle": 1.5165407308568877,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.09570827745498775,
+              "root": {
+                "x": 5.762363743904976,
+                "y": -10.668611105197073
+              },
+              "tip": {
+                "x": 69.96725404449259,
+                "y": -51.814111197128724
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.09570827745498775,
+              "root": {
+                "x": -5.122196023539084,
+                "y": -10.55306574536315
+              },
+              "tip": {
+                "x": -70.2730037969524,
+                "y": -40.032414543638865
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "master": true,
+      "size": [
+        2731,
+        4096
+      ],
+      "rootError": 1.6304788408914756e-14,
+      "hornScaleError": 2.7755575615628914e-17,
+      "hornOrthogonality": 0,
+      "basisDifference": 0,
+      "traceRootError": 1.2560739669470201e-14,
+      "lengthRelativeError": 4.440892098500626e-15,
+      "maxLag": 0.4452692147046659,
+      "maxLagStep": 0.00751059825742556,
+      "maxTipDeviation": 22.39240475210515,
+      "samples": [
+        {
+          "t": 0,
+          "frame": {
+            "x": -27.950000000000006,
+            "y": 3.422887803616853e-15,
+            "angle": -3.1401740235088647,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": 0,
+              "root": {
+                "x": -10.263276904552878,
+                "y": -6.374046725815273
+              },
+              "tip": {
+                "x": -38.97001668426097,
+                "y": -77.79110812447811
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": 0,
+              "root": {
+                "x": -10.869118778698471,
+                "y": 4.495323770615474
+              },
+              "tip": {
+                "x": -42.33969206132398,
+                "y": 68.40761916928935
+              }
+            }
+          ]
+        },
+        {
+          "t": 1,
+          "frame": {
+            "x": -27.949999999870496,
+            "y": -0.00006492290784430136,
+            "angle": 3.140416489252498,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.00000109375,
+              "root": {
+                "x": -10.279875768678348,
+                "y": -6.419983549505497
+              },
+              "tip": {
+                "x": -45.347350090789575,
+                "y": -74.07247715260911
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.00000109375,
+              "root": {
+                "x": -10.857511853026509,
+                "y": 4.450922388787149
+              },
+              "tip": {
+                "x": -49.34498716709024,
+                "y": 64.15140486870686
+              }
+            }
+          ]
+        },
+        {
+          "t": 2,
+          "frame": {
+            "x": -14.124777731554406,
+            "y": -24.117864101700523,
+            "angle": -2.111856228117719,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.4404679057127179,
+              "root": {
+                "x": 0.46511064319183415,
+                "y": -12.261060032713644
+              },
+              "tip": {
+                "x": 26.87090747783291,
+                "y": -80.08698833032416
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.4404679057127179,
+              "root": {
+                "x": -9.156535397038704,
+                "y": -7.168498119328262
+              },
+              "tip": {
+                "x": -79.70517614502157,
+                "y": 6.453574485497439
+              }
+            }
+          ]
+        },
+        {
+          "t": 3,
+          "frame": {
+            "x": 21.057254346700503,
+            "y": -18.378816794333545,
+            "angle": -0.7265609122347743,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.3919702613244433,
+              "root": {
+                "x": 12.094810003628451,
+                "y": -1.8523762545429179
+              },
+              "tip": {
+                "x": 84.18973141073923,
+                "y": 13.930602775577473
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.3919702613244433,
+              "root": {
+                "x": 5.315009738527616,
+                "y": -10.369686142675793
+              },
+              "tip": {
+                "x": -20.951432073593633,
+                "y": -77.1750209635137
+              }
+            }
+          ]
+        },
+        {
+          "t": 4,
+          "frame": {
+            "x": 22.495492123338543,
+            "y": 16.587301655659836,
+            "angle": 0.6240074455399617,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.414606964833466,
+              "root": {
+                "x": 4.410338842492607,
+                "y": 11.451556692540386
+              },
+              "tip": {
+                "x": 6.676649138406276,
+                "y": 85.00389752656876
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.414606964833466,
+              "root": {
+                "x": 11.240874338939022,
+                "y": 2.974880209570605
+              },
+              "tip": {
+                "x": 70.17840356811871,
+                "y": -38.21228179188519
+              }
+            }
+          ]
+        },
+        {
+          "t": 5,
+          "frame": {
+            "x": 3.3366670084121863,
+            "y": 27.7501016010966,
+            "angle": 1.450099652640231,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.1575152336934913,
+              "root": {
+                "x": -5.1443690322512845,
+                "y": 10.971523795011048
+              },
+              "tip": {
+                "x": -63.901425533435685,
+                "y": 58.14543794846562
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.1575152336934913,
+              "root": {
+                "x": 5.717858124832524,
+                "y": 10.248833990836108
+              },
+              "tip": {
+                "x": 72.7935134065692,
+                "y": 35.67456657381368
+              }
+            }
+          ]
+        },
+        {
+          "t": 6,
+          "frame": {
+            "x": -21.95468032972811,
+            "y": 17.29687370470988,
+            "angle": 2.4637301850843643,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.38299025866152886,
+              "root": {
+                "x": -12.198367411785277,
+                "y": 1.226310436265269
+              },
+              "tip": {
+                "x": -83.11804677494557,
+                "y": -16.055964070052546
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.38299025866152886,
+              "root": {
+                "x": -5.8412206478365185,
+                "y": 10.063557993438444
+              },
+              "tip": {
+                "x": 14.691667853119181,
+                "y": 79.05479521519585
+              }
+            }
+          ]
+        },
+        {
+          "t": 7,
+          "frame": {
+            "x": -27.889757422508364,
+            "y": 1.834008972167527,
+            "angle": 3.0757493914093423,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.0986428201384593,
+              "root": {
+                "x": -10.671435289993891,
+                "y": -5.714370221994737
+              },
+              "tip": {
+                "x": -51.517727211638196,
+                "y": -69.45943892886798
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.0986428201384593,
+              "root": {
+                "x": -10.545363930295636,
+                "y": 5.1711414966802876
+              },
+              "tip": {
+                "x": -41.66640418935758,
+                "y": 69.24547853959294
+              }
+            }
+          ]
+        },
+        {
+          "t": 8,
+          "frame": {
+            "x": -16.974496475572227,
+            "y": -22.20487726263139,
+            "angle": -2.233026133008023,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.3805870424931489,
+              "root": {
+                "x": -1.058407763424551,
+                "y": -12.198540988802453
+              },
+              "tip": {
+                "x": 19.72826196076982,
+                "y": -83.11268565245743
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.3805870424931489,
+              "root": {
+                "x": -9.993950599572027,
+                "y": -5.980315069095049
+              },
+              "tip": {
+                "x": -78.47579726949934,
+                "y": 15.521750694316193
+              }
+            }
+          ]
+        },
+        {
+          "t": 9,
+          "frame": {
+            "x": -1.7686206766413421,
+            "y": -27.893980763552857,
+            "angle": -1.6356670530044148,
+            "sourceAngle": 1.516534120851337,
+            "spineS": 0.065
+          },
+          "lag": [
+            {
+              "name": "dragon_04_whisker_l",
+              "lag": -0.09570827745498775,
+              "root": {
+                "x": 5.763009512800475,
+                "y": -10.668325704676636
+              },
+              "tip": {
+                "x": 69.97491842379577,
+                "y": -51.813713399453206
+              }
+            },
+            {
+              "name": "dragon_04_whisker_r",
+              "lag": -0.09570827745498775,
+              "root": {
+                "x": -5.122619666886663,
+                "y": -10.552840954638757
+              },
+              "tip": {
+                "x": -70.27954049990872,
+                "y": -40.03223840960699
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "velocityDirections": [
+    {
+      "velocity": [
+        120,
+        0
+      ],
+      "expected": [
+        0.9986352511227707,
+        -0.05222676722678317
+      ],
+      "error": 1.2118257228641695e-16,
+      "actual": [
+        {
+          "name": "dragon_04_whisker_l",
+          "backwardSource": [
+            0.9986352511227709,
+            -0.05222676722678322
+          ]
+        },
+        {
+          "name": "dragon_04_whisker_r",
+          "backwardSource": [
+            0.9986352511227709,
+            -0.05222676722678322
+          ]
+        }
+      ]
+    },
+    {
+      "velocity": [
+        0,
+        120
+      ],
+      "expected": [
+        0.05222676722678317,
+        0.9986352511227707
+      ],
+      "error": 1.1123893155135927e-16,
+      "actual": [
+        {
+          "name": "dragon_04_whisker_l",
+          "backwardSource": [
+            0.052226767226783176,
+            0.9986352511227709
+          ]
+        },
+        {
+          "name": "dragon_04_whisker_r",
+          "backwardSource": [
+            0.052226767226783176,
+            0.9986352511227709
+          ]
+        }
+      ]
+    },
+    {
+      "velocity": [
+        -120,
+        0
+      ],
+      "expected": [
+        -0.9986352511227707,
+        0.05222676722678317
+      ],
+      "error": 1.2118257228641695e-16,
+      "actual": [
+        {
+          "name": "dragon_04_whisker_l",
+          "backwardSource": [
+            -0.9986352511227709,
+            0.05222676722678322
+          ]
+        },
+        {
+          "name": "dragon_04_whisker_r",
+          "backwardSource": [
+            -0.9986352511227709,
+            0.05222676722678322
+          ]
+        }
+      ]
+    },
+    {
+      "velocity": [
+        0,
+        -120
+      ],
+      "expected": [
+        -0.05222676722678317,
+        -0.9986352511227707
+      ],
+      "error": 1.1123893155135927e-16,
+      "actual": [
+        {
+          "name": "dragon_04_whisker_l",
+          "backwardSource": [
+            -0.05222676722678316,
+            -0.9986352511227709
+          ]
+        },
+        {
+          "name": "dragon_04_whisker_r",
+          "backwardSource": [
+            -0.05222676722678316,
+            -0.9986352511227709
+          ]
+        }
+      ]
+    },
+    {
+      "velocity": [
+        0,
+        0
+      ],
+      "expected": [
+        0.05423558170789149,
+        0.9985281676932337
+      ],
+      "error": 1.1123893155135927e-16,
+      "actual": [
+        {
+          "name": "dragon_04_whisker_l",
+          "backwardSource": [
+            0.0542355817078915,
+            0.9985281676932338
+          ]
+        },
+        {
+          "name": "dragon_04_whisker_r",
+          "backwardSource": [
+            0.0542355817078915,
+            0.9985281676932338
+          ]
+        }
+      ]
+    }
+  ],
+  "claws": {
+    "samples": 384,
+    "minOverlap": 5977,
+    "records": [
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 0,
+        "extra": -0.15,
+        "overlap": 13765,
+        "bodyActive": 97151,
+        "limbActive": 13911,
+        "rotation": -0.23960300650132005
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 0,
+        "extra": 0,
+        "overlap": 12623,
+        "bodyActive": 97151,
+        "limbActive": 13463,
+        "rotation": -0.08960300650132007
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 0,
+        "extra": 0.15,
+        "overlap": 11555,
+        "bodyActive": 97151,
+        "limbActive": 13330,
+        "rotation": 0.06039699349867993
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 0,
+        "extra": -0.15,
+        "overlap": 7394,
+        "bodyActive": 96894,
+        "limbActive": 14073,
+        "rotation": -0.1960738126893943
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 0,
+        "extra": 0,
+        "overlap": 6525,
+        "bodyActive": 96894,
+        "limbActive": 12860,
+        "rotation": -0.046073812689394304
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 0,
+        "extra": 0.15,
+        "overlap": 6194,
+        "bodyActive": 96894,
+        "limbActive": 12688,
+        "rotation": 0.10392618731060568
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 0,
+        "extra": -0.15,
+        "overlap": 7998,
+        "bodyActive": 79235,
+        "limbActive": 16472,
+        "rotation": -0.11456000873010364
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 0,
+        "extra": 0,
+        "overlap": 7957,
+        "bodyActive": 79235,
+        "limbActive": 15092,
+        "rotation": 0.035439991269896366
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 0,
+        "extra": 0.15,
+        "overlap": 7855,
+        "bodyActive": 79235,
+        "limbActive": 14395,
+        "rotation": 0.18543999126989635
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 0,
+        "extra": -0.15,
+        "overlap": 8119,
+        "bodyActive": 79235,
+        "limbActive": 15654,
+        "rotation": -0.06226397889096737
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 0,
+        "extra": 0,
+        "overlap": 6545,
+        "bodyActive": 79235,
+        "limbActive": 14713,
+        "rotation": 0.08773602110903263
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 0,
+        "extra": 0.15,
+        "overlap": 6040,
+        "bodyActive": 79235,
+        "limbActive": 14280,
+        "rotation": 0.23773602110903264
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 1,
+        "extra": -0.15,
+        "overlap": 13335,
+        "bodyActive": 97865,
+        "limbActive": 13852,
+        "rotation": -0.2388422763739354
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 1,
+        "extra": 0,
+        "overlap": 12005,
+        "bodyActive": 97865,
+        "limbActive": 13439,
+        "rotation": -0.08884227637393541
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 1,
+        "extra": 0.15,
+        "overlap": 11356,
+        "bodyActive": 97865,
+        "limbActive": 13298,
+        "rotation": 0.061157723626064586
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 1,
+        "extra": -0.15,
+        "overlap": 8597,
+        "bodyActive": 97851,
+        "limbActive": 14079,
+        "rotation": -0.2137671435627138
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 1,
+        "extra": 0,
+        "overlap": 6711,
+        "bodyActive": 97851,
+        "limbActive": 12869,
+        "rotation": -0.06376714356271382
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 1,
+        "extra": 0.15,
+        "overlap": 6193,
+        "bodyActive": 97851,
+        "limbActive": 12683,
+        "rotation": 0.08623285643728618
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 1,
+        "extra": -0.15,
+        "overlap": 8035,
+        "bodyActive": 80921,
+        "limbActive": 14670,
+        "rotation": -0.13612049676002494
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 1,
+        "extra": 0,
+        "overlap": 7963,
+        "bodyActive": 80921,
+        "limbActive": 14197,
+        "rotation": 0.01387950323997506
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 1,
+        "extra": 0.15,
+        "overlap": 7885,
+        "bodyActive": 80921,
+        "limbActive": 13975,
+        "rotation": 0.16387950323997505
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 1,
+        "extra": -0.15,
+        "overlap": 7682,
+        "bodyActive": 80921,
+        "limbActive": 14409,
+        "rotation": -0.06991652181008011
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 1,
+        "extra": 0,
+        "overlap": 6410,
+        "bodyActive": 80921,
+        "limbActive": 14076,
+        "rotation": 0.08008347818991988
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 1,
+        "extra": 0.15,
+        "overlap": 6050,
+        "bodyActive": 80921,
+        "limbActive": 13919,
+        "rotation": 0.23008347818991987
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 2,
+        "extra": -0.15,
+        "overlap": 12594,
+        "bodyActive": 97785,
+        "limbActive": 13564,
+        "rotation": -0.23255460599849487
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 2,
+        "extra": 0,
+        "overlap": 11763,
+        "bodyActive": 97785,
+        "limbActive": 13324,
+        "rotation": -0.08255460599849489
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 2,
+        "extra": 0.15,
+        "overlap": 10827,
+        "bodyActive": 97785,
+        "limbActive": 13336,
+        "rotation": 0.06744539400150511
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 2,
+        "extra": -0.15,
+        "overlap": 9200,
+        "bodyActive": 97940,
+        "limbActive": 13437,
+        "rotation": -0.2274964008387234
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 2,
+        "extra": 0,
+        "overlap": 7003,
+        "bodyActive": 97940,
+        "limbActive": 12662,
+        "rotation": -0.07749640083872343
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 2,
+        "extra": 0.15,
+        "overlap": 6276,
+        "bodyActive": 97940,
+        "limbActive": 12763,
+        "rotation": 0.07250359916127656
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 2,
+        "extra": -0.15,
+        "overlap": 8059,
+        "bodyActive": 83121,
+        "limbActive": 14086,
+        "rotation": -0.15854787703900053
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 2,
+        "extra": 0,
+        "overlap": 7960,
+        "bodyActive": 83121,
+        "limbActive": 13967,
+        "rotation": -0.008547877039000545
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 2,
+        "extra": 0.15,
+        "overlap": 7915,
+        "bodyActive": 83121,
+        "limbActive": 14096,
+        "rotation": 0.14145212296099946
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 2,
+        "extra": -0.15,
+        "overlap": 7158,
+        "bodyActive": 83121,
+        "limbActive": 13984,
+        "rotation": -0.08255223128514433
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 2,
+        "extra": 0,
+        "overlap": 6434,
+        "bodyActive": 83121,
+        "limbActive": 13915,
+        "rotation": 0.06744776871485567
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 2,
+        "extra": 0.15,
+        "overlap": 6052,
+        "bodyActive": 83121,
+        "limbActive": 14091,
+        "rotation": 0.21744776871485566
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 3,
+        "extra": -0.15,
+        "overlap": 11915,
+        "bodyActive": 95543,
+        "limbActive": 13342,
+        "rotation": -0.22113147181293774
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 3,
+        "extra": 0,
+        "overlap": 11668,
+        "bodyActive": 95543,
+        "limbActive": 13349,
+        "rotation": -0.07113147181293775
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 3,
+        "extra": 0.15,
+        "overlap": 10341,
+        "bodyActive": 95543,
+        "limbActive": 13574,
+        "rotation": 0.07886852818706225
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 3,
+        "extra": -0.15,
+        "overlap": 9519,
+        "bodyActive": 95831,
+        "limbActive": 12668,
+        "rotation": -0.23640700226432265
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 3,
+        "extra": 0,
+        "overlap": 7577,
+        "bodyActive": 95831,
+        "limbActive": 12736,
+        "rotation": -0.08640700226432264
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 3,
+        "extra": 0.15,
+        "overlap": 6467,
+        "bodyActive": 95831,
+        "limbActive": 13000,
+        "rotation": 0.06359299773567735
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 3,
+        "extra": -0.15,
+        "overlap": 8120,
+        "bodyActive": 86155,
+        "limbActive": 13970,
+        "rotation": -0.18044605143860465
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 3,
+        "extra": 0,
+        "overlap": 7931,
+        "bodyActive": 86155,
+        "limbActive": 14120,
+        "rotation": -0.03044605143860466
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 3,
+        "extra": 0.15,
+        "overlap": 7910,
+        "bodyActive": 86155,
+        "limbActive": 14589,
+        "rotation": 0.11955394856139534
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 3,
+        "extra": -0.15,
+        "overlap": 7064,
+        "bodyActive": 86155,
+        "limbActive": 13923,
+        "rotation": -0.09938447778797688
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 3,
+        "extra": 0,
+        "overlap": 6489,
+        "bodyActive": 86155,
+        "limbActive": 14140,
+        "rotation": 0.05061552221202312
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 3,
+        "extra": 0.15,
+        "overlap": 6068,
+        "bodyActive": 86155,
+        "limbActive": 14639,
+        "rotation": 0.2006155222120231
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 4,
+        "extra": -0.15,
+        "overlap": 11949,
+        "bodyActive": 92887,
+        "limbActive": 13433,
+        "rotation": -0.20528373430633579
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 4,
+        "extra": 0,
+        "overlap": 11292,
+        "bodyActive": 92887,
+        "limbActive": 13756,
+        "rotation": -0.05528373430633579
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 4,
+        "extra": 0.15,
+        "overlap": 10102,
+        "bodyActive": 92887,
+        "limbActive": 14386,
+        "rotation": 0.0947162656936642
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 4,
+        "extra": -0.15,
+        "overlap": 10272,
+        "bodyActive": 93199,
+        "limbActive": 12808,
+        "rotation": -0.2399445226392724
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 4,
+        "extra": 0,
+        "overlap": 8339,
+        "bodyActive": 93199,
+        "limbActive": 13101,
+        "rotation": -0.08994452263927243
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 4,
+        "extra": 0.15,
+        "overlap": 6923,
+        "bodyActive": 93199,
+        "limbActive": 13501,
+        "rotation": 0.06005547736072757
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 4,
+        "extra": -0.15,
+        "overlap": 8220,
+        "bodyActive": 88908,
+        "limbActive": 14058,
+        "rotation": -0.20045239355736566
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 4,
+        "extra": 0,
+        "overlap": 7917,
+        "bodyActive": 88908,
+        "limbActive": 14446,
+        "rotation": -0.05045239355736568
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 4,
+        "extra": 0.15,
+        "overlap": 7840,
+        "bodyActive": 88908,
+        "limbActive": 15108,
+        "rotation": 0.09954760644263431
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 4,
+        "extra": -0.15,
+        "overlap": 7076,
+        "bodyActive": 88908,
+        "limbActive": 14078,
+        "rotation": -0.11936582311247808
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 4,
+        "extra": 0,
+        "overlap": 6537,
+        "bodyActive": 88908,
+        "limbActive": 14482,
+        "rotation": 0.03063417688752192
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 4,
+        "extra": 0.15,
+        "overlap": 6091,
+        "bodyActive": 88908,
+        "limbActive": 15276,
+        "rotation": 0.18063417688752192
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 5,
+        "extra": -0.15,
+        "overlap": 11914,
+        "bodyActive": 91908,
+        "limbActive": 14112,
+        "rotation": -0.18599730540402518
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 5,
+        "extra": 0,
+        "overlap": 10830,
+        "bodyActive": 91908,
+        "limbActive": 15337,
+        "rotation": -0.035997305404025175
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 5,
+        "extra": 0.15,
+        "overlap": 9680,
+        "bodyActive": 91908,
+        "limbActive": 16897,
+        "rotation": 0.11400269459597481
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 5,
+        "extra": -0.15,
+        "overlap": 10907,
+        "bodyActive": 92129,
+        "limbActive": 13313,
+        "rotation": -0.23788892712029347
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 5,
+        "extra": 0,
+        "overlap": 8987,
+        "bodyActive": 92129,
+        "limbActive": 13799,
+        "rotation": -0.08788892712029349
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 5,
+        "extra": 0.15,
+        "overlap": 7672,
+        "bodyActive": 92129,
+        "limbActive": 14706,
+        "rotation": 0.062111072879706505
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 5,
+        "extra": -0.15,
+        "overlap": 8389,
+        "bodyActive": 88343,
+        "limbActive": 14170,
+        "rotation": -0.2173223249982077
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 5,
+        "extra": 0,
+        "overlap": 7964,
+        "bodyActive": 88343,
+        "limbActive": 14672,
+        "rotation": -0.0673223249982077
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 5,
+        "extra": 0.15,
+        "overlap": 7780,
+        "bodyActive": 88343,
+        "limbActive": 15393,
+        "rotation": 0.0826776750017923
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 5,
+        "extra": -0.15,
+        "overlap": 7098,
+        "bodyActive": 88343,
+        "limbActive": 14178,
+        "rotation": -0.14125321244768108
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 5,
+        "extra": 0,
+        "overlap": 6591,
+        "bodyActive": 88343,
+        "limbActive": 14703,
+        "rotation": 0.008746787552318933
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 5,
+        "extra": 0.15,
+        "overlap": 6146,
+        "bodyActive": 88343,
+        "limbActive": 15647,
+        "rotation": 0.1587467875523189
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 6,
+        "extra": -0.15,
+        "overlap": 11803,
+        "bodyActive": 92167,
+        "limbActive": 16739,
+        "rotation": -0.16447179319610575
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 6,
+        "extra": 0,
+        "overlap": 10603,
+        "bodyActive": 92167,
+        "limbActive": 17116,
+        "rotation": -0.014471793196105745
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 6,
+        "extra": 0.15,
+        "overlap": 9321,
+        "bodyActive": 92167,
+        "limbActive": 15892,
+        "rotation": 0.13552820680389424
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 6,
+        "extra": -0.15,
+        "overlap": 11578,
+        "bodyActive": 92184,
+        "limbActive": 14387,
+        "rotation": -0.23036809520615142
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 6,
+        "extra": 0,
+        "overlap": 10503,
+        "bodyActive": 92184,
+        "limbActive": 16117,
+        "rotation": -0.08036809520615142
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 6,
+        "extra": 0.15,
+        "overlap": 8508,
+        "bodyActive": 92184,
+        "limbActive": 17070,
+        "rotation": 0.06963190479384858
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 6,
+        "extra": -0.15,
+        "overlap": 8734,
+        "bodyActive": 86549,
+        "limbActive": 14147,
+        "rotation": -0.23000656903792077
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 6,
+        "extra": 0,
+        "overlap": 8051,
+        "bodyActive": 86549,
+        "limbActive": 14630,
+        "rotation": -0.08000656903792076
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 6,
+        "extra": 0.15,
+        "overlap": 7746,
+        "bodyActive": 86549,
+        "limbActive": 15345,
+        "rotation": 0.06999343096207923
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 6,
+        "extra": -0.15,
+        "overlap": 7123,
+        "bodyActive": 86549,
+        "limbActive": 14153,
+        "rotation": -0.16368526752786716
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 6,
+        "extra": 0,
+        "overlap": 6633,
+        "bodyActive": 86549,
+        "limbActive": 14623,
+        "rotation": -0.013685267527867178
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 6,
+        "extra": 0.15,
+        "overlap": 6164,
+        "bodyActive": 86549,
+        "limbActive": 15507,
+        "rotation": 0.13631473247213283
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 7,
+        "extra": -0.15,
+        "overlap": 11675,
+        "bodyActive": 91721,
+        "limbActive": 16067,
+        "rotation": -0.14204590486728355
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 7,
+        "extra": 0,
+        "overlap": 10471,
+        "bodyActive": 91721,
+        "limbActive": 14754,
+        "rotation": 0.007954095132716452
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 7,
+        "extra": 0.15,
+        "overlap": 9078,
+        "bodyActive": 91721,
+        "limbActive": 13899,
+        "rotation": 0.15795409513271644
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 7,
+        "extra": -0.15,
+        "overlap": 13216,
+        "bodyActive": 91821,
+        "limbActive": 16964,
+        "rotation": -0.2178497735134163
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 7,
+        "extra": 0,
+        "overlap": 10167,
+        "bodyActive": 91821,
+        "limbActive": 16791,
+        "rotation": -0.06784977351341631
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 7,
+        "extra": 0.15,
+        "overlap": 7356,
+        "bodyActive": 91821,
+        "limbActive": 15160,
+        "rotation": 0.08215022648658368
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 7,
+        "extra": -0.15,
+        "overlap": 9353,
+        "bodyActive": 83947,
+        "limbActive": 13996,
+        "rotation": -0.23771628761785768
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 7,
+        "extra": 0,
+        "overlap": 8259,
+        "bodyActive": 83947,
+        "limbActive": 14369,
+        "rotation": -0.0877162876178577
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 7,
+        "extra": 0.15,
+        "overlap": 7769,
+        "bodyActive": 83947,
+        "limbActive": 15004,
+        "rotation": 0.062283712382142295
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 7,
+        "extra": -0.15,
+        "overlap": 7156,
+        "bodyActive": 83947,
+        "limbActive": 13994,
+        "rotation": -0.18526690698182668
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 7,
+        "extra": 0,
+        "overlap": 6673,
+        "bodyActive": 83947,
+        "limbActive": 14304,
+        "rotation": -0.035266906981826676
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 7,
+        "extra": 0.15,
+        "overlap": 6171,
+        "bodyActive": 83947,
+        "limbActive": 14962,
+        "rotation": 0.11473309301817332
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 8,
+        "extra": -0.15,
+        "overlap": 11606,
+        "bodyActive": 92206,
+        "limbActive": 14050,
+        "rotation": -0.120114223669918
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 8,
+        "extra": 0,
+        "overlap": 10388,
+        "bodyActive": 92206,
+        "limbActive": 13523,
+        "rotation": 0.029885776330081985
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 8,
+        "extra": 0.15,
+        "overlap": 8982,
+        "bodyActive": 92206,
+        "limbActive": 13326,
+        "rotation": 0.179885776330082
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 8,
+        "extra": -0.15,
+        "overlap": 10320,
+        "bodyActive": 92440,
+        "limbActive": 15521,
+        "rotation": -0.2011124392357187
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 8,
+        "extra": 0,
+        "overlap": 7728,
+        "bodyActive": 92440,
+        "limbActive": 14088,
+        "rotation": -0.05111243923571872
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 8,
+        "extra": 0.15,
+        "overlap": 6370,
+        "bodyActive": 92440,
+        "limbActive": 12856,
+        "rotation": 0.09888756076428128
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 8,
+        "extra": -0.15,
+        "overlap": 10424,
+        "bodyActive": 80662,
+        "limbActive": 13953,
+        "rotation": -0.2399720523129834
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 8,
+        "extra": 0,
+        "overlap": 8644,
+        "bodyActive": 80662,
+        "limbActive": 14058,
+        "rotation": -0.0899720523129834
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 8,
+        "extra": 0.15,
+        "overlap": 7841,
+        "bodyActive": 80662,
+        "limbActive": 14444,
+        "rotation": 0.060027947687016595
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 8,
+        "extra": -0.15,
+        "overlap": 7137,
+        "bodyActive": 80662,
+        "limbActive": 13875,
+        "rotation": -0.20465605170039833
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 8,
+        "extra": 0,
+        "overlap": 6703,
+        "bodyActive": 80662,
+        "limbActive": 14005,
+        "rotation": -0.054656051700398334
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 8,
+        "extra": 0.15,
+        "overlap": 6152,
+        "bodyActive": 80662,
+        "limbActive": 14324,
+        "rotation": 0.09534394829960166
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 9,
+        "extra": -0.15,
+        "overlap": 11668,
+        "bodyActive": 94419,
+        "limbActive": 13391,
+        "rotation": -0.10004052073014913
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 9,
+        "extra": 0,
+        "overlap": 10414,
+        "bodyActive": 94419,
+        "limbActive": 13330,
+        "rotation": 0.04995947926985086
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 9,
+        "extra": 0.15,
+        "overlap": 9011,
+        "bodyActive": 94419,
+        "limbActive": 13492,
+        "rotation": 0.19995947926985086
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 9,
+        "extra": -0.15,
+        "overlap": 7965,
+        "bodyActive": 94793,
+        "limbActive": 13259,
+        "rotation": -0.18119687124971862
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 9,
+        "extra": 0,
+        "overlap": 6775,
+        "bodyActive": 94793,
+        "limbActive": 12667,
+        "rotation": -0.031196871249718632
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 9,
+        "extra": 0.15,
+        "overlap": 6263,
+        "bodyActive": 94793,
+        "limbActive": 12789,
+        "rotation": 0.11880312875028136
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 9,
+        "extra": -0.15,
+        "overlap": 11563,
+        "bodyActive": 80132,
+        "limbActive": 14180,
+        "rotation": -0.23663360094635427
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 9,
+        "extra": 0,
+        "overlap": 9222,
+        "bodyActive": 80132,
+        "limbActive": 13970,
+        "rotation": -0.08663360094635428
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 9,
+        "extra": 0.15,
+        "overlap": 8006,
+        "bodyActive": 80132,
+        "limbActive": 14016,
+        "rotation": 0.06336639905364572
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 9,
+        "extra": -0.15,
+        "overlap": 7182,
+        "bodyActive": 80132,
+        "limbActive": 14163,
+        "rotation": -0.22064703472879799
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 9,
+        "extra": 0,
+        "overlap": 6700,
+        "bodyActive": 80132,
+        "limbActive": 13933,
+        "rotation": -0.07064703472879799
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 9,
+        "extra": 0.15,
+        "overlap": 6139,
+        "bodyActive": 80132,
+        "limbActive": 13944,
+        "rotation": 0.079352965271202
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 10,
+        "extra": -0.15,
+        "overlap": 11783,
+        "bodyActive": 98115,
+        "limbActive": 13342,
+        "rotation": -0.08307298389883451
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 10,
+        "extra": 0,
+        "overlap": 10485,
+        "bodyActive": 98115,
+        "limbActive": 13569,
+        "rotation": 0.06692701610116548
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 10,
+        "extra": 0.15,
+        "overlap": 9182,
+        "bodyActive": 98115,
+        "limbActive": 14002,
+        "rotation": 0.2169270161011655
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 10,
+        "extra": -0.15,
+        "overlap": 7156,
+        "bodyActive": 98283,
+        "limbActive": 12654,
+        "rotation": -0.159341429212171
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 10,
+        "extra": 0,
+        "overlap": 6600,
+        "bodyActive": 98283,
+        "limbActive": 12852,
+        "rotation": -0.009341429212171022
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 10,
+        "extra": 0.15,
+        "overlap": 6227,
+        "bodyActive": 98283,
+        "limbActive": 13174,
+        "rotation": 0.14065857078782898
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 10,
+        "extra": -0.15,
+        "overlap": 13021,
+        "bodyActive": 84063,
+        "limbActive": 14945,
+        "rotation": -0.22790852475366175
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 10,
+        "extra": 0,
+        "overlap": 10106,
+        "bodyActive": 84063,
+        "limbActive": 14329,
+        "rotation": -0.07790852475366175
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 10,
+        "extra": 0.15,
+        "overlap": 8254,
+        "bodyActive": 84063,
+        "limbActive": 14036,
+        "rotation": 0.07209147524633824
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 10,
+        "extra": -0.15,
+        "overlap": 7172,
+        "bodyActive": 84063,
+        "limbActive": 14870,
+        "rotation": -0.23224553454395996
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 10,
+        "extra": 0,
+        "overlap": 6700,
+        "bodyActive": 84063,
+        "limbActive": 14335,
+        "rotation": -0.08224553454395997
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 10,
+        "extra": 0.15,
+        "overlap": 6120,
+        "bodyActive": 84063,
+        "limbActive": 14033,
+        "rotation": 0.06775446545604003
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 11,
+        "extra": -0.15,
+        "overlap": 11916,
+        "bodyActive": 98559,
+        "limbActive": 13525,
+        "rotation": -0.0702666305490052
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 11,
+        "extra": 0,
+        "overlap": 10668,
+        "bodyActive": 98559,
+        "limbActive": 13916,
+        "rotation": 0.0797333694509948
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 11,
+        "extra": 0.15,
+        "overlap": 9489,
+        "bodyActive": 98559,
+        "limbActive": 14731,
+        "rotation": 0.2297333694509948
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 11,
+        "extra": -0.15,
+        "overlap": 6933,
+        "bodyActive": 98445,
+        "limbActive": 12822,
+        "rotation": -0.13690505729195718
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 11,
+        "extra": 0,
+        "overlap": 6505,
+        "bodyActive": 98445,
+        "limbActive": 13135,
+        "rotation": 0.013094942708042805
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 11,
+        "extra": 0.15,
+        "overlap": 6226,
+        "bodyActive": 98445,
+        "limbActive": 13558,
+        "rotation": 0.1630949427080428
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 11,
+        "extra": -0.15,
+        "overlap": 15951,
+        "bodyActive": 87440,
+        "limbActive": 17190,
+        "rotation": -0.21433934104418978
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 11,
+        "extra": 0,
+        "overlap": 11525,
+        "bodyActive": 87440,
+        "limbActive": 15556,
+        "rotation": -0.06433934104418977
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 11,
+        "extra": 0.15,
+        "overlap": 8562,
+        "bodyActive": 87440,
+        "limbActive": 14624,
+        "rotation": 0.08566065895581022
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 11,
+        "extra": -0.15,
+        "overlap": 7187,
+        "bodyActive": 87440,
+        "limbActive": 16522,
+        "rotation": -0.23873037432402405
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 11,
+        "extra": 0,
+        "overlap": 6709,
+        "bodyActive": 87440,
+        "limbActive": 15574,
+        "rotation": -0.08873037432402404
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 11,
+        "extra": 0.15,
+        "overlap": 6134,
+        "bodyActive": 87440,
+        "limbActive": 14664,
+        "rotation": 0.06126962567597595
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 12,
+        "extra": -0.15,
+        "overlap": 11970,
+        "bodyActive": 98420,
+        "limbActive": 13642,
+        "rotation": -0.062417726909640966
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 12,
+        "extra": 0,
+        "overlap": 11096,
+        "bodyActive": 98420,
+        "limbActive": 14155,
+        "rotation": 0.08758227309035903
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 12,
+        "extra": 0.15,
+        "overlap": 9848,
+        "bodyActive": 98420,
+        "limbActive": 15430,
+        "rotation": 0.237582273090359
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 12,
+        "extra": -0.15,
+        "overlap": 6829,
+        "bodyActive": 98097,
+        "limbActive": 12952,
+        "rotation": -0.1152827950188911
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 12,
+        "extra": 0,
+        "overlap": 6403,
+        "bodyActive": 98097,
+        "limbActive": 13309,
+        "rotation": 0.03471720498110888
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 12,
+        "extra": 0.15,
+        "overlap": 6229,
+        "bodyActive": 98097,
+        "limbActive": 13800,
+        "rotation": 0.18471720498110888
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 12,
+        "extra": -0.15,
+        "overlap": 15686,
+        "bodyActive": 87419,
+        "limbActive": 16734,
+        "rotation": -0.19676975091293794
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 12,
+        "extra": 0,
+        "overlap": 13771,
+        "bodyActive": 87419,
+        "limbActive": 17666,
+        "rotation": -0.046769750912937946
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 12,
+        "extra": 0.15,
+        "overlap": 9379,
+        "bodyActive": 87419,
+        "limbActive": 16510,
+        "rotation": 0.10323024908706205
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 12,
+        "extra": -0.15,
+        "overlap": 7172,
+        "bodyActive": 87419,
+        "limbActive": 16409,
+        "rotation": -0.23969834466114345
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 12,
+        "extra": 0,
+        "overlap": 6706,
+        "bodyActive": 87419,
+        "limbActive": 16898,
+        "rotation": -0.08969834466114346
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 12,
+        "extra": 0.15,
+        "overlap": 6139,
+        "bodyActive": 87419,
+        "limbActive": 16308,
+        "rotation": 0.060301655338856536
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 13,
+        "extra": -0.15,
+        "overlap": 11870,
+        "bodyActive": 97507,
+        "limbActive": 13566,
+        "rotation": -0.06001429131720304
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 13,
+        "extra": 0,
+        "overlap": 11507,
+        "bodyActive": 97507,
+        "limbActive": 14057,
+        "rotation": 0.08998570868279696
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 13,
+        "extra": 0.15,
+        "overlap": 10043,
+        "bodyActive": 97507,
+        "limbActive": 15208,
+        "rotation": 0.23998570868279695
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 13,
+        "extra": -0.15,
+        "overlap": 6721,
+        "bodyActive": 96774,
+        "limbActive": 12951,
+        "rotation": -0.09581904550532021
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 13,
+        "extra": 0,
+        "overlap": 6339,
+        "bodyActive": 96774,
+        "limbActive": 13301,
+        "rotation": 0.05418095449467979
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 13,
+        "extra": 0.15,
+        "overlap": 6199,
+        "bodyActive": 96774,
+        "limbActive": 13800,
+        "rotation": 0.20418095449467977
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 13,
+        "extra": -0.15,
+        "overlap": 13944,
+        "bodyActive": 84180,
+        "limbActive": 15210,
+        "rotation": -0.1762921766685924
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 13,
+        "extra": 0,
+        "overlap": 12091,
+        "bodyActive": 84180,
+        "limbActive": 16041,
+        "rotation": -0.026292176668592394
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 13,
+        "extra": 0.15,
+        "overlap": 9221,
+        "bodyActive": 84180,
+        "limbActive": 17348,
+        "rotation": 0.1237078233314076
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 13,
+        "extra": -0.15,
+        "overlap": 7154,
+        "bodyActive": 84180,
+        "limbActive": 14613,
+        "rotation": -0.23508926188761342
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 13,
+        "extra": 0,
+        "overlap": 6683,
+        "bodyActive": 84180,
+        "limbActive": 15497,
+        "rotation": -0.08508926188761341
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 13,
+        "extra": 0.15,
+        "overlap": 6140,
+        "bodyActive": 84180,
+        "limbActive": 16626,
+        "rotation": 0.06491073811238658
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 14,
+        "extra": -0.15,
+        "overlap": 12496,
+        "bodyActive": 94836,
+        "limbActive": 13435,
+        "rotation": -0.0632057593693954
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 14,
+        "extra": 0,
+        "overlap": 11761,
+        "bodyActive": 94836,
+        "limbActive": 13758,
+        "rotation": 0.08679424063060459
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 14,
+        "extra": 0.15,
+        "overlap": 10501,
+        "bodyActive": 94836,
+        "limbActive": 14383,
+        "rotation": 0.23679424063060459
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 14,
+        "extra": -0.15,
+        "overlap": 6645,
+        "bodyActive": 94052,
+        "limbActive": 12815,
+        "rotation": -0.07972399203113081
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 14,
+        "extra": 0,
+        "overlap": 6313,
+        "bodyActive": 94052,
+        "limbActive": 13123,
+        "rotation": 0.07027600796886918
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 14,
+        "extra": 0.15,
+        "overlap": 6167,
+        "bodyActive": 94052,
+        "limbActive": 13539,
+        "rotation": 0.22027600796886918
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 14,
+        "extra": -0.15,
+        "overlap": 12429,
+        "bodyActive": 81797,
+        "limbActive": 14331,
+        "rotation": -0.15417983848242547
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 14,
+        "extra": 0,
+        "overlap": 10307,
+        "bodyActive": 81797,
+        "limbActive": 14962,
+        "rotation": -0.004179838482425476
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 14,
+        "extra": 0.15,
+        "overlap": 8022,
+        "bodyActive": 81797,
+        "limbActive": 15726,
+        "rotation": 0.14582016151757451
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 14,
+        "extra": -0.15,
+        "overlap": 7128,
+        "bodyActive": 81797,
+        "limbActive": 14013,
+        "rotation": -0.22518970280273765
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 14,
+        "extra": 0,
+        "overlap": 6665,
+        "bodyActive": 81797,
+        "limbActive": 14357,
+        "rotation": -0.07518970280273765
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 14,
+        "extra": 0.15,
+        "overlap": 6153,
+        "bodyActive": 81797,
+        "limbActive": 15059,
+        "rotation": 0.07481029719726234
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 15,
+        "extra": -0.15,
+        "overlap": 13000,
+        "bodyActive": 93412,
+        "limbActive": 13297,
+        "rotation": -0.07179369778921038
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 15,
+        "extra": 0,
+        "overlap": 11905,
+        "bodyActive": 93412,
+        "limbActive": 13421,
+        "rotation": 0.07820630221078961
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 15,
+        "extra": 0.15,
+        "overlap": 11001,
+        "bodyActive": 93412,
+        "limbActive": 13743,
+        "rotation": 0.2282063022107896
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 15,
+        "extra": -0.15,
+        "overlap": 6585,
+        "bodyActive": 92691,
+        "limbActive": 12671,
+        "rotation": -0.06799835906406874
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 15,
+        "extra": 0,
+        "overlap": 6259,
+        "bodyActive": 92691,
+        "limbActive": 12838,
+        "rotation": 0.08200164093593125
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 15,
+        "extra": 0.15,
+        "overlap": 6141,
+        "bodyActive": 92691,
+        "limbActive": 13148,
+        "rotation": 0.23200164093593123
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 15,
+        "extra": -0.15,
+        "overlap": 10868,
+        "bodyActive": 81413,
+        "limbActive": 14001,
+        "rotation": -0.1318075917989434
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 15,
+        "extra": 0,
+        "overlap": 8925,
+        "bodyActive": 81413,
+        "limbActive": 14304,
+        "rotation": 0.01819240820105658
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 15,
+        "extra": 0.15,
+        "overlap": 7565,
+        "bodyActive": 81413,
+        "limbActive": 14906,
+        "rotation": 0.16819240820105658
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 15,
+        "extra": -0.15,
+        "overlap": 7105,
+        "bodyActive": 81413,
+        "limbActive": 13921,
+        "rotation": -0.21061518244739988
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 15,
+        "extra": 0,
+        "overlap": 6627,
+        "bodyActive": 81413,
+        "limbActive": 13997,
+        "rotation": -0.06061518244739989
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 15,
+        "extra": 0.15,
+        "overlap": 6163,
+        "bodyActive": 81413,
+        "limbActive": 14296,
+        "rotation": 0.08938481755260011
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 16,
+        "extra": -0.15,
+        "overlap": 13531,
+        "bodyActive": 93273,
+        "limbActive": 13578,
+        "rotation": -0.08524414509773477
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 16,
+        "extra": 0,
+        "overlap": 12535,
+        "bodyActive": 93273,
+        "limbActive": 13328,
+        "rotation": 0.06475585490226522
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 16,
+        "extra": 0.15,
+        "overlap": 11397,
+        "bodyActive": 93273,
+        "limbActive": 13350,
+        "rotation": 0.21475585490226523
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 16,
+        "extra": -0.15,
+        "overlap": 6530,
+        "bodyActive": 92719,
+        "limbActive": 13355,
+        "rotation": -0.061371195464906145
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 16,
+        "extra": 0,
+        "overlap": 6227,
+        "bodyActive": 92719,
+        "limbActive": 12663,
+        "rotation": 0.08862880453509385
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 16,
+        "extra": 0.15,
+        "overlap": 6141,
+        "bodyActive": 92719,
+        "limbActive": 12771,
+        "rotation": 0.23862880453509383
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 16,
+        "extra": -0.15,
+        "overlap": 9510,
+        "bodyActive": 82684,
+        "limbActive": 13956,
+        "rotation": -0.11056644643418412
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 16,
+        "extra": 0,
+        "overlap": 7903,
+        "bodyActive": 82684,
+        "limbActive": 14052,
+        "rotation": 0.03943355356581587
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 16,
+        "extra": 0.15,
+        "overlap": 7484,
+        "bodyActive": 82684,
+        "limbActive": 14443,
+        "rotation": 0.18943355356581587
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 16,
+        "extra": -0.15,
+        "overlap": 7062,
+        "bodyActive": 82684,
+        "limbActive": 14008,
+        "rotation": -0.19227188207215035
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 16,
+        "extra": 0,
+        "overlap": 6581,
+        "bodyActive": 82684,
+        "limbActive": 13907,
+        "rotation": -0.04227188207215036
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 16,
+        "extra": 0.15,
+        "overlap": 6140,
+        "bodyActive": 82684,
+        "limbActive": 14046,
+        "rotation": 0.10772811792784964
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 17,
+        "extra": -0.15,
+        "overlap": 14788,
+        "bodyActive": 94858,
+        "limbActive": 14788,
+        "rotation": -0.10272081243849013
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 17,
+        "extra": 0,
+        "overlap": 13369,
+        "bodyActive": 94858,
+        "limbActive": 13930,
+        "rotation": 0.04727918756150986
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 17,
+        "extra": 0.15,
+        "overlap": 11739,
+        "bodyActive": 94858,
+        "limbActive": 13463,
+        "rotation": 0.19727918756150986
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 17,
+        "extra": -0.15,
+        "overlap": 6499,
+        "bodyActive": 94479,
+        "limbActive": 15672,
+        "rotation": -0.060254548236739175
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 17,
+        "extra": 0,
+        "overlap": 6210,
+        "bodyActive": 94479,
+        "limbActive": 14219,
+        "rotation": 0.08974545176326082
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 17,
+        "extra": 0.15,
+        "overlap": 6131,
+        "bodyActive": 94479,
+        "limbActive": 12919,
+        "rotation": 0.23974545176326081
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 17,
+        "extra": -0.15,
+        "overlap": 8311,
+        "bodyActive": 84944,
+        "limbActive": 13981,
+        "rotation": -0.09177708154796914
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 17,
+        "extra": 0,
+        "overlap": 7681,
+        "bodyActive": 84944,
+        "limbActive": 13995,
+        "rotation": 0.058222918452030856
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 17,
+        "extra": 0.15,
+        "overlap": 7530,
+        "bodyActive": 84944,
+        "limbActive": 14306,
+        "rotation": 0.20822291845203084
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 17,
+        "extra": -0.15,
+        "overlap": 7040,
+        "bodyActive": 84944,
+        "limbActive": 14090,
+        "rotation": -0.17130030614019887
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 17,
+        "extra": 0,
+        "overlap": 6535,
+        "bodyActive": 84944,
+        "limbActive": 13909,
+        "rotation": -0.02130030614019888
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 17,
+        "extra": 0.15,
+        "overlap": 6116,
+        "bodyActive": 84944,
+        "limbActive": 13985,
+        "rotation": 0.12869969385980112
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 18,
+        "extra": -0.15,
+        "overlap": 17113,
+        "bodyActive": 97139,
+        "limbActive": 17113,
+        "rotation": -0.12313708077436825
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 18,
+        "extra": 0,
+        "overlap": 15605,
+        "bodyActive": 97139,
+        "limbActive": 15890,
+        "rotation": 0.02686291922563174
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 18,
+        "extra": 0.15,
+        "overlap": 12718,
+        "bodyActive": 97139,
+        "limbActive": 14619,
+        "rotation": 0.17686291922563174
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 18,
+        "extra": -0.15,
+        "overlap": 6498,
+        "bodyActive": 96685,
+        "limbActive": 16879,
+        "rotation": -0.06471784512704393
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 18,
+        "extra": 0,
+        "overlap": 6207,
+        "bodyActive": 96685,
+        "limbActive": 16879,
+        "rotation": 0.08528215487295607
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 18,
+        "extra": 0.15,
+        "overlap": 6128,
+        "bodyActive": 96685,
+        "limbActive": 15265,
+        "rotation": 0.23528215487295606
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 18,
+        "extra": -0.15,
+        "overlap": 7971,
+        "bodyActive": 86484,
+        "limbActive": 13974,
+        "rotation": -0.07660773338953931
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 18,
+        "extra": 0,
+        "overlap": 7658,
+        "bodyActive": 86484,
+        "limbActive": 14024,
+        "rotation": 0.07339226661046068
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 18,
+        "extra": 0.15,
+        "overlap": 7625,
+        "bodyActive": 86484,
+        "limbActive": 14334,
+        "rotation": 0.2233922666104607
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 18,
+        "extra": -0.15,
+        "overlap": 7151,
+        "bodyActive": 86484,
+        "limbActive": 14035,
+        "rotation": -0.149004370981064
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 18,
+        "extra": 0,
+        "overlap": 6480,
+        "bodyActive": 86484,
+        "limbActive": 13906,
+        "rotation": 0.0009956290189359822
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 18,
+        "extra": 0.15,
+        "overlap": 6065,
+        "bodyActive": 86484,
+        "limbActive": 14008,
+        "rotation": 0.15099562901893598
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 19,
+        "extra": -0.15,
+        "overlap": 15273,
+        "bodyActive": 97392,
+        "limbActive": 15273,
+        "rotation": -0.14522356187658675
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 19,
+        "extra": 0,
+        "overlap": 16810,
+        "bodyActive": 97392,
+        "limbActive": 16869,
+        "rotation": 0.004776438123413242
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 19,
+        "extra": 0.15,
+        "overlap": 15576,
+        "bodyActive": 97392,
+        "limbActive": 17050,
+        "rotation": 0.15477643812341324
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 19,
+        "extra": -0.15,
+        "overlap": 6535,
+        "bodyActive": 96744,
+        "limbActive": 14333,
+        "rotation": -0.07448357902674736
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 19,
+        "extra": 0,
+        "overlap": 6223,
+        "bodyActive": 96744,
+        "limbActive": 16002,
+        "rotation": 0.07551642097325263
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 19,
+        "extra": 0.15,
+        "overlap": 6132,
+        "bodyActive": 96744,
+        "limbActive": 17051,
+        "rotation": 0.22551642097325264
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 19,
+        "extra": -0.15,
+        "overlap": 7867,
+        "bodyActive": 86103,
+        "limbActive": 13970,
+        "rotation": -0.06600156101543753
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 19,
+        "extra": 0,
+        "overlap": 7698,
+        "bodyActive": 86103,
+        "limbActive": 14144,
+        "rotation": 0.08399843898456247
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 19,
+        "extra": 0.15,
+        "overlap": 7747,
+        "bodyActive": 86103,
+        "limbActive": 14632,
+        "rotation": 0.23399843898456246
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 19,
+        "extra": -0.15,
+        "overlap": 7413,
+        "bodyActive": 86103,
+        "limbActive": 13924,
+        "rotation": -0.12677033367182278
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 19,
+        "extra": 0,
+        "overlap": 6448,
+        "bodyActive": 86103,
+        "limbActive": 13942,
+        "rotation": 0.023229666328177204
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 19,
+        "extra": 0.15,
+        "overlap": 6025,
+        "bodyActive": 86103,
+        "limbActive": 14191,
+        "rotation": 0.1732296663281772
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 20,
+        "extra": -0.15,
+        "overlap": 13695,
+        "bodyActive": 94292,
+        "limbActive": 13695,
+        "rotation": -0.16760702273077316
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 20,
+        "extra": 0,
+        "overlap": 14253,
+        "bodyActive": 94292,
+        "limbActive": 14273,
+        "rotation": -0.017607022730773168
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 20,
+        "extra": 0.15,
+        "overlap": 14134,
+        "bodyActive": 94292,
+        "limbActive": 15715,
+        "rotation": 0.13239297726922683
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 20,
+        "extra": -0.15,
+        "overlap": 6577,
+        "bodyActive": 93386,
+        "limbActive": 13291,
+        "rotation": -0.08894456265970938
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 20,
+        "extra": 0,
+        "overlap": 6257,
+        "bodyActive": 93386,
+        "limbActive": 13792,
+        "rotation": 0.06105543734029061
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 20,
+        "extra": 0.15,
+        "overlap": 6134,
+        "bodyActive": 93386,
+        "limbActive": 14675,
+        "rotation": 0.2110554373402906
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 20,
+        "extra": -0.15,
+        "overlap": 7863,
+        "bodyActive": 84408,
+        "limbActive": 14116,
+        "rotation": -0.060618005987447
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 20,
+        "extra": 0,
+        "overlap": 7782,
+        "bodyActive": 84408,
+        "limbActive": 14590,
+        "rotation": 0.08938199401255299
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 20,
+        "extra": 0.15,
+        "overlap": 7812,
+        "bodyActive": 84408,
+        "limbActive": 15285,
+        "rotation": 0.239381994012553
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 20,
+        "extra": -0.15,
+        "overlap": 7616,
+        "bodyActive": 84408,
+        "limbActive": 13951,
+        "rotation": -0.10598060153814531
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 20,
+        "extra": 0,
+        "overlap": 6525,
+        "bodyActive": 84408,
+        "limbActive": 14210,
+        "rotation": 0.04401939846185468
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 20,
+        "extra": 0.15,
+        "overlap": 5986,
+        "bodyActive": 84408,
+        "limbActive": 14750,
+        "rotation": 0.19401939846185468
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 21,
+        "extra": -0.15,
+        "overlap": 13323,
+        "bodyActive": 92756,
+        "limbActive": 13323,
+        "rotation": -0.18889576637592986
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 21,
+        "extra": 0,
+        "overlap": 13459,
+        "bodyActive": 92756,
+        "limbActive": 13512,
+        "rotation": -0.03889576637592986
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 21,
+        "extra": 0.15,
+        "overlap": 12745,
+        "bodyActive": 92756,
+        "limbActive": 13893,
+        "rotation": 0.11110423362407013
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 21,
+        "extra": -0.15,
+        "overlap": 6626,
+        "bodyActive": 91889,
+        "limbActive": 12799,
+        "rotation": -0.10720168089169
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 21,
+        "extra": 0,
+        "overlap": 6299,
+        "bodyActive": 91889,
+        "limbActive": 13107,
+        "rotation": 0.04279831910831001
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 21,
+        "extra": 0.15,
+        "overlap": 6149,
+        "bodyActive": 91889,
+        "limbActive": 13500,
+        "rotation": 0.19279831910831
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 21,
+        "extra": -0.15,
+        "overlap": 7886,
+        "bodyActive": 80591,
+        "limbActive": 14729,
+        "rotation": -0.060791792034526435
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 21,
+        "extra": 0,
+        "overlap": 7849,
+        "bodyActive": 80591,
+        "limbActive": 15465,
+        "rotation": 0.08920820796547356
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 21,
+        "extra": 0.15,
+        "overlap": 7823,
+        "bodyActive": 80591,
+        "limbActive": 16362,
+        "rotation": 0.23920820796547354
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 21,
+        "extra": -0.15,
+        "overlap": 7832,
+        "bodyActive": 80591,
+        "limbActive": 14344,
+        "rotation": -0.08792778105721968
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 21,
+        "extra": 0,
+        "overlap": 6654,
+        "bodyActive": 80591,
+        "limbActive": 15036,
+        "rotation": 0.062072218942780304
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 21,
+        "extra": 0.15,
+        "overlap": 5977,
+        "bodyActive": 80591,
+        "limbActive": 16271,
+        "rotation": 0.2120722189427803
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 22,
+        "extra": -0.15,
+        "overlap": 13419,
+        "bodyActive": 94465,
+        "limbActive": 13419,
+        "rotation": -0.2077661606997814
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 22,
+        "extra": 0,
+        "overlap": 13094,
+        "bodyActive": 94465,
+        "limbActive": 13316,
+        "rotation": -0.05776616069978142
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 22,
+        "extra": 0.15,
+        "overlap": 12030,
+        "bodyActive": 94465,
+        "limbActive": 13446,
+        "rotation": 0.09223383930021858
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 22,
+        "extra": -0.15,
+        "overlap": 6702,
+        "bodyActive": 93846,
+        "limbActive": 12665,
+        "rotation": -0.12811979351178468
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 22,
+        "extra": 0,
+        "overlap": 6317,
+        "bodyActive": 93846,
+        "limbActive": 12750,
+        "rotation": 0.02188020648821531
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 22,
+        "extra": 0.15,
+        "overlap": 6179,
+        "bodyActive": 93846,
+        "limbActive": 13026,
+        "rotation": 0.1718802064882153
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 22,
+        "extra": -0.15,
+        "overlap": 7936,
+        "bodyActive": 78498,
+        "limbActive": 15852,
+        "rotation": -0.06651211391844444
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 22,
+        "extra": 0,
+        "overlap": 7905,
+        "bodyActive": 78498,
+        "limbActive": 17134,
+        "rotation": 0.08348788608155555
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 22,
+        "extra": 0.15,
+        "overlap": 7813,
+        "bodyActive": 78498,
+        "limbActive": 17608,
+        "rotation": 0.23348788608155555
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 22,
+        "extra": -0.15,
+        "overlap": 8115,
+        "bodyActive": 78498,
+        "limbActive": 15653,
+        "rotation": -0.07373431012059047
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 22,
+        "extra": 0,
+        "overlap": 6853,
+        "bodyActive": 78498,
+        "limbActive": 16681,
+        "rotation": 0.07626568987940953
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 22,
+        "extra": 0.15,
+        "overlap": 5997,
+        "bodyActive": 78498,
+        "limbActive": 16736,
+        "rotation": 0.22626568987940954
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 23,
+        "extra": -0.15,
+        "overlap": 13702,
+        "bodyActive": 96341,
+        "limbActive": 13702,
+        "rotation": -0.22304493529746233
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 23,
+        "extra": 0,
+        "overlap": 12897,
+        "bodyActive": 96341,
+        "limbActive": 13384,
+        "rotation": -0.07304493529746234
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 23,
+        "extra": 0.15,
+        "overlap": 11675,
+        "bodyActive": 96341,
+        "limbActive": 13326,
+        "rotation": 0.07695506470253766
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 23,
+        "extra": -0.15,
+        "overlap": 6790,
+        "bodyActive": 95912,
+        "limbActive": 13280,
+        "rotation": -0.1503983127997262
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 23,
+        "extra": 0,
+        "overlap": 6385,
+        "bodyActive": 95912,
+        "limbActive": 12649,
+        "rotation": -0.0003983127997262028
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 23,
+        "extra": 0.15,
+        "overlap": 6199,
+        "bodyActive": 95912,
+        "limbActive": 12784,
+        "rotation": 0.14960168720027378
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 23,
+        "extra": -0.15,
+        "overlap": 7963,
+        "bodyActive": 77787,
+        "limbActive": 17633,
+        "rotation": -0.07742330948149462
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 23,
+        "extra": 0,
+        "overlap": 7926,
+        "bodyActive": 77787,
+        "limbActive": 16744,
+        "rotation": 0.07257669051850538
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 23,
+        "extra": 0.15,
+        "overlap": 7819,
+        "bodyActive": 77787,
+        "limbActive": 15255,
+        "rotation": 0.22257669051850537
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 23,
+        "extra": -0.15,
+        "overlap": 8504,
+        "bodyActive": 77787,
+        "limbActive": 16927,
+        "rotation": -0.06428267050632884
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 23,
+        "extra": 0,
+        "overlap": 6712,
+        "bodyActive": 77787,
+        "limbActive": 16077,
+        "rotation": 0.08571732949367115
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 23,
+        "extra": 0.15,
+        "overlap": 6022,
+        "bodyActive": 77787,
+        "limbActive": 15065,
+        "rotation": 0.23571732949367113
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 24,
+        "extra": -0.15,
+        "overlap": 13698,
+        "bodyActive": 97325,
+        "limbActive": 13890,
+        "rotation": -0.23378212959525013
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 24,
+        "extra": 0,
+        "overlap": 12432,
+        "bodyActive": 97325,
+        "limbActive": 13453,
+        "rotation": -0.08378212959525014
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 24,
+        "extra": 0.15,
+        "overlap": 11560,
+        "bodyActive": 97325,
+        "limbActive": 13304,
+        "rotation": 0.06621787040474986
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 24,
+        "extra": -0.15,
+        "overlap": 7318,
+        "bodyActive": 97085,
+        "limbActive": 13851,
+        "rotation": -0.17265206775974576
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 24,
+        "extra": 0,
+        "overlap": 6466,
+        "bodyActive": 97085,
+        "limbActive": 12757,
+        "rotation": -0.022652067759745764
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 24,
+        "extra": 0.15,
+        "overlap": 6181,
+        "bodyActive": 97085,
+        "limbActive": 12713,
+        "rotation": 0.12734793224025423
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 24,
+        "extra": -0.15,
+        "overlap": 7985,
+        "bodyActive": 79575,
+        "limbActive": 15715,
+        "rotation": -0.09284697313096651
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 24,
+        "extra": 0,
+        "overlap": 7952,
+        "bodyActive": 79575,
+        "limbActive": 14703,
+        "rotation": 0.05715302686903347
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 24,
+        "extra": 0.15,
+        "overlap": 7839,
+        "bodyActive": 79575,
+        "limbActive": 14220,
+        "rotation": 0.20715302686903347
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 24,
+        "extra": -0.15,
+        "overlap": 8056,
+        "bodyActive": 79575,
+        "limbActive": 15295,
+        "rotation": -0.06016051960526772
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 24,
+        "extra": 0,
+        "overlap": 6490,
+        "bodyActive": 79575,
+        "limbActive": 14539,
+        "rotation": 0.08983948039473227
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 24,
+        "extra": 0.15,
+        "overlap": 6034,
+        "bodyActive": 79575,
+        "limbActive": 14168,
+        "rotation": 0.23983948039473227
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 25,
+        "extra": -0.15,
+        "overlap": 13191,
+        "bodyActive": 97942,
+        "limbActive": 13809,
+        "rotation": -0.23931015668455669
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 25,
+        "extra": 0,
+        "overlap": 11876,
+        "bodyActive": 97942,
+        "limbActive": 13425,
+        "rotation": -0.08931015668455668
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 25,
+        "extra": 0.15,
+        "overlap": 11266,
+        "bodyActive": 97942,
+        "limbActive": 13313,
+        "rotation": 0.06068984331544332
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 25,
+        "extra": -0.15,
+        "overlap": 8380,
+        "bodyActive": 97962,
+        "limbActive": 13784,
+        "rotation": -0.19349742730720404
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 25,
+        "extra": 0,
+        "overlap": 6600,
+        "bodyActive": 97962,
+        "limbActive": 12728,
+        "rotation": -0.04349742730720404
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 25,
+        "extra": 0.15,
+        "overlap": 6179,
+        "bodyActive": 97962,
+        "limbActive": 12726,
+        "rotation": 0.10650257269279595
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 25,
+        "extra": -0.15,
+        "overlap": 7996,
+        "bodyActive": 81231,
+        "limbActive": 14390,
+        "rotation": -0.11182413588312001
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 25,
+        "extra": 0,
+        "overlap": 7954,
+        "bodyActive": 81231,
+        "limbActive": 14066,
+        "rotation": 0.03817586411687998
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 25,
+        "extra": 0.15,
+        "overlap": 7870,
+        "bodyActive": 81231,
+        "limbActive": 13963,
+        "rotation": 0.18817586411687998
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 25,
+        "extra": -0.15,
+        "overlap": 7395,
+        "bodyActive": 81231,
+        "limbActive": 14276,
+        "rotation": -0.06162415284994914
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 25,
+        "extra": 0,
+        "overlap": 6377,
+        "bodyActive": 81231,
+        "limbActive": 13978,
+        "rotation": 0.08837584715005085
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 25,
+        "extra": 0.15,
+        "overlap": 6041,
+        "bodyActive": 81231,
+        "limbActive": 13910,
+        "rotation": 0.23837584715005083
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 26,
+        "extra": -0.15,
+        "overlap": 12531,
+        "bodyActive": 97584,
+        "limbActive": 13540,
+        "rotation": -0.23928531056112295
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 26,
+        "extra": 0,
+        "overlap": 11796,
+        "bodyActive": 97584,
+        "limbActive": 13332,
+        "rotation": -0.08928531056112295
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 26,
+        "extra": 0.15,
+        "overlap": 10834,
+        "bodyActive": 97584,
+        "limbActive": 13367,
+        "rotation": 0.06071468943887705
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 26,
+        "extra": -0.15,
+        "overlap": 8903,
+        "bodyActive": 97817,
+        "limbActive": 13122,
+        "rotation": -0.21163832770428193
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 26,
+        "extra": 0,
+        "overlap": 6996,
+        "bodyActive": 97817,
+        "limbActive": 12661,
+        "rotation": -0.061638327704281945
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 26,
+        "extra": 0.15,
+        "overlap": 6246,
+        "bodyActive": 97817,
+        "limbActive": 12803,
+        "rotation": 0.08836167229571805
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 26,
+        "extra": -0.15,
+        "overlap": 8023,
+        "bodyActive": 83631,
+        "limbActive": 14007,
+        "rotation": -0.1331748894399722
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 26,
+        "extra": 0,
+        "overlap": 7936,
+        "bodyActive": 83631,
+        "limbActive": 13983,
+        "rotation": 0.016825110560027796
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 26,
+        "extra": 0.15,
+        "overlap": 7894,
+        "bodyActive": 83631,
+        "limbActive": 14241,
+        "rotation": 0.1668251105600278
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 26,
+        "extra": -0.15,
+        "overlap": 6969,
+        "bodyActive": 83631,
+        "limbActive": 13923,
+        "rotation": -0.06858256858496849
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 26,
+        "extra": 0,
+        "overlap": 6384,
+        "bodyActive": 83631,
+        "limbActive": 13956,
+        "rotation": 0.08141743141503151
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 26,
+        "extra": 0.15,
+        "overlap": 6038,
+        "bodyActive": 83631,
+        "limbActive": 14221,
+        "rotation": 0.23141743141503152
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 27,
+        "extra": -0.15,
+        "overlap": 11919,
+        "bodyActive": 94985,
+        "limbActive": 13336,
+        "rotation": -0.23370913604485427
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 27,
+        "extra": 0,
+        "overlap": 11707,
+        "bodyActive": 94985,
+        "limbActive": 13378,
+        "rotation": -0.08370913604485426
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 27,
+        "extra": 0.15,
+        "overlap": 10411,
+        "bodyActive": 94985,
+        "limbActive": 13650,
+        "rotation": 0.06629086395514573
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 27,
+        "extra": -0.15,
+        "overlap": 9511,
+        "bodyActive": 95267,
+        "limbActive": 12663,
+        "rotation": -0.22594685548524368
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 27,
+        "extra": 0,
+        "overlap": 7583,
+        "bodyActive": 95267,
+        "limbActive": 12802,
+        "rotation": -0.07594685548524367
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 27,
+        "extra": 0.15,
+        "overlap": 6470,
+        "bodyActive": 95267,
+        "limbActive": 13102,
+        "rotation": 0.07405314451475632
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 27,
+        "extra": -0.15,
+        "overlap": 8075,
+        "bodyActive": 86827,
+        "limbActive": 13984,
+        "rotation": -0.15557174717957373
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 27,
+        "extra": 0,
+        "overlap": 7912,
+        "bodyActive": 86827,
+        "limbActive": 14265,
+        "rotation": -0.005571747179573723
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 27,
+        "extra": 0.15,
+        "overlap": 7899,
+        "bodyActive": 86827,
+        "limbActive": 14825,
+        "rotation": 0.14442825282042626
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 27,
+        "extra": -0.15,
+        "overlap": 6967,
+        "bodyActive": 86827,
+        "limbActive": 13977,
+        "rotation": -0.08060312615806738
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 27,
+        "extra": 0,
+        "overlap": 6427,
+        "bodyActive": 86827,
+        "limbActive": 14273,
+        "rotation": 0.06939687384193262
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 27,
+        "extra": 0.15,
+        "overlap": 6036,
+        "bodyActive": 86827,
+        "limbActive": 14867,
+        "rotation": 0.21939687384193263
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 28,
+        "extra": -0.15,
+        "overlap": 11974,
+        "bodyActive": 92577,
+        "limbActive": 13473,
+        "rotation": -0.2229283326958423
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 28,
+        "extra": 0,
+        "overlap": 11387,
+        "bodyActive": 92577,
+        "limbActive": 13822,
+        "rotation": -0.07292833269584231
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 28,
+        "extra": 0.15,
+        "overlap": 10173,
+        "bodyActive": 92577,
+        "limbActive": 14511,
+        "rotation": 0.07707166730415768
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 28,
+        "extra": -0.15,
+        "overlap": 10343,
+        "bodyActive": 92861,
+        "limbActive": 12874,
+        "rotation": -0.23553337561941978
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 28,
+        "extra": 0,
+        "overlap": 8418,
+        "bodyActive": 92861,
+        "limbActive": 13206,
+        "rotation": -0.08553337561941979
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 28,
+        "extra": 0.15,
+        "overlap": 6992,
+        "bodyActive": 92861,
+        "limbActive": 13652,
+        "rotation": 0.0644666243805802
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 28,
+        "extra": -0.15,
+        "overlap": 8172,
+        "bodyActive": 88975,
+        "limbActive": 14129,
+        "rotation": -0.17762218083993248
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 28,
+        "extra": 0,
+        "overlap": 7899,
+        "bodyActive": 88975,
+        "limbActive": 14612,
+        "rotation": -0.027622180839932488
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 28,
+        "extra": 0.15,
+        "overlap": 7831,
+        "bodyActive": 88975,
+        "limbActive": 15315,
+        "rotation": 0.12237781916006751
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 28,
+        "extra": -0.15,
+        "overlap": 6969,
+        "bodyActive": 88975,
+        "limbActive": 14170,
+        "rotation": -0.09693844544831617
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 28,
+        "extra": 0,
+        "overlap": 6459,
+        "bodyActive": 88975,
+        "limbActive": 14654,
+        "rotation": 0.053061554551683814
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 28,
+        "extra": 0.15,
+        "overlap": 6036,
+        "bodyActive": 88975,
+        "limbActive": 15569,
+        "rotation": 0.20306155455168381
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 29,
+        "extra": -0.15,
+        "overlap": 11952,
+        "bodyActive": 91843,
+        "limbActive": 14242,
+        "rotation": -0.20761319869475983
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 29,
+        "extra": 0,
+        "overlap": 11008,
+        "bodyActive": 91843,
+        "limbActive": 15664,
+        "rotation": -0.05761319869475984
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 29,
+        "extra": 0.15,
+        "overlap": 9857,
+        "bodyActive": 91843,
+        "limbActive": 17027,
+        "rotation": 0.09238680130524016
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 29,
+        "extra": -0.15,
+        "overlap": 11031,
+        "bodyActive": 92036,
+        "limbActive": 13431,
+        "rotation": -0.23980184468330834
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 29,
+        "extra": 0,
+        "overlap": 9186,
+        "bodyActive": 92036,
+        "limbActive": 14010,
+        "rotation": -0.08980184468330835
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 29,
+        "extra": 0.15,
+        "overlap": 7902,
+        "bodyActive": 92036,
+        "limbActive": 15194,
+        "rotation": 0.06019815531669165
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 29,
+        "extra": -0.15,
+        "overlap": 8361,
+        "bodyActive": 88069,
+        "limbActive": 14230,
+        "rotation": -0.1979552011722559
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 29,
+        "extra": 0,
+        "overlap": 7943,
+        "bodyActive": 88069,
+        "limbActive": 14787,
+        "rotation": -0.04795520117225591
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 29,
+        "extra": 0.15,
+        "overlap": 7772,
+        "bodyActive": 88069,
+        "limbActive": 15519,
+        "rotation": 0.10204479882774409
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 29,
+        "extra": -0.15,
+        "overlap": 6999,
+        "bodyActive": 88069,
+        "limbActive": 14261,
+        "rotation": -0.11657287535623298
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 29,
+        "extra": 0,
+        "overlap": 6504,
+        "bodyActive": 88069,
+        "limbActive": 14868,
+        "rotation": 0.033427124643767014
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 29,
+        "extra": 0.15,
+        "overlap": 6047,
+        "bodyActive": 88069,
+        "limbActive": 15942,
+        "rotation": 0.183427124643767
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 30,
+        "extra": -0.15,
+        "overlap": 11876,
+        "bodyActive": 92223,
+        "limbActive": 16896,
+        "rotation": -0.1887159549379531
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 30,
+        "extra": 0,
+        "overlap": 10729,
+        "bodyActive": 92223,
+        "limbActive": 17032,
+        "rotation": -0.0387159549379531
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 30,
+        "extra": 0.15,
+        "overlap": 9526,
+        "bodyActive": 92223,
+        "limbActive": 15643,
+        "rotation": 0.1112840450620469
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 30,
+        "extra": -0.15,
+        "overlap": 11961,
+        "bodyActive": 92196,
+        "limbActive": 14740,
+        "rotation": -0.23848686993592566
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 30,
+        "extra": 0,
+        "overlap": 10869,
+        "bodyActive": 92196,
+        "limbActive": 16521,
+        "rotation": -0.08848686993592568
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 30,
+        "extra": 0.15,
+        "overlap": 8674,
+        "bodyActive": 92196,
+        "limbActive": 17050,
+        "rotation": 0.061513130064074314
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 30,
+        "extra": -0.15,
+        "overlap": 8720,
+        "bodyActive": 86138,
+        "limbActive": 14170,
+        "rotation": -0.2153065994017658
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 30,
+        "extra": 0,
+        "overlap": 8041,
+        "bodyActive": 86138,
+        "limbActive": 14671,
+        "rotation": -0.06530659940176581
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 30,
+        "extra": 0.15,
+        "overlap": 7735,
+        "bodyActive": 86138,
+        "limbActive": 15390,
+        "rotation": 0.08469340059823419
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 30,
+        "extra": -0.15,
+        "overlap": 7027,
+        "bodyActive": 86138,
+        "limbActive": 14184,
+        "rotation": -0.13828564207553495
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 30,
+        "extra": 0,
+        "overlap": 6551,
+        "bodyActive": 86138,
+        "limbActive": 14719,
+        "rotation": 0.01171435792446504
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 30,
+        "extra": 0.15,
+        "overlap": 6063,
+        "bodyActive": 86138,
+        "limbActive": 15656,
+        "rotation": 0.16171435792446504
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 31,
+        "extra": -0.15,
+        "overlap": 11820,
+        "bodyActive": 91636,
+        "limbActive": 15846,
+        "rotation": -0.16741154054954177
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 31,
+        "extra": 0,
+        "overlap": 10636,
+        "bodyActive": 91636,
+        "limbActive": 14588,
+        "rotation": -0.017411540549541787
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 31,
+        "extra": 0.15,
+        "overlap": 9314,
+        "bodyActive": 91636,
+        "limbActive": 13802,
+        "rotation": 0.13258845945045822
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 31,
+        "extra": -0.15,
+        "overlap": 13399,
+        "bodyActive": 91803,
+        "limbActive": 17085,
+        "rotation": -0.23167021014219707
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 31,
+        "extra": 0,
+        "overlap": 9989,
+        "bodyActive": 91803,
+        "limbActive": 16531,
+        "rotation": -0.08167021014219708
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 31,
+        "extra": 0.15,
+        "overlap": 7298,
+        "bodyActive": 91803,
+        "limbActive": 14854,
+        "rotation": 0.06832978985780291
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 31,
+        "extra": -0.15,
+        "overlap": 9441,
+        "bodyActive": 83355,
+        "limbActive": 14025,
+        "rotation": -0.22859754959687933
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 31,
+        "extra": 0,
+        "overlap": 8273,
+        "bodyActive": 83355,
+        "limbActive": 14341,
+        "rotation": -0.07859754959687934
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 31,
+        "extra": 0.15,
+        "overlap": 7759,
+        "bodyActive": 83355,
+        "limbActive": 14955,
+        "rotation": 0.07140245040312065
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 31,
+        "extra": -0.15,
+        "overlap": 7067,
+        "bodyActive": 83355,
+        "limbActive": 14000,
+        "rotation": -0.1607267508965466
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 31,
+        "extra": 0,
+        "overlap": 6586,
+        "bodyActive": 83355,
+        "limbActive": 14321,
+        "rotation": -0.010726750896546604
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 31,
+        "extra": 0.15,
+        "overlap": 6042,
+        "bodyActive": 83355,
+        "limbActive": 14987,
+        "rotation": 0.1392732491034534
+      }
+    ],
+    "worst": [
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 8,
+        "extra": -0.15,
+        "overlap": 11606,
+        "bodyActive": 92206,
+        "limbActive": 14050,
+        "rotation": -0.120114223669918
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 8,
+        "extra": 0,
+        "overlap": 10388,
+        "bodyActive": 92206,
+        "limbActive": 13523,
+        "rotation": 0.029885776330081985
+      },
+      {
+        "name": "dragon_04_leg_fl",
+        "phase": 8,
+        "extra": 0.15,
+        "overlap": 8982,
+        "bodyActive": 92206,
+        "limbActive": 13326,
+        "rotation": 0.179885776330082
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 18,
+        "extra": -0.15,
+        "overlap": 6498,
+        "bodyActive": 96685,
+        "limbActive": 16879,
+        "rotation": -0.06471784512704393
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 18,
+        "extra": 0,
+        "overlap": 6207,
+        "bodyActive": 96685,
+        "limbActive": 16879,
+        "rotation": 0.08528215487295607
+      },
+      {
+        "name": "dragon_04_leg_fr",
+        "phase": 18,
+        "extra": 0.15,
+        "overlap": 6128,
+        "bodyActive": 96685,
+        "limbActive": 15265,
+        "rotation": 0.23528215487295606
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 20,
+        "extra": -0.15,
+        "overlap": 7863,
+        "bodyActive": 84408,
+        "limbActive": 14116,
+        "rotation": -0.060618005987447
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 18,
+        "extra": 0,
+        "overlap": 7658,
+        "bodyActive": 86484,
+        "limbActive": 14024,
+        "rotation": 0.07339226661046068
+      },
+      {
+        "name": "dragon_04_leg_bl",
+        "phase": 16,
+        "extra": 0.15,
+        "overlap": 7484,
+        "bodyActive": 82684,
+        "limbActive": 14443,
+        "rotation": 0.18943355356581587
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 27,
+        "extra": -0.15,
+        "overlap": 6967,
+        "bodyActive": 86827,
+        "limbActive": 13977,
+        "rotation": -0.08060312615806738
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 25,
+        "extra": 0,
+        "overlap": 6377,
+        "bodyActive": 81231,
+        "limbActive": 13978,
+        "rotation": 0.08837584715005085
+      },
+      {
+        "name": "dragon_04_leg_br",
+        "phase": 21,
+        "extra": 0.15,
+        "overlap": 5977,
+        "bodyActive": 80591,
+        "limbActive": 16271,
+        "rotation": 0.2120722189427803
+      }
+    ]
+  },
+  "errors": [],
+  "scope": "Head rigid geometry and independent whisker source binding/inertia; 4K6x actual claw-host overlap sweep. Root screenshots require human/agent visual inspection."
+}

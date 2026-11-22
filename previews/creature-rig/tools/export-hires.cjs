@@ -7,7 +7,7 @@ const vec=(v,sx,sy)=>Array.isArray(v)?[v[0]*sx,v[1]*sy]:v;
 const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
 async function continuousBody(rig,dir,dest,W,H){
  const species=rig.id.split('_')[0],[width,height]=rig.sourceSize;
- const layers=[...rig.layers].sort((a,b)=>(a.order??0)-(b.order??0)).filter(l=>l.kind==='body'||['head','tail'].includes(l.kind)&&species!=='turtle'||species==='dragon'&&/_horn_[lr]$/.test(l.name));
+ const layers=[...rig.layers].sort((a,b)=>(a.order??0)-(b.order??0)).filter(l=>l.kind==='body'||['head','tail'].includes(l.kind)&&species!=='turtle');
  const native=await sharp({create:{width,height,channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite(layers.map(l=>({input:path.join(dir,l.file),left:0,top:0}))).png().toBuffer();
  await sharp(native).resize(W,H,{kernel:'lanczos3',fit:'fill'}).png({compressionLevel:9}).toFile(path.join(dest,'continuous-body.png'));
 }
@@ -35,7 +35,7 @@ async function exportOne(id){
   if(x1<0)throw Error(id+' empty master layer '+l.name);
   const pad=12,left=Math.max(0,x0-pad),top=Math.max(0,y0-pad),right=Math.min(W,x1+pad+1),bottom=Math.min(H,y1+pad+1),bbox=[left,top,right-left,bottom-top],file='textures/'+path.basename(l.file);
   await sharp(aligned).extract({left,top,width:bbox[2],height:bbox[3]}).png({compressionLevel:9}).toFile(path.join(dest,file));
-  const rootRepair=l.rootRepair?{...l.rootRepair,outer:vec(l.rootRepair.outer,sx,sy),inner:vec(l.rootRepair.inner,sx,sy),...(l.rootRepair.innerTip?{innerTip:vec(l.rootRepair.innerTip,sx,sy)}:{}),...(l.rootRepair.paintFile?{paintFile:path.posix.relative('masters/'+id,path.posix.normalize(id+'/'+l.rootRepair.paintFile))}:{}),radius:(l.rootRepair.radius||0)*s}:undefined;
+  const rootRepair=l.rootRepair?{...l.rootRepair,outer:vec(l.rootRepair.outer,sx,sy),inner:vec(l.rootRepair.inner,sx,sy),...(l.rootRepair.innerTip?{innerTip:vec(l.rootRepair.innerTip,sx,sy)}:{}),...(l.rootRepair.paintFile?{paintFile:path.posix.relative('masters/'+id,path.posix.normalize(id+'/'+l.rootRepair.paintFile))}:{}),...(l.rootRepair.coverageMask?{coverageMask:path.posix.relative('masters/'+id,path.posix.normalize(id+'/'+l.rootRepair.coverageMask))}:{}),radius:(l.rootRepair.radius||0)*s}:undefined;
   const strand=l.strand?{...l.strand,...(l.strand.sourceTrace?{sourceTrace:l.strand.sourceTrace.map(p=>vec(p,sx,sy))}:{})}:undefined;
   scaled.layers.push({...l,file,croppedFile:file,bbox,bounds:[x0,y0,x1,y1],pivot:vec(l.pivot,sx,sy),...(rootRepair?{rootRepair}:{}),...(strand?{strand}:{}),fileLayout:'cropped-with-global-bbox',authoringAlignedFile:'aligned/'+l.file});
   composites.push({order:l.order||0,input:aligned,left:0,top:0});

@@ -1,0 +1,423 @@
+{
+  "version": 8,
+  "sourceHash": "ee65bdc4e888b46eb07193281390ea9f63e84aaca8aaa1b55bec8e3663d5158d",
+  "paintFile": "../repair-plates/dragon_04_joints-r8.png",
+  "sourcePreserved": true,
+  "regions": [
+    {
+      "part": "dragon_04_leg_fl",
+      "hostPixels": 4130,
+      "recoveredSourceHostPixels": 12,
+      "rootPaintedPixels": 3975,
+      "removedTorsoTabPixels": 6558,
+      "underHostPixels": 3102,
+      "suffix": "leg_fl",
+      "outer": [
+        454,
+        528
+      ],
+      "inner": [
+        533,
+        520
+      ],
+      "tip": [
+        539,
+        519
+      ],
+      "radius": 25,
+      "armTrace": [
+        [
+          405,
+          526
+        ],
+        [
+          430,
+          527
+        ],
+        [
+          454,
+          528
+        ],
+        [
+          490,
+          524
+        ],
+        [
+          533,
+          520
+        ]
+      ],
+      "pruneFromX": 410
+    },
+    {
+      "part": "dragon_04_leg_fr",
+      "hostPixels": 0,
+      "recoveredSourceHostPixels": 34,
+      "rootPaintedPixels": 4079,
+      "removedTorsoTabPixels": 5079,
+      "underHostPixels": 1501,
+      "suffix": "leg_fr",
+      "outer": [
+        617,
+        526
+      ],
+      "inner": [
+        535,
+        520
+      ],
+      "tip": [
+        529,
+        519
+      ],
+      "radius": 25,
+      "armTrace": [
+        [
+          660,
+          520
+        ],
+        [
+          640,
+          527
+        ],
+        [
+          617,
+          526
+        ],
+        [
+          575,
+          523
+        ],
+        [
+          535,
+          520
+        ]
+      ],
+      "pruneFromX": 655
+    },
+    {
+      "part": "dragon_04_leg_bl",
+      "hostPixels": 3894,
+      "recoveredSourceHostPixels": 573,
+      "rootPaintedPixels": 4696,
+      "removedTorsoTabPixels": 7448,
+      "underHostPixels": 2125,
+      "suffix": "leg_bl",
+      "outer": [
+        485,
+        992
+      ],
+      "inner": [
+        579,
+        986
+      ],
+      "tip": [
+        585,
+        985
+      ],
+      "radius": 26,
+      "armTrace": [
+        [
+          435,
+          1002
+        ],
+        [
+          461,
+          1000
+        ],
+        [
+          485,
+          992
+        ],
+        [
+          535,
+          990
+        ],
+        [
+          579,
+          986
+        ]
+      ],
+      "pruneFromX": 440
+    },
+    {
+      "part": "dragon_04_leg_br",
+      "hostPixels": 0,
+      "recoveredSourceHostPixels": 133,
+      "rootPaintedPixels": 3496,
+      "removedTorsoTabPixels": 4727,
+      "underHostPixels": 1924,
+      "suffix": "leg_br",
+      "outer": [
+        645,
+        990
+      ],
+      "inner": [
+        579,
+        986
+      ],
+      "tip": [
+        573,
+        985
+      ],
+      "radius": 25,
+      "armTrace": [
+        [
+          668,
+          999
+        ],
+        [
+          645,
+          990
+        ],
+        [
+          615,
+          988
+        ],
+        [
+          579,
+          986
+        ]
+      ],
+      "pruneFromX": 665
+    }
+  ],
+  "horns": [
+    {
+      "part": "dragon_04_horn_l",
+      "sourcePixels": 4493,
+      "removedHostPixels": 790,
+      "rigid": true,
+      "headAttachment": true
+    },
+    {
+      "part": "dragon_04_horn_r",
+      "sourcePixels": 4313,
+      "removedHostPixels": 589,
+      "rigid": true,
+      "headAttachment": true
+    }
+  ],
+  "whiskers": [
+    {
+      "part": "dragon_04_whisker_l",
+      "sourceTrace": [
+        [
+          496,
+          133
+        ],
+        [
+          477,
+          111
+        ],
+        [
+          458,
+          119
+        ],
+        [
+          444,
+          131
+        ],
+        [
+          430,
+          146
+        ],
+        [
+          418,
+          161
+        ],
+        [
+          401,
+          176
+        ],
+        [
+          383,
+          185
+        ],
+        [
+          364,
+          189
+        ],
+        [
+          345,
+          187
+        ],
+        [
+          327,
+          184
+        ],
+        [
+          307,
+          184
+        ],
+        [
+          288,
+          187
+        ],
+        [
+          271,
+          194
+        ],
+        [
+          258,
+          207
+        ],
+        [
+          250,
+          223
+        ],
+        [
+          244,
+          245
+        ]
+      ],
+      "removedHeadSkinPixels": 427
+    },
+    {
+      "part": "dragon_04_whisker_r",
+      "sourceTrace": [
+        [
+          535,
+          133
+        ],
+        [
+          546,
+          105
+        ],
+        [
+          564,
+          112
+        ],
+        [
+          578,
+          128
+        ],
+        [
+          590,
+          146
+        ],
+        [
+          606,
+          161
+        ],
+        [
+          624,
+          176
+        ],
+        [
+          644,
+          187
+        ],
+        [
+          663,
+          193
+        ],
+        [
+          681,
+          193
+        ],
+        [
+          700,
+          188
+        ],
+        [
+          720,
+          183
+        ],
+        [
+          737,
+          185
+        ],
+        [
+          751,
+          195
+        ],
+        [
+          762,
+          212
+        ],
+        [
+          770,
+          231
+        ]
+      ],
+      "removedHeadSkinPixels": 567
+    }
+  ],
+  "hostContourRefinements": [
+    {
+      "name": "tail-side inherited brush tab",
+      "roi": [
+        390,
+        1105,
+        40,
+        90
+      ],
+      "side": "left",
+      "mode": "source-contour",
+      "points": [
+        [
+          1105,
+          414
+        ],
+        [
+          1120,
+          418
+        ],
+        [
+          1140,
+          419
+        ],
+        [
+          1155,
+          419
+        ],
+        [
+          1170,
+          418
+        ],
+        [
+          1195,
+          418
+        ]
+      ],
+      "changedPixels": 908,
+      "method": "restore original selected-source alpha and pigment within ROI; no limb edits"
+    },
+    {
+      "name": "hind-right receiving-edge tab",
+      "roi": [
+        605,
+        980,
+        48,
+        54
+      ],
+      "side": "right",
+      "points": [
+        [
+          980,
+          636
+        ],
+        [
+          995,
+          628
+        ],
+        [
+          1010,
+          618
+        ],
+        [
+          1025,
+          608
+        ],
+        [
+          1034,
+          601
+        ]
+      ],
+      "changedPixels": 1296,
+      "method": "bounded feathered silhouette only; inner pigment and all claw layers retained"
+    }
+  ],
+  "changedLayerPixels": 50176,
+  "changedOutsideApprovedMask": 0
+}

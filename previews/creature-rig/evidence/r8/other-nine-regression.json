@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "assets": {
+    "files": 255,
+    "changed": []
+  },
+  "motion": [
+    {
+      "id": "fish_04",
+      "maxDifference": 0
+    },
+    {
+      "id": "fish_01",
+      "maxDifference": 0
+    },
+    {
+      "id": "fish_02",
+      "maxDifference": 0
+    },
+    {
+      "id": "fish_04_special",
+      "maxDifference": 0
+    },
+    {
+      "id": "shrimp_07",
+      "maxDifference": 0
+    },
+    {
+      "id": "shrimp_04",
+      "maxDifference": 0
+    },
+    {
+      "id": "shrimp_05",
+      "maxDifference": 0
+    },
+    {
+      "id": "turtle_02",
+      "maxDifference": 0
+    },
+    {
+      "id": "turtle_08",
+      "maxDifference": 0
+    }
+  ]
+}
