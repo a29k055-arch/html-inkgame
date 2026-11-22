@@ -1,4 +1,4 @@
-> 当前维护版本：**V5 形体水墨与游入生态**（2026-11-23）。十套生物素材/R7动画、统一墨量资格与平滑变身、全身形体散墨、边缘游入、快速大体型与扁平顶栏。V4继续冻结；开发目录src-v5。详见 [交接](PROJECT_HANDOFF.md) 与 [本轮报告及玩法企划](docs/V5-SHAPE-FLOW-20261123.md)。
+> 当前维护版本：**V5 形体水墨与游入生态**（2026-11-23）。十套生物素材/R8龙动画、统一墨量资格与平滑变身、全身形体散墨、边缘游入、快速大体型与扁平顶栏。V4继续冻结；开发目录src-v5。详见 [交接](PROJECT_HANDOFF.md) 与 [本轮报告及玩法企划](docs/V5-SHAPE-FLOW-20261123.md)。
 
 # 墨—BOKU—
 
@@ -13,7 +13,7 @@
 
 当前公开版本为V2/V3/V4冻结版及V5维护版。根首页与/v5/发布V5；/v4/从v4-ink-reveal固定提取，绝不跟随HEAD。各版独立归档全部资源，versions.json记录各SHA。V5存档boku.save.v5、画作数据库boku.paintings.v5；只复制V4设置偏好，不迁移或改写V4游玩进度。旧涂色及复杂玩法预览继续保留。
 
-本地：`node tools/serve-preview.cjs 4191`，打开`http://127.0.0.1:4191/v5.html`；本地index.html仍是V4入口，用于隔离回归。打包工具会把v5.html作为公开根首页和/v5/的index。
+本地：`node tools/serve-preview.cjs 4191`，打开`http://127.0.0.1:4191/v5.html`；本地index.html仍是V4入口，用于隔离回归。公开根首页转入/v5；正式V5取最近修改src-v5或v5.html的提交，素材演示按部署HEAD保留，避免并行素材更新直接改动正式游戏资源。
 
 - [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V5）
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)

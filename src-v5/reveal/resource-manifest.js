@@ -2,7 +2,7 @@
 export const V5_CREATURE_RESOURCES=Object.freeze([
  {
   "path": "previews/creature-rig/dragon_04/rig.json",
-  "bytes": 13923
+  "bytes": 16625
  },
  {
   "path": "previews/creature-rig/dragon_04/source.png",
@@ -10,47 +10,47 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_body_01.png",
-  "bytes": 115026
+  "bytes": 122034
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_body_02.png",
-  "bytes": 106793
+  "bytes": 106843
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_body_03.png",
-  "bytes": 90966
+  "bytes": 97364
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_head.png",
-  "bytes": 82268
+  "bytes": 86145
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_horn_l.png",
-  "bytes": 23440
+  "bytes": 15469
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_horn_r.png",
-  "bytes": 21658
+  "bytes": 14882
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_leg_bl.png",
-  "bytes": 45460
+  "bytes": 37934
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_leg_br.png",
-  "bytes": 32409
+  "bytes": 28164
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_leg_fl.png",
-  "bytes": 49152
+  "bytes": 41119
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_leg_fr.png",
-  "bytes": 36214
+  "bytes": 32739
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_neck.png",
-  "bytes": 73833
+  "bytes": 78539
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_tail.png",
@@ -58,11 +58,11 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_whisker_l.png",
-  "bytes": 12957
+  "bytes": 11287
  },
  {
   "path": "previews/creature-rig/dragon_04/textures/dragon_04_whisker_r.png",
-  "bytes": 13027
+  "bytes": 11097
  },
  {
   "path": "previews/creature-rig/fish_01/rig.json",

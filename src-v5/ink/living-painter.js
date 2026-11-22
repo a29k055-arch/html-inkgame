@@ -147,7 +147,9 @@ export class LivingPainter {
   for(const e of alive){if(e.dead)continue;if(isPlayer(e)){const before=this.playerSizes.get(e)??coreRadius(e);this.playerSizes.set(e,before+(coreRadius(e)-before)*(1-Math.exp(-dt*9)));}const q=this.ensure(e);if(!q)continue;this.configure(q,e);const radius=q.coreRadius,extent=radius*Math.max(2,q.calibration.lengthPerRadius*1.5),x=(e.x-camera.x)*camera.scale,y=(e.y-camera.y)*camera.scale,pad=extent*camera.scale;
    q.visible=isPlayer(e)||(x+pad>=0&&x-pad<viewport.width&&y+pad>=0&&y-pad<viewport.height);
    q.age+=dt;q.renderAge+=dt;const interval=isPlayer(e)?1/60:q.visible?1/30:1/6;
-   if(q.age>=interval){const c=q.creature,speed=Math.hypot(e.vx||0,e.vy||0),maximum=Math.max(1,arena.speed?.(e,false)||100);c.setInput(speed>1?(e.vx||0)/Math.max(maximum,speed):0,speed>1?(e.vy||0)/Math.max(maximum,speed):0);c.update(Math.min(.1,q.age));q.age=0;this.configure(q,e);if(q.visible)this.metrics.animated++;}
+   if(q.age>=interval){const c=q.creature,speed=Math.hypot(e.vx||0,e.vy||0),maximum=Math.max(1,arena.speed?.(e,false)||100);c.setInput(speed>1?(e.vx||0)/Math.max(maximum,speed):0,speed>1?(e.vy||0)/Math.max(maximum,speed):0);// External entity motion owns translation. R8 whiskers still need its actual
+    // local velocity, so clear it before integration and restore it only for draw.
+    c.vx=c.vy=0;c.update(Math.min(.1,q.age));if(isPlayer(e)&&q.species==='dragon'){c.vx=(e.vx||0)/Math.max(.0001,q.scale);c.vy=(e.vy||0)/Math.max(.0001,q.scale);}q.age=0;this.configure(q,e);if(q.visible)this.metrics.animated++;}
    this.syncBody(q,e);
    if(!q.visible){this.metrics.culled++;if(q.tile&&this.clock-(q.lastDraw||0)>2){q.tile.width=q.tile.height=1;q.tile=null;q.world=null;}}
   }
