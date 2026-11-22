@@ -1,0 +1,21 @@
+import {GAME_CONFIG as C,CAMERA_CONFIG as B,clamp,dist} from './config.js';
+export const random=(a,b)=>a+Math.random()*(b-a);
+// Adapted from GitHub legacy randomPoint/randomNpcPoint/createFood/moveSpeed.
+// No revealAt, obscureNpcTrail, painting state, recoil or fluid fields are imported.
+export function randomPoint(world=C.world){return {x:random(80,world.width-80),y:random(80,world.height-80)};}
+export function randomNpcPoint(player,world=C.world){
+ for(let attempt=0;attempt<30;attempt++){
+  let point=randomPoint(world);
+  if(Math.random()<.42){const side=Math.floor(random(0,4)),margin=random(90,520);point={x:side===0?margin:side===1?world.width-margin:random(90,world.width-90),y:side===2?margin:side===3?world.height-margin:random(90,world.height-90)};}
+  if(!player||dist(point,player)>300)return point;
+ }
+ return randomPoint(world);
+}
+export function createFood(point=randomPoint()){
+ const r=random(2.2,4.2);return {...point,r,mass:r*r*2.8,shape:['circle','square','triangle','pentagon'][Math.floor(random(0,4))],rot:random(0,Math.PI*2),alpha:random(.42,.78)};
+}
+export function moveSpeed(radius){return 235*(1-clamp((radius-C.initialRadius)/(170-C.initialRadius),0,1)*.38);}
+export function cameraTarget(player,width,height,mobile){
+ const floor=Math.max(width/C.world.width,height/C.world.height,mobile?B.mobileMin:B.desktopMin),scale=Math.max(floor,(1.12-(player.r-C.initialRadius)/B.growthRange)*(mobile?.8:1));
+ return {scale,x:clamp(player.x-width/scale/2,0,Math.max(0,C.world.width-width/scale)),y:clamp(player.y-height/scale/2,0,Math.max(0,C.world.height-height/scale))};
+}

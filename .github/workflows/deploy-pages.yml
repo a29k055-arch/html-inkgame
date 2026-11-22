@@ -27,7 +27,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Package frozen V2, frozen V3, current V4
+      - name: Package frozen V2-V4 and current V5
         run: node tools/package-versions.cjs
 
       - name: Setup Pages

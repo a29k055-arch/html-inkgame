@@ -1,0 +1,63 @@
+import {GAME_CONFIG as C,clamp,dist} from './config.js';
+import {random} from './legacy-foundation.js';
+// Personality stays internal. Each controller has its own reaction, awareness and aim skill.
+export const AI_PROFILES={
+ aggressive:{waterTolerance:220,waterSeconds:2.5,risk:.9,hunt:1.7,food:.7,items:.8,reaction:.32,skill:.65},
+ conservative:{waterTolerance:0,waterSeconds:0,risk:.25,hunt:.25,food:1.4,items:.8,reaction:.48,skill:.62},
+ flee:{waterTolerance:0,waterSeconds:0,risk:.12,hunt:.08,food:1.1,items:.5,reaction:.30,skill:.58},
+ opportunist:{waterTolerance:180,waterSeconds:2,risk:.55,hunt:1.1,food:.9,items:1.8,reaction:.37,skill:.76},
+ expert:{waterTolerance:150,waterSeconds:1.8,risk:.7,hunt:1.45,food:1.2,items:1.4,reaction:.20,skill:.96},
+ balanced:{waterTolerance:90,waterSeconds:1.2,risk:.5,hunt:.85,food:1.1,items:1,reaction:.52,skill:.55},
+ novice:{waterTolerance:70,waterSeconds:1,risk:.65,hunt:.55,food:.85,items:.65,reaction:.95,skill:.23},
+};
+export const COMPETITOR_PROFILE=Object.freeze({waterTolerance:0,waterSeconds:0,risk:.35,hunt:1.9,food:2.6,items:0,reaction:.22,skill:.95,playerSpeedRatio:.93});
+// Passive drifters: tiny, slow, never hunt and never flee. Used as living plankton near spawn.
+export const DRIFTER_PROFILE=Object.freeze({waterTolerance:0,waterSeconds:0,risk:0,hunt:0,food:.6,items:0,reaction:.9,skill:.12,speedScale:.34,passive:true});
+export function aiController(index,forced){const personality=forced&&AI_PROFILES[forced]?forced:forced==='competitor'?'competitor':forced==='drift'?'drift':Object.keys(AI_PROFILES)[index%7],profile=forced==='competitor'?COMPETITOR_PROFILE:forced==='drift'?DRIFTER_PROFILE:AI_PROFILES[personality];return {type:'ai',personality,profile:{...profile,reaction:profile.reaction*random(.8,1.25),skill:clamp(profile.skill+random(-.08,.08),.1,1)},think:random(0,.7),goal:null,intent:'wander',chaseTime:0,previousDistance:Infinity,routeSeed:random(0,6.28)};}
+function threatCost(point,threats,e,game){let cost=0;for(const t of threats){const d=dist(point,t),reach=game.radius(t)+game.radius(e)+190;if(d<reach)cost+=(reach-d)/reach*(1+game.radius(t)/game.radius(e));}return cost;}
+export function chooseGoal(game,e){
+ const world=game.world||C.world,ctrl=e.controller,p=ctrl.profile,own=game.radius(e),perception=C.aiPerceptionRange*(.65+p.skill*.7);
+ const nearby=game.entities.filter(o=>o!==e&&!o.dead&&!o.effects.water&&dist(o,e)<perception);
+ const threats=nearby.filter(o=>game.radius(o)>own*1.06);
+ const immediate=threats.filter(o=>dist(o,e)<own+game.radius(o)+100+(1-p.risk)*200).sort((a,b)=>dist(a,e)-dist(b,e))[0];
+ const center=game.center,edge=dist(e,center)>game.safeRadius-e.r-70;
+ ctrl.threats=threats;ctrl.danger=immediate||null;ctrl.prey=null;
+ const waterDepth=Math.max(0,dist(e,center)+e.r+70-game.safeRadius),waterLimit=p.waterTolerance||0;const forcedWater=edge&&(waterDepth>waterLimit||(ctrl.waterExposure||0)>(p.waterSeconds||0));if(forcedWater){ctrl.intent='water';return {x:center.x,y:center.y};}
+ if(immediate){
+  // Fan candidate routes: escape away from threats while avoiding walls/water and dead ends.
+  const away=Math.atan2(e.y-immediate.y,e.x-immediate.x);let best=null,bestScore=-Infinity;
+  for(const offset of [-1,-.5,0,.5,1]){const a=away+offset,point={x:clamp(e.x+Math.cos(a)*420,e.r+30,world.width-e.r-30),y:clamp(e.y+Math.sin(a)*420,e.r+30,world.height-e.r-30)};const score=dist(point,immediate)-threatCost(point,threats,e,game)*220-Math.max(0,dist(point,center)-game.safeRadius+60)*2;if(score>bestScore){bestScore=score;best=point;}}
+  ctrl.intent='flee';return best;
+ }
+ let goal=null,best=-Infinity,intent='forage';
+ for(const prey of nearby){
+  if(game.boundarySliding){const reachable={x:clamp(prey.x,own,world.width-own),y:clamp(prey.y,own,world.height-own)};if(dist(reachable,prey)>own-game.radius(prey)*C.consumeOverlap){ctrl.unreachable=prey.id;continue;}}
+  const sizeRatio=own/game.radius(prey),distance=dist(e,prey);if(sizeRatio<1.12||prey.invincible||p.hunt<.15||dist(prey,center)>game.safeRadius-e.r+waterLimit)continue;
+  const speedRatio=game.speed(e)/game.speed(prey),closing=distance/Math.max(25,game.speed(e));
+  if(speedRatio<.86&&distance>own+140)continue;
+  if(e.v4Visual&&ctrl.v4IgnoreId===prey.id&&game.elapsed<ctrl.v4IgnoreUntil)continue;const previous=ctrl.goal?.id===prey.id;if(previous&&ctrl.personality!=='competitor'&&ctrl.chaseTime>4.5&&distance>own+100&&distance>=ctrl.previousDistance-8)continue;
+  const reward=prey.mass*C.npcGain/(e.mass+200),risk=threatCost(prey,threats,e,game);
+  const score=p.hunt*(reward+1.1)/(1+closing*.65)-risk*(2-p.risk)-Math.max(0,dist(prey,center)+e.r-game.safeRadius)/Math.max(1,waterLimit)*.8;
+  if(score>best){best=score;goal={id:prey.id,x:prey.x+prey.vx*.3*p.skill,y:prey.y+prey.vy*.3*p.skill};intent='hunt';ctrl.prey=prey;}
+ }
+ // Linear scan avoids sorting the whole food list for every NPC.
+ for(const food of game.foods){if(game.isPointBlockedForNpc?.(food,e))continue;const distance=dist(e,food);if(distance>perception||dist(food,center)>game.safeRadius-45+waterLimit*.65)continue;const score=p.food*(.65+food.mass/60)/(1+distance/110)-threatCost(food,threats,e,game)*(2-p.risk)-Math.max(0,dist(food,center)+45-game.safeRadius)/Math.max(1,waterLimit)*1.2;if(score>best){best=score;goal={x:food.x,y:food.y};intent='forage';}}
+ if(!game.simplePickups&&e.skills.length<2)for(const item of game.items){const distance=dist(e,item);if(distance>perception||dist(item,center)>game.safeRadius-45)continue;const score=p.items*1.7/(1+distance/150)-threatCost(item,threats,e,game)*2;if(score>best){best=score;goal={x:item.x,y:item.y};intent='item';}}
+ if(!goal){ctrl.intent=edge?'water':'wander';return edge?{...center}:game.spawnPoint();}
+ if(intent==='hunt'&&ctrl.goal?.id===goal.id)ctrl.chaseTime+=p.reaction;else ctrl.chaseTime=0;
+ ctrl.previousDistance=dist(e,goal);ctrl.intent=intent;return goal;
+}
+export function aiDirection(game,e,dt){if(game.theme==='boss')return clashDirection(game,e,dt);
+ const ctrl=e.controller,c=game.behavior,variant=e.v4Visual&&c;if(variant){ctrl.v4Cycle=(ctrl.v4Cycle||0)-dt;if(ctrl.v4Cycle<=0){ctrl.v4Cycle=random(c.cycleMin,c.cycleMax);ctrl.v4Patience=random(c.patienceMin,c.patienceMax);ctrl.v4Noise=random(c.noiseMin,c.noiseMax);ctrl.v4Phase=random(0,Math.PI*2);ctrl.v4Rethink=random(.85,1.15);}if(ctrl.intent==='hunt'&&ctrl.goal?.id){if(ctrl.v4HuntTarget!==ctrl.goal.id){ctrl.v4HuntTarget=ctrl.goal.id;ctrl.v4HuntTime=0;}ctrl.v4HuntTime=(ctrl.v4HuntTime||0)+dt;const prey=game.entities.find(o=>o.id===ctrl.goal.id);if(ctrl.v4HuntTime>ctrl.v4Patience&&prey&&dist(e,prey)>game.radius(e)+game.radius(prey)+24){ctrl.v4IgnoreId=prey.id;ctrl.v4IgnoreUntil=game.elapsed+random(c.cooldownMin,c.cooldownMax);ctrl.goal=null;ctrl.prey=null;ctrl.v4HuntTime=0;}}else{ctrl.v4HuntTime=0;ctrl.v4HuntTarget=null;}}ctrl.waterExposure=dist(e,game.center)+e.r>game.safeRadius?(ctrl.waterExposure||0)+dt:0;ctrl.think-=dt;if(ctrl.think<=0||!ctrl.goal){ctrl.goal=chooseGoal(game,e);ctrl.think=ctrl.profile.reaction*random(.8,1.3)*(variant?ctrl.v4Rethink:1);}
+ if(game.boundarySliding){const r=game.radius(e);ctrl.goal.x=clamp(ctrl.goal.x,r,game.world.width-r);ctrl.goal.y=clamp(ctrl.goal.y,r,game.world.height-r);if(ctrl.escapeUntil>game.elapsed){const dx=game.center.x-e.x,dy=game.center.y-e.y,n=Math.hypot(dx,dy)||1;ctrl.intent='reroute';return {x:dx/n,y:dy/n};}}
+ let dx=ctrl.goal.x-e.x,dy=ctrl.goal.y-e.y,n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;
+ // Legacy NPC-to-NPC avoidance, updated to include the human using the same strength rules.
+ for(const other of game.entities){if(other===e||other.dead)continue;const d=dist(e,other),reach=e.r+other.r+150;if(d<1||d>reach)continue;const danger=game.radius(other)>game.radius(e)*1.06;const sameTarget=ctrl.goal.id===other.id;if(sameTarget&&!danger)continue;const weight=(reach-d)/reach*(danger?2.8: .35);dx+=(e.x-other.x)/d*weight;dy+=(e.y-other.y)/d*weight;}
+ const world=game.world||C.world,margin=game.boundarySliding?game.radius(e)+20:e.r+75;dx+=(e.x<margin?.6:e.x>world.width-margin?-.6:0);dy+=(e.y<margin?.6:e.y>world.height-margin?-.6:0);
+ if(variant){const phase=game.elapsed+ctrl.v4Phase;dx+=Math.sin(phase*1.3)*ctrl.v4Noise;dy+=Math.cos(phase*.9)*ctrl.v4Noise;}
+ if(ctrl.personality==='novice'){ctrl.routeSeed+=dt;dx+=Math.sin(ctrl.routeSeed)*.14;dy+=Math.cos(ctrl.routeSeed*1.3)*.14;}
+ n=Math.hypot(dx,dy)||1;return {x:dx/n,y:dy/n};
+}
+export function shouldUseSkill(game,e){const id=e.skills[0]?.id,c=e.controller;if(!id)return false;if(id==='water'||id==='shield')return !!c.danger;if(id==='dense')return c.intent==='hunt'&&!!c.prey&&dist(e,c.prey)<220;if(id==='absorb')return c.intent==='forage'&&game.foods.filter(f=>dist(e,f)<100).length>=3;if(id==='splash')return !!c.prey&&dist(e,c.prey)<C.splashRange;return false;}
+
+function clashDirection(game,e,dt){const p=game.player,c=e.controller,dx=p.x-e.x,dy=p.y-e.y,n=Math.hypot(dx,dy)||1,profile=c.profile,range=460+(profile.skill-.5)*70,spacing=Math.max(game.radius(e)+game.radius(p)+30,range*(.42+(1-profile.risk)*.18)),approach=n>range*.86?1:n<spacing?-.45:.12,orbit=Math.sin(game.elapsed*(.35+profile.skill*.35)+c.routeSeed)*(.18+profile.risk*.36);if(n>C.aiPerceptionRange*(.65+profile.skill*.7)){const gx=game.center.x+Math.sin(c.routeSeed)*220-e.x,gy=game.center.y+Math.cos(c.routeSeed)*220-e.y,length=Math.hypot(gx,gy)||1;c.goal={x:e.x+gx,y:e.y+gy};c.prey=null;c.intent='search';c.attackTarget=null;return {x:gx/length*.8,y:gy/length*.8};}c.goal={id:p.id,x:p.x,y:p.y};c.prey=p;c.intent=approach>0?'hunt':'adjust';c.attackTarget=p.id;return {x:dx/n*approach-dy/n*orbit,y:dy/n*approach+dx/n*orbit};}

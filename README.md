@@ -1,4 +1,4 @@
-> 当前维护版本：V4 `v4-system-r12`（2026-11-17）。永久显画，75%总进度或90%有墨区完成，四阶段846/4200/9000墨；新增轻墨L与完整交互赏画。下方较早的临时显画、65%等段落仅供历史参考，现行规则和验收边界以 [最新交接](PROJECT_HANDOFF.md) 与 [本轮验收](docs/V4-SYSTEM-REPAIR-20261117.md) 为准。V2/V3冻结保留。
+> 当前维护版本：**V5 生灵游墨**（2026-11-22）。虾／鱼／乌龟生态、发光奖励变身、限时墨龙、原生水墨尾与手机窄顶栏。V4已按 `v4-ink-reveal` 留档；后续默认仅修改 `src-v5/`。详见 [交接](PROJECT_HANDOFF.md) 与 [V5交付记录](docs/V5-LIVING-WORLD-20261122.md)。
 
 # 墨—BOKU—
 
@@ -6,18 +6,21 @@
 
 | 版本 | 直接游玩 | 冻结引用与来源 |
 |---|---|---|
-| **V4｜最新版水墨涂色游戏** | **[打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/)** | main 持续维护；本轮标签 v4-four-growth-20261116 |
+| **V5｜生灵游墨・当前版本** | **[打开 V5](https://a29k055-arch.github.io/html-inkgame/v5/)** | main；独立src-v5与boku.save.v5 |
+| V4｜水墨吞噬显画留档 | [打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/) | v4-ink-reveal → 10ef89b，完整源码和资源冻结 |
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |
 | V2｜更早期原版游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-original → 1bb0250（原版入口重定向至 outputs/ink_demo_v2.html） |
 
-按本轮定义纠正编号：V2原版、V3复杂玩法、V4涂色。三个公开地址已确认可用（V4于2026-11-16发布43732204178，公开运行版本49df86c；V2/V3固定来源与入口保持可用）；最终验证见PROJECT_HANDOFF发布补记。每版独立归档全部资源，更新V4不会改写V2/V3。标签本身不产生网页；两个Pages工作流统一调用 tools/package-versions.cjs 创建上述目录，并生成 versions.json 记录源码SHA。根首页发布V4最新版；旧涂色快照保留于 /previews/reveal-scroll/ 和 /archive/reveal-v3/（旧误标V3，来源1faf41f）；原误标V2的复杂快照另保留 /archive/scroll-v2/。历史Git标签不移动。V4使用独立本机存档 boku.save.v4，首次兼容读取旧记录但不改写旧键；V2/V3保留原存档方式。
+当前公开版本为V2/V3/V4冻结版及V5维护版。根首页与/v5/发布V5；/v4/从v4-ink-reveal固定提取，绝不跟随HEAD。各版独立归档全部资源，versions.json记录各SHA。V5存档boku.save.v5、画作数据库boku.paintings.v5；只复制V4设置偏好，不迁移或改写V4游玩进度。旧涂色及复杂玩法预览继续保留。
 
-- [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V4）
+本地：`node tools/serve-preview.cjs 4191`，打开`http://127.0.0.1:4191/v5.html`；本地index.html仍是V4入口，用于隔离回归。打包工具会把v5.html作为公开根首页和/v5/的index。
+
+- [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V5）
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
 - [水墨视觉效果 README](prototypes/ink/README.md)
 - [水墨视觉测试 · 冻结历史候选](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
 - [V4共享水墨测试](https://a29k055-arch.github.io/html-inkgame/v4/visual-effects/v4.html)
-- [生物分层动画测试 · 鱼／龙／虾／乌龟](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/?rev=rig-r5-batch2-hires-20261122)（第二批：10角色／104层／透明留白鱼特别版／4K母版）
+- [生物分层动画测试 · 鱼／龙／虾／乌龟](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/?rev=rig-r5-batch2-hires-20261122)（第二批：10角色／104层／透明留白鱼特别版／4K母版；V5本轮仍使用首批四套）
 - [水墨效果对比实验室](https://a29k055-arch.github.io/html-inkgame/visual-effects/lab.html)
 - [视觉来源与参数](visual-effects/REFERENCE.md)
 
