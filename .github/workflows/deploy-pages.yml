@@ -20,7 +20,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -56,6 +56,19 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 600000
+
+      # The artifact service used by deploy-pages can lag the public REST index.
+      - name: Allow artifact service discovery to settle
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 20
+
+      - name: Retry GitHub Pages deployment
+        if: steps.deployment.outcome == 'failure'
+        id: deployment_retry
         uses: actions/deploy-pages@v4
         with:
           timeout: 600000
