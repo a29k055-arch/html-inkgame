@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -37,6 +38,21 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist-pages
+
+      # Artifact upload can finish before the REST metadata index becomes visible.
+      - name: Wait for Pages artifact metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for attempt in {1..18}; do
+            count="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" --jq '[.artifacts[] | select(.name == "github-pages" and .expired == false)] | length')"
+            if [ "$count" -eq 1 ]; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::Uploaded Pages artifact metadata did not become visible within 90 seconds."
+          exit 1
 
       - name: Deploy to GitHub Pages
         id: deployment
