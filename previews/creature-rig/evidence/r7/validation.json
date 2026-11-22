@@ -235,6 +235,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 8,
         "meanPixelError": 0.00008873456790123456,
         "stats": {
           "gpuBatches": 1,
@@ -256,6 +258,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 25,
         "meanPixelError": 0.00011959876543209877,
         "stats": {
           "gpuBatches": 1,
@@ -277,6 +281,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 128,
         "meanPixelError": 0.00019097222222222223,
         "stats": {
           "gpuBatches": 1,
@@ -298,6 +304,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 8,
         "meanPixelError": 0.00009387860082304527,
         "stats": {
           "gpuBatches": 1,
@@ -319,6 +327,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 5,
         "meanPixelError": 0.000028935185185185186,
         "stats": {
           "gpuBatches": 1,
@@ -340,6 +350,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 85,
         "meanPixelError": 0.0003112139917695473,
         "stats": {
           "gpuBatches": 1,
@@ -361,6 +373,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 255,
         "meanPixelError": 0.0003054269547325103,
         "stats": {
           "gpuBatches": 1,
@@ -382,6 +396,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 7,
         "meanPixelError": 0.00009259259259259259,
         "stats": {
           "gpuBatches": 1,
@@ -403,6 +419,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 0,
         "meanPixelError": 0,
         "stats": {
           "gpuBatches": 0,
@@ -422,6 +440,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 0,
         "meanPixelError": 0,
         "stats": {
           "gpuBatches": 0,
@@ -441,6 +461,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 85,
         "meanPixelError": 0.0008127572016460906,
         "stats": {
           "gpuBatches": 1,
@@ -462,6 +484,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 127,
         "meanPixelError": 0.0002494855967078189,
         "stats": {
           "gpuBatches": 1,
@@ -483,6 +507,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 255,
         "meanPixelError": 0.0002636316872427984,
         "stats": {
           "gpuBatches": 1,
@@ -504,6 +530,8 @@
         "changed": 0,
         "changedRatio": 0,
         "alphaLoss": 0,
+        "weakInkLoss": 0,
+        "maxChannelError": 128,
         "meanPixelError": 0.00019917052469135802,
         "stats": {
           "gpuBatches": 1,
@@ -516,7 +544,79 @@
         }
       }
     ],
-    "note": "Identical injected pose/time/input/scale, old and new renderer. Edge AA differences are measured; visual review remains necessary."
+    "note": "Identical injected pose/time/input/scale, old and new renderer. Edge AA differences are measured; visual review remains necessary.",
+    "visibleCompositedDifferences": [
+      {
+        "file": "dragon_04-master-dpr2-edge-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "dragon_04-master-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "dragon_04-working-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "fish_01-working-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "fish_02-working-old.png",
+        "maxVisibleChannelError": 3,
+        "channelsDifferingOver2": 1
+      },
+      {
+        "file": "fish_04-master-dpr2-edge-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "fish_04-master-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "fish_04-working-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "fish_04_special-working-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "shrimp_04-working-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "shrimp_05-working-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "shrimp_07-working-old.png",
+        "maxVisibleChannelError": 2,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "turtle_02-working-old.png",
+        "maxVisibleChannelError": 0,
+        "channelsDifferingOver2": 0
+      },
+      {
+        "file": "turtle_08-working-old.png",
+        "maxVisibleChannelError": 0,
+        "channelsDifferingOver2": 0
+      }
+    ]
   },
   "motion": {
     "baseline": false,

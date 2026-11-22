@@ -1,0 +1,72 @@
+[
+  {
+    "file": "dragon_04-master-dpr2-edge-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "dragon_04-master-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "dragon_04-working-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "fish_01-working-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "fish_02-working-old.png",
+    "maxVisibleChannelError": 3,
+    "channelsDifferingOver2": 1
+  },
+  {
+    "file": "fish_04-master-dpr2-edge-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "fish_04-master-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "fish_04-working-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "fish_04_special-working-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "shrimp_04-working-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "shrimp_05-working-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "shrimp_07-working-old.png",
+    "maxVisibleChannelError": 2,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "turtle_02-working-old.png",
+    "maxVisibleChannelError": 0,
+    "channelsDifferingOver2": 0
+  },
+  {
+    "file": "turtle_08-working-old.png",
+    "maxVisibleChannelError": 0,
+    "channelsDifferingOver2": 0
+  }
+]

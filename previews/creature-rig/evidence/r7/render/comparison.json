@@ -11,6 +11,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 8,
       "meanPixelError": 0.00008873456790123456,
       "stats": {
         "gpuBatches": 1,
@@ -32,6 +34,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 25,
       "meanPixelError": 0.00011959876543209877,
       "stats": {
         "gpuBatches": 1,
@@ -53,6 +57,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 128,
       "meanPixelError": 0.00019097222222222223,
       "stats": {
         "gpuBatches": 1,
@@ -74,6 +80,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 8,
       "meanPixelError": 0.00009387860082304527,
       "stats": {
         "gpuBatches": 1,
@@ -95,6 +103,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 5,
       "meanPixelError": 0.000028935185185185186,
       "stats": {
         "gpuBatches": 1,
@@ -116,6 +126,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 85,
       "meanPixelError": 0.0003112139917695473,
       "stats": {
         "gpuBatches": 1,
@@ -137,6 +149,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 255,
       "meanPixelError": 0.0003054269547325103,
       "stats": {
         "gpuBatches": 1,
@@ -158,6 +172,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 7,
       "meanPixelError": 0.00009259259259259259,
       "stats": {
         "gpuBatches": 1,
@@ -179,6 +195,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 0,
       "meanPixelError": 0,
       "stats": {
         "gpuBatches": 0,
@@ -198,6 +216,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 0,
       "meanPixelError": 0,
       "stats": {
         "gpuBatches": 0,
@@ -217,6 +237,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 85,
       "meanPixelError": 0.0008127572016460906,
       "stats": {
         "gpuBatches": 1,
@@ -238,6 +260,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 127,
       "meanPixelError": 0.0002494855967078189,
       "stats": {
         "gpuBatches": 1,
@@ -259,6 +283,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 255,
       "meanPixelError": 0.0002636316872427984,
       "stats": {
         "gpuBatches": 1,
@@ -280,6 +306,8 @@
       "changed": 0,
       "changedRatio": 0,
       "alphaLoss": 0,
+      "weakInkLoss": 0,
+      "maxChannelError": 128,
       "meanPixelError": 0.00019917052469135802,
       "stats": {
         "gpuBatches": 1,
