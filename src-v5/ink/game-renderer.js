@@ -72,10 +72,8 @@ export class GameRenderer {
   c.save();c.translate(-cam.x*scale,-cam.y*scale);c.scale(scale,scale);this.drawCollisionOutline(p);c.restore();
   // Opt-in canopy pass: V4 pond objects can sit above the player; classic ordering stays unchanged.
   if(this.itemLayer){c.save();c.translate(-cam.x*scale,-cam.y*scale);c.scale(scale,scale);this.drawItems(game,'upper',orderedItems);c.restore();}
-  c.save();c.textAlign='center';c.font='12px '+this.fontFamily;for(const e of game.entities){if(e.dead||!this.visible(e,e.r+40)||(e!==p&&e.species&&!e.rewardGlow&&!e.eventDragon)||(p.revealJourney?.stage===4&&e!==p&&e.r*scale<10))continue;const x=(e.x-cam.x)*scale,y=(e.y-cam.y)*scale;
-   // Sit above the warning ring when there is one, so the id never reads inside it.
-   const ring=e===p?0:((npcDangerState(e,p,scale)?.radius||0)*scale);
-   const r=Math.max(e.r*(e.effects.dense?1.32:1)*scale,ring)+4;c.fillStyle=e===p?'#353127':'#585246';c.fillText(e.species?t('living'+e.species[0].toUpperCase()+e.species.slice(1)):entityLabel(e),x,y-r-10);if(e.effects.shield){c.strokeStyle='#a1853c99';c.beginPath();c.arc(x,y,r+4,0,Math.PI*2);c.stroke();}}
+  // V5 has no floating player/NPC names; internal ids remain stable for AI and saves.
+  c.save();
   if(p.hitFlash>0){c.strokeStyle='#ad5c4977';c.lineWidth=3;c.beginPath();c.arc((p.x-cam.x)*scale,(p.y-cam.y)*scale,p.r*scale+7,0,Math.PI*2);c.stroke();}c.restore();this.endWorldClip();if(!this.deferTopItems){this.drawTopItems(game);this.drawWorldFrame();}
  }
  drawTopItems(game){if(!this.itemLayer)return;const c=this.ctx,cam=this.camera;this.beginWorldClip();c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);this.drawItems(game,'top',this.itemOrder?[...game.items].sort((a,b)=>this.itemOrder(a)-this.itemOrder(b)):game.items);c.restore();this.endWorldClip();}

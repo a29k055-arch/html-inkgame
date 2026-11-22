@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {livingCoverage,coversLivingBody,livingBodyContains,livingBodyBound} from '../src-v5/game/living-contact.js';
+const circle=(x,y,r)=>({x,y,r,effects:{},collisionScale:1});
+const fish={...circle(0,0,2),species:'fish',livingBody:{species:'fish',coreRadius:2,bound:10,samples:[-8,-4,0,4,8].map(x=>({x,y:0,w:.2})),sections:[{x:-8,y:0,r:2},{x:8,y:0,r:2}]}};
+assert(Math.abs(livingCoverage(circle(0,0,5),fish)-.6)<1e-10);
+assert(!coversLivingBody(circle(0,0,5),fish),'touching torso center is insufficient');
+assert.equal(livingCoverage(circle(1,0,7),fish),.8);
+assert(coversLivingBody(circle(1,0,7),fish),'80% of body is enough; tail need not fully fit');
+assert(!coversLivingBody(circle(100,0,70),fish),'no remote swallow');
+assert(livingBodyContains(fish,7,1));assert(!livingBodyContains(fish,0,4));
+fish.r=4;assert(livingBodyContains(fish,14,2));assert.equal(livingBodyBound(fish),20);
+const curved={...circle(0,0,2),species:'dragon',livingBody:{species:'dragon',coreRadius:2,bound:24,samples:[{x:0,y:0,w:1}],sections:[{x:-10,y:0,r:2},{x:-10,y:15,r:2},{x:10,y:15,r:2},{x:10,y:0,r:2}]}};
+assert(!livingBodyContains(curved,0,5),'curved-body empty space is not a solid convex hull');
+const player={...fish,form:{species:'shrimp',remaining:5}};assert(!livingBodyContains(player,14,2),'new bubble form does not inherit stale fish geometry');
+assert.equal(livingCoverage(circle(0,0,20),circle(0,0,5)),1);
+console.log('PASS weighted 80% living-body coverage, curved gaps, growth, no remote contact and stale-form rejection');

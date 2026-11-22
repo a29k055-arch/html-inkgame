@@ -8,6 +8,10 @@ export const LIVING_ANCHORS=Object.freeze({fish:.35,shrimp:.30,turtle:.555,drago
 const TAU=Math.PI*2,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const sharedKeys=['bodyImage','bodyOrder','bodyBounds','layers','sourceImage','mesh'];
 let warm;
+const progressListeners=new Set();let warmProgress={loaded:0,total:78,stage:'rig'};
+export const NPC_ANIMATION=Object.freeze({fish:{frames:18,seconds:2.8},shrimp:{frames:16,seconds:3.8},turtle:{frames:16,seconds:5.5},dragon:{frames:20,seconds:6.5}});
+const preparationYield=()=>new Promise(resolve=>setTimeout(resolve,0));
+const reportPreparation=(stage,loaded)=>{warmProgress={loaded,total:78,stage};for(const listener of progressListeners)listener(warmProgress);};
 export const livingSpecies=e=>e?.form?.species&&e.form.remaining>0?e.form.species:e?.species;
 const isPlayer=e=>e?.controller?.type==='human'||e?.id==='human';
 const seedOf=e=>[...String(e?.id||'living')].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,17)/4294967296;
@@ -61,21 +65,56 @@ function calibrate(creature,species){
  const lengthPerRadius=creature.sourceCurve.length/cross.half,anchorT=cross.mid/creature.sourceCurve.length;
  creature.reset(0,0,0);const b=creature.visualBounds(),a=creature.mapPoint(s,anchorT);
  const extent=Math.max(...[[b.minX,b.minY],[b.minX,b.maxY],[b.maxX,b.minY],[b.maxX,b.maxY]].map(([x,y])=>Math.hypot(x-a.x,y-a.y)));
- return Object.freeze({anchorS:s,anchorT,sourceHalfWidth:cross.half,sourceAnchor:{x:source.x,y:source.y},lengthPerRadius,bubbleExtent:extent,revision:INK_CREATURE_REV});
+ // At most sixty alpha-weighted body points, measured once at startup. Separate
+ // fin/antenna layers never enter these samples. Runtime collision never reads pixels.
+ const bounds=creature.bodyBounds||{x:0,y:0,w:image.width,h:image.height},bodySamples=[];
+ for(let gy=0;gy<10;gy++)for(let gx=0;gx<6;gx++){
+  const x0=Math.max(0,Math.floor(bounds.x+bounds.w*gx/6)),x1=Math.min(image.width,Math.ceil(bounds.x+bounds.w*(gx+1)/6)),y0=Math.max(0,Math.floor(bounds.y+bounds.h*gy/10)),y1=Math.min(image.height,Math.ceil(bounds.y+bounds.h*(gy+1)/10));let weight=0,xSum=0,ySum=0;
+  for(let y=y0;y<y1;y+=2)for(let x=x0;x<x1;x+=2){const alpha=data[(y*image.width+x)*4+3];if(alpha<38)continue;weight+=alpha;xSum+=x*alpha;ySum+=y*alpha;}
+  if(weight)bodySamples.push({...projectPoint(creature.sourceCurve,xSum/weight,ySum/weight),w:weight,r:Math.hypot(x1-x0,y1-y0)*.5});
+ }
+ const total=bodySamples.reduce((n,p)=>n+p.w,0);for(const p of bodySamples)p.w/=total;
+ const bodySections=[];for(let n=0;n<13;n++){const at=.025+n*.95/12,q=section(at);if(q)bodySections.push({s:at,t:q.mid/creature.sourceCurve.length,r:q.half});}
+ return Object.freeze({anchorS:s,anchorT,sourceHalfWidth:cross.half,sourceAnchor:{x:source.x,y:source.y},lengthPerRadius,bubbleExtent:extent,bodySamples,bodySections,sourceArea:total*4/255,revision:INK_CREATURE_REV});
 }
 
-export async function preloadLivingCreatures(){
+export async function preloadLivingCreatures({onProgress}={}){
+ if(onProgress){progressListeners.add(onProgress);onProgress(warmProgress);}
  if(!warm)warm=Promise.all(Object.entries(LIVING_RIGS).map(async([species,id])=>{
   const url=new URL(`../../previews/creature-rig/${id}/rig.json`,import.meta.url);
-  const template=await InkCreature.load(url,{length:100,speed:0});return[species,{template,calibration:calibrate(template,species)}];
- })).then(rows=>Object.fromEntries(rows)).catch(error=>{warm=null;throw error;});
- return warm;
+  const template=await InkCreature.load(url,{length:100,speed:0});reportPreparation('rig',warmProgress.loaded+1);return[species,{template,calibration:calibrate(template,species)}];
+ })).then(async rows=>{
+  const assets=Object.fromEntries(rows);playerDragonDetail(assets.dragon);
+  for(const [species,asset]of rows){await bakeNPCAnimation(asset,species);const player={id:'human',controller:{type:'human'},form:{species,remaining:5}},c=clone(asset,player),canvas=document.createElement('canvas');canvas.width=canvas.height=160;const ctx=canvas.getContext('2d');ctx.translate(130,80);ctx.scale(.8,.8);c.draw(ctx);asset.playerWarm=c;reportPreparation('gpu',warmProgress.loaded+1);await preparationYield();}
+  reportPreparation('ready',78);return assets;
+ }).catch(error=>{warm=null;warmProgress={loaded:0,total:78,stage:'rig'};throw error;});
+ try{return await warm;}finally{if(onProgress)progressListeners.delete(onProgress);}
+}
+
+function calmProfile(c){c.profile.amplitude*=.45;c.profile.idle*=.45;c.profile.appendage*=.55;c.profile.hz*=.6;c.profile.idleHz*=.6;c.profile.maxAngularVelocity*=.72;c.profile.maxAngularAcceleration*=.65;}
+function mappedPoints(c,points,anchor){return(points||[]).map(p=>{const q=c.mapPoint(p.s,p.t);return{x:q.x-anchor.x,y:q.y-anchor.y,w:p.w,r:(p.r||0)*c.length/c.sourceCurve.length};});}
+function bodyPoints(c,calibration,anchor){return mappedPoints(c,calibration.bodySamples,anchor);}
+async function bakeNPCAnimation(asset,species){
+ const config=NPC_ANIMATION[species],c=clone(asset,{id:'atlas-'+species,species}),poses=[];c.reset(0,0,0);c.drive=.65;c.locomotion=1;
+ let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+ for(let i=0;i<config.frames;i++){
+  const phase=i/config.frames*TAU;c.time=phase/2.5;c.wavePhase=c.finPhase=c.gaitPhase=phase;c.pose=c.buildPose();c.targetCurve=makeCurve(c.pose,false);
+  const a=c.mapPoint(asset.calibration.anchorS,asset.calibration.anchorT),b=c.visualBounds();minX=Math.min(minX,b.minX-a.x);minY=Math.min(minY,b.minY-a.y);maxX=Math.max(maxX,b.maxX-a.x);maxY=Math.max(maxY,b.maxY-a.y);
+  poses.push({phase,anchor:a,body:bodyPoints(c,asset.calibration,a),sections:mappedPoints(c,asset.calibration.bodySections,a)});
+ }
+ const pad=2,bounds={x:minX-pad,y:minY-pad,w:maxX-minX+pad*2,h:maxY-minY+pad*2},pixels=Math.min(640/Math.max(bounds.w,bounds.h),Math.sqrt(90000/(bounds.w*bounds.h))),width=Math.ceil(bounds.w*pixels),height=Math.ceil(bounds.h*pixels),frames=[];
+ for(const state of poses){
+  c.time=state.phase/2.5;c.wavePhase=c.finPhase=c.gaitPhase=state.phase;c.pose=c.buildPose();c.targetCurve=makeCurve(c.pose,false);
+  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');ctx.setTransform(pixels,0,0,pixels,-(bounds.x+state.anchor.x)*pixels,-(bounds.y+state.anchor.y)*pixels);c.draw(ctx);frames.push({canvas,body:state.body,sections:state.sections});reportPreparation('animation',warmProgress.loaded+1);if(frames.length%3===0)await preparationYield();
+ }
+ asset.npcAtlas={bounds,frames,seconds:config.seconds,bytes:width*height*4*frames.length};c.dispose();
 }
 
 function clone(asset,e){
  const c=new InkCreature(asset.template.rig,{length:100,speed:0});
  for(const key of sharedKeys)c[key]=asset.template[key];
  c.resourceEntry=asset.template.resourceEntry;c.resourceEntry.refs++;
+ if(!isPlayer(e))calmProfile(c);
  // The long player dragon coils more tightly than the travelling event dragon.
  // This is a per-instance V5 pose profile; the approved R4 rig remains untouched.
  if(isPlayer(e)&&livingSpecies(e)==='dragon'){
@@ -91,21 +130,31 @@ function release(record){record.creature.dispose();if(record.tile){record.tile.w
 function poseBounds(record){if(record.boundsPose!==record.creature.pose){record.boundsPose=record.creature.pose;record.localBounds=record.creature.visualBounds();}return record.localBounds;}
 
 export class LivingPainter {
- constructor({assets=null}={}){this.assets=assets;this.ready=assets?Promise.resolve(assets):preloadLivingCreatures();this.records=new Map();this.clock=0;this.metrics={revision:INK_CREATURE_REV,loaded:0,drawn:0,animated:0,culled:0,tiles:0};this.disposed=false;}
+ constructor({assets=null}={}){this.assets=assets;this.ready=assets?Promise.resolve(assets):preloadLivingCreatures();this.records=new Map();this.clock=0;this.bodyRevision=0;this.metrics={revision:INK_CREATURE_REV,loaded:0,drawn:0,animated:0,culled:0,tiles:0,liveRasters:0,sharedFrames:0,atlasBytes:0};this.disposed=false;}
  async prepare(entities=[]){this.assets=await this.ready;for(const e of entities)if(!e.dead&&LIVING_RIGS[livingSpecies(e)])this.ensure(e);return this;}
  ensure(e){const species=livingSpecies(e);if(!this.assets||!LIVING_RIGS[species])return null;let q=this.records.get(e);if(q?.species!==species){if(q)release(q);const asset=this.assets[species];q={species,creature:clone(asset,e),calibration:asset.calibration,age:0,renderAge:Infinity,tile:null,world:null,visible:true};this.records.set(e,q);}return q;}
  configure(q,e){const r=coreRadius(e),c=q.creature,a=q.calibration,bubble=isPlayer(e)&&q.species==='shrimp';q.scale=bubble?r*2.4/100:r*a.lengthPerRadius/100;q.coreRadius=r;q.bubble=bubble;q.anchor=c.mapPoint(bubble?.30:a.anchorS,bubble?0:a.anchorT);q.x=e.x;q.y=e.y;}
  update(dt,arena,camera={x:0,y:0,scale:1},viewport={width:1200,height:900}){
   if(this.disposed)return;dt=clamp(Number(dt)||0,0,.1);this.clock+=dt;this.camera=camera;this.viewport=viewport;this.metrics.drawn=this.metrics.animated=this.metrics.culled=0;
   const entities=arena?.entities||[],player=arena?.player,alive=new Set(entities);if(player)alive.add(player);
-  for(const [e,q]of this.records)if(!alive.has(e)||!LIVING_RIGS[livingSpecies(e)]){release(q);this.records.delete(e);}
+  for(const [e,q]of this.records)if(!alive.has(e)||!LIVING_RIGS[livingSpecies(e)]){release(q);this.records.delete(e);delete e.livingBody;}
   for(const e of alive){if(e.dead)continue;const q=this.ensure(e);if(!q)continue;this.configure(q,e);const radius=q.coreRadius,extent=radius*Math.max(2,q.calibration.lengthPerRadius*1.5),x=(e.x-camera.x)*camera.scale,y=(e.y-camera.y)*camera.scale,pad=extent*camera.scale;
    q.visible=isPlayer(e)||(x+pad>=0&&x-pad<viewport.width&&y+pad>=0&&y-pad<viewport.height);
-   q.age+=dt;q.renderAge+=dt;const interval=q.visible?1/30:1/8;
+   q.age+=dt;q.renderAge+=dt;const interval=isPlayer(e)?1/30:q.visible?1/15:1/4;
    if(q.age>=interval){const c=q.creature,speed=Math.hypot(e.vx||0,e.vy||0),maximum=Math.max(1,arena.speed?.(e,false)||100);c.setInput(speed>1?(e.vx||0)/Math.max(maximum,speed):0,speed>1?(e.vy||0)/Math.max(maximum,speed):0);c.update(Math.min(.1,q.age));q.age=0;this.configure(q,e);if(q.visible)this.metrics.animated++;}
+   this.syncBody(q,e);
    if(!q.visible){this.metrics.culled++;if(q.tile&&this.clock-(q.lastDraw||0)>2){q.tile.width=q.tile.height=1;q.tile=null;q.world=null;}}
   }
-  this.metrics.loaded=this.records.size;this.metrics.tiles=[...this.records.values()].filter(q=>q.tile).length;
+  this.metrics.loaded=this.records.size;this.metrics.tiles=[...this.records.values()].filter(q=>q.tile).length;this.metrics.atlasBytes=Object.values(this.assets||{}).reduce((n,a)=>n+(a.npcAtlas?.bytes||0),0);
+ }
+ atlasFrame(q,e){const atlas=this.assets?.[q.species]?.npcAtlas;if(isPlayer(e)||!atlas)return null;const index=Math.floor(((this.clock/atlas.seconds+seedOf(e))%1)*atlas.frames.length);return{atlas,index,frame:atlas.frames[index]};}
+ syncBody(q,e){
+  const sprite=this.atlasFrame(q,e),angle=sprite?q.creature.heading:0,pose=sprite?sprite.index:q.creature.pose;
+  if(q.bodyPose===pose&&q.bodyScale===q.scale&&Math.abs((q.bodyAngle??0)-angle)<.005)return;q.bodyPose=pose;q.bodyScale=q.scale;q.bodyAngle=angle;
+  const k=q.scale,c=q.creature,a=q.anchor,co=Math.cos(angle),si=Math.sin(angle),transform=p=>({x:(p.x*co-p.y*si)*k,y:(p.x*si+p.y*co)*k,w:p.w,r:(p.r||0)*k});let samples,sections;
+  if(q.bubble){samples=[];for(let ring=0;ring<4;ring++)for(let n=0;n<12;n++){const theta=(n+.5)*TAU/12,r=Math.sqrt((ring+.5)/4)*q.coreRadius;samples.push({x:Math.cos(theta)*r,y:Math.sin(theta)*r,w:1/48,r:q.coreRadius*.2});}sections=[{x:0,y:0,r:q.coreRadius}];}
+  else{samples=(sprite?sprite.frame.body:bodyPoints(c,q.calibration,a)).map(transform);sections=(sprite?sprite.frame.sections:mappedPoints(c,q.calibration.bodySections,a)).map(transform);}
+  const bound=Math.max(q.coreRadius,...samples.map(p=>Math.hypot(p.x,p.y)+p.r));e.livingBody={species:q.species,coreRadius:q.coreRadius,samples,sections,bound,area:q.bubble?Math.PI*q.coreRadius**2:(q.calibration.sourceArea||0)*(c.length/c.sourceCurve.length*k)**2,revision:++this.bodyRevision};
  }
  pose(e){const q=this.records.get(e);if(!q||e.dead)return null;this.configure(q,e);const c=q.creature,a=q.anchor,k=q.scale,spine=c.pose.map(([x,y])=>{const p=c.presentationPoint({x,y});return{x:e.x+(p.x-a.x)*k,y:e.y+(p.y-a.y)*k};});
   return {species:q.species,coreRadius:q.coreRadius,heading:c.heading,spine,center:{x:e.x,y:e.y},anchorS:q.bubble?.30:q.calibration.anchorS,length:c.length*k,lengthPerRadius:c.length*k/Math.max(.001,q.coreRadius),extent:q.bubble?q.coreRadius:q.calibration.lengthPerRadius*q.coreRadius,revision:INK_CREATURE_REV};
@@ -119,14 +168,15 @@ export class LivingPainter {
   if(!(right>x&&bottom>y))return false;
   const w=right-x,h=bottom-y,cap=viewport.mobile?768:1200,pixels=Math.min(camera.scale*Math.min(1.5,globalThis.devicePixelRatio||1),cap/Math.max(w,h),Math.sqrt(950000/(w*h)));
   const width=Math.max(1,Math.ceil(w*pixels)),height=Math.max(1,Math.ceil(h*pixels));q.tile??=document.createElement('canvas');if(q.tile.width!==width||q.tile.height!==height){q.tile.width=width;q.tile.height=height;}
-  const c=q.tile.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,width,height);c.setTransform(pixels*k,0,0,pixels*k,(e.x-a.x*k-x)*pixels,(e.y-a.y*k-y)*pixels);c.save();if(q.bubble){c.beginPath();c.arc(a.x,a.y,q.coreRadius*.94/k,0,TAU);c.clip();}q.creature.draw(c);c.restore();q.world={x,y,w,h};q.rasterX=e.x;q.rasterY=e.y;q.renderAge=0;return true;
+  const c=q.tile.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,width,height);c.setTransform(pixels*k,0,0,pixels*k,(e.x-a.x*k-x)*pixels,(e.y-a.y*k-y)*pixels);c.save();if(q.bubble){c.beginPath();c.arc(a.x,a.y,q.coreRadius*.94/k,0,TAU);c.clip();}q.creature.draw(c);c.restore();q.world={x,y,w,h};q.rasterX=e.x;q.rasterY=e.y;q.renderAge=0;this.metrics.liveRasters++;return true;
  }
  draw(ctx,e,index=0,entities=[],forced=null,contact=false){
   if(this.disposed||e.dead)return;const q=this.ensure(e);if(!q)return;const cam=this.camera||{x:0,y:0,scale:1},view=this.viewport||{width:1200,height:900};this.configure(q,e);if(!q.visible)return;
+  const sprite=this.atlasFrame(q,e);if(sprite){const b=sprite.atlas.bounds;ctx.save();ctx.translate(e.x,e.y);ctx.rotate(q.creature.heading);ctx.scale(q.scale,q.scale);ctx.drawImage(sprite.frame.canvas,b.x,b.y,b.w,b.h);ctx.restore();q.lastDraw=this.clock;this.metrics.sharedFrames++;this.metrics.drawn++;return;}
   // Raster only real visible world pixels. Huge offscreen tails never allocate a
   // multi-thousand-pixel canvas, and each live rig shares the runtime GPU context.
   if(!q.tile||q.renderAge>=1/30||!q.world||Math.abs(cam.scale/(q.lastScale||cam.scale)-1)>.025||Math.abs(q.coreRadius/(q.lastRadius||q.coreRadius)-1)>.03||Math.hypot(e.x-q.rasterX,e.y-q.rasterY)*cam.scale>10){if(!this.raster(q,e,cam,view))return;q.lastScale=cam.scale;q.lastRadius=q.coreRadius;}
-  q.lastDraw=this.clock;ctx.save();if(!contact&&(e.rewardGlow||e.rewardKind)){ctx.shadowColor='rgba(217,188,110,.85)';ctx.shadowBlur=8;ctx.globalAlpha*=.96;}
+  q.lastDraw=this.clock;ctx.save();
   const w=q.world;ctx.drawImage(q.tile,w.x+e.x-q.rasterX,w.y+e.y-q.rasterY,w.w,w.h);ctx.restore();if(!contact)this.metrics.drawn++;
  }
  drawPlayer(ctx,player){const q=this.ensure(player);if(!q||player.dead)return;if(q.bubble){const r=coreRadius(player),scale=this.camera?.scale||1;ctx.save();const g=ctx.createRadialGradient(player.x-r*.3,player.y-r*.3,r*.12,player.x,player.y,r);g.addColorStop(0,'rgba(246,248,230,.08)');g.addColorStop(.8,'rgba(217,230,208,.025)');g.addColorStop(1,'rgba(212,228,204,.17)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(player.x,player.y,r,0,TAU);ctx.fill();ctx.shadowColor='rgba(220,233,205,.65)';ctx.shadowBlur=10;ctx.strokeStyle='rgba(224,236,207,.64)';ctx.lineWidth=1.35/scale;ctx.stroke();ctx.shadowBlur=0;ctx.strokeStyle='rgba(255,252,222,.70)';ctx.lineWidth=2/scale;ctx.beginPath();ctx.arc(player.x,player.y,r*.96,-2.6,-1.65);ctx.stroke();ctx.restore();}this.draw(ctx,player);}

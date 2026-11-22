@@ -1,19 +1,18 @@
 import {livingSlot} from './living-world.js';
 import {pondCollisionRadius} from './pond-rules.js';
-// Four birth layers coexist from the first frame. Slots retain birth tier across deaths;
-// feeding can grow every layer to the shared radius ceiling without resetting the world.
+// Small pond species coexist; species bands and unique large slots stay stable across deaths.
 const frozenBands=rows=>Object.freeze(rows.map(row=>Object.freeze(row)));
 export const GROWTH_ECOLOGY_CONFIG=Object.freeze({
  // Close nursery: prey plus food is deliberately dense around the body.
- nearSmallCount:18,nearSmallMin:62,nearSmallMax:520,closeSmallCount:10,closeSmallMax:210,
+ nearSmallCount:8,nearSmallMin:110,nearSmallMax:620,closeSmallCount:4,closeSmallMax:300,
  tiers:Object.freeze([[3.5,10,5.5],[18,38,23],[55,100,65],[240,360,260]].map(row=>Object.freeze(row))),
  bandRatios:frozenBands([[.50,.22,.62],[.80,.82,1.15],[.95,1.30,1.70],[1,1.9,2.8]]),
  lethalRatio:1.28,
  // A slice of the prey band becomes passive plankton: tiny, slow, no hunt and no flee.
- drifterChance:.28,drifterLo:.08,drifterHi:.20,
+ drifterChance:.18,drifterLo:.08,drifterHi:.20,
  nurseryFoodCount:40,nurseryFoodMin:22,nurseryFoodRadius:380,
  mediumSpawnMin:440,largeSpawnMin:900,spawnAttempts:120,unitGap:20,leafGap:2,
- giantRadiusCap:420,minRadius:3
+ giantRadiusCap:88,minRadius:3
 });
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const mix=(a,b,t)=>a+(b-a)*t;
@@ -22,8 +21,8 @@ export class GrowthEcology {
  band(rows,roll){return rows.find(row=>roll<row[0])||rows.at(-1);}
  spawn(arena,index=0,{respawn=false,entity=null}={}){
   const c=this.config,p=arena.player,w=arena.world;
-  // Birth tier belongs to a slot across deaths; it never limits later feeding or growth.
-  const slot=livingSlot(entity?.birthSlot??index),ecologyTier=entity?.ecologyTier||slot.tier,band=[slot.min,slot.max,slot.low],metadata={species:slot.species,rewardKind:slot.rewardKind,rewardGlow:!!slot.rewardKind,rewardTier:Math.min(3,ecologyTier),birthSlot:entity?.birthSlot??index,appearance:'living'};
+  // A birth slot owns its species band; respawns restart near the lower end.
+  const slot=livingSlot(entity?.birthSlot??index),ecologyTier=entity?.ecologyTier||slot.tier,band=[slot.min,slot.max,slot.low],metadata={species:slot.species,rewardKind:slot.rewardKind,rewardGlow:false,rewardTier:Math.min(3,ecologyTier),birthSlot:entity?.birthSlot??index,appearance:'living'};
   const small=ecologyTier===1,peer=ecologyTier===2,huge=ecologyTier===4;
   const drifter=small&&(respawn?entity?.passive===true:this.rng()<c.drifterChance);
   const radius=clamp(mix(band[0],respawn?band[2]:band[1],this.rng()),c.minRadius,c.giantRadiusCap);

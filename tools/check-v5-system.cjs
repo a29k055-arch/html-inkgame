@@ -16,7 +16,7 @@ try{for(const mobile of [false,true])for(const art of ['ink-01','ink-13']){
  const contact=await page.evaluate(()=>({position:bokuMetrics.position,samples:bokuMetrics.contactSamples,writes:revealDebug.game.temporary.writes,maskVersion:revealDebug.game.mask.version,paintVersion:revealDebug.painter.last}));
  assert(contact.samples>before.samples);assert(contact.writes>0);assert.equal(contact.paintVersion,contact.maskVersion,'current contact must be painted in same frame');
  // Remove unrelated ecological loss only in this fixture, keep the actual camera/stage clocks.
- await page.evaluate(()=>{const g=revealDebug.game;g.arena.entities=g.arena.entities.slice(0,1);g.arena.foods.length=0;g.arena.foodTarget=0;g.arena.items.length=0;});
+ await page.evaluate(()=>{const g=revealDebug.game;g.living.largeUnlocked=true;g.living.config.dragonEnabled=false;g.arena.entities=g.arena.entities.slice(0,1);g.arena.foods.length=0;g.arena.foodTarget=0;g.arena.items.length=0;});
  const stages=[];
  for(const stage of [2,3,4]){
   await page.evaluate(async stage=>{const {syncReserve}=await import('./src-v5/game/ink-reserve.js'),g=revealDebug.game;g.player.ink=g.config.growthStages.thresholds[stage-2]+2;g.player.turtleInk=0;syncReserve(g.player,0,true);},stage);

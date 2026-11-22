@@ -4,7 +4,7 @@ import {getSave,updateSettings} from '../data/save.js';
 const rows={
 livingDragonPicked:["墨龍の姿・5秒追加","墨龙形态 · 增加5秒","Ink dragon form · +5s"],
 livingShrimp:["墨海老","墨虾","Ink shrimp"],livingFish:["墨鯉","墨鲤","Ink fish"],livingTurtle:["墨亀","墨龟","Ink turtle"],livingDragon:["墨龍","墨龙","Ink dragon"],
-livingFormChanged:["{name}に変化","化为{name}","Become {name}"],livingDragonArrives:["墨龍が水面へ — 大きさを見て近づこう","墨龙游入 · 看清体型再靠近","An ink dragon arrives · judge its size"],livingDragonLeaves:["墨龍が泳ぎ去りました","墨龙游离了这片水域","The ink dragon swims away"],
+livingFormChanged:["{name}に変化","化为{name}","Become {name}"],livingDragonArrives:["墨龍が水面へ — 大きさを見て近づこう","墨龙游入 · 看清体型再靠近","An ink dragon arrives · judge its size"],livingDragonLeaves:["墨龍は飲み込まれました・30秒後に再び現れます","墨龙已被吞噬 · 30秒后再现","The dragon was swallowed · returns in 30s"],
 
 revealChargeUsing:["疾走・蓄墨中","疾行·蓄墨中","Charging ink"],
 revealChargeMore:["墨を蓄える","蓄墨未成","Gathering ink"],
@@ -66,7 +66,7 @@ revealTeachConsumeText:["自分より小さい生き物や墨粒を飲み込ん�
  revealTeachSkill:["暈染","晕染","Bloom"],
  revealTeachSkillText:["長押しで加速し、墨を使って縮みます。1秒以上かつ必要な墨が蓄まると「放して落墨」に変わり、離すと暈染を放ちます。長く蓄えるほど広くなり、冷却は最大3秒。蓄墨未完なら落墨も冷却もありません。","长按加速，同时耗墨、缩小。按住至少1秒并蓄够墨后，按钮显示「松开落墨」；此时松开才释放晕染。蓄得越多，范围越大，冷却最多3秒。尚未蓄成时松开，不落墨也不冷却。","Hold to accelerate while spending ink and shrinking. After at least 1 second AND enough ink is stored, the button says Release ink. Release then to bloom; more ink spreads farther, with up to 3 seconds cooldown. Releasing before it is ready gives no bloom or cooldown."],
 revealTeachItems:["道具","道具","Items"],
-revealTeachItemsText:["淡く光る海老・魚・亀を飲み込むと、その姿と能力を5秒獲得します。海老は泡の中で墨粒と小さい生物を吸引、魚は加速、亀は一時的に成長。最新の有効な姿を表示し、同種は最大{cap}秒まで延長。蓮も残ります。","吞下发光的虾、鱼、乌龟，获得对应形态和能力，每次5秒：虾化为泡泡并吸引墨点和较小生物；鱼加速；乌龟临时变大。外形跟随最近仍有效的增益，同类最长{cap}秒。地图不再放置独立动物道具，荷叶与荷花保留。","Swallow a glowing shrimp, fish or turtle for 5 seconds of its form and power: shrimp uses a bubble and attraction, fish adds speed, turtle temporarily grows. Your newest active form is shown; matching effects extend up to {cap}s. Lotus leaves and blossoms remain; separate animal pickups are removed."],
+revealTeachItemsText:["海老・魚・亀を飲み込むと、その姿と能力を5秒獲得します。海老は泡の中で墨粒と小さい生物を吸引、魚は加速、亀は一時的に成長。最新の有効な姿を表示し、同種は最大{cap}秒まで延長。蓮も残ります。","吞下任意虾、鱼、乌龟，获得对应形态和能力，每次5秒：虾化为泡泡并吸引墨点和较小生物；鱼加速；乌龟临时变大。外形跟随最近仍有效的增益，同类最长{cap}秒。地图不再放置独立动物道具，荷叶与荷花保留。","Swallow any shrimp, fish or turtle for 5 seconds of its form and power: shrimp uses a bubble and attraction, fish adds speed, turtle temporarily grows. Your newest active form is shown; matching effects extend up to {cap}s. Lotus leaves and blossoms remain; separate animal pickups are removed."],
 revealTeachDanger:["敵と情景道具","敌人与场景道具","Enemies & Props"],
 revealTeachDangerText:["海老は小さめ、魚は中ほど、亀は大きめ。どの種も成長し、大小が同じ水域に暮らします。ときどき巨大な墨龍が短時間泳ぎ入ります。大きな相手から逃げ、成長してから捕食しましょう。蓮の下は安全です。","虾整体偏小、鱼居中、乌龟偏大，各种体型在同一水域生活并成长。偶尔有墨龙短暂游入，先躲避巨大威胁，长大后再反捕。荷叶下仍可庇护。","Shrimp tend to be small, fish medium and turtles large; sizes coexist and grow in one world. An ink dragon occasionally visits for a short time. Evade larger creatures, grow, then return to swallow them. Lotus leaves still shelter you."],
 revealTeachFinish:["画巻を完成する","完成画卷","Complete the Painting"],

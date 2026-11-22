@@ -30,3 +30,15 @@ const pixels=new Uint8ClampedArray(32*64*4);for(let y=2;y<62;y++)for(let x=5;x<2
 const coarse=denseDragonMesh(pixels,32,64,dragon.sourceCurve,{x:200,y:300},21),dense=denseDragonMesh(pixels,32,64,dragon.sourceCurve,{x:200,y:300},42);
 assert(dense.vertices.length>coarse.vertices.length*3);assert(dense.triangles.length>coarse.triangles.length*2);assert(dense.vertices.every(v=>v.x>=0&&v.x<=32&&v.y>=0&&v.y<=64&&Number.isFinite(v.s)&&Number.isFinite(v.t)));assert(dense.triangles.flat().every(i=>i<dense.vertices.length&&i<65535));
 console.log('PASS actual R4 pose animation, torso-centered world spine, physical growth, smooth turn, shrimp bubble fit, culling and resource cleanup');
+
+// A visible NPC reuses pre-baked real-rig frames; it must never request a live
+// mesh raster during ordinary rendering. Body geometry follows that same frame.
+const asset=assets.fish,canvas={width:100,height:40};asset.calibration={...asset.calibration,bodySamples:[{s:.4,t:0,w:1,r:2}],bodySections:[{s:.4,t:0,r:2}],sourceArea:100};
+asset.npcAtlas={bounds:{x:-60,y:-10,w:80,h:20},frames:[{canvas,body:[{x:-20,y:0,w:1,r:2}],sections:[{x:-20,y:0,r:3}]}],seconds:3,bytes:16000};
+const npc={id:'cached-fish',species:'fish',appearance:'living',x:300,y:200,r:10,controller:{type:'ai'},vx:40,vy:0},cached=new LivingPainter({assets});await cached.prepare([npc]);cached.update(1/15,{entities:[npc],speed:()=>80},{x:0,y:0,scale:1},{width:1200,height:900});
+assert(cached.records.get(npc).creature.profile.amplitude<asset.template.profile.amplitude*.5,'NPC body sway is reduced, independently of player animation');
+assert(cached.records.get(npc).creature.profile.maxAngularVelocity<asset.template.profile.maxAngularVelocity,'NPC presentation turns are calmer');
+cached.raster=()=>{throw Error('ordinary NPC must not rasterize a live GPU rig');};let drawn=0;const context={save(){},restore(){},translate(){},rotate(){},scale(){},drawImage(image){assert.equal(image,canvas);drawn++;}};cached.draw(context,npc);cached.draw(context,npc);assert.equal(drawn,2);assert.equal(cached.metrics.liveRasters,0);assert.equal(cached.metrics.sharedFrames,2);
+const body=npc.livingBody;assert.equal(body.species,'fish');assert.equal(body.coreRadius,10);assert.equal(body.samples.length,1);assert.equal(body.samples[0].w,1);assert(body.samples[0].r>0&&body.sections[0].r>0);assert(body.area>0&&body.bound>10);assert(Number.isFinite(body.samples[0].x)&&Number.isFinite(body.samples[0].y));
+const revision=body.revision;cached.update(1/60,{entities:[npc],speed:()=>80},{x:0,y:0,scale:1},{width:1200,height:900});assert.equal(npc.livingBody.revision,revision,'unchanged frame/angle/size reuses collision geometry');npc.r=20;cached.update(1/60,{entities:[npc],speed:()=>80},{x:0,y:0,scale:1},{width:1200,height:900});assert.equal(npc.livingBody.coreRadius,20);assert(Math.abs(npc.livingBody.area/body.area-4)<1e-10);assert(Math.abs(npc.livingBody.samples[0].x/body.samples[0].x-2)<1e-10);assert(npc.livingBody.revision>revision);cached.dispose();
+console.log('PASS shared NPC frames without live GPU raster, calmer NPC profiles, and cached weighted body/section geometry at current physical scale');

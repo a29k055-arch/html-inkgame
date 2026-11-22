@@ -1,24 +1,31 @@
 import {entity} from '../game/inkstone.js';
 import {aiController} from '../game/ai.js';
 
-// Birth slots preserve a readable ecological size distribution, not a growth cap.
-const slot=(species,tier,min,max,low,rewardKind=null)=>Object.freeze({species,tier,min,max,low,rewardKind});
+// World lengths use the existing R4 torso calibration (shrimp~11.47r,
+// fish~10.19r, turtle~3.18r), with a flower~95 and leaf artwork~178–500.
+// The last two slots are introduced once stage two is reached, never at startup.
+const slot=(species,tier,min,max,low,big=false)=>Object.freeze({species,tier,min,max,low,big,rewardKind:({shrimp:'magnet',fish:'speed',turtle:'shield'})[species]});
 export const LIVING_SLOTS=Object.freeze([
- slot('shrimp',1,3,5.5,4,'magnet'),slot('fish',1,4.5,8,6,'speed'),
- ...Array.from({length:6},()=>slot('shrimp',1,3,7,4.5)),
- ...Array.from({length:3},()=>slot('fish',1,6,13,8)),
- slot('shrimp',2,14,28,18),slot('fish',2,22,42,25),slot('turtle',2,18,30,20,'shield'),
- slot('fish',2,28,55,32),slot('shrimp',2,22,38,25,'magnet'),
- slot('fish',3,55,95,65,'speed'),slot('turtle',3,58,95,65),slot('fish',3,70,125,78),
- slot('turtle',3,105,170,115),slot('fish',4,160,210,165),
- slot('turtle',4,240,320,250),slot('turtle',4,260,360,270),slot('turtle',3,140,220,150)
+ slot('shrimp',1,3,4.5,3.5),slot('shrimp',1,3.5,5.5,4),
+ slot('shrimp',1,4,6.5,4.5),slot('shrimp',1,5,7.5,5.5),
+ slot('fish',1,6.5,9,7),slot('fish',1,7.5,11,8),
+ slot('fish',1,9,13,9.5),slot('fish',1,11,15,11.5),
+ slot('turtle',2,28,36,29),slot('turtle',2,34,45,35),
+ slot('fish',2,22,28,23,true),slot('turtle',2,66,82,68,true)
 ]);
+export const LIVING_INITIAL_COUNT=10;
 export const livingSlot=index=>LIVING_SLOTS[((index%LIVING_SLOTS.length)+LIVING_SLOTS.length)%LIVING_SLOTS.length];
 export const REWARD_SPECIES=Object.freeze({magnet:'shrimp',speed:'fish',shield:'turtle',dragon:'dragon'});
-export const LIVING_WORLD_CONFIG=Object.freeze({formDuration:5,dragonFirst:70,dragonIntervalMin:110,dragonIntervalMax:150,dragonLifetime:28,dragonEnabled:true});
+export const SPECIES_REWARDS=Object.freeze({shrimp:'magnet',fish:'speed',turtle:'shield',dragon:'dragon'});
+export function livingRadiusLimit(e){
+ if(e?.eventDragon||e?.species==='dragon')return 26;
+ const big=Number.isInteger(e?.birthSlot)&&livingSlot(e.birthSlot).big;
+ return e?.species==='shrimp'?8:e?.species==='fish'?(big?30:18):e?.species==='turtle'?(big?88:50):88;
+}
+export const LIVING_WORLD_CONFIG=Object.freeze({formDuration:5,dragonFirst:60,dragonRespawn:30,dragonEnabled:true});
 
 export class LivingWorld {
- constructor(run,config={},rng=Math.random){this.run=run;this.config={...LIVING_WORLD_CONFIG,...config};this.rng=rng;this.nextDragon=this.config.dragonFirst;this.serial=0;this.dragon=null;}
+ constructor(run,config={},rng=Math.random){this.run=run;this.config={...LIVING_WORLD_CONFIG,...config};this.rng=rng;this.nextDragon=this.config.dragonFirst;this.serial=0;this.dragon=null;this.largeUnlocked=false;}
  recordForm(species,effect){const p=this.run.player;p.formOrder=(p.formOrder||[]).filter(q=>q.effect!==effect);p.formOrder.push({species,effect});this.refreshForm('reward');}
  clearForm(){const p=this.run.player,previous=p.form?.species;delete p.form;p.formOrder=[];if(previous)this.run.onEvent('creature-form-end',{entity:p,species:previous});}
  refreshForm(reason='elapsed'){
@@ -30,16 +37,28 @@ export class LivingWorld {
  }
  tick(dt){
   const g=this.run,p=g.player;
-  if(this.dragon&&(this.dragon.dead||this.dragon.expiresAt<=g.elapsed))this.removeDragon(this.dragon.dead?'swallowed':'departed');
+  if(!this.largeUnlocked&&g.journey.stage>=2)this.unlockLarge();
+  if(this.dragon?.dead)this.removeDragon('swallowed');
   if(this.config.dragonEnabled&&!this.dragon&&g.elapsed>=this.nextDragon)this.spawnDragon();
  }
  afterArena(){if(this.dragon?.dead)this.removeDragon('swallowed');this.refreshForm();}
  removeDragon(reason='departed'){
   const g=this.run,d=this.dragon;if(!d)return;g.arena.entities=g.arena.entities.filter(e=>e!==d);this.dragon=null;
+  this.nextDragon=g.elapsed+this.config.dragonRespawn;
   g.onEvent('dragon-departure',{entity:d,reason});
  }
+ unlockLarge(){
+  const g=this.run,a=g.arena;this.largeUnlocked=true;
+  for(let index=LIVING_INITIAL_COUNT;index<LIVING_SLOTS.length;index++){
+   if(a.entities.some(e=>e.birthSlot===index&&!e.eventDragon))continue;
+   const spawn=g.ecology.spawn(a,index),p=spawn.point,n=entity('living-large-'+index,p.x,p.y,spawn.radius,aiController(index,spawn.personality));
+   Object.assign(n,{...spawn,r:spawn.radius,mass:spawn.radius**2,birthSlot:index,skinIndex:index,v4Visual:true,invincible:.8});delete n.point;delete n.radius;a.entities.push(n);a.constrain(n);
+  }
+  g.onEvent('large-living-arrival',{count:2});
+ }
  spawnDragon(){
-  const g=this.run,a=g.arena,p=g.player,w=a.world,r=Math.min(220,100+p.r*.35,Math.min(w.width,w.height)*.22),margin=r+12;
+  if(this.dragon&&!this.dragon.dead)return this.dragon;
+  const g=this.run,a=g.arena,p=g.player,w=a.world,r=Math.min(26,18+p.r*.04,Math.min(w.width,w.height)*.08),margin=r+12;
   let point=null,best=-Infinity;
   // Spawn at a distant boundary, never beside the player or overlapping another core.
   for(let i=0;i<32;i++){
@@ -50,10 +69,10 @@ export class LivingWorld {
   }
   if(!point||best<0){this.nextDragon=g.elapsed+5;return null;}
   const d=entity('dragon-event-'+(++this.serial),point.x,point.y,r,aiController(50+this.serial,'wander'));
-  Object.assign(d,{species:'dragon',appearance:'living',rewardKind:'dragon',rewardGlow:true,rewardTier:3,eventDragon:true,v4Visual:true,ecologyTier:4,skinIndex:50+this.serial,invincible:.8,expiresAt:g.elapsed+this.config.dragonLifetime});
+  Object.assign(d,{species:'dragon',appearance:'living',rewardKind:'dragon',rewardGlow:false,rewardTier:3,eventDragon:true,v4Visual:true,ecologyTier:4,skinIndex:50+this.serial,invincible:.8});
   d.controller.goal={x:w.width-point.x,y:w.height-point.y};a.entities.push(d);a.constrain(d);this.dragon=d;
   g.metrics.living.dragonArrivals++;
-  this.nextDragon=g.elapsed+this.config.dragonIntervalMin+this.rng()*(this.config.dragonIntervalMax-this.config.dragonIntervalMin);
-  g.onEvent('dragon-arrival',{entity:d,duration:this.config.dragonLifetime});return d;
+  this.nextDragon=Infinity;
+  g.onEvent('dragon-arrival',{entity:d,persistent:true});return d;
  }
 }
