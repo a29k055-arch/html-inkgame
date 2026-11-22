@@ -1,8 +1,8 @@
 # 水墨生物分层动画测试
 
-当前精修版：**rig-r3-shrimp-turtle-20261121**。虾加入平滑纸片转身，三根长须独立拆分并修复交叉处；乌龟补齐完整壳沿，四肢根部藏在壳下。保留已认可的鱼与龙效果。详情见 [R3 修正说明](MOTION_REPAIR_R3.md)。
+当前精修版：**rig-r4-joint-polish-20261122**。乌龟四肢向壳下补长；虾须交叉处修顺，九根小步足独立附着并补齐，纸片转身围绕躯干柔和过渡。保留已认可的鱼与龙效果。详情见 [R4 修正说明](MOTION_REPAIR_R4.md)。
 
-**[直接在线打开](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/)**
+**[直接在线打开](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/?rev=rig-r4-joint-polish-20261122)**
 
 这是独立的素材动画试验场，基于用户选定的 fish_04、dragon_04、shrimp_07、turtle_02。此测试不改变现有 V4 游戏机制。
 

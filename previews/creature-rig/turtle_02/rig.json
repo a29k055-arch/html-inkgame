@@ -88,8 +88,8 @@
       "bbox": [
         172,
         291,
-        301,
-        247
+        381,
+        343
       ],
       "kind": "leg",
       "pivot": [
@@ -102,10 +102,10 @@
       "bounds": [
         182,
         302,
-        462,
-        527
+        542,
+        623
       ],
-      "pixelCount": 32338,
+      "pixelCount": 47618,
       "rootRepair": {
         "outer": [
           332,
@@ -116,8 +116,12 @@
           490
         ],
         "radius": 49,
-        "paintFile": "../repair-plates/turtle_02_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+        "paintFile": "../repair-plates/turtle_02_legs-r4.png",
+        "extension": "Long natural scaly proximal leg, continuous beneath the closed shell; original distal foot preserved",
+        "innerTip": [
+          490,
+          570
+        ]
       }
     },
     {
@@ -125,10 +129,10 @@
       "file": "turtle_02_leg_fr.png",
       "croppedFile": "textures/turtle_02_leg_fr.png",
       "bbox": [
-        719,
+        656,
         297,
-        314,
-        241
+        377,
+        337
       ],
       "kind": "leg",
       "pivot": [
@@ -139,12 +143,12 @@
       "phase": 4.39822971502571,
       "order": 3,
       "bounds": [
-        729,
+        665,
         307,
         1022,
-        527
+        623
       ],
-      "pixelCount": 32773,
+      "pixelCount": 45179,
       "rootRepair": {
         "outer": [
           858,
@@ -155,8 +159,12 @@
           490
         ],
         "radius": 49,
-        "paintFile": "../repair-plates/turtle_02_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+        "paintFile": "../repair-plates/turtle_02_legs-r4.png",
+        "extension": "Long natural scaly proximal leg, continuous beneath the closed shell; original distal foot preserved",
+        "innerTip": [
+          709,
+          570
+        ]
       }
     },
     {
@@ -165,9 +173,9 @@
       "croppedFile": "textures/turtle_02_leg_bl.png",
       "bbox": [
         176,
-        944,
-        296,
-        243
+        857,
+        377,
+        330
       ],
       "kind": "leg",
       "pivot": [
@@ -179,11 +187,11 @@
       "order": 3,
       "bounds": [
         186,
-        953,
-        461,
+        867,
+        543,
         1177
       ],
-      "pixelCount": 33123,
+      "pixelCount": 43907,
       "rootRepair": {
         "outer": [
           315,
@@ -194,8 +202,12 @@
           995
         ],
         "radius": 53,
-        "paintFile": "../repair-plates/turtle_02_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+        "paintFile": "../repair-plates/turtle_02_legs-r4.png",
+        "extension": "Long natural scaly proximal leg, continuous beneath the closed shell; original distal foot preserved",
+        "innerTip": [
+          492,
+          930
+        ]
       }
     },
     {
@@ -203,10 +215,10 @@
       "file": "turtle_02_leg_br.png",
       "croppedFile": "textures/turtle_02_leg_br.png",
       "bbox": [
-        714,
-        944,
-        298,
-        245
+        652,
+        858,
+        360,
+        331
       ],
       "kind": "leg",
       "pivot": [
@@ -217,12 +229,12 @@
       "phase": 8.79645943005142,
       "order": 3,
       "bounds": [
-        724,
-        954,
+        661,
+        868,
         1001,
         1180
       ],
-      "pixelCount": 32365,
+      "pixelCount": 43113,
       "rootRepair": {
         "outer": [
           869,
@@ -233,8 +245,12 @@
           995
         ],
         "radius": 53,
-        "paintFile": "../repair-plates/turtle_02_repair.png",
-        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+        "paintFile": "../repair-plates/turtle_02_legs-r4.png",
+        "extension": "Long natural scaly proximal leg, continuous beneath the closed shell; original distal foot preserved",
+        "innerTip": [
+          705,
+          930
+        ]
       }
     },
     {
@@ -421,7 +437,68 @@
       "rimPixels": 158767,
       "method": "Complete continuous shell-only AI rim, feathered to original inner scutes; independent limbs behind shell"
     },
-    "assembledChangedPixels": 152014,
+    "longLegUnderlaps": {
+      "paintFile": "../repair-plates/turtle_02_legs-r4.png",
+      "legs": [
+        {
+          "part": "leg_fl",
+          "paintedPixels": 35557,
+          "replacedPixels": 35557,
+          "proximalDepth": 280,
+          "rootPivot": [
+            431,
+            490
+          ],
+          "hiddenTip": [
+            490,
+            570
+          ]
+        },
+        {
+          "part": "leg_fr",
+          "paintedPixels": 33827,
+          "replacedPixels": 33827,
+          "proximalDepth": 266,
+          "rootPivot": [
+            760,
+            490
+          ],
+          "hiddenTip": [
+            709,
+            570
+          ]
+        },
+        {
+          "part": "leg_bl",
+          "paintedPixels": 34299,
+          "replacedPixels": 34299,
+          "proximalDepth": 283,
+          "rootPivot": [
+            430,
+            995
+          ],
+          "hiddenTip": [
+            492,
+            930
+          ]
+        },
+        {
+          "part": "leg_br",
+          "paintedPixels": 32919,
+          "replacedPixels": 32919,
+          "proximalDepth": 288,
+          "rootPivot": [
+            755,
+            995
+          ],
+          "hiddenTip": [
+            705,
+            930
+          ]
+        }
+      ]
+    },
+    "assembledChangedPixels": 225707,
     "changedOutsideApprovedMask": 0
   },
   "notes": "Selected source silhouettes and pigment preserved outside bounded anatomical repair regions. AI repair paint supplies hidden root extensions and restored host coverage. Layers intentionally overlap at joints; draw attached limbs beneath host torso. Continuous body bands share one mesh. Source remains the original approval reference."

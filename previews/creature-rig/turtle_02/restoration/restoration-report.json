@@ -112,6 +112,67 @@
     "rimPixels": 158767,
     "method": "Complete continuous shell-only AI rim, feathered to original inner scutes; independent limbs behind shell"
   },
-  "assembledChangedPixels": 152014,
+  "longLegUnderlaps": {
+    "paintFile": "../repair-plates/turtle_02_legs-r4.png",
+    "legs": [
+      {
+        "part": "leg_fl",
+        "paintedPixels": 35557,
+        "replacedPixels": 35557,
+        "proximalDepth": 280,
+        "rootPivot": [
+          431,
+          490
+        ],
+        "hiddenTip": [
+          490,
+          570
+        ]
+      },
+      {
+        "part": "leg_fr",
+        "paintedPixels": 33827,
+        "replacedPixels": 33827,
+        "proximalDepth": 266,
+        "rootPivot": [
+          760,
+          490
+        ],
+        "hiddenTip": [
+          709,
+          570
+        ]
+      },
+      {
+        "part": "leg_bl",
+        "paintedPixels": 34299,
+        "replacedPixels": 34299,
+        "proximalDepth": 283,
+        "rootPivot": [
+          430,
+          995
+        ],
+        "hiddenTip": [
+          492,
+          930
+        ]
+      },
+      {
+        "part": "leg_br",
+        "paintedPixels": 32919,
+        "replacedPixels": 32919,
+        "proximalDepth": 288,
+        "rootPivot": [
+          755,
+          995
+        ],
+        "hiddenTip": [
+          705,
+          930
+        ]
+      }
+    ]
+  },
+  "assembledChangedPixels": 225707,
   "changedOutsideApprovedMask": 0
 }

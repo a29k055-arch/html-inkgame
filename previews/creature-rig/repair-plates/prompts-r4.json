@@ -1,0 +1,6 @@
+{
+  "tool": "built-in image_gen",
+  "target": "turtle_02/source.png",
+  "output": "repair-plates/turtle_02_legs-r4.png",
+  "prompt": "Precise animation-underlap edit of the reference top-down Chinese ink turtle. Need a repair plate of ONLY THE FOUR LEGS, on true transparent alpha. Preserve exact original canvas layout and toes/feet positions: 1218x1292 frame, front left foot around(240,360), front right(960,360), rear left(245,1115), rear right(960,1120). Remove shell, head, tail completely. Continue each existing scaly leg inward toward where shell center was: front-left root must continue smoothly to(500,560), front-right to(700,560), back-left to(500,950), back-right to(700,950). These are four long diagonal complete limbs with natural rounded upper joints. Each root continuous with original leg, slightly broader in upper portion, no gaps or isolated patches. Gray ink wash, delicate original scaly mottles, soft ink edges. No longitudinal stretching stripes, shell scute pattern, blocky rectangles, repeated texture tiling or extra toes. Four fully disconnected LEGS only each as one internally continuous shape, same original positions. The extra long upper portions will be hidden under shell. Do not change original feet silhouettes or style. No white/gray/checkerboard backdrop."
+}

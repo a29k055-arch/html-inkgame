@@ -1,4 +1,4 @@
-最新精修版 **rig-r3-shrimp-turtle-20261121**：虾纸片转身、三根独立长须；乌龟完整壳沿与连续肢根。鱼和龙保留已认可效果。详见 [R3 修正说明](MOTION_REPAIR_R3.md)。
+最新精修版 **rig-r4-joint-polish-20261122**：乌龟四肢补长，虾须修顺、九根步足独立补根，转身围绕躯干柔和过渡。鱼和龙保持已认可效果。详见 [R4 修正说明](MOTION_REPAIR_R4.md)。
 
 # 四类水墨生物 · 可控动画素材包
 
@@ -18,7 +18,7 @@
 | --- | --- |
 | fish_04/ | 6 层：head，body_01、body_02，tail，fin_l、fin_r |
 | dragon_04/ | 14 层：head，neck，body_01—03，tail，whisker_l/r，horn_l/r，leg_fl/fr/bl/br |
-| shrimp_07/ | 12 层：head_chest，abdomen_01—04，tail，antenna_01/02/03，forearm_l/r，legs_l |
+| shrimp_07/ | 20 层：head_chest，abdomen_01—04，tail，antenna_01/02/03，forearm_l/r，leg_walk_01—09 |
 | turtle_02/ | 7 层：shell，head，tail，leg_fl/fr/bl/br |
 
 每层完整文件名均带对象前缀，例如 dragon_04_body_01.png。各目录有 source.png 原图副本、rig.json 结构/连接点/曲线数据、原画布对齐的 PNG 分层，以及 textures/ 下适合网页加载的裁切版。后缀 l/r 表示素材画面左/右，fl/fr/bl/br 表示前左/前右/后左/后右。

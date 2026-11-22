@@ -12,7 +12,7 @@
   "registration": "same-pose source canvas; fit only if dimensions differ",
   "hostRaisedPixels": 1464,
   "hostRecoveredSourcePixels": 0,
-  "rootAddedPixels": 5110,
+  "rootAddedPixels": 5208,
   "cleanupPixels": 0,
   "roots": [
     {
@@ -45,8 +45,8 @@
     },
     {
       "part": "antenna_01",
-      "addedPixels": 303,
-      "underHostPixels": 157,
+      "addedPixels": 333,
+      "underHostPixels": 150,
       "outer": [
         932,
         383
@@ -59,8 +59,8 @@
     },
     {
       "part": "antenna_02",
-      "addedPixels": 541,
-      "underHostPixels": 233,
+      "addedPixels": 567,
+      "underHostPixels": 230,
       "outer": [
         939,
         360
@@ -73,8 +73,8 @@
     },
     {
       "part": "antenna_03",
-      "addedPixels": 260,
-      "underHostPixels": 170,
+      "addedPixels": 302,
+      "underHostPixels": 168,
       "outer": [
         968,
         405
@@ -100,16 +100,113 @@
       "radius": 14
     }
   ],
-  "antennaSplit": {
+  "smallLegRepair": {
     "version": 1,
+    "count": 9,
+    "method": "Original foot pigment separated by individual traces; source gaps filled locally; each root has its own hidden overlap and pivot",
+    "feet": [
+      {
+        "name": "leg_walk_01",
+        "pivot": [
+          904,
+          532
+        ],
+        "originalPixels": 1358,
+        "gapFilledPixels": 71,
+        "rootUnderlapPixels": 612
+      },
+      {
+        "name": "leg_walk_02",
+        "pivot": [
+          884,
+          551
+        ],
+        "originalPixels": 1328,
+        "gapFilledPixels": 47,
+        "rootUnderlapPixels": 526
+      },
+      {
+        "name": "leg_walk_03",
+        "pivot": [
+          858,
+          564
+        ],
+        "originalPixels": 1770,
+        "gapFilledPixels": 24,
+        "rootUnderlapPixels": 491
+      },
+      {
+        "name": "leg_walk_04",
+        "pivot": [
+          805,
+          588
+        ],
+        "originalPixels": 2205,
+        "gapFilledPixels": 68,
+        "rootUnderlapPixels": 713
+      },
+      {
+        "name": "leg_walk_05",
+        "pivot": [
+          753,
+          594
+        ],
+        "originalPixels": 1663,
+        "gapFilledPixels": 59,
+        "rootUnderlapPixels": 588
+      },
+      {
+        "name": "leg_walk_06",
+        "pivot": [
+          726,
+          601
+        ],
+        "originalPixels": 2097,
+        "gapFilledPixels": 29,
+        "rootUnderlapPixels": 556
+      },
+      {
+        "name": "leg_walk_07",
+        "pivot": [
+          634,
+          637
+        ],
+        "originalPixels": 1336,
+        "gapFilledPixels": 2,
+        "rootUnderlapPixels": 463
+      },
+      {
+        "name": "leg_walk_08",
+        "pivot": [
+          550,
+          668
+        ],
+        "originalPixels": 1357,
+        "gapFilledPixels": 26,
+        "rootUnderlapPixels": 589
+      },
+      {
+        "name": "leg_walk_09",
+        "pivot": [
+          482,
+          707
+        ],
+        "originalPixels": 1224,
+        "gapFilledPixels": 28,
+        "rootUnderlapPixels": 486
+      }
+    ]
+  },
+  "antennaSplit": {
+    "version": 2,
     "source": "source.png",
-    "method": "Three source-ink ridge traces, narrow independent mattes and local same-strand crossing reconstruction",
+    "method": "Three smooth source-ink ridge fields with median-filtered arc profiles and one-pass antialiased distance rasterization; no per-point max-alpha knobs",
     "strands": [
       {
         "name": "antenna_01",
         "points": 1192,
-        "visiblePixels": 3255,
-        "repairedGapPixels": 276,
+        "visiblePixels": 2314,
+        "repairedGapPixels": 116,
         "pivot": [
           930,
           410
@@ -118,8 +215,8 @@
       {
         "name": "antenna_02",
         "points": 1759,
-        "visiblePixels": 4742,
-        "repairedGapPixels": 1000,
+        "visiblePixels": 3393,
+        "repairedGapPixels": 608,
         "pivot": [
           930,
           410
@@ -128,8 +225,8 @@
       {
         "name": "antenna_03",
         "points": 1621,
-        "visiblePixels": 4355,
-        "repairedGapPixels": 657,
+        "visiblePixels": 3067,
+        "repairedGapPixels": 321,
         "pivot": [
           966,
           426
@@ -138,6 +235,6 @@
     ],
     "shortFilaments": "Retained on head_chest; do not move with independent long antennae"
   },
-  "assembledChangedPixels": 19709,
+  "assembledChangedPixels": 28135,
   "changedOutsideApprovedMask": 0
 }

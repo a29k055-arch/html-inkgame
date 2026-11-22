@@ -1,0 +1,2718 @@
+{
+  "passed": true,
+  "results": {
+    "fishDragonUnchanged": {
+      "passed": true,
+      "files": 56
+    },
+    "turnFrames": [],
+    "turtleSweep": [
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": -0.25,
+        "overlap": 10167,
+        "limbArea": 11353
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": 0,
+        "overlap": 10541,
+        "limbArea": 11482
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": 0.25,
+        "overlap": 11162,
+        "limbArea": 11509
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": -0.25,
+        "overlap": 9492,
+        "limbArea": 11184
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": 0,
+        "overlap": 10252,
+        "limbArea": 11778
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": 0.25,
+        "overlap": 10620,
+        "limbArea": 11327
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 0,
+        "gaitPhase": 0,
+        "time": 1.9999999999999953,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": -0.25,
+        "overlap": 12184,
+        "limbArea": 12555
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": 0,
+        "overlap": 12104,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": 0.25,
+        "overlap": 11592,
+        "limbArea": 12953
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": -0.25,
+        "overlap": 10185,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": 0,
+        "overlap": 10575,
+        "limbArea": 11482
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": 0.25,
+        "overlap": 11183,
+        "limbArea": 11483
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": -0.25,
+        "overlap": 9436,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": 0,
+        "overlap": 10192,
+        "limbArea": 11760
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11396
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": -0.25,
+        "overlap": 11058,
+        "limbArea": 11496
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": 0,
+        "overlap": 10648,
+        "limbArea": 11884
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 1,
+        "gaitPhase": 0.2617993877991494,
+        "time": 2.1488095238095193,
+        "extraRotation": 0.25,
+        "overlap": 9969,
+        "limbArea": 11673
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": -0.25,
+        "overlap": 12167,
+        "limbArea": 12487
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": 0,
+        "overlap": 12120,
+        "limbArea": 13118
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": 0.25,
+        "overlap": 11654,
+        "limbArea": 13006
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": -0.25,
+        "overlap": 11053,
+        "limbArea": 11549
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": 0,
+        "overlap": 10581,
+        "limbArea": 11880
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 2,
+        "gaitPhase": 0.5235987755982988,
+        "time": 2.297619047619043,
+        "extraRotation": 0.25,
+        "overlap": 9914,
+        "limbArea": 11636
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": -0.25,
+        "overlap": 12133,
+        "limbArea": 12369
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": 0,
+        "overlap": 12143,
+        "limbArea": 13003
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": 0.25,
+        "overlap": 11755,
+        "limbArea": 13078
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": -0.25,
+        "overlap": 11033,
+        "limbArea": 11650
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": 0,
+        "overlap": 10461,
+        "limbArea": 11867
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 3,
+        "gaitPhase": 0.7853981633974483,
+        "time": 2.4464285714285667,
+        "extraRotation": 0.25,
+        "overlap": 9842,
+        "limbArea": 11577
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": -0.25,
+        "overlap": 12042,
+        "limbArea": 12223
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": 0,
+        "overlap": 12162,
+        "limbArea": 12895
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": 0.25,
+        "overlap": 11864,
+        "limbArea": 13145
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": -0.25,
+        "overlap": 10990,
+        "limbArea": 11736
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": 0,
+        "overlap": 10337,
+        "limbArea": 11829
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 4,
+        "gaitPhase": 1.0471975511965976,
+        "time": 2.5952380952380905,
+        "extraRotation": 0.25,
+        "overlap": 9781,
+        "limbArea": 11505
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": -0.25,
+        "overlap": 12028,
+        "limbArea": 12204
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0,
+        "overlap": 12163,
+        "limbArea": 12882
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0.25,
+        "overlap": 11878,
+        "limbArea": 13149
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": -0.25,
+        "overlap": 10978,
+        "limbArea": 11745
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0,
+        "overlap": 10318,
+        "limbArea": 11821
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0.25,
+        "overlap": 9769,
+        "limbArea": 11491
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": -0.25,
+        "overlap": 12137,
+        "limbArea": 12368
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": 0,
+        "overlap": 12149,
+        "limbArea": 12997
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": 0.25,
+        "overlap": 11761,
+        "limbArea": 13082
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": -0.25,
+        "overlap": 11040,
+        "limbArea": 11668
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": 0,
+        "overlap": 10448,
+        "limbArea": 11860
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 6,
+        "gaitPhase": 1.5707963267948966,
+        "time": 2.892857142857138,
+        "extraRotation": 0.25,
+        "overlap": 9836,
+        "limbArea": 11572
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": -0.25,
+        "overlap": 12181,
+        "limbArea": 12571
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": 0,
+        "overlap": 12094,
+        "limbArea": 13169
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": 0.25,
+        "overlap": 11579,
+        "limbArea": 12939
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": -0.25,
+        "overlap": 11060,
+        "limbArea": 11479
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": 0,
+        "overlap": 10660,
+        "limbArea": 11876
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 7,
+        "gaitPhase": 1.832595714594046,
+        "time": 3.0416666666666616,
+        "extraRotation": 0.25,
+        "overlap": 9986,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": -0.25,
+        "overlap": 12181,
+        "limbArea": 12750
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": 0,
+        "overlap": 12007,
+        "limbArea": 13206
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": 0.25,
+        "overlap": 11475,
+        "limbArea": 12802
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": -0.25,
+        "overlap": 10958,
+        "limbArea": 11222
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": 0,
+        "overlap": 10873,
+        "limbArea": 11835
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 8,
+        "gaitPhase": 2.0943951023931953,
+        "time": 3.190476190476186,
+        "extraRotation": 0.25,
+        "overlap": 10167,
+        "limbArea": 11766
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": -0.25,
+        "overlap": 12165,
+        "limbArea": 12842
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0,
+        "overlap": 11914,
+        "limbArea": 13168
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0.25,
+        "overlap": 11419,
+        "limbArea": 12701
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": -0.25,
+        "overlap": 10901,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0,
+        "overlap": 10959,
+        "limbArea": 11772
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0.25,
+        "overlap": 10286,
+        "limbArea": 11813
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": -0.25,
+        "overlap": 12170,
+        "limbArea": 12822
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": 0,
+        "overlap": 11943,
+        "limbArea": 13184
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": 0.25,
+        "overlap": 11428,
+        "limbArea": 12721
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": -0.25,
+        "overlap": 10922,
+        "limbArea": 11138
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": 0,
+        "overlap": 10938,
+        "limbArea": 11784
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 10,
+        "gaitPhase": 2.6179938779914944,
+        "time": 3.4880952380952333,
+        "extraRotation": 0.25,
+        "overlap": 10257,
+        "limbArea": 11804
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": -0.25,
+        "overlap": 12172,
+        "limbArea": 12712
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": 0,
+        "overlap": 12020,
+        "limbArea": 13202
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": 0.25,
+        "overlap": 11483,
+        "limbArea": 12821
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": -0.25,
+        "overlap": 10970,
+        "limbArea": 11259
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": 0,
+        "overlap": 10838,
+        "limbArea": 11845
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 11,
+        "gaitPhase": 2.8797932657906435,
+        "time": 3.636904761904757,
+        "extraRotation": 0.25,
+        "overlap": 10135,
+        "limbArea": 11754
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": -0.25,
+        "overlap": 12178,
+        "limbArea": 12614
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": 0,
+        "overlap": 12076,
+        "limbArea": 13190
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": 0.25,
+        "overlap": 11549,
+        "limbArea": 12907
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": -0.25,
+        "overlap": 10186,
+        "limbArea": 11361
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": 0,
+        "overlap": 10589,
+        "limbArea": 11493
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": 0.25,
+        "overlap": 11188,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": -0.25,
+        "overlap": 9437,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": 0,
+        "overlap": 10175,
+        "limbArea": 11749
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": 0.25,
+        "overlap": 10603,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": -0.25,
+        "overlap": 11033,
+        "limbArea": 11406
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": 0,
+        "overlap": 10718,
+        "limbArea": 11868
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 12,
+        "gaitPhase": 3.141592653589793,
+        "time": 3.785714285714281,
+        "extraRotation": 0.25,
+        "overlap": 10031,
+        "limbArea": 11707
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": -0.25,
+        "overlap": 12180,
+        "limbArea": 12570
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": 0,
+        "overlap": 12094,
+        "limbArea": 13168
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": 0.25,
+        "overlap": 11582,
+        "limbArea": 12942
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": -0.25,
+        "overlap": 10193,
+        "limbArea": 11365
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": 0,
+        "overlap": 10595,
+        "limbArea": 11494
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": 0.25,
+        "overlap": 11185,
+        "limbArea": 11473
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": -0.25,
+        "overlap": 9430,
+        "limbArea": 11091
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": 0,
+        "overlap": 10159,
+        "limbArea": 11741
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": 0.25,
+        "overlap": 10598,
+        "limbArea": 11417
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": -0.25,
+        "overlap": 11059,
+        "limbArea": 11478
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": 0,
+        "overlap": 10659,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 13,
+        "gaitPhase": 3.4033920413889427,
+        "time": 3.934523809523805,
+        "extraRotation": 0.25,
+        "overlap": 9987,
+        "limbArea": 11687
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": -0.25,
+        "overlap": 10216,
+        "limbArea": 11373
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11513
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": 0.25,
+        "overlap": 11221,
+        "limbArea": 11458
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": -0.25,
+        "overlap": 9386,
+        "limbArea": 11017
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": 0,
+        "overlap": 10073,
+        "limbArea": 11694
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": 0.25,
+        "overlap": 10585,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 14,
+        "gaitPhase": 3.665191429188092,
+        "time": 4.083333333333329,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": -0.25,
+        "overlap": 10274,
+        "limbArea": 11393
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": 0,
+        "overlap": 10755,
+        "limbArea": 11533
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": 0.25,
+        "overlap": 11239,
+        "limbArea": 11384
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": -0.25,
+        "overlap": 9310,
+        "limbArea": 10873
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": 0,
+        "overlap": 9916,
+        "limbArea": 11591
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": 0.25,
+        "overlap": 10542,
+        "limbArea": 11612
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 15,
+        "gaitPhase": 3.926990816987241,
+        "time": 4.232142857142852,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": -0.25,
+        "overlap": 10334,
+        "limbArea": 11411
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": 0,
+        "overlap": 10863,
+        "limbArea": 11527
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": 0.25,
+        "overlap": 11245,
+        "limbArea": 11324
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": -0.25,
+        "overlap": 9264,
+        "limbArea": 10753
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": 0,
+        "overlap": 9789,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": 0.25,
+        "overlap": 10483,
+        "limbArea": 11689
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 16,
+        "gaitPhase": 4.1887902047863905,
+        "time": 4.380952380952376,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": -0.25,
+        "overlap": 10335,
+        "limbArea": 11408
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0,
+        "overlap": 10879,
+        "limbArea": 11518
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0.25,
+        "overlap": 11245,
+        "limbArea": 11319
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": -0.25,
+        "overlap": 9256,
+        "limbArea": 10732
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0,
+        "overlap": 9776,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0.25,
+        "overlap": 10467,
+        "limbArea": 11695
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": -0.25,
+        "overlap": 10277,
+        "limbArea": 11395
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": 0,
+        "overlap": 10766,
+        "limbArea": 11537
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": 0.25,
+        "overlap": 11241,
+        "limbArea": 11381
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": -0.25,
+        "overlap": 9309,
+        "limbArea": 10865
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": 0,
+        "overlap": 9913,
+        "limbArea": 11587
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": 0.25,
+        "overlap": 10527,
+        "limbArea": 11607
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 18,
+        "gaitPhase": 4.71238898038469,
+        "time": 4.6785714285714235,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": -0.25,
+        "overlap": 10187,
+        "limbArea": 11363
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": 0,
+        "overlap": 10575,
+        "limbArea": 11483
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": 0.25,
+        "overlap": 11182,
+        "limbArea": 11483
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": -0.25,
+        "overlap": 9435,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": 0,
+        "overlap": 10189,
+        "limbArea": 11755
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": 0.25,
+        "overlap": 10604,
+        "limbArea": 11396
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 19,
+        "gaitPhase": 4.974188368183839,
+        "time": 4.827380952380947,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": -0.25,
+        "overlap": 10133,
+        "limbArea": 11319
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": 0,
+        "overlap": 10426,
+        "limbArea": 11438
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": 0.25,
+        "overlap": 11029,
+        "limbArea": 11515
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": -0.25,
+        "overlap": 9624,
+        "limbArea": 11338
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": 0,
+        "overlap": 10377,
+        "limbArea": 11771
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": 0.25,
+        "overlap": 10625,
+        "limbArea": 11170
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": -0.25,
+        "overlap": 10138,
+        "limbArea": 11308
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0,
+        "overlap": 10346,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0.25,
+        "overlap": 10916,
+        "limbArea": 11518
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": -0.25,
+        "overlap": 9739,
+        "limbArea": 11451
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0,
+        "overlap": 10444,
+        "limbArea": 11716
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0.25,
+        "overlap": 10584,
+        "limbArea": 11029
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": -0.25,
+        "overlap": 10142,
+        "limbArea": 11316
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": 0,
+        "overlap": 10368,
+        "limbArea": 11416
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": 0.25,
+        "overlap": 10946,
+        "limbArea": 11521
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": -0.25,
+        "overlap": 9699,
+        "limbArea": 11416
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": 0,
+        "overlap": 10437,
+        "limbArea": 11743
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": 0.25,
+        "overlap": 10606,
+        "limbArea": 11077
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 22,
+        "gaitPhase": 5.759586531581287,
+        "time": 5.273809523809518,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": -0.25,
+        "overlap": 12179,
+        "limbArea": 12557
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": 0,
+        "overlap": 12097,
+        "limbArea": 13162
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": 0.25,
+        "overlap": 11590,
+        "limbArea": 12949
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": -0.25,
+        "overlap": 10139,
+        "limbArea": 11328
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": 0,
+        "overlap": 10450,
+        "limbArea": 11447
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": 0.25,
+        "overlap": 11065,
+        "limbArea": 11519
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": -0.25,
+        "overlap": 9585,
+        "limbArea": 11297
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": 0,
+        "overlap": 10355,
+        "limbArea": 11782
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": 0.25,
+        "overlap": 10619,
+        "limbArea": 11197
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": -0.25,
+        "overlap": 11063,
+        "limbArea": 11492
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": 0,
+        "overlap": 10652,
+        "limbArea": 11875
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 23,
+        "gaitPhase": 6.021385919380436,
+        "time": 5.422619047619043,
+        "extraRotation": 0.25,
+        "overlap": 9983,
+        "limbArea": 11686
+      }
+    ],
+    "whiskerLayers": [],
+    "walkingLegLayers": [],
+    "revision": "rig-r3-shrimp-turtle-20261121",
+    "worstTurtleCases": [
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": -0.25,
+        "overlap": 12028,
+        "limbArea": 12204
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0,
+        "overlap": 11914,
+        "limbArea": 13168
+      },
+      {
+        "name": "turtle_02_leg_fl",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": 0.25,
+        "overlap": 11419,
+        "limbArea": 12701
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 20,
+        "gaitPhase": 5.235987755982989,
+        "time": 4.976190476190471,
+        "extraRotation": -0.25,
+        "overlap": 10133,
+        "limbArea": 11319
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0,
+        "overlap": 10346,
+        "limbArea": 11403
+      },
+      {
+        "name": "turtle_02_leg_fr",
+        "phase": 21,
+        "gaitPhase": 5.497787143782138,
+        "time": 5.124999999999995,
+        "extraRotation": 0.25,
+        "overlap": 10916,
+        "limbArea": 11518
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": -0.25,
+        "overlap": 9256,
+        "limbArea": 10732
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0,
+        "overlap": 9776,
+        "limbArea": 11481
+      },
+      {
+        "name": "turtle_02_leg_bl",
+        "phase": 17,
+        "gaitPhase": 4.4505895925855405,
+        "time": 4.5297619047619,
+        "extraRotation": 0.25,
+        "overlap": 10467,
+        "limbArea": 11695
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 9,
+        "gaitPhase": 2.356194490192345,
+        "time": 3.3392857142857095,
+        "extraRotation": -0.25,
+        "overlap": 10901,
+        "limbArea": 11103
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0,
+        "overlap": 10318,
+        "limbArea": 11821
+      },
+      {
+        "name": "turtle_02_leg_br",
+        "phase": 5,
+        "gaitPhase": 1.3089969389957472,
+        "time": 2.744047619047614,
+        "extraRotation": 0.25,
+        "overlap": 9769,
+        "limbArea": 11491
+      }
+    ]
+  },
+  "note": "Full-cycle overlap is a structural check; smooth crossings and natural root appearance require inspection of the saved magnified images."
+}

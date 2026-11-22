@@ -1,13 +1,13 @@
 {
-  "version": 1,
+  "version": 2,
   "source": "source.png",
-  "method": "Three source-ink ridge traces, narrow independent mattes and local same-strand crossing reconstruction",
+  "method": "Three smooth source-ink ridge fields with median-filtered arc profiles and one-pass antialiased distance rasterization; no per-point max-alpha knobs",
   "strands": [
     {
       "name": "antenna_01",
       "points": 1192,
-      "visiblePixels": 3255,
-      "repairedGapPixels": 276,
+      "visiblePixels": 2314,
+      "repairedGapPixels": 116,
       "pivot": [
         930,
         410
@@ -16,8 +16,8 @@
     {
       "name": "antenna_02",
       "points": 1759,
-      "visiblePixels": 4742,
-      "repairedGapPixels": 1000,
+      "visiblePixels": 3393,
+      "repairedGapPixels": 608,
       "pivot": [
         930,
         410
@@ -26,8 +26,8 @@
     {
       "name": "antenna_03",
       "points": 1621,
-      "visiblePixels": 4355,
-      "repairedGapPixels": 657,
+      "visiblePixels": 3067,
+      "repairedGapPixels": 321,
       "pivot": [
         966,
         426

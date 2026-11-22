@@ -17,7 +17,7 @@
 - [水墨视觉效果 README](prototypes/ink/README.md)
 - [水墨视觉测试 · 冻结历史候选](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
 - [V4共享水墨测试](https://a29k055-arch.github.io/html-inkgame/v4/visual-effects/v4.html)
-- [生物分层动画测试 · 鱼／龙／虾／乌龟](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/)（R3 精修：虾平滑纸片转身与独立长须／乌龟完整壳沿；保留柔和鱼与 S 形龙）
+- [生物分层动画测试 · 鱼／龙／虾／乌龟](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/?rev=rig-r4-joint-polish-20261122)（11月22日 R4：乌龟四肢补长／虾须与小步足修复／柔和纸片转身）
 - [水墨效果对比实验室](https://a29k055-arch.github.io/html-inkgame/visual-effects/lab.html)
 - [视觉来源与参数](visual-effects/REFERENCE.md)
 

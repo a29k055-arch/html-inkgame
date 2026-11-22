@@ -1,6 +1,6 @@
 /** Canvas 2D ink puppet runtime. Coordinates/input are CSS pixels, seconds and radians. */
-import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r3-shrimp-turtle-20261121';
-export const INK_CREATURE_REV='rig-r3-shrimp-turtle-20261121';
+import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r4-joint-polish-20261122';
+export const INK_CREATURE_REV='rig-r4-joint-polish-20261122';
 const TAU = Math.PI * 2;
 const RESOURCE_CACHE=new Map();
 const revisionURL=(value,base)=>{const url=new URL(value,base);url.searchParams.set('inkRigRev',INK_CREATURE_REV);return url;};
@@ -20,9 +20,9 @@ export function shrimpPresentation(facing,ix,iy) {
   return {facing,inclination:Math.atan2(iy,Math.abs(ix))};
 }
 export function stepShrimpTurn(progress,velocity,target,dt) {
-  // A full turn uses a .1 s acceleration, .2 s cruise, .1 s braking profile.
+  // A full turn takes about .55 s; the displayed yaw additionally eases at both ends.
   // Retargeting keeps the current progress AND velocity instead of restarting a flip.
-  const acceleration=100/3,maxVelocity=10/3,distance=target-progress;
+  const acceleration=22,maxVelocity=2.2,distance=target-progress;
   const desired=Math.sign(distance)*Math.min(maxVelocity,Math.sqrt(2*acceleration*Math.abs(distance)));
   const nextVelocity=velocity+clamp(desired-velocity,-acceleration*dt,acceleration*dt);
   let next=progress+(velocity+nextVelocity)*.5*dt;
@@ -236,8 +236,17 @@ export class InkCreature {
     this.history.push({t:this.time,a:this.heading});while(this.history.length>2&&this.history[1].t<this.time-3)this.history.shift();
   }
   get handedness(){return this.species==='shrimp'?this.facing:1;}
-  get presentationWidth(){return this.species==='shrimp'?Math.abs(Math.cos(Math.PI*this.shrimpTurnProgress)):1;}
-  presentationPoint(p){return this.species==='shrimp'?{x:this.x+(p.x-this.x)*this.presentationWidth,y:p.y}:p;}
+  get presentationWidth(){
+    if(this.species!=='shrimp')return 1;
+    const width=Math.abs(Math.cos(Math.PI*smoothstep(this.shrimpTurnProgress)));
+    return this.shrimpEdgePass?.012:width;
+  }
+  get paperEdgeOpacity(){return this.species==='shrimp'?smoothstep(1-this.presentationWidth/.07)*.7:0;}
+  presentationPoint(p){
+    if(this.species!=='shrimp')return p;
+    const pivot=sampleCurve(this.targetCurve,.45);
+    return{x:this.x+(p.x-pivot.x)*this.presentationWidth,y:this.y+p.y-pivot.y};
+  }
   mapPoint(s,t) {const p=sampleCurve(this.targetCurve,s),sign=this.handedness;return this.presentationPoint({x:p.x-p.ty*t*this.length*sign,y:p.y+p.tx*t*this.length*sign});}
   layerMotion(layer) {
     if(this.mode==='straight'||this.mode==='rest')return 0;
@@ -284,6 +293,11 @@ export class InkCreature {
   }
   draw(ctx,{debug=false}={}) {
     if(this.disposed||!this.bodyImage)return;
+    if(this.species==='shrimp'&&!this.shrimpEdgePass&&this.paperEdgeOpacity>0){
+      // A paper puppet has a thin ink-bearing edge, rather than vanishing for one frame.
+      const opacity=this.paperEdgeOpacity;this.shrimpEdgePass=true;ctx.save();ctx.globalAlpha*=opacity;
+      try{this.draw(ctx,{debug:false});}finally{ctx.restore();this.shrimpEdgePass=false;}
+    }
     if(this.mode==='rest'){this.drawSource(ctx);if(debug)this.drawDebug(ctx);return;}
     const before=this.layers.filter(l=>(l.order??0)<this.bodyOrder),after=this.layers.filter(l=>(l.order??0)>=this.bodyOrder);
     before.forEach(l=>this.drawLayer(ctx,l));
@@ -311,27 +325,32 @@ export class InkCreature {
       ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(this.meshSurface,0,0);ctx.restore();
   }
   drawSource(ctx) {
-    const src=sampleCurve(this.sourceCurve,0),m=this.rigidTransform({x:this.x,y:this.y},this.heading+Math.PI,Math.atan2(src.ty,src.tx));
-    ctx.save();ctx.transform(m.a,m.b,m.c,m.d,m.x,m.y);ctx.drawImage(this.sourceImage,-src.x,-src.y);ctx.restore();
+    const src=sampleCurve(this.sourceCurve,0),pivot=this.species==='shrimp'?sampleCurve(this.sourceCurve,.45):src,m=this.rigidTransform({x:this.x,y:this.y},this.heading+Math.PI,Math.atan2(src.ty,src.tx));
+    ctx.save();ctx.transform(m.a,m.b,m.c,m.d,m.x,m.y);ctx.drawImage(this.sourceImage,-pivot.x,-pivot.y);ctx.restore();
   }
   visualBounds() {
     const points=[];
     const addRigid=(bounds,pivot,m)=>{for(const [x,y] of [[bounds.x,bounds.y],[bounds.x+bounds.w,bounds.y],[bounds.x+bounds.w,bounds.y+bounds.h],[bounds.x,bounds.y+bounds.h]]){const dx=x-pivot[0],dy=y-pivot[1];points.push({x:m.x+m.a*dx+m.c*dy,y:m.y+m.b*dx+m.d*dy});}};
     if(this.mode==='rest') {
-      const src=sampleCurve(this.sourceCurve,0);addRigid({x:0,y:0,w:this.rig.sourceSize[0],h:this.rig.sourceSize[1]},[src.x,src.y],this.rigidTransform({x:this.x,y:this.y},this.heading+Math.PI,Math.atan2(src.ty,src.tx)));
+      const src=sampleCurve(this.sourceCurve,0),pivot=this.species==='shrimp'?sampleCurve(this.sourceCurve,.45):src;addRigid({x:0,y:0,w:this.rig.sourceSize[0],h:this.rig.sourceSize[1]},[pivot.x,pivot.y],this.rigidTransform({x:this.x,y:this.y},this.heading+Math.PI,Math.atan2(src.ty,src.tx)));
     } else {
       if(this.species==='turtle') {const src=sampleCurve(this.sourceCurve,0),dst=sampleCurve(this.targetCurve,0);addRigid(this.bodyBounds,[src.x,src.y],this.rigidTransform(dst,Math.atan2(dst.ty,dst.tx),Math.atan2(src.ty,src.tx)));}
       else for(const i of this.mesh.activeIndices){const v=this.mesh.vertices[i];points.push(this.mapPoint(v.s,v.t));}
       for(const layer of this.layers){if(layer.finMesh){for(const i of layer.finMesh.activeIndices)points.push(this.mapFinVertex(layer,layer.finMesh.vertices[i]));}else addRigid(layer.bounds,layer.pivot,this.layerTransform(layer));}
     }
-    return {minX:Math.min(...points.map(p=>p.x)),minY:Math.min(...points.map(p=>p.y)),maxX:Math.max(...points.map(p=>p.x)),maxY:Math.max(...points.map(p=>p.y))};
+    const bounds={minX:Math.min(...points.map(p=>p.x)),minY:Math.min(...points.map(p=>p.y)),maxX:Math.max(...points.map(p=>p.x)),maxY:Math.max(...points.map(p=>p.y))};
+    if(this.species==='shrimp'&&!this.shrimpEdgePass&&this.paperEdgeOpacity>0){
+      this.shrimpEdgePass=true;
+      try{const edge=this.visualBounds();bounds.minX=Math.min(bounds.minX,edge.minX);bounds.minY=Math.min(bounds.minY,edge.minY);bounds.maxX=Math.max(bounds.maxX,edge.maxX);bounds.maxY=Math.max(bounds.maxY,edge.maxY);}finally{this.shrimpEdgePass=false;}
+    }
+    return bounds;
   }
   drawDebug(ctx) {
     const points=this.pose.map(([x,y])=>this.presentationPoint({x,y}));
     ctx.save();ctx.lineWidth=1.5;ctx.strokeStyle='#a7482c';ctx.fillStyle='#a7482c';ctx.beginPath();points.forEach(({x,y},i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
     points.forEach(({x,y},i)=>{if(i%4===0){ctx.beginPath();ctx.arc(x,y,3,0,TAU);ctx.fill();}});ctx.restore();
   }
-  snapshot() {return{revision:INK_CREATURE_REV,id:this.id,position:{x:this.x,y:this.y},heading:this.heading,angularVelocity:this.angularVelocity,angularAcceleration:this.angularAcceleration,speed:Math.hypot(this.vx,this.vy),drive:this.drive,mode:this.mode,wavePhase:this.wavePhase,gaitPhase:this.gaitPhase,finPhase:this.finPhase,mirrorX:this.handedness<0,facing:this.facing,desiredFacing:this.desiredFacing,turnProgress:this.shrimpTurnProgress,presentationWidth:this.presentationWidth,inclination:this.inclination,profile:{...this.profile},attachments:this.attachmentPivots(),spine:this.pose.map(([x,y])=>this.presentationPoint({x,y})),loaded:!!this.bodyImage,triangles:this.mesh?.triangles.length||0,renderer:this.species==='turtle'?'canvas-rigid':this.gpuSurface?'webgl-mesh':'canvas-fallback'};}
+  snapshot() {return{revision:INK_CREATURE_REV,id:this.id,position:{x:this.x,y:this.y},heading:this.heading,angularVelocity:this.angularVelocity,angularAcceleration:this.angularAcceleration,speed:Math.hypot(this.vx,this.vy),drive:this.drive,mode:this.mode,wavePhase:this.wavePhase,gaitPhase:this.gaitPhase,finPhase:this.finPhase,mirrorX:this.handedness<0,facing:this.facing,desiredFacing:this.desiredFacing,turnProgress:this.shrimpTurnProgress,presentationWidth:this.presentationWidth,turnCenter:this.species==='shrimp'?{x:this.x,y:this.y,spineS:.45}:null,paperEdgeWidth:this.species==='shrimp'?.012:0,paperEdgeOpacity:this.paperEdgeOpacity,inclination:this.inclination,profile:{...this.profile},attachments:this.attachmentPivots(),spine:this.pose.map(([x,y])=>this.presentationPoint({x,y})),loaded:!!this.bodyImage,triangles:this.mesh?.triangles.length||0,renderer:this.species==='turtle'?'canvas-rigid':this.gpuSurface?'webgl-mesh':'canvas-fallback'};}
   dispose() {
     if(this.disposed)return;this.disposed=true;
     for(const surface of this.finSurfaces.values())surface?.dispose();this.finSurfaces.clear();
