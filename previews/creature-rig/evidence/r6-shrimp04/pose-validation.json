@@ -1,0 +1,197 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "stage": "before",
+      "pose": "right",
+      "mirrorX": false,
+      "inclination": 0,
+      "feet": [
+        {
+          "name": "shrimp_04_leg_walk_01",
+          "rootY": -22.61706395336882,
+          "distalY": -59.96419601790254
+        },
+        {
+          "name": "shrimp_04_leg_walk_02",
+          "rootY": -21.944324489132946,
+          "distalY": -52.159602557143586
+        },
+        {
+          "name": "shrimp_04_leg_walk_03",
+          "rootY": -10.523779112122352,
+          "distalY": -43.72768787286907
+        }
+      ],
+      "alphaPixels": 60433
+    },
+    {
+      "stage": "before",
+      "pose": "left",
+      "mirrorX": true,
+      "inclination": 0,
+      "feet": [
+        {
+          "name": "shrimp_04_leg_walk_01",
+          "rootY": -22.137428001804764,
+          "distalY": -59.51029508446004
+        },
+        {
+          "name": "shrimp_04_leg_walk_02",
+          "rootY": -21.488020339639707,
+          "distalY": -51.705581920067665
+        },
+        {
+          "name": "shrimp_04_leg_walk_03",
+          "rootY": -10.097184139610638,
+          "distalY": -43.42545086654153
+        }
+      ],
+      "alphaPixels": 58307
+    },
+    {
+      "stage": "before",
+      "pose": "inclined",
+      "mirrorX": false,
+      "inclination": -0.5028086519121133,
+      "feet": [
+        {
+          "name": "shrimp_04_leg_walk_01",
+          "rootY": -82.89211390682435,
+          "distalY": -110.41212884135723
+        },
+        {
+          "name": "shrimp_04_leg_walk_02",
+          "rootY": -74.35278609462634,
+          "distalY": -92.40120265825978
+        },
+        {
+          "name": "shrimp_04_leg_walk_03",
+          "rootY": -57.17566391390736,
+          "distalY": -68.9336723551144
+        }
+      ],
+      "alphaPixels": 43223
+    },
+    {
+      "stage": "before",
+      "pose": "rest",
+      "mirrorX": false,
+      "inclination": 0,
+      "feet": [
+        {
+          "name": "shrimp_04_leg_walk_01",
+          "rootY": -22.29298665229144,
+          "distalY": -59.36562991487446
+        },
+        {
+          "name": "shrimp_04_leg_walk_02",
+          "rootY": -21.61974597673864,
+          "distalY": -51.68328040096755
+        },
+        {
+          "name": "shrimp_04_leg_walk_03",
+          "rootY": -10.202374475127924,
+          "distalY": -44.765241382745415
+        }
+      ],
+      "alphaPixels": 31079
+    },
+    {
+      "stage": "after",
+      "pose": "right",
+      "mirrorX": false,
+      "inclination": 0,
+      "feet": [
+        {
+          "name": "shrimp_04_leg_walk_01",
+          "rootY": 21.48658420756521,
+          "distalY": 58.839174794332244
+        },
+        {
+          "name": "shrimp_04_leg_walk_02",
+          "rootY": 20.833783850190322,
+          "distalY": 51.08050739953739
+        },
+        {
+          "name": "shrimp_04_leg_walk_03",
+          "rootY": 9.446841784050541,
+          "distalY": 42.754943774170826
+        }
+      ],
+      "alphaPixels": 60412
+    },
+    {
+      "stage": "after",
+      "pose": "left",
+      "mirrorX": true,
+      "inclination": 0,
+      "feet": [
+        {
+          "name": "shrimp_04_leg_walk_01",
+          "rootY": 21.966212343338213,
+          "distalY": 59.324918223541864
+        },
+        {
+          "name": "shrimp_04_leg_walk_02",
+          "rootY": 21.290089260211456,
+          "distalY": 51.47728186340093
+        },
+        {
+          "name": "shrimp_04_leg_walk_03",
+          "rootY": 9.873449715445142,
+          "distalY": 43.13920229076292
+        }
+      ],
+      "alphaPixels": 58427
+    },
+    {
+      "stage": "after",
+      "pose": "inclined",
+      "mirrorX": false,
+      "inclination": -0.5028086519121133,
+      "feet": [
+        {
+          "name": "shrimp_04_leg_walk_01",
+          "rootY": -44.2219436252181,
+          "distalY": -6.189879394242091
+        },
+        {
+          "name": "shrimp_04_leg_walk_02",
+          "rootY": -36.82473941732688,
+          "distalY": -1.932349207577154
+        },
+        {
+          "name": "shrimp_04_leg_walk_03",
+          "rootY": -39.651133770296894,
+          "distalY": 7.102517594161405
+        }
+      ],
+      "alphaPixels": 96991
+    },
+    {
+      "stage": "after",
+      "pose": "rest",
+      "mirrorX": false,
+      "inclination": 0,
+      "feet": [
+        {
+          "name": "shrimp_04_leg_walk_01",
+          "rootY": 21.81065948806522,
+          "distalY": 58.89262180196848
+        },
+        {
+          "name": "shrimp_04_leg_walk_02",
+          "rootY": 21.158365883877924,
+          "distalY": 51.250401220520786
+        },
+        {
+          "name": "shrimp_04_leg_walk_03",
+          "rootY": 9.768255553189254,
+          "distalY": 44.40567763562568
+        }
+      ],
+      "alphaPixels": 31082
+    }
+  ]
+}

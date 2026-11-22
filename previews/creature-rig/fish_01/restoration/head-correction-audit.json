@@ -1,0 +1,73 @@
+{
+  "method": "Native AI head repaint, local anatomical axis registration (+10 degrees at skull, smoothly tapered to zero at neck), premultiplied 18px seam blend; all changes confined to head/short-neck polygon. No runtime/global fish rotation.",
+  "originalSelection": "original-selection.png",
+  "plate": "head-fix-ai-plate.png",
+  "polygon": [
+    [
+      80,
+      0
+    ],
+    [
+      375,
+      0
+    ],
+    [
+      459,
+      148
+    ],
+    [
+      482,
+      228
+    ],
+    [
+      473,
+      287
+    ],
+    [
+      433,
+      355
+    ],
+    [
+      337,
+      361
+    ],
+    [
+      253,
+      326
+    ],
+    [
+      174,
+      273
+    ],
+    [
+      77,
+      243
+    ]
+  ],
+  "axisLandmarks": {
+    "beforeEyePair": [
+      [
+        320,
+        140
+      ],
+      [
+        237,
+        245
+      ]
+    ],
+    "beforeSkullAxisDegrees": 38.3,
+    "upperTrunkDegrees": 48,
+    "registeredSkullAxisDegrees": 48.3,
+    "rotationDegrees": 10,
+    "pivot": [
+      380,
+      280
+    ]
+  },
+  "changedPixels": 115968,
+  "changedOutsideApprovedMask": 0,
+  "sourceSize": [
+    1536,
+    1024
+  ]
+}

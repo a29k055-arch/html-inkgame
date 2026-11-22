@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "automatedChecksPassed": true,
+  "neck": "Inspected final 4K 4x positive/negative extra head rotations. Fixed-heading 72-state full-cycle sweep and 12 closeups keep neck-to-shell connected, no visible exposed slit.",
+  "shrimp04": "Whole-asset vertical correction verified; right and left remain ventral feet down.",
+  "fish01": "Initial regular head/body zigzag seam rejected. Continuous-body export fixes it; final 4K closeup visibly clean, 1,478,623 solid material samples have zero newly low alpha pixels.",
+  "beforeEvidence": "fish01-seam-review.png",
+  "afterEvidence": "fish01-seam-after.png",
+  "bodyMaterial": {
+    "passed": true,
+    "bodyTexture": "continuous-body.png",
+    "size": [
+      4096,
+      2731
+    ],
+    "solidSamples": 1478623,
+    "newLowAlpha": 0,
+    "minSolidAlpha": 241
+  },
+  "unchangedWorkingAssets": {
+    "ids": 7,
+    "matchedFiles": 216
+  },
+  "scopeLimits": "Automated Edge desktop/touch emulation, not real mobile hardware or user artistic approval."
+}

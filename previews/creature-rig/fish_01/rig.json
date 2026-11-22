@@ -8,20 +8,20 @@
   ],
   "spine": [
     [
-      222,
-      151
+      243,
+      125
     ],
     [
-      270,
-      238
+      300,
+      190
     ],
     [
-      348,
-      323
+      370,
+      280
     ],
     [
       437,
-      414
+      390
     ],
     [
       540,
@@ -56,7 +56,7 @@
       900
     ]
   ],
-  "nominalLength": 1377.585961745885,
+  "nominalLength": 1382.5246030298174,
   "bodyOrder": 6,
   "layers": [
     {
@@ -181,26 +181,26 @@
       "file": "fish_01_head.png",
       "croppedFile": "textures/fish_01_head.png",
       "bbox": [
-        89,
-        18,
-        423,
-        417
+        117,
+        5,
+        641,
+        411
       ],
       "bounds": [
-        97,
-        26,
-        503,
-        426
+        125,
+        13,
+        749,
+        407
       ],
       "kind": "head",
       "pivot": [
-        278.2392578125,
-        248.6796875
+        308.1484375,
+        199.9169921875
       ],
       "side": 0,
       "phase": 0,
       "order": 6,
-      "pixelCount": 65043,
+      "pixelCount": 55313,
       "spineRange": [
         0,
         0.21
@@ -212,25 +212,25 @@
       "croppedFile": "textures/fish_01_body_01.png",
       "bbox": [
         204,
-        129,
-        554,
-        551
+        164,
+        540,
+        514
       ],
       "bounds": [
         212,
-        137,
-        749,
-        671
+        172,
+        735,
+        669
       ],
       "kind": "body",
       "pivot": [
-        507.19482421875,
-        482.6063232421875
+        506.456298828125,
+        476.7109375
       ],
       "side": 0,
       "phase": 0.7,
       "order": 6,
-      "pixelCount": 74345,
+      "pixelCount": 73832,
       "spineRange": [
         0.21,
         0.47
@@ -241,15 +241,15 @@
       "file": "fish_01_body_02.png",
       "croppedFile": "textures/fish_01_body_02.png",
       "bbox": [
-        620,
-        538,
-        492,
-        335
+        616,
+        533,
+        490,
+        340
       ],
       "bounds": [
-        628,
-        546,
-        1103,
+        624,
+        541,
+        1097,
         864
       ],
       "kind": "body",
@@ -260,7 +260,7 @@
       "side": 0,
       "phase": 1.4,
       "order": 6,
-      "pixelCount": 53059,
+      "pixelCount": 53051,
       "spineRange": [
         0.47,
         0.77
@@ -290,7 +290,7 @@
       "side": 0,
       "phase": 2.0999999999999996,
       "order": 6,
-      "pixelCount": 58779,
+      "pixelCount": 59192,
       "spineRange": [
         0.77,
         1
@@ -309,7 +309,7 @@
       1024
     ],
     "method": "Original selected pixels preserved; native AI repaint used only in body/fin-root repair masks",
-    "bodyRaisedPixels": 6382,
+    "bodyRaisedPixels": 5324,
     "roots": [
       {
         "part": "fin_l",
@@ -360,10 +360,83 @@
         "paintFile": "repair-paint-native.png"
       }
     ],
-    "assembledChangedPixels": 19350,
+    "assembledChangedPixels": 18571,
     "changedOutsideApprovedMask": 0,
-    "hostRaisedPixels": 6382,
+    "hostRaisedPixels": 5324,
     "rootAddedPixels": 16105
+  },
+  "headCorrection": {
+    "method": "Native AI head repaint, local anatomical axis registration (+10 degrees at skull, smoothly tapered to zero at neck), premultiplied 18px seam blend; all changes confined to head/short-neck polygon. No runtime/global fish rotation.",
+    "originalSelection": "original-selection.png",
+    "plate": "head-fix-ai-plate.png",
+    "polygon": [
+      [
+        80,
+        0
+      ],
+      [
+        375,
+        0
+      ],
+      [
+        459,
+        148
+      ],
+      [
+        482,
+        228
+      ],
+      [
+        473,
+        287
+      ],
+      [
+        433,
+        355
+      ],
+      [
+        337,
+        361
+      ],
+      [
+        253,
+        326
+      ],
+      [
+        174,
+        273
+      ],
+      [
+        77,
+        243
+      ]
+    ],
+    "axisLandmarks": {
+      "beforeEyePair": [
+        [
+          320,
+          140
+        ],
+        [
+          237,
+          245
+        ]
+      ],
+      "beforeSkullAxisDegrees": 38.3,
+      "upperTrunkDegrees": 48,
+      "registeredSkullAxisDegrees": 48.3,
+      "rotationDegrees": 10,
+      "pivot": [
+        380,
+        280
+      ]
+    },
+    "changedPixels": 115968,
+    "changedOutsideApprovedMask": 0,
+    "sourceSize": [
+      1536,
+      1024
+    ]
   },
   "artSpec": {
     "originalNativeSize": [

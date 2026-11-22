@@ -47,18 +47,18 @@
       "file": "textures/turtle_08_head.png",
       "croppedFile": "textures/turtle_08_head.png",
       "bbox": [
-        1121,
+        1178,
         110,
-        831,
-        1216
+        700,
+        1270
       ],
       "bounds": [
-        1133,
+        1190,
         122,
-        1939,
-        1313
+        1865,
+        1367
       ],
-      "pixelCount": 67885,
+      "pixelCount": 76850,
       "kind": "head",
       "pivot": [
         1527.513812154696,
@@ -76,12 +76,12 @@
           1527.513812154696,
           1159.7790055248618
         ],
-        "radius": 214.98342541436463,
+        "radius": 277.21546961325964,
         "innerTip": [
           1527.513812154696,
-          1159.7790055248618
+          1323.8453038674033
         ],
-        "paintFile": "../../turtle_08/source.png",
+        "paintFile": "../../repair-plates/turtle_08_neck-r6.png",
         "extension": "Complete long proximal underlap below closed shell"
       },
       "fileLayout": "cropped-with-global-bbox",
@@ -447,10 +447,32 @@
           540,
           1160
         ]
+      },
+      {
+        "part": "head",
+        "revision": "R6",
+        "plate": "../repair-plates/turtle_08_neck-r6.png",
+        "alignedBounds": [
+          421,
+          45,
+          238,
+          438
+        ],
+        "blendRows": [
+          255,
+          285
+        ],
+        "originalEyesAndNosePreserved": true,
+        "changedPixels": 47150,
+        "changedOutsideNeckMask": 0,
+        "coreMinimumAlpha": 252,
+        "underHostPixels": 29033,
+        "method": "Continuous AI-painted broad neck extends beyond shell joint to y483; erase old separated collar/rim fragments; preserve original upper head."
       }
     ],
     "method": "Independent complete shell and reference-pose repainted long legs; original head/tail with hidden extensions"
   },
   "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
-  "sourceFile": "../../turtle_08/source.png"
+  "sourceFile": "../../turtle_08/source.png",
+  "bodyTexture": "continuous-body.png"
 }

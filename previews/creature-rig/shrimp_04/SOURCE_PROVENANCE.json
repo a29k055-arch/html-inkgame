@@ -1,11 +1,19 @@
 {
   "sourceProjectFile": "../08_CONCEPT_CREATURES/shrimp/shrimp_04.png",
-  "sourceSHA256": "09c32f44ce91ab3192ad05d675956991cad8177ff22c8a4b149265c2f3bf09ac",
+  "sourceSHA256": "7e663f5a35f3b173dee636cd33e7a1e5530f6e8051db05c72f112b7dd476c2a5",
   "originalPNG_SHA256": "03de097dd59408bff85152e0bbdd8474673b5641147c04544c485b413bab7cfb",
   "generator": "built-in image_gen",
   "repairNativeDimensions": [
     1536,
     1024
   ],
-  "purpose": "Hidden anatomical root/joint repair only, not replacement of the approved composition"
+  "purpose": "Hidden anatomical root/joint repair only, not replacement of the approved composition",
+  "originalSelection": "original-selection.png",
+  "workingOrientation": {
+    "revision": "r6",
+    "operation": "Whole-source vertical reflection y = sourceHeight - 1 - y, including spine, pivots, roots, layer alpha and crop bounds",
+    "originalSelection": "original-selection.png",
+    "rightFacingAnatomy": "Antennae frontal; walking feet and forearms ventral/downward",
+    "sharedRuntimeChanged": false
+  }
 }

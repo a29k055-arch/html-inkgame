@@ -1,0 +1,6 @@
+{
+  "tool": "built-in image_gen",
+  "target": "turtle_08/source.png",
+  "output": "repair-plates/turtle_08_neck-r6.png",
+  "prompt": "Precise animation repair edit of reference turtle08. Produce ONLY ITS EXACT HEAD AND NECK on same transparent 1086x1448 canvas registration, head at top center (nose around540,48), no shell/legs/tail. Preserve the selected head, eyes, stripes and watercolor pigment unchanged down to y270. Below that repair the neck-root: a complete broad continuous softly gray ink neck, extending straight down to y470 with a rounded broad hidden stump centered x540. Neck width about170-205px, smoothly flares at base beneath where shell rim was. NO transparent transverse slits, white collars or empty stripes interrupting the lower neck at y300-390. Dark neck stripes remain organic and not sharp horizontal cut bands. Thin pale wash remains fully pigmented, not a transparent break through the connection. Remove any remaining shell rim/scute marks; this is a head+long neck cutout only. Match soft gray/brown ink style and original eye positions, not a new design. Transparent alpha background, no paper/white/gray/checkerboard/no labels. Complete head-neck as one connected shape intended to overlap deeply under a shell."
+}

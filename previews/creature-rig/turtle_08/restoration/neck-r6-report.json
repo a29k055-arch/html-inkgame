@@ -1,0 +1,21 @@
+{
+  "part": "head",
+  "revision": "R6",
+  "plate": "../repair-plates/turtle_08_neck-r6.png",
+  "alignedBounds": [
+    421,
+    45,
+    238,
+    438
+  ],
+  "blendRows": [
+    255,
+    285
+  ],
+  "originalEyesAndNosePreserved": true,
+  "changedPixels": 47150,
+  "changedOutsideNeckMask": 0,
+  "coreMinimumAlpha": 252,
+  "underHostPixels": 29033,
+  "method": "Continuous AI-painted broad neck extends beyond shell joint to y483; erase old separated collar/rim fragments; preserve original upper head."
+}

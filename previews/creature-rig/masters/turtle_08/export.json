@@ -1,5 +1,5 @@
 {
-  "signature": "6c41e7bd7d903e93d59cf84ef5a6b528bae0889f62a417134a4780acbf5c41bb",
+  "signature": "c407aa24514fb675258160b4404211d3e4bf75d069ff26346b107604d09bed69",
   "resolution": {
     "id": "turtle_08",
     "nativeSize": [
@@ -20,5 +20,6 @@
     "recommendedCssLongEdgeAtDpr2": 724,
     "smoothPreviewCssLongEdgeAtDpr2": 2048,
     "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
-  }
+  },
+  "bodyTextureSignature": "c407aa24514fb675258160b4404211d3e4bf75d069ff26346b107604d09bed69"
 }

@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "operation": {
+    "revision": "r6",
+    "operation": "Whole-source vertical reflection y = sourceHeight - 1 - y, including spine, pivots, roots, layer alpha and crop bounds",
+    "originalSelection": "original-selection.png",
+    "rightFacingAnatomy": "Antennae frontal; walking feet and forearms ventral/downward",
+    "sharedRuntimeChanged": false
+  },
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "layerCount": 14,
+  "sourceOriginalSHA256": "03de097dd59408bff85152e0bbdd8474673b5641147c04544c485b413bab7cfb",
+  "flipped": [
+    {
+      "file": "source.png",
+      "pixelSHA256": "7e663f5a35f3b173dee636cd33e7a1e5530f6e8051db05c72f112b7dd476c2a5"
+    },
+    {
+      "file": "assembled-restored.png",
+      "pixelSHA256": "83e522be655ddacb9bdf16e4839df2c92d5859c7a2d7501da4433147f0787e45"
+    },
+    {
+      "file": "shrimp_04_antenna_01.png",
+      "pixelSHA256": "89c06a312c3fb5a8bfc5782f3d7437fdd483d311376d5a539f9dc4baeed7574f"
+    },
+    {
+      "file": "shrimp_04_antenna_02.png",
+      "pixelSHA256": "cdce37abd5d53af1ad40cec05859ebc5efcc3b01acd6ee17123704cc3f098a59"
+    },
+    {
+      "file": "shrimp_04_forearm_l.png",
+      "pixelSHA256": "192707faf3670f22b8062a523ee0e923809c59286438b64243d5bccc3eb6e683"
+    },
+    {
+      "file": "shrimp_04_forearm_r.png",
+      "pixelSHA256": "c7f226d441a87bacf660dcb4751a766a7ba89ae58a1e859ffe2cd983b4915c2c"
+    },
+    {
+      "file": "shrimp_04_leg_walk_01.png",
+      "pixelSHA256": "c653d079e27504540270b23b898ed4491808cab2552624678dfb3483e2cc52d1"
+    },
+    {
+      "file": "shrimp_04_leg_walk_02.png",
+      "pixelSHA256": "8079e01261c99a8f9babb4b2ed3fee141b5bfdf78aab9bb61dfb3b142c5c91c9"
+    },
+    {
+      "file": "shrimp_04_leg_walk_03.png",
+      "pixelSHA256": "d7c7129bf984fcbbb94eb1f564589e42cf0e7f73e3d7efbf0b0db38fabfee039"
+    },
+    {
+      "file": "shrimp_04_head_chest.png",
+      "pixelSHA256": "46690c1278b8f8921cb75cbd2b5cc66c404673821ee27882205de0ae9c32ed61"
+    },
+    {
+      "file": "shrimp_04_abdomen_01.png",
+      "pixelSHA256": "715249c2cde30c57beaedf77a3e165418f60cdce5903d5be4fcb64ae4ee684fc"
+    },
+    {
+      "file": "shrimp_04_abdomen_02.png",
+      "pixelSHA256": "debf184bcd69d07c5b3644268850f131b963330d58f2c885a5fc6ca02a5d3ada"
+    },
+    {
+      "file": "shrimp_04_abdomen_03.png",
+      "pixelSHA256": "9bc65641faf972ae88eff1aebd6b63325c9fa2c05d31a27ef68c26c378d7233f"
+    },
+    {
+      "file": "shrimp_04_abdomen_04.png",
+      "pixelSHA256": "0cf7aa653407ddd7fddba679cefe03039e723027a5e2419a5d10190b2dc6ff6a"
+    },
+    {
+      "file": "shrimp_04_abdomen_05.png",
+      "pixelSHA256": "0ad2386a1223f15e00ab3b6be01f0440f2a9789e77d0523d457b73b0f27244c9"
+    },
+    {
+      "file": "shrimp_04_tail.png",
+      "pixelSHA256": "ed3a65a92274c449fd23ce4205c1c2cf6b2ff7037113748b5a8c0d9e5b8d4314"
+    },
+    {
+      "file": "restoration/repair-plate-native.png",
+      "pixelSHA256": "27e505800647d893c8c65b81c40958e9bd1ea5bc56e70d9ffc54068b83fbedf2"
+    },
+    {
+      "file": "restoration/approved-repair-region.png",
+      "pixelSHA256": "4a39ecc1a1fc0d9a048a2a7de97abb606621cbc69d85102c66e20c6e865075cf"
+    },
+    {
+      "file": "restoration/host-repaint-mask.png",
+      "pixelSHA256": "254c25c8293aac25623b1fd3c3716dd20ee945752693242f6f1bcf1b7e4115c9"
+    },
+    {
+      "file": "restoration/hidden-root-mask.png",
+      "pixelSHA256": "aea66e4c1ff4751119c9963626d2c6f3c51e9bf4e17926d652500cb6f7f912a0"
+    }
+  ]
+}

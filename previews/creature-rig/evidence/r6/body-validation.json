@@ -1,0 +1,504 @@
+{
+  "approved": {
+    "matched": 216,
+    "changed": []
+  },
+  "neck": {
+    "passed": true,
+    "samples": 72,
+    "minOverlap": 127952,
+    "records": [
+      {
+        "phase": 0,
+        "extra": -0.1,
+        "overlap": 128153,
+        "rotation": -0.08711246570446327
+      },
+      {
+        "phase": 0,
+        "extra": 0,
+        "overlap": 127968,
+        "rotation": 0.012887534295536738
+      },
+      {
+        "phase": 0,
+        "extra": 0.1,
+        "overlap": 128107,
+        "rotation": 0.11288753429553675
+      },
+      {
+        "phase": 1,
+        "extra": -0.1,
+        "overlap": 128186,
+        "rotation": -0.09147124404114665
+      },
+      {
+        "phase": 1,
+        "extra": 0,
+        "overlap": 127969,
+        "rotation": 0.00852875595885335
+      },
+      {
+        "phase": 1,
+        "extra": 0.1,
+        "overlap": 128111,
+        "rotation": 0.10852875595885336
+      },
+      {
+        "phase": 2,
+        "extra": -0.1,
+        "overlap": 128201,
+        "rotation": -0.09614820687092726
+      },
+      {
+        "phase": 2,
+        "extra": 0,
+        "overlap": 127959,
+        "rotation": 0.0038517931290727434
+      },
+      {
+        "phase": 2,
+        "extra": 0.1,
+        "overlap": 128078,
+        "rotation": 0.10385179312907275
+      },
+      {
+        "phase": 3,
+        "extra": -0.1,
+        "overlap": 128221,
+        "rotation": -0.10096886953808182
+      },
+      {
+        "phase": 3,
+        "extra": 0,
+        "overlap": 127955,
+        "rotation": -0.0009688695380818088
+      },
+      {
+        "phase": 3,
+        "extra": 0.1,
+        "overlap": 128070,
+        "rotation": 0.0990311304619182
+      },
+      {
+        "phase": 4,
+        "extra": -0.1,
+        "overlap": 128214,
+        "rotation": -0.10575338634007865
+      },
+      {
+        "phase": 4,
+        "extra": 0,
+        "overlap": 127990,
+        "rotation": -0.0057533863400786416
+      },
+      {
+        "phase": 4,
+        "extra": 0.1,
+        "overlap": 128078,
+        "rotation": 0.09424661365992136
+      },
+      {
+        "phase": 5,
+        "extra": -0.1,
+        "overlap": 128251,
+        "rotation": -0.11032326007747822
+      },
+      {
+        "phase": 5,
+        "extra": 0,
+        "overlap": 127987,
+        "rotation": -0.010323260077478212
+      },
+      {
+        "phase": 5,
+        "extra": 0.1,
+        "overlap": 128052,
+        "rotation": 0.08967673992252179
+      },
+      {
+        "phase": 6,
+        "extra": -0.1,
+        "overlap": 128280,
+        "rotation": -0.1145080012948819
+      },
+      {
+        "phase": 6,
+        "extra": 0,
+        "overlap": 127973,
+        "rotation": -0.014508001294881882
+      },
+      {
+        "phase": 6,
+        "extra": 0.1,
+        "overlap": 128032,
+        "rotation": 0.08549199870511812
+      },
+      {
+        "phase": 7,
+        "extra": -0.1,
+        "overlap": 128288,
+        "rotation": -0.11815148877491323
+      },
+      {
+        "phase": 7,
+        "extra": 0,
+        "overlap": 128015,
+        "rotation": -0.018151488774913228
+      },
+      {
+        "phase": 7,
+        "extra": 0.1,
+        "overlap": 128014,
+        "rotation": 0.08184851122508678
+      },
+      {
+        "phase": 8,
+        "extra": -0.1,
+        "overlap": 128307,
+        "rotation": -0.12111779399264633
+      },
+      {
+        "phase": 8,
+        "extra": 0,
+        "overlap": 127996,
+        "rotation": -0.02111779399264633
+      },
+      {
+        "phase": 8,
+        "extra": 0.1,
+        "overlap": 128016,
+        "rotation": 0.07888220600735368
+      },
+      {
+        "phase": 9,
+        "extra": -0.1,
+        "overlap": 128310,
+        "rotation": -0.12329625223606114
+      },
+      {
+        "phase": 9,
+        "extra": 0,
+        "overlap": 127995,
+        "rotation": -0.02329625223606114
+      },
+      {
+        "phase": 9,
+        "extra": 0.1,
+        "overlap": 128005,
+        "rotation": 0.07670374776393887
+      },
+      {
+        "phase": 10,
+        "extra": -0.1,
+        "overlap": 128307,
+        "rotation": -0.12460559120292992
+      },
+      {
+        "phase": 10,
+        "extra": 0,
+        "overlap": 127987,
+        "rotation": -0.02460559120292992
+      },
+      {
+        "phase": 10,
+        "extra": 0.1,
+        "overlap": 128013,
+        "rotation": 0.07539440879707009
+      },
+      {
+        "phase": 11,
+        "extra": -0.1,
+        "overlap": 128309,
+        "rotation": -0.12499696304750875
+      },
+      {
+        "phase": 11,
+        "extra": 0,
+        "overlap": 127988,
+        "rotation": -0.024996963047508744
+      },
+      {
+        "phase": 11,
+        "extra": 0.1,
+        "overlap": 128011,
+        "rotation": 0.07500303695249126
+      },
+      {
+        "phase": 12,
+        "extra": -0.1,
+        "overlap": 128312,
+        "rotation": -0.12445576675968775
+      },
+      {
+        "phase": 12,
+        "extra": 0,
+        "overlap": 127983,
+        "rotation": -0.024455766759687747
+      },
+      {
+        "phase": 12,
+        "extra": 0.1,
+        "overlap": 128010,
+        "rotation": 0.07554423324031226
+      },
+      {
+        "phase": 13,
+        "extra": -0.1,
+        "overlap": 128317,
+        "rotation": -0.12300219288863228
+      },
+      {
+        "phase": 13,
+        "extra": 0,
+        "overlap": 127991,
+        "rotation": -0.02300219288863227
+      },
+      {
+        "phase": 13,
+        "extra": 0.1,
+        "overlap": 128013,
+        "rotation": 0.07699780711136774
+      },
+      {
+        "phase": 14,
+        "extra": -0.1,
+        "overlap": 128312,
+        "rotation": -0.12069047028876992
+      },
+      {
+        "phase": 14,
+        "extra": 0,
+        "overlap": 127996,
+        "rotation": -0.020690470288769917
+      },
+      {
+        "phase": 14,
+        "extra": 0.1,
+        "overlap": 128010,
+        "rotation": 0.07930952971123009
+      },
+      {
+        "phase": 15,
+        "extra": -0.1,
+        "overlap": 128292,
+        "rotation": -0.11760684298996475
+      },
+      {
+        "phase": 15,
+        "extra": 0,
+        "overlap": 128002,
+        "rotation": -0.017606842989964747
+      },
+      {
+        "phase": 15,
+        "extra": 0.1,
+        "overlap": 128011,
+        "rotation": 0.08239315701003526
+      },
+      {
+        "phase": 16,
+        "extra": -0.1,
+        "overlap": 128273,
+        "rotation": -0.11386635266930362
+      },
+      {
+        "phase": 16,
+        "extra": 0,
+        "overlap": 127981,
+        "rotation": -0.013866352669303606
+      },
+      {
+        "phase": 16,
+        "extra": 0.1,
+        "overlap": 128045,
+        "rotation": 0.0861336473306964
+      },
+      {
+        "phase": 17,
+        "extra": -0.1,
+        "overlap": 128249,
+        "rotation": -0.10960854676164766
+      },
+      {
+        "phase": 17,
+        "extra": 0,
+        "overlap": 127985,
+        "rotation": -0.009608546761647664
+      },
+      {
+        "phase": 17,
+        "extra": 0.1,
+        "overlap": 128056,
+        "rotation": 0.09039145323835235
+      },
+      {
+        "phase": 18,
+        "extra": -0.1,
+        "overlap": 128222,
+        "rotation": -0.1049922723275729
+      },
+      {
+        "phase": 18,
+        "extra": 0,
+        "overlap": 127981,
+        "rotation": -0.004992272327572886
+      },
+      {
+        "phase": 18,
+        "extra": 0.1,
+        "overlap": 128073,
+        "rotation": 0.09500772767242711
+      },
+      {
+        "phase": 19,
+        "extra": -0.1,
+        "overlap": 128229,
+        "rotation": -0.10018974990520822
+      },
+      {
+        "phase": 19,
+        "extra": 0,
+        "overlap": 127952,
+        "rotation": -0.00018974990520821005
+      },
+      {
+        "phase": 19,
+        "extra": 0.1,
+        "overlap": 128070,
+        "rotation": 0.09981025009479179
+      },
+      {
+        "phase": 20,
+        "extra": -0.1,
+        "overlap": 128183,
+        "rotation": -0.09538014843430526
+      },
+      {
+        "phase": 20,
+        "extra": 0,
+        "overlap": 127971,
+        "rotation": 0.004619851565694752
+      },
+      {
+        "phase": 20,
+        "extra": 0.1,
+        "overlap": 128089,
+        "rotation": 0.10461985156569475
+      },
+      {
+        "phase": 21,
+        "extra": -0.1,
+        "overlap": 128183,
+        "rotation": -0.09074290095450095
+      },
+      {
+        "phase": 21,
+        "extra": 0,
+        "overlap": 127965,
+        "rotation": 0.009257099045499057
+      },
+      {
+        "phase": 21,
+        "extra": 0.1,
+        "overlap": 128111,
+        "rotation": 0.10925709904549906
+      },
+      {
+        "phase": 22,
+        "extra": -0.1,
+        "overlap": 128157,
+        "rotation": -0.08645101045073786
+      },
+      {
+        "phase": 22,
+        "extra": 0,
+        "overlap": 127968,
+        "rotation": 0.013548989549262142
+      },
+      {
+        "phase": 22,
+        "extra": 0.1,
+        "overlap": 128102,
+        "rotation": 0.11354898954926215
+      },
+      {
+        "phase": 23,
+        "extra": -0.1,
+        "overlap": 128144,
+        "rotation": -0.08266459558638925
+      },
+      {
+        "phase": 23,
+        "extra": 0,
+        "overlap": 127985,
+        "rotation": 0.017335404413610762
+      },
+      {
+        "phase": 23,
+        "extra": 0.1,
+        "overlap": 128127,
+        "rotation": 0.11733540441361076
+      }
+    ],
+    "note": "Overlap is necessary, not sufficient for artistic seamlessness; screenshots require visual inspection."
+  },
+  "art": [
+    {
+      "id": "fish_01",
+      "mode": "manual",
+      "sourceSize": [
+        4096,
+        2731
+      ],
+      "active": 328670,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "fish_01",
+      "mode": "rest",
+      "sourceSize": [
+        4096,
+        2731
+      ],
+      "active": 75017,
+      "renderer": "canvas-fallback"
+    },
+    {
+      "id": "shrimp_04",
+      "mode": "manual",
+      "sourceSize": [
+        4096,
+        2731
+      ],
+      "active": 64825,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "shrimp_04",
+      "mode": "rest",
+      "sourceSize": [
+        4096,
+        2731
+      ],
+      "active": 34883,
+      "renderer": "canvas-fallback"
+    }
+  ],
+  "bodyMaterial": {
+    "passed": true,
+    "bodyTexture": "continuous-body.png",
+    "size": [
+      4096,
+      2731
+    ],
+    "solidSamples": 1478623,
+    "newLowAlpha": 0,
+    "minSolidAlpha": 241
+  },
+  "approvedAfter": {
+    "matched": 216,
+    "changed": []
+  },
+  "passed": true
+}

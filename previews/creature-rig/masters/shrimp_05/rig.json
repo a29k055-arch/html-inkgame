@@ -693,5 +693,6 @@
     ]
   },
   "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
-  "sourceFile": "../../shrimp_05/source.png"
+  "sourceFile": "../../shrimp_05/source.png",
+  "bodyTexture": "continuous-body.png"
 }

@@ -10,7 +10,7 @@
     1024
   ],
   "method": "Original selected pixels preserved; native AI repaint used only in body/fin-root repair masks",
-  "bodyRaisedPixels": 6382,
+  "bodyRaisedPixels": 5324,
   "roots": [
     {
       "part": "fin_l",
@@ -61,8 +61,8 @@
       "paintFile": "repair-paint-native.png"
     }
   ],
-  "assembledChangedPixels": 19350,
+  "assembledChangedPixels": 18571,
   "changedOutsideApprovedMask": 0,
-  "hostRaisedPixels": 6382,
+  "hostRaisedPixels": 5324,
   "rootAddedPixels": 16105
 }

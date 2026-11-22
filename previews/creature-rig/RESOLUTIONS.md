@@ -17,6 +17,6 @@
 
 4K是带透明度的高质量超采样导出，能平滑边缘、提高加工采样精度；原始笔墨纹理的细节上限仍由原生尺寸决定。它属于透明PNG位图，不是无限缩放矢量。
 
-完整对齐4K图层保存在本地 masters/{id}/aligned/。网页/GitHub提供同像素内容的4K裁片和带bbox坐标的rig.json，可使用 tools/unpack-master.cjs 重建对齐画布。
+完整对齐4K图层保存在本地 masters/{id}/aligned/。网页/GitHub提供同像素内容的4K裁片和带bbox坐标的rig.json，可使用 tools/unpack-master.cjs 无损重建对齐画布。
 
 网页默认工作贴图，减少手机解码内存；runtime也能直接加载 masters/{id}/rig.json。建议按敌人在屏幕中的像素尺寸选择贴图，使用双线性平滑采样，避免nearest像素采样。

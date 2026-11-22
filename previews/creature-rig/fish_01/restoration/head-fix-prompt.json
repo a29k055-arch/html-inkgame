@@ -1,0 +1,12 @@
+{
+  "tool": "built-in image_gen",
+  "intent": "precise-object-edit",
+  "reference": "original-selection.png",
+  "output": "head-fix-ai-plate.png",
+  "request": "Only correct top-left head/short neck of exact koi into true dorsal aligned skull: nose (210,120), eyes center (275,195), neck (360,285), nose-to-neck axis 48 degrees. Preserve red forehead, ink black eyes, white snout, black wet-ink back, original brush texture, whiskers. All torso/fins/tail positions unchanged. Transparent alpha, no background/text/border. Local head region x120..470 y40..390.",
+  "nativeOutputSize": [
+    1536,
+    1024
+  ],
+  "postprocess": "Premultiplied local registration plus bounded head/neck seam blend, see audit."
+}

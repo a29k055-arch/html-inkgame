@@ -47,18 +47,18 @@
       "file": "turtle_08_head.png",
       "croppedFile": "textures/turtle_08_head.png",
       "bbox": [
-        393,
+        413,
         35,
-        300,
-        437
+        254,
+        456
       ],
       "bounds": [
-        401,
+        421,
         43,
-        684,
-        463
+        658,
+        482
       ],
-      "pixelCount": 67885,
+      "pixelCount": 76850,
       "kind": "head",
       "pivot": [
         540,
@@ -76,12 +76,12 @@
           540,
           410
         ],
-        "radius": 76,
+        "radius": 98,
         "innerTip": [
           540,
-          410
+          468
         ],
-        "paintFile": "source.png",
+        "paintFile": "../repair-plates/turtle_08_neck-r6.png",
         "extension": "Complete long proximal underlap below closed shell"
       }
     },
@@ -423,6 +423,27 @@
           540,
           1160
         ]
+      },
+      {
+        "part": "head",
+        "revision": "R6",
+        "plate": "../repair-plates/turtle_08_neck-r6.png",
+        "alignedBounds": [
+          421,
+          45,
+          238,
+          438
+        ],
+        "blendRows": [
+          255,
+          285
+        ],
+        "originalEyesAndNosePreserved": true,
+        "changedPixels": 47150,
+        "changedOutsideNeckMask": 0,
+        "coreMinimumAlpha": 252,
+        "underHostPixels": 29033,
+        "method": "Continuous AI-painted broad neck extends beyond shell joint to y483; erase old separated collar/rim fragments; preserve original upper head."
       }
     ],
     "method": "Independent complete shell and reference-pose repainted long legs; original head/tail with hidden extensions"

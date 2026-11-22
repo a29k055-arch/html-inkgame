@@ -20,5 +20,6 @@
     "recommendedCssLongEdgeAtDpr2": 768,
     "smoothPreviewCssLongEdgeAtDpr2": 2048,
     "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
-  }
+  },
+  "bodyTextureSignature": "4276f2831b9f449b7056f2f5600d85e5143953fad025c82dc8c7977da7c143ca"
 }

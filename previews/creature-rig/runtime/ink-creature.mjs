@@ -1,6 +1,6 @@
 /** Canvas 2D ink puppet runtime. Coordinates/input are CSS pixels, seconds and radians. */
-import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r5-batch2-hires-20261122';
-export const INK_CREATURE_REV='rig-r5-batch2-hires-20261122';
+import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r6-zoom-and-joints-20261122';
+export const INK_CREATURE_REV='rig-r6-zoom-and-joints-20261122';
 const TAU = Math.PI * 2;
 const RESOURCE_CACHE=new Map();
 const revisionURL=(value,base)=>{const url=new URL(value,base);url.searchParams.set('inkRigRev',INK_CREATURE_REV);return url;};
@@ -91,13 +91,16 @@ function readBounds(data,w,h) {
 }
 // Source-space skinning keeps fin roots on the same material curve as the torso.
 // Only distal fin vertices receive independent flap, rather than rotating a hard cut.
-function createFinMesh(image,bounds,curve,root) {
-  const nx=Math.max(8,Math.ceil(image.width/20)),ny=Math.max(8,Math.ceil(image.height/20));
+function createFinMesh(image,bounds,curve,root,pixelScale=[1,1]) {
+  const [scaleX,scaleY]=pixelScale;
+  const nx=Math.max(8,Math.ceil(image.width/(20*scaleX))),ny=Math.max(8,Math.ceil(image.height/(20*scaleY)));
   const vertices=[],triangles=[],pixels=image.getContext('2d').getImageData(0,0,image.width,image.height).data;
   const a=root?.inner||[bounds.x,bounds.y],b=root?.outer||a,dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1;
   for(let y=0;y<=ny;y++)for(let x=0;x<=nx;x++){
     const px=x*image.width/nx,py=y*image.height/ny,sx=px+bounds.x,sy=py+bounds.y;
-    const outward=((sx-b[0])*dx+(sy-b[1])*dy)/L;
+    // Fin flap is defined in working-art pixels, independent of texture density.
+    const nativeDx=dx/scaleX,nativeDy=dy/scaleY,nativeLength=Math.hypot(nativeDx,nativeDy)||1;
+    const outward=((sx-b[0])/scaleX*nativeDx+(sy-b[1])/scaleY*nativeDy)/nativeLength;
     vertices.push({x:px,y:py,...projectPoint(curve,sx,sy),flap:smoothstep(outward/165)});
   }
   const occupied=new Uint8Array(nx*ny);
@@ -148,6 +151,8 @@ export class InkCreature {
     const [w,h]=this.rig.sourceSize;const scratch=getCanvas(w,h),sc=scratch.getContext('2d',{willReadFrequently:true});
     const body=getCanvas(w,h),bc=body.getContext('2d');const bodyOrder=Number.isFinite(this.rig.bodyOrder)?this.rig.bodyOrder:6;
     for(const layer of [...this.rig.layers].sort((a,b)=>(a.order??0)-(b.order??0))) {
+      const mesh=layer.kind==='body'||['head','tail'].includes(layer.kind)&&this.species!=='turtle'||this.species==='dragon'&&/_horn_[lr]$/.test(layer.name);
+      if(mesh&&this.rig.bodyTexture)continue;
       const cropped=!!layer.croppedFile&&Array.isArray(layer.bbox);
       const img=await imageAt(revisionURL(cropped?layer.croppedFile:layer.file,url));
       if(!cropped&&(img.naturalWidth!==w||img.naturalHeight!==h))throw Error(`Layer canvas mismatch: ${layer.file}`);
@@ -155,15 +160,23 @@ export class InkCreature {
       const ox=cropped?layer.bbox[0]:0,oy=cropped?layer.bbox[1]:0;
       sc.clearRect(0,0,w,h);sc.drawImage(img,ox,oy);
       const bounds=readBounds(sc.getImageData(0,0,w,h).data,w,h);if(!bounds)continue;
-      const mesh=layer.kind==='body'||['head','tail'].includes(layer.kind)&&this.species!=='turtle'||this.species==='dragon'&&/_horn_[lr]$/.test(layer.name);
       if(mesh) {bc.drawImage(img,ox,oy);}
       else {
         const crop=getCanvas(bounds.w,bounds.h);crop.getContext('2d').drawImage(img,bounds.x-ox,bounds.y-oy,bounds.w,bounds.h,0,0,bounds.w,bounds.h);
         const pivot=layer.pivot||[w/2,h/2];
         const prepared={...layer,image:crop,bounds,pivot,anchor:projectPoint(this.sourceCurve,...pivot)};
-        if(this.species==='fish'&&layer.kind==='fin')prepared.finMesh=createFinMesh(crop,bounds,this.sourceCurve,layer.rootRepair);
+        if(this.species==='fish'&&layer.kind==='fin'){
+          const working=this.rig.resolution?.workingSize;
+          const pixelScale=Array.isArray(working)&&working.length===2?[w/working[0],h/working[1]]:[1,1];
+          prepared.finMesh=createFinMesh(crop,bounds,this.sourceCurve,layer.rootRepair,pixelScale);
+        }
         this.layers.push(prepared);
       }
+    }
+    if(this.rig.bodyTexture){
+      const image=await imageAt(revisionURL(this.rig.bodyTexture,url));
+      if(image.naturalWidth!==w||image.naturalHeight!==h)throw Error(`Body texture canvas mismatch: ${this.rig.bodyTexture}`);
+      bc.drawImage(image,0,0);
     }
     this.bodyImage=body;this.bodyOrder=bodyOrder;this.layers.sort((a,b)=>(a.order??0)-(b.order??0));
     this.sourceImage=await imageAt(revisionURL(this.rig.sourceFile||this.rig.source||'source.png',url));

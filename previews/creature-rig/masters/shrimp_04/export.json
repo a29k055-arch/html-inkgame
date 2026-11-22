@@ -1,5 +1,5 @@
 {
-  "signature": "8c63456c627af99fac8fe7472d6613824fde6548a075ce3fd4b61b078ce32aea",
+  "signature": "ee5cdce59d8a1efc8c324da3ab1c85cddb5e165e332b91b0fbe079b725b2dedb",
   "resolution": {
     "id": "shrimp_04",
     "nativeSize": [
@@ -20,5 +20,6 @@
     "recommendedCssLongEdgeAtDpr2": 768,
     "smoothPreviewCssLongEdgeAtDpr2": 2048,
     "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
-  }
+  },
+  "bodyTextureSignature": "ee5cdce59d8a1efc8c324da3ab1c85cddb5e165e332b91b0fbe079b725b2dedb"
 }

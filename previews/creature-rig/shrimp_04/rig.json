@@ -14,47 +14,47 @@
   "spine": [
     [
       528,
-      363
+      660
     ],
     [
       600,
-      397
+      626
     ],
     [
       678,
-      444
+      579
     ],
     [
       758,
-      473
+      550
     ],
     [
       836,
-      507
+      516
     ],
     [
       915,
-      548
+      475
     ],
     [
       994,
-      587
+      436
     ],
     [
       1072,
-      627
+      396
     ],
     [
       1140,
-      664
+      359
     ],
     [
       1200,
-      707
+      316
     ],
     [
       1278,
-      779
+      244
     ]
   ],
   "nominalLength": 863.2658666617757,
@@ -65,16 +65,16 @@
       "croppedFile": "textures/shrimp_04_antenna_01.png",
       "bbox": [
         498,
-        74,
+        638,
         804,
         312
       ],
       "kind": "antenna",
       "pivot": [
         566,
-        374
+        649
       ],
-      "side": -1,
+      "side": 1,
       "phase": 0,
       "order": 12,
       "pixelCount": 8562,
@@ -82,11 +82,11 @@
       "rootRepair": {
         "outer": [
           523,
-          337
+          686
         ],
         "inner": [
           566,
-          374
+          649
         ],
         "radius": 4,
         "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
@@ -98,16 +98,16 @@
       "croppedFile": "textures/shrimp_04_antenna_02.png",
       "bbox": [
         74,
-        357,
+        182,
         504,
         485
       ],
       "kind": "antenna",
       "pivot": [
         566,
-        405
+        618
       ],
-      "side": 1,
+      "side": -1,
       "phase": 0.67,
       "order": 12,
       "pixelCount": 6514,
@@ -115,11 +115,11 @@
       "rootRepair": {
         "outer": [
           514,
-          378
+          645
         ],
         "inner": [
           566,
-          405
+          618
         ],
         "radius": 4,
         "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
@@ -131,16 +131,16 @@
       "croppedFile": "textures/shrimp_04_forearm_l.png",
       "bbox": [
         245,
-        424,
+        348,
         413,
         252
       ],
       "kind": "leg",
       "pivot": [
         638,
-        444
+        579
       ],
-      "side": -1,
+      "side": 1,
       "phase": 1.34,
       "order": 3,
       "pixelCount": 8832,
@@ -148,11 +148,11 @@
       "rootRepair": {
         "outer": [
           603,
-          466
+          557
         ],
         "inner": [
           638,
-          444
+          579
         ],
         "radius": 12,
         "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
@@ -164,16 +164,16 @@
       "croppedFile": "textures/shrimp_04_forearm_r.png",
       "bbox": [
         298,
-        455,
+        146,
         402,
         423
       ],
       "kind": "leg",
       "pivot": [
         680,
-        475
+        548
       ],
-      "side": 1,
+      "side": -1,
       "phase": 2.0100000000000002,
       "order": 3,
       "pixelCount": 10117,
@@ -181,11 +181,11 @@
       "rootRepair": {
         "outer": [
           669,
-          529
+          494
         ],
         "inner": [
           680,
-          475
+          548
         ],
         "radius": 12,
         "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
@@ -197,16 +197,16 @@
       "croppedFile": "textures/shrimp_04_leg_walk_01.png",
       "bbox": [
         575,
-        468,
+        339,
         139,
         217
       ],
       "kind": "leg",
       "pivot": [
         692,
-        484
+        539
       ],
-      "side": 1,
+      "side": -1,
       "phase": 2.68,
       "order": 3,
       "pixelCount": 3123,
@@ -214,11 +214,11 @@
       "rootRepair": {
         "outer": [
           690,
-          540
+          483
         ],
         "inner": [
           692,
-          484
+          539
         ],
         "radius": 8,
         "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
@@ -230,16 +230,16 @@
       "croppedFile": "textures/shrimp_04_leg_walk_02.png",
       "bbox": [
         635,
-        475,
+        324,
         117,
         225
       ],
       "kind": "leg",
       "pivot": [
         716,
-        491
+        532
       ],
-      "side": -1,
+      "side": 1,
       "phase": 3.35,
       "order": 3,
       "pixelCount": 3553,
@@ -247,11 +247,11 @@
       "rootRepair": {
         "outer": [
           727,
-          540
+          483
         ],
         "inner": [
           716,
-          491
+          532
         ],
         "radius": 8,
         "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
@@ -263,16 +263,16 @@
       "croppedFile": "textures/shrimp_04_leg_walk_03.png",
       "bbox": [
         703,
-        466,
+        328,
         95,
         230
       ],
       "kind": "leg",
       "pivot": [
         741,
-        482
+        541
       ],
-      "side": 1,
+      "side": -1,
       "phase": 4.0200000000000005,
       "order": 3,
       "pixelCount": 3642,
@@ -280,11 +280,11 @@
       "rootRepair": {
         "outer": [
           772,
-          546
+          477
         ],
         "inner": [
           741,
-          482
+          541
         ],
         "radius": 8,
         "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
@@ -296,14 +296,14 @@
       "croppedFile": "textures/shrimp_04_head_chest.png",
       "bbox": [
         367,
-        300,
+        483,
         427,
         241
       ],
       "kind": "head",
       "pivot": [
         638.5,
-        420.8125
+        602.1875
       ],
       "side": 0,
       "phase": 0,
@@ -321,14 +321,14 @@
       "croppedFile": "textures/shrimp_04_abdomen_01.png",
       "bbox": [
         730,
-        408,
+        446,
         172,
         170
       ],
       "kind": "body",
       "pivot": [
         812.5894999999999,
-        496.12800000000004
+        526.872
       ],
       "side": 0,
       "phase": 0.7,
@@ -346,14 +346,14 @@
       "croppedFile": "textures/shrimp_04_abdomen_02.png",
       "bbox": [
         827,
-        449,
+        418,
         171,
         157
       ],
       "kind": "body",
       "pivot": [
         907.0954999999999,
-        543.9495000000001
+        479.05049999999994
       ],
       "side": 0,
       "phase": 1.4,
@@ -371,14 +371,14 @@
       "croppedFile": "textures/shrimp_04_abdomen_03.png",
       "bbox": [
         940,
-        486,
+        378,
         148,
         160
       ],
       "kind": "body",
       "pivot": [
         1001.8855,
-        590.9730000000001
+        432.02699999999993
       ],
       "side": 0,
       "phase": 2.0999999999999996,
@@ -396,14 +396,14 @@
       "croppedFile": "textures/shrimp_04_abdomen_04.png",
       "bbox": [
         1030,
-        177,
+        338,
         278,
         509
       ],
       "kind": "body",
       "pivot": [
         1093.3870000000002,
-        638.1315
+        384.86850000000004
       ],
       "side": 0,
       "phase": 2.8,
@@ -421,14 +421,14 @@
       "croppedFile": "textures/shrimp_04_abdomen_05.png",
       "bbox": [
         1126,
-        619,
+        276,
         124,
         129
       ],
       "kind": "body",
       "pivot": [
         1169.375,
-        683.3125
+        339.6875
       ],
       "side": 0,
       "phase": 3.5,
@@ -446,14 +446,14 @@
       "croppedFile": "textures/shrimp_04_tail.png",
       "bbox": [
         1186,
-        676,
+        195,
         194,
         153
       ],
       "kind": "tail",
       "pivot": [
         1242.75,
-        745.6875
+        277.3125
       ],
       "side": 0,
       "phase": 4.199999999999999,
@@ -531,5 +531,12 @@
       }
     ]
   },
-  "notes": "Original selected pale-ink art preserved outside bounded anatomical hidden repair masks. Independent antennae, forearms and each walking foot use their own source-body node pivots; complete assembled body bands share continuous runtime mesh."
+  "notes": "Original selected pale-ink art preserved outside bounded anatomical hidden repair masks. Independent antennae, forearms and each walking foot use their own source-body node pivots; complete assembled body bands share continuous runtime mesh.",
+  "orientationCorrection": {
+    "revision": "r6",
+    "operation": "Whole-source vertical reflection y = sourceHeight - 1 - y, including spine, pivots, roots, layer alpha and crop bounds",
+    "originalSelection": "original-selection.png",
+    "rightFacingAnatomy": "Antennae frontal; walking feet and forearms ventral/downward",
+    "sharedRuntimeChanged": false
+  }
 }
