@@ -1,6 +1,6 @@
 /** Canvas 2D ink puppet runtime. Coordinates/input are CSS pixels, seconds and radians. */
-import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r8-dragon-joints-horns-whiskers-20261123';
-export const INK_CREATURE_REV='rig-r8-dragon-joints-horns-whiskers-20261123';
+import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r9-waterflow-joints-20261123';
+export const INK_CREATURE_REV='rig-r9-waterflow-joints-20261123';
 const TAU = Math.PI * 2;
 const RESOURCE_CACHE=new Map();
 const revisionURL=(value,base)=>{const url=new URL(value,base);url.searchParams.set('inkRigRev',INK_CREATURE_REV);return url;};
@@ -136,15 +136,21 @@ function createStrandMesh(image,bounds,curve,pixelScale=[1,1]) {
   for(let y=0;y<ny;y++)for(let x=0;x<nx;x++)if(occupied[y*nx+x]){const a=y*(nx+1)+x,b=a+1,c=a+nx+1,d=c+1;triangles.push([a,b,d],[a,d,c]);}
   return compactMesh(vertices,triangles);
 }
-export function strandPose(curve,{lag=0,drive=0,time=0,phase=0,backward=[0,1],still=false}={}) {
+export function strandPose(curve,{lag=0,drive=0,time=0,phase=0,backward=[0,1],still=false,drag=.35,bend=.045,idle=.045,maxDragAngle=.7,lagGain=1,frequency=1.25,waves=.45,pinnedFraction=.1}={}) {
   const source=curve.points,points=[[...source[0]]];
   for(let i=1;i<source.length;i++){
-    const dx=source[i][0]-source[i-1][0],dy=source[i][1]-source[i-1][1],s=(curve.lengths[i]+curve.lengths[i-1])/(2*curve.length),weight=smoothstep((s-.1)/.9);
-    const towardBack=clamp(Math.atan2(dx*backward[1]-dy*backward[0],dx*backward[0]+dy*backward[1]),-.7,.7);
-    const bend=still?0:weight*(lag+.35*drive*towardBack+.045*Math.sin(time*1.25-s*2.8+phase)),c=Math.cos(bend),sn=Math.sin(bend);
+    const dx=source[i][0]-source[i-1][0],dy=source[i][1]-source[i-1][1],s=(curve.lengths[i]+curve.lengths[i-1])/(2*curve.length),weight=smoothstep((s-pinnedFraction)/(1-pinnedFraction));
+    const towardBack=clamp(Math.atan2(dx*backward[1]-dy*backward[0],dx*backward[0]+dy*backward[1]),-maxDragAngle,maxDragAngle);
+    const angle=still?0:weight*(lag*lagGain+drag*drive*towardBack+(idle+(bend-idle)*drive)*Math.sin(time*frequency-s*TAU*waves+phase)),c=Math.cos(angle),sn=Math.sin(angle);
     points.push([points.at(-1)[0]+c*dx-sn*dy,points.at(-1)[1]+sn*dx+c*dy]);
   }
   return makeCurve(points,false);
+}
+export function strandBehavior(species,id,direction='lateral',behavior='') {
+  if(species==='dragon')return{drag:.92,bend:.035,idle:.035,maxDragAngle:1.4,lagGain:.9,frequency:1.25,waves:.4};
+  const forward=direction==='forward',back=direction==='backward',bendFirst=behavior==='bend'||id==='shrimp_05';
+  if(species==='fish')return{drag:(back?.43:forward?.10:.22)*(bendFirst?.65:1),bend:forward?.11:.055,idle:.014,maxDragAngle:.85,lagGain:.48,frequency:1.8,waves:.7};
+  return{drag:bendFirst?.12:back?.60:forward?.18:.34,bend:bendFirst?.22:forward?.19:.085,idle:.025,maxDragAngle:1.0,lagGain:bendFirst?.85:.7,frequency:1.5,waves:bendFirst?.9:.7};
 }
 function textureTriangle(ctx,image,a,b,c,A,B,C) {
   const det=(b.x-a.x)*(c.y-a.y)-(c.x-a.x)*(b.y-a.y);if(Math.abs(det)<1e-8)return;
@@ -208,7 +214,7 @@ export class InkCreature {
           const pixelScale=Array.isArray(working)&&working.length===2?[w/working[0],h/working[1]]:[1,1];
           prepared.finMesh=createFinMesh(crop,bounds,this.sourceCurve,layer.rootRepair,pixelScale);
         }
-        if(this.species==='dragon'&&layer.kind==='antenna'&&layer.strand?.sourceTrace?.length>=2){
+        if(layer.kind==='antenna'&&layer.strand?.sourceTrace?.length>=2){
           const working=this.rig.resolution?.workingSize,pixelScale=Array.isArray(working)&&working.length===2?[w/working[0],h/working[1]]:[1,1];
           prepared.strandCurve=makeCurve(layer.strand.sourceTrace);prepared.finMesh=createStrandMesh(crop,bounds,prepared.strandCurve,pixelScale);
         }
@@ -298,8 +304,9 @@ export class InkCreature {
     this.wavePhase+=TAU*(this.profile.idleHz+(this.profile.hz-this.profile.idleHz)*this.drive)*dt;
     this.finPhase+=(2+5*this.drive)*dt;this.gaitPhase+=TAU*.28*dt;
     this.history.push({t:this.time,a:this.heading,v:this.angularVelocity});while(this.history.length>2&&this.history[1].t<this.time-3)this.history.shift();
-    if(this.species==='dragon'){
-      const target=clamp(-this.angularVelocity*.30,-.46,.46),acceleration=42*(target-this.strandLag)-10*this.strandLagVelocity;
+    if(this.species!=='turtle'){
+      const gain=this.species==='fish'?.18:this.species==='shrimp'?.26:.30,paperTurn=this.species==='shrimp'?this.shrimpTurnVelocity*.06:0;
+      const target=clamp(-this.angularVelocity*gain+paperTurn,-.46,.46),acceleration=42*(target-this.strandLag)-10*this.strandLagVelocity;
       this.strandLagVelocity+=acceleration*dt;this.strandLag+=this.strandLagVelocity*dt;
     }
   }
@@ -326,6 +333,7 @@ export class InkCreature {
     out.x=x;out.y=y;return out;
   }
   layerMotion(layer) {
+    if(layer.strandCurve)return 0;
     if(this.species==='dragon'&&(layer.kind==='horn'||layer.headAttachment))return 0;
     if(this.mode==='straight'||this.mode==='rest')return 0;
     const {kind,side=1,phase=0}=layer;const t=this.time;
@@ -340,6 +348,7 @@ export class InkCreature {
     return .025*Math.sin(t*1.7+phase)*side;
   }
   layerTransform(layer) {
+    if(layer.strandCurve){const frame=this.strandFrame(layer);return{...frame,opacity:this.offsets.get(layer.name)?.opacity??1,rotation:0};}
     if(this.species==='dragon'&&(layer.headAttachment||layer.kind==='horn')){
       const frame=this.headFrameTransform(),dx=layer.pivot[0]-frame.sourceX,dy=layer.pivot[1]-frame.sourceY,tweak=this.offsets.get(layer.name)||{};
       return {...frame,x:frame.x+frame.a*dx+frame.c*dy,y:frame.y+frame.b*dx+frame.d*dy,opacity:tweak.opacity??1,rotation:0};
@@ -359,21 +368,29 @@ export class InkCreature {
     const spineS=this.rig.headFrame?.s??.065,source=sampleCurve(this.sourceCurve,spineS),target=sampleSmoothFrame(this.targetCurve,spineS),sourceAngle=Math.atan2(source.ty,source.tx),targetAngle=Math.atan2(target.ty,target.tx);
     this._headFrameCurve=this.targetCurve;return this._headFrame={...this.rigidTransform(target,targetAngle,sourceAngle),sourceX:source.x,sourceY:source.y,sourceAngle,targetAngle,spineS};
   }
+  strandFrame(layer) {
+    if(this.species==='dragon')return this.headFrameTransform();
+    const cache=this._strandFrames||(this._strandFrames=new Map()),old=cache.get(layer);
+    if(old?.curve===this.targetCurve&&old.width===this.presentationWidth)return old.frame;
+    const src=sampleCurve(this.sourceCurve,layer.anchor.s),dst=sampleCurve(this.targetCurve,layer.anchor.s),sourceAngle=Math.atan2(src.ty,src.tx),targetAngle=Math.atan2(dst.ty,dst.tx),anchor=this.mapPoint(layer.anchor.s,layer.anchor.t);
+    const frame={...this.rigidTransform(anchor,targetAngle,sourceAngle),sourceX:layer.pivot[0],sourceY:layer.pivot[1],sourceAngle,targetAngle,spineS:layer.anchor.s};cache.set(layer,{curve:this.targetCurve,width:this.presentationWidth,frame});return frame;
+  }
   strandTarget(layer) {
     const cache=this._strandTargets||(this._strandTargets=new Map()),old=cache.get(layer);
     if(old?.curve===this.targetCurve&&old.time===this.time&&old.mode===this.mode)return old.target;
-    const frame=this.headFrameTransform(),speed=Math.hypot(this.vx,this.vy),angle=frame.targetAngle-frame.sourceAngle,c=Math.cos(angle),s=Math.sin(angle),weight=smoothstep(speed/Math.max(1,this.maxSpeed*this.profile.speedScale*.22));
-    const restX=Math.cos(frame.sourceAngle),restY=Math.sin(frame.sourceAngle),backX=speed>1e-6?(-c*this.vx-s*this.vy)/speed:restX,backY=speed>1e-6?(s*this.vx-c*this.vy)/speed:restY;
+    const frame=this.strandFrame(layer),speed=Math.hypot(this.vx,this.vy),angle=(this.species==='shrimp'?this.inclination+Math.PI:frame.targetAngle)-frame.sourceAngle,c=Math.cos(angle),s=Math.sin(angle),weight=smoothstep(speed/Math.max(1,this.maxSpeed*this.profile.speedScale*.22)),vx=this.species==='shrimp'?Math.abs(this.vx):this.vx;
+    const restX=Math.cos(frame.sourceAngle),restY=Math.sin(frame.sourceAngle),backX=speed>1e-6?(-c*vx-s*this.vy)/speed:restX,backY=speed>1e-6?(s*vx-c*this.vy)/speed:restY;
     const bx=restX+(backX-restX)*weight,by=restY+(backY-restY)*weight,magnitude=Math.hypot(bx,by)||1,backward=[bx/magnitude,by/magnitude];
-    const target=strandPose(layer.strandCurve,{lag:this.strandLag,drive:this.drive,time:this.time,phase:layer.phase||0,backward,still:this.mode==='straight'||this.mode==='rest'});target.backward=backward;
+    const first=layer.strandCurve.points[0],tip=sampleCurve(layer.strandCurve,1),dot=((tip.x-first[0])*restX+(tip.y-first[1])*restY)/(Math.hypot(tip.x-first[0],tip.y-first[1])||1),direction=layer.strand?.direction||(dot>.18?'backward':dot<-.18?'forward':'lateral'),parameters={...strandBehavior(this.species,this.id,direction,layer.strand?.behavior),pinnedFraction:clamp(layer.strand?.rootPinnedFraction??(this.species==='fish'?.2:.1),0,.5)};
+    const target=strandPose(layer.strandCurve,{...parameters,lag:this.strandLag,drive:this.drive,time:this.time,phase:layer.phase||0,backward,still:this.mode==='straight'||this.mode==='rest'});target.backward=backward;target.direction=direction;target.parameters=parameters;
     cache.set(layer,{curve:this.targetCurve,time:this.time,mode:this.mode,target});return target;
   }
   mapStrandVertex(layer,v,out={}) {
-    const frame=this.headFrameTransform(),target=this.strandTarget(layer),p=sampleCurve(target,v.s,this._strandSample||(this._strandSample={})),x=p.x-p.ty*v.t*target.length-frame.sourceX,y=p.y+p.tx*v.t*target.length-frame.sourceY;
+    const frame=this.strandFrame(layer),target=this.strandTarget(layer),p=sampleCurve(target,v.s,this._strandSample||(this._strandSample={})),x=p.x-p.ty*v.t*target.length-frame.sourceX,y=p.y+p.tx*v.t*target.length-frame.sourceY;
     out.x=frame.x+frame.a*x+frame.c*y;out.y=frame.y+frame.b*x+frame.d*y;return out;
   }
   strandSnapshot() {
-    return this.layers.filter(l=>l.strandCurve).map(layer=>{const curve=this.strandTarget(layer),frame=this.headFrameTransform(),nodes=curve.points.map(([x,y])=>({x:frame.x+frame.a*(x-frame.sourceX)+frame.c*(y-frame.sourceY),y:frame.y+frame.b*(x-frame.sourceX)+frame.d*(y-frame.sourceY)}));return{name:layer.name,root:nodes[0],nodes,sourceLength:layer.strandCurve.length,worldLength:curve.length*this.length/this.sourceCurve.length,lag:this.strandLag,backwardSource:curve.backward};});
+    return this.layers.filter(l=>l.strandCurve).map(layer=>{const curve=this.strandTarget(layer),frame=this.strandFrame(layer),nodes=curve.points.map(([x,y])=>({x:frame.x+frame.a*(x-frame.sourceX)+frame.c*(y-frame.sourceY),y:frame.y+frame.b*(x-frame.sourceX)+frame.d*(y-frame.sourceY)}));let worldLength=0;for(let i=1;i<nodes.length;i++)worldLength+=Math.hypot(nodes[i].x-nodes[i-1].x,nodes[i].y-nodes[i-1].y);return{name:layer.name,root:nodes[0],nodes,sourceLength:layer.strandCurve.length,materialLength:curve.length*this.length/this.sourceCurve.length,worldLength,lag:this.strandLag,backwardSource:curve.backward,direction:curve.direction,parameters:curve.parameters,presentationWidth:this.presentationWidth};});
   }
   attachmentPivots() {return this.layers.map(l=>{const m=this.layerTransform(l);return{name:l.name,kind:l.kind,x:m.x,y:m.y,rotation:m.rotation,handedness:this.handedness};});}
   mapFinVertex(layer,v,out={}) {
@@ -468,14 +485,14 @@ export class InkCreature {
     ctx.save();ctx.lineWidth=1.5;ctx.strokeStyle='#a7482c';ctx.fillStyle='#a7482c';ctx.beginPath();points.forEach(({x,y},i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
     points.forEach(({x,y},i)=>{if(i%4===0){ctx.beginPath();ctx.arc(x,y,3,0,TAU);ctx.fill();}});ctx.restore();
   }
-  snapshot() {return{revision:INK_CREATURE_REV,id:this.id,position:{x:this.x,y:this.y},heading:this.heading,angularVelocity:this.angularVelocity,angularAcceleration:this.angularAcceleration,speed:Math.hypot(this.vx,this.vy),drive:this.drive,mode:this.mode,wavePhase:this.wavePhase,gaitPhase:this.gaitPhase,finPhase:this.finPhase,mirrorX:this.handedness<0,facing:this.facing,desiredFacing:this.desiredFacing,turnProgress:this.shrimpTurnProgress,presentationWidth:this.presentationWidth,turnCenter:this.species==='shrimp'?{x:this.x,y:this.y,spineS:.45}:null,paperEdgeWidth:this.species==='shrimp'?.012:0,paperEdgeOpacity:this.paperEdgeOpacity,inclination:this.inclination,profile:{...this.profile},headFrame:this.species==='dragon'?{x:this.headFrameTransform().x,y:this.headFrameTransform().y,angle:this.headFrameTransform().targetAngle,sourceAngle:this.headFrameTransform().sourceAngle,spineS:this.headFrameTransform().spineS}:null,strandLag:this.strandLag,strandLagVelocity:this.strandLagVelocity,strands:this.species==='dragon'?this.strandSnapshot():[],attachments:this.attachmentPivots(),spine:this.pose.map(([x,y])=>this.presentationPoint({x,y})),loaded:!!this.bodyImage,triangles:this.mesh?.triangles.length||0,renderStats:{...this.renderStats},renderer:this.species==='turtle'?'canvas-rigid':this.gpuSurface?'webgl-mesh':'canvas-fallback'};}
+  snapshot() {return{revision:INK_CREATURE_REV,id:this.id,position:{x:this.x,y:this.y},heading:this.heading,angularVelocity:this.angularVelocity,angularAcceleration:this.angularAcceleration,speed:Math.hypot(this.vx,this.vy),drive:this.drive,mode:this.mode,wavePhase:this.wavePhase,gaitPhase:this.gaitPhase,finPhase:this.finPhase,mirrorX:this.handedness<0,facing:this.facing,desiredFacing:this.desiredFacing,turnProgress:this.shrimpTurnProgress,presentationWidth:this.presentationWidth,turnCenter:this.species==='shrimp'?{x:this.x,y:this.y,spineS:.45}:null,paperEdgeWidth:this.species==='shrimp'?.012:0,paperEdgeOpacity:this.paperEdgeOpacity,inclination:this.inclination,profile:{...this.profile},headFrame:this.species==='dragon'?{x:this.headFrameTransform().x,y:this.headFrameTransform().y,angle:this.headFrameTransform().targetAngle,sourceAngle:this.headFrameTransform().sourceAngle,spineS:this.headFrameTransform().spineS}:null,strandLag:this.strandLag,strandLagVelocity:this.strandLagVelocity,strands:this.strandSnapshot(),attachments:this.attachmentPivots(),spine:this.pose.map(([x,y])=>this.presentationPoint({x,y})),loaded:!!this.bodyImage,triangles:this.mesh?.triangles.length||0,renderStats:{...this.renderStats},renderer:this.species==='turtle'?'canvas-rigid':this.gpuSurface?'webgl-mesh':'canvas-fallback'};}
   dispose() {
     if(this.disposed)return;this.disposed=true;
     for(const surface of this.finSurfaces.values())surface?.dispose();this.finSurfaces.clear();
     this.gpuSurface?.dispose();this.gpuSurface=null;
     const entry=this.resourceEntry;
     if(entry&&--entry.refs===0){RESOURCE_CACHE.delete(entry.key);for(const l of this.layers){l.image.width=1;l.image.height=1;}if(this.bodyImage){this.bodyImage.width=1;this.bodyImage.height=1;}}
-    this._strandTargets?.clear();this._mappedMeshes=null;this._headFrameCurve=null;this.layers=[];this.sourceImage=null;this.bodyImage=null;this.mesh=null;this.history=[];
+    this._strandTargets?.clear();this._strandFrames?.clear();this._mappedMeshes=null;this._headFrameCurve=null;this.layers=[];this.sourceImage=null;this.bodyImage=null;this.mesh=null;this.history=[];
     if(this.meshSurface){this.meshSurface.width=1;this.meshSurface.height=1;this.meshSurface=null;}
   }
 }

@@ -1,0 +1,267 @@
+{
+  "creatures": 10,
+  "paths": 20,
+  "samples": 9216,
+  "cases": [
+    {
+      "id": "fish_04",
+      "mode": "working",
+      "sourceSize": [
+        1218,
+        1292
+      ],
+      "samples": 144,
+      "excludedPaper": 0,
+      "minOverlap": 9944,
+      "zeroOverlapSignals": 0,
+      "evidence": "fish_04/working/"
+    },
+    {
+      "id": "fish_04",
+      "mode": "master",
+      "sourceSize": [
+        3861,
+        4096
+      ],
+      "samples": 144,
+      "excludedPaper": 0,
+      "minOverlap": 9889,
+      "zeroOverlapSignals": 0,
+      "evidence": "fish_04/master/"
+    },
+    {
+      "id": "fish_01",
+      "mode": "working",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "samples": 360,
+      "excludedPaper": 0,
+      "minOverlap": 690,
+      "zeroOverlapSignals": 0,
+      "evidence": "fish_01/working/"
+    },
+    {
+      "id": "fish_01",
+      "mode": "master",
+      "sourceSize": [
+        4096,
+        2731
+      ],
+      "samples": 360,
+      "excludedPaper": 0,
+      "minOverlap": 695,
+      "zeroOverlapSignals": 0,
+      "evidence": "fish_01/master/"
+    },
+    {
+      "id": "fish_02",
+      "mode": "working",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "samples": 432,
+      "excludedPaper": 0,
+      "minOverlap": 1078,
+      "zeroOverlapSignals": 0,
+      "evidence": "fish_02/working/"
+    },
+    {
+      "id": "fish_02",
+      "mode": "master",
+      "sourceSize": [
+        4096,
+        1365
+      ],
+      "samples": 432,
+      "excludedPaper": 0,
+      "minOverlap": 1088,
+      "zeroOverlapSignals": 0,
+      "evidence": "fish_02/master/"
+    },
+    {
+      "id": "fish_04_special",
+      "mode": "working",
+      "sourceSize": [
+        1218,
+        1292
+      ],
+      "samples": 144,
+      "excludedPaper": 0,
+      "minOverlap": 9944,
+      "zeroOverlapSignals": 0,
+      "evidence": "fish_04_special/working/"
+    },
+    {
+      "id": "fish_04_special",
+      "mode": "master",
+      "sourceSize": [
+        3861,
+        4096
+      ],
+      "samples": 144,
+      "excludedPaper": 0,
+      "minOverlap": 9889,
+      "zeroOverlapSignals": 0,
+      "evidence": "fish_04_special/master/"
+    },
+    {
+      "id": "dragon_04",
+      "mode": "working",
+      "sourceSize": [
+        1024,
+        1536
+      ],
+      "samples": 576,
+      "excludedPaper": 0,
+      "minOverlap": 556,
+      "zeroOverlapSignals": 0,
+      "evidence": "dragon_04/working/"
+    },
+    {
+      "id": "dragon_04",
+      "mode": "master",
+      "sourceSize": [
+        2731,
+        4096
+      ],
+      "samples": 576,
+      "excludedPaper": 0,
+      "minOverlap": 615,
+      "zeroOverlapSignals": 0,
+      "evidence": "dragon_04/master/"
+    },
+    {
+      "id": "turtle_02",
+      "mode": "working",
+      "sourceSize": [
+        1218,
+        1292
+      ],
+      "samples": 432,
+      "excludedPaper": 0,
+      "minOverlap": 7848,
+      "zeroOverlapSignals": 0,
+      "evidence": "turtle_02/working/"
+    },
+    {
+      "id": "turtle_02",
+      "mode": "master",
+      "sourceSize": [
+        3861,
+        4096
+      ],
+      "samples": 432,
+      "excludedPaper": 0,
+      "minOverlap": 7821,
+      "zeroOverlapSignals": 0,
+      "evidence": "turtle_02/master/"
+    },
+    {
+      "id": "turtle_08",
+      "mode": "working",
+      "sourceSize": [
+        1086,
+        1448
+      ],
+      "samples": 432,
+      "excludedPaper": 0,
+      "minOverlap": 9305,
+      "zeroOverlapSignals": 0,
+      "evidence": "turtle_08/working/"
+    },
+    {
+      "id": "turtle_08",
+      "mode": "master",
+      "sourceSize": [
+        3072,
+        4096
+      ],
+      "samples": 432,
+      "excludedPaper": 0,
+      "minOverlap": 9273,
+      "zeroOverlapSignals": 0,
+      "evidence": "turtle_08/master/"
+    },
+    {
+      "id": "shrimp_07",
+      "mode": "working",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "samples": 1008,
+      "excludedPaper": 84,
+      "minOverlap": 469,
+      "zeroOverlapSignals": 0,
+      "evidence": "shrimp_07/working/"
+    },
+    {
+      "id": "shrimp_07",
+      "mode": "master",
+      "sourceSize": [
+        4096,
+        2731
+      ],
+      "samples": 1008,
+      "excludedPaper": 84,
+      "minOverlap": 467,
+      "zeroOverlapSignals": 0,
+      "evidence": "shrimp_07/master/"
+    },
+    {
+      "id": "shrimp_04",
+      "mode": "working",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "samples": 504,
+      "excludedPaper": 42,
+      "minOverlap": 1237,
+      "zeroOverlapSignals": 0,
+      "evidence": "shrimp_04/working/"
+    },
+    {
+      "id": "shrimp_04",
+      "mode": "master",
+      "sourceSize": [
+        4096,
+        2731
+      ],
+      "samples": 504,
+      "excludedPaper": 42,
+      "minOverlap": 1202,
+      "zeroOverlapSignals": 0,
+      "evidence": "shrimp_04/master/"
+    },
+    {
+      "id": "shrimp_05",
+      "mode": "working",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "samples": 576,
+      "excludedPaper": 48,
+      "minOverlap": 1236,
+      "zeroOverlapSignals": 0,
+      "evidence": "shrimp_05/working/"
+    },
+    {
+      "id": "shrimp_05",
+      "mode": "master",
+      "sourceSize": [
+        4096,
+        2731
+      ],
+      "samples": 576,
+      "excludedPaper": 48,
+      "minOverlap": 1214,
+      "zeroOverlapSignals": 0,
+      "evidence": "shrimp_05/master/"
+    }
+  ]
+}

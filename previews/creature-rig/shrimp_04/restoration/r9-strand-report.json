@@ -1,0 +1,33 @@
+{
+  "id": "shrimp_04",
+  "method": "Individually fitted original-alpha paths; hidden original repair root prepended",
+  "pngPreserved": true,
+  "strands": [
+    {
+      "name": "shrimp_04_antenna_01",
+      "root": [
+        566,
+        649
+      ],
+      "tip": [
+        1285,
+        844
+      ],
+      "points": 87,
+      "direction": "backward"
+    },
+    {
+      "name": "shrimp_04_antenna_02",
+      "root": [
+        566,
+        618
+      ],
+      "tip": [
+        99,
+        194
+      ],
+      "points": 74,
+      "direction": "forward"
+    }
+  ]
+}

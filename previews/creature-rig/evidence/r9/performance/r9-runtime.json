@@ -1,0 +1,707 @@
+{
+  "passed": true,
+  "baseline": false,
+  "source": "D:/InkGame Unity/BOKU_ASSETS/09_ANIMATED_CREATURES",
+  "revision": "rig-r8-dragon-joints-horns-whiskers-20261123",
+  "browser": "158.0.4370.33",
+  "conditions": {
+    "viewport": [
+      1440,
+      1080
+    ],
+    "dpr": 1,
+    "warmupMs": 900,
+    "rafMs": 3000,
+    "cpuSamples": 96
+  },
+  "rows": [
+    {
+      "id": "fish_04",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00600060006,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.665000000000003,
+        "p50": 16.699999999999818,
+        "p95": 16.800000000000182,
+        "max": 17
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.6562277777777777,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.017708333519597847,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.13749999987582365,
+        "p50": 0.09999999403953552,
+        "p95": 0.29999998211860657,
+        "max": 0.4000000059604645
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 65522,
+        "vertexCount": 659,
+        "triangleCount": 1022,
+        "surfacePixels": 172032,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        1218,
+        1292
+      ],
+      "strands": 0
+    },
+    {
+      "id": "fish_01",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00400026668443,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.66555555555556,
+        "p50": 16.699999999999818,
+        "p95": 16.899999999999636,
+        "max": 16.900000000000546
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.7318277777777777,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.015625000310440857,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.19270833333333334,
+        "p50": 0.19999998807907104,
+        "p95": 0.30000001192092896,
+        "max": 0.5999999940395355
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 6,
+        "compositePixels": 69345,
+        "vertexCount": 853,
+        "triangleCount": 1276,
+        "surfacePixels": 172032,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        1536,
+        1024
+      ],
+      "strands": 2
+    },
+    {
+      "id": "fish_02",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00600060006,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.665000000000003,
+        "p50": 16.69999999999891,
+        "p95": 16.80000000000109,
+        "max": 16.900000000001455
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.7757444444444447,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.013541666169961294,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.26041666728754836,
+        "p50": 0.20000001788139343,
+        "p95": 0.5,
+        "max": 0.9000000059604645
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 7,
+        "compositePixels": 69252,
+        "vertexCount": 1074,
+        "triangleCount": 1628,
+        "surfacePixels": 147456,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        2172,
+        724
+      ],
+      "strands": 2
+    },
+    {
+      "id": "fish_04_special",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.008001066808944,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.664444444444435,
+        "p50": 16.69999999999891,
+        "p95": 16.80000000000109,
+        "max": 17
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.6131499999999993,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.010416667287548384,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.20000001788139343
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.10729166585952044,
+        "p50": 0.09999999403953552,
+        "p95": 0.20000001788139343,
+        "max": 0.4000000059604645
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 63897,
+        "vertexCount": 659,
+        "triangleCount": 1022,
+        "surfacePixels": 172032,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        1218,
+        1292
+      ],
+      "strands": 0
+    },
+    {
+      "id": "dragon_04",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00600060006,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.665000000000003,
+        "p50": 16.700000000000728,
+        "p95": 16.80000000000291,
+        "max": 16.900000000001455
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.7623833333333335,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.012500000496705374,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.21354166573534408,
+        "p50": 0.19999998807907104,
+        "p95": 0.30000001192092896,
+        "max": 0.5999999940395355
+      },
+      "renderStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 3,
+        "compositePixels": 71262,
+        "vertexCount": 546,
+        "triangleCount": 732,
+        "surfacePixels": 344064,
+        "viewportPixels": 1557400
+      },
+      "texture": [
+        1024,
+        1536
+      ],
+      "strands": 2
+    },
+    {
+      "id": "shrimp_07",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00600060006006,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.664999999999985,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 17
+      },
+      "longFrames": 0,
+      "taskPerFrame": 1.1308944444444438,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.030208334016303223,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.29999998211860657
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.8479166661078731,
+        "p50": 0.5999999940395355,
+        "p95": 1.7999999821186066,
+        "max": 20.599999994039536
+      },
+      "renderStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 4,
+        "compositePixels": 151659,
+        "vertexCount": 1294,
+        "triangleCount": 1474,
+        "surfacePixels": 245760,
+        "viewportPixels": 1557400
+      },
+      "texture": [
+        1536,
+        1024
+      ],
+      "strands": 3
+    },
+    {
+      "id": "shrimp_04",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00400026668439,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.66555555555557,
+        "p50": 16.69999999999709,
+        "p95": 16.799999999999272,
+        "max": 16.900000000001455
+      },
+      "longFrames": 0,
+      "taskPerFrame": 1.0401555555555566,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.014583333084980646,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.5145833330849806,
+        "p50": 0.5,
+        "p95": 0.8999999761581421,
+        "max": 1.9000000059604645
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 75803,
+        "vertexCount": 939,
+        "triangleCount": 1224,
+        "surfacePixels": 147456,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        1536,
+        1024
+      ],
+      "strands": 2
+    },
+    {
+      "id": "shrimp_05",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00400026668439,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.66555555555557,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 16.900000000001455
+      },
+      "longFrames": 0,
+      "taskPerFrame": 1.1153277777777786,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.008333333147068819,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.5468750003104409,
+        "p50": 0.5,
+        "p95": 1.0999999940395355,
+        "max": 1.7000000178813934
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 93534,
+        "vertexCount": 907,
+        "triangleCount": 1176,
+        "surfacePixels": 143360,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        1536,
+        1024
+      ],
+      "strands": 2
+    },
+    {
+      "id": "turtle_02",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00600060006006,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.664999999999985,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 17
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.47908888888888873,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.008333333457509676,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.020833333333333332,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.19999998807907104
+      },
+      "renderStats": {
+        "gpuBatches": 0,
+        "meshDrawCalls": 0,
+        "compositePixels": 0,
+        "vertexCount": 0,
+        "triangleCount": 0
+      },
+      "texture": [
+        1218,
+        1292
+      ],
+      "strands": 0
+    },
+    {
+      "id": "turtle_08",
+      "mode": "working",
+      "zoom": 1,
+      "fps": 60.00400026668439,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.66555555555557,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 17
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.5317888888888882,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.007291666232049465,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.09999999403953552
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.010416666977107525,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "renderStats": {
+        "gpuBatches": 0,
+        "meshDrawCalls": 0,
+        "compositePixels": 0,
+        "vertexCount": 0,
+        "triangleCount": 0
+      },
+      "texture": [
+        1086,
+        1448
+      ],
+      "strands": 0
+    },
+    {
+      "id": "fish_01",
+      "mode": "master",
+      "zoom": 4,
+      "fps": 60.00400026668453,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.66555555555553,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 16.900000000001455
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.9003833333333322,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.015625000620881718,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.19999998807907104
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.2239583327124516,
+        "p50": 0.19999998807907104,
+        "p95": 0.30000001192092896,
+        "max": 0.4000000059604645
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 6,
+        "compositePixels": 568100,
+        "vertexCount": 877,
+        "triangleCount": 1316,
+        "surfacePixels": 778700,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        4096,
+        2731
+      ],
+      "strands": 2
+    },
+    {
+      "id": "fish_02",
+      "mode": "master",
+      "zoom": 4,
+      "fps": 60.00331510028178,
+      "rafMs": {
+        "n": 181,
+        "mean": 16.665745856353592,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 16.900000000001455
+      },
+      "longFrames": 0,
+      "taskPerFrame": 0.845795580110495,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.010416666666666666,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.24375000006208816,
+        "p50": 0.20000001788139343,
+        "p95": 0.30000001192092896,
+        "max": 0.699999988079071
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 7,
+        "compositePixels": 461500,
+        "vertexCount": 1079,
+        "triangleCount": 1638,
+        "surfacePixels": 778700,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        4096,
+        1365
+      ],
+      "strands": 2
+    },
+    {
+      "id": "shrimp_04",
+      "mode": "master",
+      "zoom": 4,
+      "fps": 60.00600060005992,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.665000000000024,
+        "p50": 16.69999999999709,
+        "p95": 16.900000000001455,
+        "max": 17
+      },
+      "longFrames": 0,
+      "taskPerFrame": 1.0719944444444451,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.019791666107873123,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.5104166669771075,
+        "p50": 0.5,
+        "p95": 0.7999999821186066,
+        "max": 1.5999999940395355
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 573950,
+        "vertexCount": 979,
+        "triangleCount": 1296,
+        "surfacePixels": 778700,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        4096,
+        2731
+      ],
+      "strands": 2
+    },
+    {
+      "id": "shrimp_05",
+      "mode": "master",
+      "zoom": 4,
+      "fps": 59.670644709647256,
+      "rafMs": {
+        "n": 179,
+        "mean": 16.75865921787711,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 33.30000000000291
+      },
+      "longFrames": 1,
+      "taskPerFrame": 1.2134357541899434,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.00624999962747097,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.09999999403953552
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 1.013541666790843,
+        "p50": 0.5,
+        "p95": 3,
+        "max": 25.400000005960464
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 655850,
+        "vertexCount": 924,
+        "triangleCount": 1212,
+        "surfacePixels": 665600,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        4096,
+        2731
+      ],
+      "strands": 2
+    },
+    {
+      "id": "shrimp_07",
+      "mode": "master",
+      "zoom": 4,
+      "fps": 60.00600060006006,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.664999999999985,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 16.900000000001455
+      },
+      "longFrames": 0,
+      "taskPerFrame": 1.289827777777772,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.025000001303851604,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 1.5114583320294817,
+        "p50": 0.699999988079071,
+        "p95": 5.200000017881393,
+        "max": 34.400000005960464
+      },
+      "renderStats": {
+        "gpuBatches": 2,
+        "meshDrawCalls": 4,
+        "compositePixels": 1134250,
+        "vertexCount": 1348,
+        "triangleCount": 1572,
+        "surfacePixels": 1414400,
+        "viewportPixels": 1557400
+      },
+      "texture": [
+        4096,
+        2731
+      ],
+      "strands": 3
+    },
+    {
+      "id": "dragon_04",
+      "mode": "master",
+      "zoom": 4,
+      "fps": 60.00600060006006,
+      "rafMs": {
+        "n": 180,
+        "mean": 16.664999999999985,
+        "p50": 16.69999999999709,
+        "p95": 16.89999999999418,
+        "max": 17.10000000000582
+      },
+      "longFrames": 0,
+      "taskPerFrame": 1.0237722222222227,
+      "updateMs": {
+        "n": 96,
+        "mean": 0.016666667225460213,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 96,
+        "mean": 0.24166666623204947,
+        "p50": 0.20000001788139343,
+        "p95": 0.3999999761581421,
+        "max": 0.5
+      },
+      "renderStats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 392600,
+        "vertexCount": 288,
+        "triangleCount": 436,
+        "surfacePixels": 778700,
+        "viewportPixels": 778700
+      },
+      "texture": [
+        2731,
+        4096
+      ],
+      "strands": 2
+    }
+  ],
+  "errors": [],
+  "experimentalArcTableCache": true,
+  "acceptedProductVersion": false,
+  "finalFocusedReport": "r9-final-focused.json"
+}

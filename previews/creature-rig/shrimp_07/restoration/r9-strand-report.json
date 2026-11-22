@@ -1,0 +1,46 @@
+{
+  "id": "shrimp_07",
+  "method": "Individually fitted original-alpha paths; hidden original repair root prepended",
+  "pngPreserved": true,
+  "strands": [
+    {
+      "name": "shrimp_07_antenna_01",
+      "root": [
+        930,
+        410
+      ],
+      "tip": [
+        1448.3727563662121,
+        46.016003551427886
+      ],
+      "points": 41,
+      "direction": "forward"
+    },
+    {
+      "name": "shrimp_07_antenna_02",
+      "root": [
+        930,
+        410
+      ],
+      "tip": [
+        108.1567284936875,
+        627.5455740343078
+      ],
+      "points": 60,
+      "direction": "backward"
+    },
+    {
+      "name": "shrimp_07_antenna_03",
+      "root": [
+        966,
+        426
+      ],
+      "tip": [
+        362.28915447361226,
+        461.8299673950594
+      ],
+      "points": 56,
+      "direction": "backward"
+    }
+  ]
+}

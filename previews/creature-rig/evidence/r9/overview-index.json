@@ -1,0 +1,18 @@
+{
+  "reports": [
+    {
+      "id": "dragon_04",
+      "master": false,
+      "samples": 0,
+      "suspects": []
+    },
+    {
+      "id": "dragon_04",
+      "master": true,
+      "samples": 0,
+      "suspects": []
+    }
+  ],
+  "errors": [],
+  "note": "Zero overlap is a review signal, not automatic artistic failure. Shrimp thin side-on poses excluded from worst-root selection; original intentional negative space preserved."
+}

@@ -1,6 +1,6 @@
-import {InkCreature,damp,sampleCurve,makeCurve,INK_CREATURE_REV} from '../runtime/ink-creature.mjs?rev=rig-r8-dragon-joints-horns-whiskers-20261123';
+import {InkCreature,damp,sampleCurve,makeCurve,INK_CREATURE_REV} from '../runtime/ink-creature.mjs?rev=rig-r9-waterflow-joints-20261123';
 const $=id=>document.getElementById(id),canvas=$('stage'),ctx=canvas.getContext('2d',{alpha:false}),keys=new Set();
-$('build-label').textContent=INK_CREATURE_REV.startsWith('rig-r8-')?'11月23日修订 R8 · 龙爪补绘 / 刚性龙角 / 柔性龙须':'素材动画 · 版本待核对';
+$('build-label').textContent=INK_CREATURE_REV.startsWith('rig-r9-')?'11月23日修订 R9 · 全素材接缝检查 / 水流柔须':'素材动画 · 版本待核对';
 const state={rig:null,selected:'fish_04',mode:'manual',width:1000,height:600,camera:{x:0,y:0},pan:{x:0,y:0},joystick:{x:0,y:0},loading:0,pendingId:null,pendingTextureMode:null,textureMode:'working',rigURL:null,zoom:1,clipped:false,frames:0,fps:0,lastTelemetry:0};
 const profiles={
  fish_04:{label:'鱼 04 · 实体衔接版',length:320,note:'柔和转向 · 身体摆动 · 尾鳍推进'},

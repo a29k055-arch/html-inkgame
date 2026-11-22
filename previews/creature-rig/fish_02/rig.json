@@ -243,7 +243,7 @@
       "side": 0,
       "phase": 0,
       "order": 6,
-      "pixelCount": 98451,
+      "pixelCount": 95172,
       "spineRange": [
         0,
         0.21
@@ -338,6 +338,220 @@
         0.77,
         1
       ]
+    },
+    {
+      "name": "fish_02_barbel_l",
+      "file": "fish_02_barbel_l.png",
+      "croppedFile": "textures/fish_02_barbel_l.png",
+      "kind": "antenna",
+      "pivot": [
+        2010,
+        329
+      ],
+      "side": -1,
+      "phase": 0.3,
+      "order": 3,
+      "sourceAttachment": "head-material",
+      "strand": {
+        "sourceTrace": [
+          [
+            2010,
+            329
+          ],
+          [
+            2007.6640000000002,
+            318.68
+          ],
+          [
+            2013.8501868744936,
+            309.81526845897395
+          ],
+          [
+            2023.1139303524267,
+            303.41422022431794
+          ],
+          [
+            2032.4905237446958,
+            298.0799964120896
+          ],
+          [
+            2042.3939570994698,
+            291.3368219205396
+          ],
+          [
+            2049.549242800884,
+            285.75421770248
+          ],
+          [
+            2056.334842449399,
+            279.7810389917118
+          ],
+          [
+            2062.541461533596,
+            273.0480171332337
+          ],
+          [
+            2068.0590588953078,
+            265.5561279914869
+          ],
+          [
+            2072.2874529358332,
+            257.5751249799357
+          ],
+          [
+            2075.6102704530363,
+            246.5294987539963
+          ],
+          [
+            2075.5361684579752,
+            235.9042552643118
+          ],
+          [
+            2072.5893284556773,
+            227.08086122097495
+          ],
+          [
+            2072,
+            220
+          ]
+        ],
+        "rootPinned": true,
+        "rootPinnedFraction": 0.2,
+        "direction": "forward",
+        "behavior": "bend",
+        "independent": true,
+        "preserveSourceInk": true
+      },
+      "rootRepair": {
+        "inner": [
+          2010,
+          329
+        ],
+        "outer": [
+          2008,
+          316
+        ],
+        "radius": 14,
+        "extension": "Original head-surface alpha retained; copied ink root underlaps head, without cutout in lip or skin"
+      },
+      "bbox": [
+        1986,
+        211,
+        108,
+        140
+      ],
+      "bounds": [
+        1994,
+        219,
+        2085,
+        342
+      ],
+      "pixelCount": 2764
+    },
+    {
+      "name": "fish_02_barbel_r",
+      "file": "fish_02_barbel_r.png",
+      "croppedFile": "textures/fish_02_barbel_r.png",
+      "kind": "antenna",
+      "pivot": [
+        2008,
+        415
+      ],
+      "side": 1,
+      "phase": 2,
+      "order": 3,
+      "sourceAttachment": "head-material",
+      "strand": {
+        "sourceTrace": [
+          [
+            2008,
+            415
+          ],
+          [
+            2011,
+            426
+          ],
+          [
+            2020.8725316623318,
+            430.1084546600386
+          ],
+          [
+            2031.1543485729146,
+            435.6476788632827
+          ],
+          [
+            2040.5258404706701,
+            442.1195326172453
+          ],
+          [
+            2049.7690258811267,
+            449.23991534764707
+          ],
+          [
+            2058.1232656801017,
+            457.11114738334413
+          ],
+          [
+            2065.4097592488906,
+            465.33306115211263
+          ],
+          [
+            2071.778945498578,
+            475.1681934435505
+          ],
+          [
+            2075.5320565577176,
+            484.2184576089011
+          ],
+          [
+            2077.0684574872184,
+            493.7187104719559
+          ],
+          [
+            2075.346789989323,
+            503.02844809498686
+          ],
+          [
+            2069.4643933808757,
+            513.2845911225709
+          ],
+          [
+            2066,
+            516
+          ]
+        ],
+        "rootPinned": true,
+        "rootPinnedFraction": 0.2,
+        "direction": "forward",
+        "behavior": "bend",
+        "independent": true,
+        "preserveSourceInk": true
+      },
+      "rootRepair": {
+        "inner": [
+          2008,
+          415
+        ],
+        "outer": [
+          2011,
+          426
+        ],
+        "radius": 14,
+        "extension": "Original head-surface alpha retained; copied ink root underlaps head, without cutout in lip or skin"
+      },
+      "bbox": [
+        1986,
+        393,
+        109,
+        133
+      ],
+      "bounds": [
+        1994,
+        401,
+        2086,
+        517
+      ],
+      "pixelCount": 2631
     }
   ],
   "restoration": {
@@ -443,5 +657,6 @@
     ],
     "highResolutionDelivery": "4K export is managed by the shared package exporter; resampling is not new native detail or vector art"
   },
-  "notes": "Continuous head/body/tail material mesh; fins use root-fixed finMesh with native hidden overlaps. Work texture preserves approved selected image style."
+  "notes": "Continuous head/body/tail material mesh; fins use root-fixed finMesh with native hidden overlaps. Work texture preserves approved selected image style. R9: each visible barbel is an independent original-ink strand; full head skin/lip and root underlap retained.",
+  "artRevision": "r9-separated-barbels"
 }

@@ -1,0 +1,590 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "id": "fish_01",
+      "master": false,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 3.774758283725532e-15,
+      "measuredLengthError": 4.218847493575595e-15,
+      "maxLag": 0.4644868319126691,
+      "maxLagStep": 0.014228118747357257,
+      "maxTipNonRigid": 3.1535060939296398,
+      "minWidth": 1,
+      "profiles": [
+        [
+          "fish_01_barbel_l",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.065,
+              "bend": 0.11,
+              "idle": 0.014,
+              "maxDragAngle": 0.85,
+              "lagGain": 0.48,
+              "frequency": 1.8,
+              "waves": 0.7,
+              "pinnedFraction": 0.2
+            }
+          }
+        ],
+        [
+          "fish_01_barbel_r",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.065,
+              "bend": 0.11,
+              "idle": 0.014,
+              "maxDragAngle": 0.85,
+              "lagGain": 0.48,
+              "frequency": 1.8,
+              "waves": 0.7,
+              "pinnedFraction": 0.2
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "fish_01",
+      "master": true,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 4.884981308350689e-15,
+      "measuredLengthError": 4.884981308350689e-15,
+      "maxLag": 0.4644868319126691,
+      "maxLagStep": 0.014228118747357257,
+      "maxTipNonRigid": 3.1534762540214336,
+      "minWidth": 1,
+      "profiles": [
+        [
+          "fish_01_barbel_l",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.065,
+              "bend": 0.11,
+              "idle": 0.014,
+              "maxDragAngle": 0.85,
+              "lagGain": 0.48,
+              "frequency": 1.8,
+              "waves": 0.7,
+              "pinnedFraction": 0.2
+            }
+          }
+        ],
+        [
+          "fish_01_barbel_r",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.065,
+              "bend": 0.11,
+              "idle": 0.014,
+              "maxDragAngle": 0.85,
+              "lagGain": 0.48,
+              "frequency": 1.8,
+              "waves": 0.7,
+              "pinnedFraction": 0.2
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "fish_02",
+      "master": false,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 2.9976021664879227e-14,
+      "measuredLengthError": 3.064215547965432e-14,
+      "maxLag": 0.4644868319126691,
+      "maxLagStep": 0.014228118747357257,
+      "maxTipNonRigid": 2.5369395895553253,
+      "minWidth": 1,
+      "profiles": [
+        [
+          "fish_02_barbel_l",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.065,
+              "bend": 0.11,
+              "idle": 0.014,
+              "maxDragAngle": 0.85,
+              "lagGain": 0.48,
+              "frequency": 1.8,
+              "waves": 0.7,
+              "pinnedFraction": 0.2
+            }
+          }
+        ],
+        [
+          "fish_02_barbel_r",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.065,
+              "bend": 0.11,
+              "idle": 0.014,
+              "maxDragAngle": 0.85,
+              "lagGain": 0.48,
+              "frequency": 1.8,
+              "waves": 0.7,
+              "pinnedFraction": 0.2
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "fish_02",
+      "master": true,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 1.84297022087776e-14,
+      "measuredLengthError": 1.8207657603852567e-14,
+      "maxLag": 0.4644868319126691,
+      "maxLagStep": 0.014228118747357257,
+      "maxTipNonRigid": 2.5364572334760465,
+      "minWidth": 1,
+      "profiles": [
+        [
+          "fish_02_barbel_l",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.065,
+              "bend": 0.11,
+              "idle": 0.014,
+              "maxDragAngle": 0.85,
+              "lagGain": 0.48,
+              "frequency": 1.8,
+              "waves": 0.7,
+              "pinnedFraction": 0.2
+            }
+          }
+        ],
+        [
+          "fish_02_barbel_r",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.065,
+              "bend": 0.11,
+              "idle": 0.014,
+              "maxDragAngle": 0.85,
+              "lagGain": 0.48,
+              "frequency": 1.8,
+              "waves": 0.7,
+              "pinnedFraction": 0.2
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "shrimp_04",
+      "master": false,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 8.881784197001252e-15,
+      "measuredLengthError": 8.770761894538737e-15,
+      "maxLag": 0.46928401547989185,
+      "maxLagStep": 0.012946372569340045,
+      "maxTipNonRigid": 132.5770957510046,
+      "minWidth": 0.023558979653443328,
+      "profiles": [
+        [
+          "shrimp_04_antenna_01",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.6,
+              "bend": 0.085,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "shrimp_04_antenna_02",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.18,
+              "bend": 0.19,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "shrimp_04",
+      "master": true,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 6.439293542825908e-15,
+      "measuredLengthError": 7.216449660063518e-15,
+      "maxLag": 0.46928401547989185,
+      "maxLagStep": 0.012946372569340045,
+      "maxTipNonRigid": 132.57601728137607,
+      "minWidth": 0.023558979653443328,
+      "profiles": [
+        [
+          "shrimp_04_antenna_01",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.6,
+              "bend": 0.085,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "shrimp_04_antenna_02",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.18,
+              "bend": 0.19,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "shrimp_05",
+      "master": false,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 1.1657341758564144e-14,
+      "measuredLengthError": 1.1546319456101628e-14,
+      "maxLag": 0.46928401547989185,
+      "maxLagStep": 0.012946372569340045,
+      "maxTipNonRigid": 61.747470234440286,
+      "minWidth": 0.023558979653443328,
+      "profiles": [
+        [
+          "shrimp_05_antenna_01",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.12,
+              "bend": 0.22,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.85,
+              "frequency": 1.5,
+              "waves": 0.9,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "shrimp_05_antenna_02",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.12,
+              "bend": 0.22,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.85,
+              "frequency": 1.5,
+              "waves": 0.9,
+              "pinnedFraction": 0.1
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "shrimp_05",
+      "master": true,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 8.548717289613705e-15,
+      "measuredLengthError": 9.325873406851315e-15,
+      "maxLag": 0.46928401547989185,
+      "maxLagStep": 0.012946372569340045,
+      "maxTipNonRigid": 61.745842929180576,
+      "minWidth": 0.023558979653443328,
+      "profiles": [
+        [
+          "shrimp_05_antenna_01",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.12,
+              "bend": 0.22,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.85,
+              "frequency": 1.5,
+              "waves": 0.9,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "shrimp_05_antenna_02",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.12,
+              "bend": 0.22,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.85,
+              "frequency": 1.5,
+              "waves": 0.9,
+              "pinnedFraction": 0.1
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "shrimp_07",
+      "master": false,
+      "count": 3,
+      "rootError": 0,
+      "lengthError": 7.105427357601002e-15,
+      "measuredLengthError": 8.215650382226158e-15,
+      "maxLag": 0.46928401547989185,
+      "maxLagStep": 0.012946372569340045,
+      "maxTipNonRigid": 128.4722836450771,
+      "minWidth": 0.023558979653443328,
+      "profiles": [
+        [
+          "shrimp_07_antenna_01",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.18,
+              "bend": 0.19,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "shrimp_07_antenna_02",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.6,
+              "bend": 0.085,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "shrimp_07_antenna_03",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.6,
+              "bend": 0.085,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "shrimp_07",
+      "master": true,
+      "count": 3,
+      "rootError": 0,
+      "lengthError": 4.884981308350689e-15,
+      "measuredLengthError": 5.329070518200751e-15,
+      "maxLag": 0.46928401547989185,
+      "maxLagStep": 0.012946372569340045,
+      "maxTipNonRigid": 128.47138110933778,
+      "minWidth": 0.023558979653443328,
+      "profiles": [
+        [
+          "shrimp_07_antenna_01",
+          {
+            "direction": "forward",
+            "parameters": {
+              "drag": 0.18,
+              "bend": 0.19,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "shrimp_07_antenna_02",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.6,
+              "bend": 0.085,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "shrimp_07_antenna_03",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.6,
+              "bend": 0.085,
+              "idle": 0.025,
+              "maxDragAngle": 1,
+              "lagGain": 0.7,
+              "frequency": 1.5,
+              "waves": 0.7,
+              "pinnedFraction": 0.1
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "dragon_04",
+      "master": false,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 5.551115123125783e-15,
+      "measuredLengthError": 6.217248937900877e-15,
+      "maxLag": 0.4463453841608835,
+      "maxLagStep": 0.010546617665880026,
+      "maxTipNonRigid": 36.63587652954301,
+      "minWidth": 1,
+      "profiles": [
+        [
+          "dragon_04_whisker_l",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.92,
+              "bend": 0.035,
+              "idle": 0.035,
+              "maxDragAngle": 1.4,
+              "lagGain": 0.9,
+              "frequency": 1.25,
+              "waves": 0.4,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "dragon_04_whisker_r",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.92,
+              "bend": 0.035,
+              "idle": 0.035,
+              "maxDragAngle": 1.4,
+              "lagGain": 0.9,
+              "frequency": 1.25,
+              "waves": 0.4,
+              "pinnedFraction": 0.1
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "dragon_04",
+      "master": true,
+      "count": 2,
+      "rootError": 0,
+      "lengthError": 3.4416913763379853e-15,
+      "measuredLengthError": 3.9968028886505635e-15,
+      "maxLag": 0.4463453841608835,
+      "maxLagStep": 0.010546617665880026,
+      "maxTipNonRigid": 36.63899510898057,
+      "minWidth": 1,
+      "profiles": [
+        [
+          "dragon_04_whisker_l",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.92,
+              "bend": 0.035,
+              "idle": 0.035,
+              "maxDragAngle": 1.4,
+              "lagGain": 0.9,
+              "frequency": 1.25,
+              "waves": 0.4,
+              "pinnedFraction": 0.1
+            }
+          }
+        ],
+        [
+          "dragon_04_whisker_r",
+          {
+            "direction": "backward",
+            "parameters": {
+              "drag": 0.92,
+              "bend": 0.035,
+              "idle": 0.035,
+              "maxDragAngle": 1.4,
+              "lagGain": 0.9,
+              "frequency": 1.25,
+              "waves": 0.4,
+              "pinnedFraction": 0.1
+            }
+          }
+        ]
+      ]
+    }
+  ],
+  "note": "materialLength is checked before paper-projection; worldLength naturally shrinks during shrimp turn."
+}

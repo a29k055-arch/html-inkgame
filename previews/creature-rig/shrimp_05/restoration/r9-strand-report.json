@@ -1,0 +1,35 @@
+{
+  "id": "shrimp_05",
+  "method": "Individually fitted original-alpha paths; hidden original repair root prepended",
+  "pngPreserved": false,
+  "strands": [
+    {
+      "name": "shrimp_05_antenna_01",
+      "root": [
+        813,
+        471
+      ],
+      "tip": [
+        1475,
+        69
+      ],
+      "points": 77,
+      "direction": "forward"
+    },
+    {
+      "name": "shrimp_05_antenna_02",
+      "root": [
+        818,
+        489
+      ],
+      "tip": [
+        1508,
+        444
+      ],
+      "points": 71,
+      "direction": "forward"
+    }
+  ],
+  "traceGenerationPreservedPNG": true,
+  "subsequentLocalJointRepair": "r9-root-repair-report.json"
+}

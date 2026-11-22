@@ -1,0 +1,42 @@
+{
+  "id": "fish_02",
+  "method": "Original source-pigment partition; morphological working-head silhouette is retained; hidden source root overlaps host",
+  "sourcePreserved": true,
+  "roots": [
+    {
+      "name": "fish_02_barbel_l",
+      "pivot": [
+        2010,
+        329
+      ],
+      "tracePoints": 15,
+      "removedHostPixels": 3230,
+      "hiddenRootPixels": 1073,
+      "range": [
+        1992,
+        204,
+        2093,
+        345
+      ]
+    },
+    {
+      "name": "fish_02_barbel_r",
+      "pivot": [
+        2008,
+        415
+      ],
+      "tracePoints": 14,
+      "removedHostPixels": 2934,
+      "hiddenRootPixels": 1058,
+      "range": [
+        1992,
+        399,
+        2089,
+        532
+      ]
+    }
+  ],
+  "oldLayerCount": 8,
+  "layerCount": 10,
+  "sourceSHA256": "080c8d1be0e94ef1595e59106aebf0b9df1c6ff465634c01b49e5b229de67ee6"
+}

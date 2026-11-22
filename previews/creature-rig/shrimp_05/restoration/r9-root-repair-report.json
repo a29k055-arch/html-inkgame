@@ -1,0 +1,46 @@
+{
+  "id": "shrimp_05",
+  "paintFile": "../repair-plates/shrimp_05_roots-r9.png",
+  "scope": "forearm_l hidden bridge and bounded receiving head/chest, no abdomen edits",
+  "rootPath": [
+    [
+      757,
+      532
+    ],
+    [
+      758,
+      545
+    ],
+    [
+      767,
+      557
+    ],
+    [
+      784,
+      545
+    ],
+    [
+      806,
+      546
+    ],
+    [
+      827,
+      552
+    ],
+    [
+      845,
+      554
+    ],
+    [
+      870,
+      544
+    ]
+  ],
+  "removedGrayBridgePixels": 2808,
+  "paintedPixels": 3488,
+  "hostAddedPixels": 999,
+  "sourceHeadRecoveredPixels": 0,
+  "strayLowAlphaPixelsCleaned": 2092,
+  "changedPixels": 7957,
+  "outsideApproved": 0
+}

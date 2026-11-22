@@ -1,5 +1,6 @@
 {
-  "signature": "f152a22bb0569dc8a6e9c4f6d34eb9fcba75b4adc720d9517b207468a16aa53b",
+  "signature": "85968caf3e167025f8bd18edf83396d9d519bfa599a87b6d44e48067bd4630d9",
+  "bodyTextureSignature": "85968caf3e167025f8bd18edf83396d9d519bfa599a87b6d44e48067bd4630d9",
   "resolution": {
     "id": "fish_01",
     "nativeSize": [
@@ -20,6 +21,5 @@
     "recommendedCssLongEdgeAtDpr2": 768,
     "smoothPreviewCssLongEdgeAtDpr2": 2048,
     "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
-  },
-  "bodyTextureSignature": "f152a22bb0569dc8a6e9c4f6d34eb9fcba75b4adc720d9517b207468a16aa53b"
+  }
 }

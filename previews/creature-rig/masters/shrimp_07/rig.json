@@ -459,6 +459,10 @@
         "crossingsRestored": true,
         "sourceTrace": [
           [
+            2480,
+            1093.466796875
+          ],
+          [
             2485.339878176763,
             1021.4596599991272
           ],
@@ -618,7 +622,11 @@
             3862.327350309899,
             122.72432197163043
           ]
-        ]
+        ],
+        "rootPinned": true,
+        "preserveSourceInk": true,
+        "direction": "forward",
+        "behavior": "follow"
       },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/shrimp_07_antenna_01.png"
@@ -667,6 +675,10 @@
         "independent": true,
         "crossingsRestored": true,
         "sourceTrace": [
+          [
+            2480,
+            1093.466796875
+          ],
           [
             2500.818462691499,
             961.0652499386132
@@ -903,7 +915,11 @@
             288.4179426498333,
             1673.6591432497019
           ]
-        ]
+        ],
+        "rootPinned": true,
+        "preserveSourceInk": true,
+        "direction": "backward",
+        "behavior": "follow"
       },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/shrimp_07_antenna_02.png"
@@ -952,6 +968,10 @@
         "independent": true,
         "crossingsRestored": true,
         "sourceTrace": [
+          [
+            2576,
+            1136.138671875
+          ],
           [
             2582.274259742839,
             1080.7378365622244
@@ -1172,7 +1192,11 @@
             966.1044119296326,
             1231.6969149960032
           ]
-        ]
+        ],
+        "rootPinned": true,
+        "preserveSourceInk": true,
+        "direction": "backward",
+        "behavior": "follow"
       },
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/shrimp_07_antenna_03.png"
@@ -1693,7 +1717,9 @@
     "changedOutsideApprovedMask": 0
   },
   "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
+  "artRevision": "r9-traced-antennae",
   "sourceFile": "../../shrimp_07/source.png",
+  "bodyTexture": "continuous-body.png",
   "resolution": {
     "id": "shrimp_07",
     "nativeSize": [
@@ -1714,6 +1740,5 @@
     "recommendedCssLongEdgeAtDpr2": 768,
     "smoothPreviewCssLongEdgeAtDpr2": 2048,
     "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
-  },
-  "bodyTexture": "continuous-body.png"
+  }
 }

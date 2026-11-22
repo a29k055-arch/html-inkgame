@@ -1,0 +1,8 @@
+{
+  "mode": "builtin-imagegen-edit",
+  "acceptedScope": "forearm_l proximal root and head/chest receiving surface only; other legs, pincers and abdomen preserved",
+  "reference": "shrimp_05/source.png",
+  "output": "repair-plates/shrimp_05_roots-r9.png",
+  "transparent_background": true,
+  "prompt": "Precise local animation repair of supplied traditional pale Chinese ink shrimp sprite, exact same 1536×1024 transparent canvas and same shrimp pose/scale: head upper right around (880,411), tail lower left, two long antennae sweeping upper/right, long pincer arms below/right. Preserve the Qi Baishi-like minimal ink brush style and all airy white/transparent spaces between abdominal ink segments. Do NOT fill abdominal blank gaps. Do NOT redesign the shrimp or change antennae, eyes, pincers or legs. ONLY repair the thin attachment of the upper long pincer arm: a slender natural gray-ink upper-arm stem from the torso at (757,532) to the existing dark forearm stroke at (845,554), with a soft tapered rounded root disappearing under the head/chest. This stem must be narrow (roughly 8–12 pixels wide), organic, slightly curved, mottled ink, NOT a rectangular gray bar, not thick. Also gently connect the tiny anterior walking leg from torso (747,542) to its visible start (745,584), with equally slim natural ink and a hidden underlap. A little continuous gray skin/ink at those receiving chest points is required so moving the separate arms doesn't reveal a slit. Keep the rest of the entire art unchanged. Actual transparent alpha background, no paper, no white rectangle, no checkerboard, no glow, no shadow, no text or scene. This is an editing paint plate for bounded local compositing, not a new creature design."
+}

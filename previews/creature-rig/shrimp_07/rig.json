@@ -441,6 +441,10 @@
         "crossingsRestored": true,
         "sourceTrace": [
           [
+            930,
+            410
+          ],
+          [
             932.0024543162862,
             383.0006194943633
           ],
@@ -600,7 +604,11 @@
             1448.3727563662121,
             46.016003551427886
           ]
-        ]
+        ],
+        "rootPinned": true,
+        "preserveSourceInk": true,
+        "direction": "forward",
+        "behavior": "follow"
       }
     },
     {
@@ -647,6 +655,10 @@
         "independent": true,
         "crossingsRestored": true,
         "sourceTrace": [
+          [
+            930,
+            410
+          ],
           [
             937.8069235093122,
             360.3554800209227
@@ -883,7 +895,11 @@
             108.1567284936875,
             627.5455740343078
           ]
-        ]
+        ],
+        "rootPinned": true,
+        "preserveSourceInk": true,
+        "direction": "backward",
+        "behavior": "follow"
       }
     },
     {
@@ -930,6 +946,10 @@
         "independent": true,
         "crossingsRestored": true,
         "sourceTrace": [
+          [
+            966,
+            426
+          ],
           [
             968.3528474035647,
             405.2272224971504
@@ -1150,7 +1170,11 @@
             362.28915447361226,
             461.8299673950594
           ]
-        ]
+        ],
+        "rootPinned": true,
+        "preserveSourceInk": true,
+        "direction": "backward",
+        "behavior": "follow"
       }
     },
     {
@@ -1652,5 +1676,6 @@
     "assembledChangedPixels": 28135,
     "changedOutsideApprovedMask": 0
   },
-  "notes": "Selected source silhouettes and pigment preserved outside bounded anatomical repair regions. AI repair paint supplies hidden root extensions and restored host coverage. Layers intentionally overlap at joints; draw attached limbs beneath host torso. Continuous body bands share one mesh. Source remains the original approval reference."
+  "notes": "Selected source silhouettes and pigment preserved outside bounded anatomical repair regions. AI repair paint supplies hidden root extensions and restored host coverage. Layers intentionally overlap at joints; draw attached limbs beneath host torso. Continuous body bands share one mesh. Source remains the original approval reference.",
+  "artRevision": "r9-traced-antennae"
 }

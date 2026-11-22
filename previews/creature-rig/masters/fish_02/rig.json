@@ -251,7 +251,7 @@
       "side": 0,
       "phase": 0,
       "order": 6,
-      "pixelCount": 98451,
+      "pixelCount": 95172,
       "spineRange": [
         0,
         0.21
@@ -354,6 +354,224 @@
       ],
       "fileLayout": "cropped-with-global-bbox",
       "authoringAlignedFile": "aligned/fish_02_tail.png"
+    },
+    {
+      "name": "fish_02_barbel_l",
+      "file": "textures/fish_02_barbel_l.png",
+      "croppedFile": "textures/fish_02_barbel_l.png",
+      "kind": "antenna",
+      "pivot": [
+        3790.497237569061,
+        620.2831491712707
+      ],
+      "side": -1,
+      "phase": 0.3,
+      "order": 3,
+      "sourceAttachment": "head-material",
+      "strand": {
+        "sourceTrace": [
+          [
+            3790.497237569061,
+            620.2831491712707
+          ],
+          [
+            3786.091963167588,
+            600.8262430939227
+          ],
+          [
+            3797.7579951371667,
+            584.1130406719606
+          ],
+          [
+            3815.227743427044,
+            572.0447660306547
+          ],
+          [
+            3832.91030628834,
+            561.9878385393679
+          ],
+          [
+            3851.5863942354645,
+            549.2745330407963
+          ],
+          [
+            3865.0799716908014,
+            538.7493192871342
+          ],
+          [
+            3877.876387970874,
+            527.4877323531583
+          ],
+          [
+            3889.580951400372,
+            514.7935682139006
+          ],
+          [
+            3899.9861442150927,
+            500.66866672428125
+          ],
+          [
+            3907.960132239951,
+            485.62160994145336
+          ],
+          [
+            3914.226366379207,
+            464.79663784420575
+          ],
+          [
+            3914.086623390362,
+            444.7642381709746
+          ],
+          [
+            3908.529414988239,
+            428.1289717771144
+          ],
+          [
+            3907.4180478821363,
+            414.7790055248619
+          ]
+        ],
+        "rootPinned": true,
+        "rootPinnedFraction": 0.2,
+        "direction": "forward",
+        "behavior": "bend",
+        "independent": true,
+        "preserveSourceInk": true
+      },
+      "rootRepair": {
+        "inner": [
+          3790.497237569061,
+          620.2831491712707
+        ],
+        "outer": [
+          3786.725598526704,
+          595.7734806629834
+        ],
+        "radius": 26.40147329650092,
+        "extension": "Original head-surface alpha retained; copied ink root underlaps head, without cutout in lip or skin"
+      },
+      "bbox": [
+        3748,
+        401,
+        198,
+        259
+      ],
+      "bounds": [
+        3760,
+        413,
+        3933,
+        647
+      ],
+      "pixelCount": 2764,
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_barbel_l.png"
+    },
+    {
+      "name": "fish_02_barbel_r",
+      "file": "textures/fish_02_barbel_r.png",
+      "croppedFile": "textures/fish_02_barbel_r.png",
+      "kind": "antenna",
+      "pivot": [
+        3786.725598526704,
+        782.4240331491712
+      ],
+      "side": 1,
+      "phase": 2,
+      "order": 3,
+      "sourceAttachment": "head-material",
+      "strand": {
+        "sourceTrace": [
+          [
+            3786.725598526704,
+            782.4240331491712
+          ],
+          [
+            3792.3830570902396,
+            803.1629834254144
+          ],
+          [
+            3811.000870022519,
+            810.9088958714816
+          ],
+          [
+            3830.390521065681,
+            821.3523227187582
+          ],
+          [
+            3848.0634634290354,
+            833.5540911913533
+          ],
+          [
+            3865.494442913948,
+            846.9785696816826
+          ],
+          [
+            3881.2490314114625,
+            861.8186687545093
+          ],
+          [
+            3894.9900432244276,
+            877.3199288296047
+          ],
+          [
+            3907.001178988111,
+            895.8626851525503
+          ],
+          [
+            3914.0788690885875,
+            912.9256831991022
+          ],
+          [
+            3916.976243953797,
+            930.8370715389776
+          ],
+          [
+            3913.729489777287,
+            948.389270234333
+          ],
+          [
+            3902.636351421762,
+            967.725782986615
+          ],
+          [
+            3896.1031307550647,
+            972.8453038674033
+          ]
+        ],
+        "rootPinned": true,
+        "rootPinnedFraction": 0.2,
+        "direction": "forward",
+        "behavior": "bend",
+        "independent": true,
+        "preserveSourceInk": true
+      },
+      "rootRepair": {
+        "inner": [
+          3786.725598526704,
+          782.4240331491712
+        ],
+        "outer": [
+          3792.3830570902396,
+          803.1629834254144
+        ],
+        "radius": 26.40147329650092,
+        "extension": "Original head-surface alpha retained; copied ink root underlaps head, without cutout in lip or skin"
+      },
+      "bbox": [
+        3748,
+        744,
+        200,
+        245
+      ],
+      "bounds": [
+        3760,
+        756,
+        3935,
+        976
+      ],
+      "pixelCount": 2631,
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_barbel_r.png"
     }
   ],
   "restoration": {
@@ -460,7 +678,9 @@
     "highResolutionDelivery": "4K export is managed by the shared package exporter; resampling is not new native detail or vector art"
   },
   "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
+  "artRevision": "r9-separated-barbels",
   "sourceFile": "../../fish_02/source.png",
+  "bodyTexture": "continuous-body.png",
   "resolution": {
     "id": "fish_02",
     "nativeSize": [
@@ -481,6 +701,5 @@
     "recommendedCssLongEdgeAtDpr2": 1086,
     "smoothPreviewCssLongEdgeAtDpr2": 2048,
     "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
-  },
-  "bodyTexture": "continuous-body.png"
+  }
 }
