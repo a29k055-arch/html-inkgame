@@ -1,0 +1,31 @@
+{
+  "revision": "rig-r4-joint-polish-20261122",
+  "scope": "Shrimp and turtle only; R3 evidence preserved and approved fish/dragon art unchanged.",
+  "finalShrimpFreezeReviewed": true,
+  "shrimp": {
+    "layerCount": 20,
+    "longWhiskers": 3,
+    "independentWalkingLegs": 9,
+    "crossingReview": "Combined independently offset pose and each separate 400px crossing crop inspected. Continuous curves, no previous round node bumps, no short rectangular branch remnants at the examined crossings.",
+    "walkingLegReview": "All nine original small feet represented as individual anchored layers, visible in offset pose; the two long forearms remain separate.",
+    "turnReview": "One camera fitted to both full end poses then frozen. Turning now stays near the torso rather than swinging the whole animal around its head. Legs remain on the ventral side after mirroring.",
+    "maxBodyAlphaCentroidShiftLengthRatio": 0.010826821828939256,
+    "minimumSideOnBodyAlphaMassRatio": 0.024746706841403034,
+    "sideOnCaveat": "This is a 2D projection turn, not a newly painted three-dimensional view. The narrowest instant retains a thin ink edge instead of becoming completely blank.",
+    "rapidTurnMaxPresentedPointStepLengthRatio": 0.04436263465604289,
+    "rapidTurnMaxBodyCenterStepLengthRatio": 0.0006721467574870403
+  },
+  "turtle": {
+    "gaitPhases": 24,
+    "limbs": 4,
+    "extraRotationsRadians": [-0.25, 0, 0.25],
+    "sampleCount": 288,
+    "minimumRootHostAlphaOverlapPixels": 9256,
+    "review": "Twelve worst-case limb/extra-angle poses and 320px root crops inspected, including both front and hind limbs. Roots stay under the shell with no exposed empty wedges, detached strips, or striped repeat-fill artifacts. Original claws/feet remain recognizable. Shell outline stays closed."
+  },
+  "approvedFishDragon": {
+    "filesHashMatched": 56,
+    "motionProfileDefinitionsUnchanged": true
+  },
+  "result": "passed-with-described-2d-side-on-projection"
+}
