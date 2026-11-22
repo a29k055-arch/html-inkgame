@@ -1,0 +1,24 @@
+{
+  "signature": "43680245809f834e26b2a219b07701c76ddf8c61768c712097b194aa477ed985",
+  "resolution": {
+    "id": "fish_01",
+    "nativeSize": [
+      1536,
+      1024
+    ],
+    "workingSize": [
+      1536,
+      1024
+    ],
+    "masterSize": [
+      4096,
+      2731
+    ],
+    "masterRig": "masters/fish_01/rig.json",
+    "masterPreview": "masters/fish_01/assembled-restored.png",
+    "masterType": "Lanczos3 alpha-aware supersampled raster",
+    "recommendedCssLongEdgeAtDpr2": 768,
+    "smoothPreviewCssLongEdgeAtDpr2": 2048,
+    "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
+  }
+}

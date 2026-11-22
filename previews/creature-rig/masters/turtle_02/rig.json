@@ -1,0 +1,541 @@
+{
+  "version": 2,
+  "id": "turtle_02",
+  "source": "../../turtle_02/source.png",
+  "sourceSize": [
+    3861,
+    4096
+  ],
+  "spine": [
+    [
+      1879.78078817734,
+      310.687306501548
+    ],
+    [
+      1882.9507389162561,
+      697.4613003095976
+    ],
+    [
+      1889.2906403940888,
+      1141.3003095975232
+    ],
+    [
+      1901.9704433497536,
+      1711.950464396285
+    ],
+    [
+      1917.820197044335,
+      2346.0061919504647
+    ],
+    [
+      1911.4802955665025,
+      3043.467492260062
+    ],
+    [
+      1895.6305418719212,
+      3572.904024767802
+    ],
+    [
+      1841.7413793103449,
+      3839.2074303405575
+    ]
+  ],
+  "nominalLength": 3535.1154719861975,
+  "layers": [
+    {
+      "name": "turtle_02_head",
+      "file": "textures/turtle_02_head.png",
+      "croppedFile": "textures/turtle_02_head.png",
+      "bbox": [
+        1544,
+        115,
+        695,
+        1199
+      ],
+      "kind": "head",
+      "pivot": [
+        1882.9507389162561,
+        1220.5572755417957
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 3,
+      "bounds": [
+        1556,
+        127,
+        2226,
+        1301
+      ],
+      "pixelCount": 70067,
+      "rootRepair": {
+        "outer": [
+          1882.9507389162561,
+          973.2755417956657
+        ],
+        "inner": [
+          1882.9507389162561,
+          1220.5572755417957
+        ],
+        "radius": 266.3034055727554,
+        "paintFile": "../../repair-plates/turtle_02_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_02_head.png"
+    },
+    {
+      "name": "turtle_02_leg_fl",
+      "file": "textures/turtle_02_leg_fl.png",
+      "croppedFile": "textures/turtle_02_leg_fl.png",
+      "bbox": [
+        558,
+        936,
+        1182,
+        1061
+      ],
+      "kind": "leg",
+      "pivot": [
+        1366.2487684729065,
+        1553.4365325077401
+      ],
+      "side": -1,
+      "phase": 2.199114857512855,
+      "order": 3,
+      "bounds": [
+        570,
+        948,
+        1727,
+        1984
+      ],
+      "pixelCount": 47618,
+      "rootRepair": {
+        "outer": [
+          1052.423645320197,
+          1334.6873065015482
+        ],
+        "inner": [
+          1366.2487684729065,
+          1553.4365325077401
+        ],
+        "radius": 155.343653250774,
+        "paintFile": "../../repair-plates/turtle_02_legs-r4.png",
+        "extension": "Long natural scaly proximal leg, continuous beneath the closed shell; original distal foot preserved",
+        "innerTip": [
+          1553.2758620689656,
+          1807.058823529412
+        ]
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_02_leg_fl.png"
+    },
+    {
+      "name": "turtle_02_leg_fr",
+      "file": "textures/turtle_02_leg_fr.png",
+      "croppedFile": "textures/turtle_02_leg_fr.png",
+      "bbox": [
+        2093,
+        956,
+        1169,
+        1042
+      ],
+      "kind": "leg",
+      "pivot": [
+        2409.1625615763546,
+        1553.4365325077401
+      ],
+      "side": 1,
+      "phase": 4.39822971502571,
+      "order": 3,
+      "bounds": [
+        2105,
+        968,
+        3249,
+        1985
+      ],
+      "pixelCount": 45179,
+      "rootRepair": {
+        "outer": [
+          2719.8177339901476,
+          1334.6873065015482
+        ],
+        "inner": [
+          2409.1625615763546,
+          1553.4365325077401
+        ],
+        "radius": 155.343653250774,
+        "paintFile": "../../repair-plates/turtle_02_legs-r4.png",
+        "extension": "Long natural scaly proximal leg, continuous beneath the closed shell; original distal foot preserved",
+        "innerTip": [
+          2247.4950738916255,
+          1807.058823529412
+        ]
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_02_leg_fr.png"
+    },
+    {
+      "name": "turtle_02_leg_bl",
+      "file": "textures/turtle_02_leg_bl.png",
+      "croppedFile": "textures/turtle_02_leg_bl.png",
+      "bbox": [
+        571,
+        2731,
+        1170,
+        1019
+      ],
+      "kind": "leg",
+      "pivot": [
+        1363.0788177339903,
+        3154.4272445820434
+      ],
+      "side": -1,
+      "phase": 6.5973445725385655,
+      "order": 3,
+      "bounds": [
+        583,
+        2743,
+        1728,
+        3737
+      ],
+      "pixelCount": 43907,
+      "rootRepair": {
+        "outer": [
+          998.5344827586207,
+          3360.495356037152
+        ],
+        "inner": [
+          1363.0788177339903,
+          3154.4272445820434
+        ],
+        "radius": 168.0247678018576,
+        "paintFile": "../../repair-plates/turtle_02_legs-r4.png",
+        "extension": "Long natural scaly proximal leg, continuous beneath the closed shell; original distal foot preserved",
+        "innerTip": [
+          1559.615763546798,
+          2948.3591331269354
+        ]
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_02_leg_bl.png"
+    },
+    {
+      "name": "turtle_02_leg_br",
+      "file": "textures/turtle_02_leg_br.png",
+      "croppedFile": "textures/turtle_02_leg_br.png",
+      "bbox": [
+        2080,
+        2735,
+        1116,
+        1023
+      ],
+      "kind": "leg",
+      "pivot": [
+        2393.3128078817736,
+        3154.4272445820434
+      ],
+      "side": 1,
+      "phase": 8.79645943005142,
+      "order": 3,
+      "bounds": [
+        2092,
+        2747,
+        3183,
+        3745
+      ],
+      "pixelCount": 43113,
+      "rootRepair": {
+        "outer": [
+          2754.6871921182264,
+          3360.495356037152
+        ],
+        "inner": [
+          2393.3128078817736,
+          3154.4272445820434
+        ],
+        "radius": 168.0247678018576,
+        "paintFile": "../../repair-plates/turtle_02_legs-r4.png",
+        "extension": "Long natural scaly proximal leg, continuous beneath the closed shell; original distal foot preserved",
+        "innerTip": [
+          2234.8152709359606,
+          2948.3591331269354
+        ]
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_02_leg_br.png"
+    },
+    {
+      "name": "turtle_02_tail",
+      "file": "textures/turtle_02_tail.png",
+      "croppedFile": "textures/turtle_02_tail.png",
+      "bbox": [
+        1705,
+        3345,
+        336,
+        663
+      ],
+      "kind": "tail",
+      "pivot": [
+        1867.1009852216748,
+        3385.857585139319
+      ],
+      "side": 0,
+      "phase": 10.995574287564276,
+      "order": 3,
+      "bounds": [
+        1717,
+        3357,
+        2028,
+        3995
+      ],
+      "pixelCount": 11820,
+      "rootRepair": {
+        "outer": [
+          1867.1009852216748,
+          3569.7337461300312
+        ],
+        "inner": [
+          1867.1009852216748,
+          3385.857585139319
+        ],
+        "radius": 101.44891640866874,
+        "paintFile": "../../repair-plates/turtle_02_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_02_tail.png"
+    },
+    {
+      "name": "turtle_02_shell",
+      "file": "textures/turtle_02_shell.png",
+      "croppedFile": "textures/turtle_02_shell.png",
+      "bbox": [
+        741,
+        938,
+        2259,
+        2671
+      ],
+      "kind": "body",
+      "pivot": [
+        1911.084051724138,
+        2021.0526315789475
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 6,
+      "bounds": [
+        753,
+        950,
+        2987,
+        3596
+      ],
+      "pixelCount": 560905,
+      "spineRange": [
+        0,
+        1
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_02_shell.png"
+    }
+  ],
+  "restoration": {
+    "status": "applied",
+    "paintFile": "../repair-plates/turtle_02_repair.png",
+    "plateSize": [
+      1218,
+      1292
+    ],
+    "sourceSize": [
+      1218,
+      1292
+    ],
+    "registration": "same-pose source canvas; fit only if dimensions differ",
+    "hostRaisedPixels": 158767,
+    "hostRecoveredSourcePixels": 0,
+    "rootAddedPixels": 64577,
+    "cleanupPixels": 25209,
+    "roots": [
+      {
+        "part": "head",
+        "addedPixels": 15700,
+        "underHostPixels": 15700,
+        "outer": [
+          594,
+          307
+        ],
+        "inner": [
+          594,
+          385
+        ],
+        "radius": 84
+      },
+      {
+        "part": "leg_fl",
+        "addedPixels": 12317,
+        "underHostPixels": 12166,
+        "outer": [
+          332,
+          421
+        ],
+        "inner": [
+          431,
+          490
+        ],
+        "radius": 49
+      },
+      {
+        "part": "leg_fr",
+        "addedPixels": 10865,
+        "underHostPixels": 10337,
+        "outer": [
+          858,
+          421
+        ],
+        "inner": [
+          760,
+          490
+        ],
+        "radius": 49
+      },
+      {
+        "part": "leg_bl",
+        "addedPixels": 10351,
+        "underHostPixels": 10147,
+        "outer": [
+          315,
+          1060
+        ],
+        "inner": [
+          430,
+          995
+        ],
+        "radius": 53
+      },
+      {
+        "part": "leg_br",
+        "addedPixels": 11149,
+        "underHostPixels": 10676,
+        "outer": [
+          869,
+          1060
+        ],
+        "inner": [
+          755,
+          995
+        ],
+        "radius": 53
+      },
+      {
+        "part": "tail",
+        "addedPixels": 4195,
+        "underHostPixels": 4195,
+        "outer": [
+          589,
+          1126
+        ],
+        "inner": [
+          589,
+          1068
+        ],
+        "radius": 32
+      }
+    ],
+    "shellRim": {
+      "paintFile": "../repair-plates/turtle_02_shell-r3.png",
+      "alignedFile": "../repair-plates/turtle_02_shell-r3-aligned.png",
+      "registeredBounds": [
+        238,
+        300,
+        704,
+        834
+      ],
+      "rimPixels": 158767,
+      "method": "Complete continuous shell-only AI rim, feathered to original inner scutes; independent limbs behind shell"
+    },
+    "longLegUnderlaps": {
+      "paintFile": "../repair-plates/turtle_02_legs-r4.png",
+      "legs": [
+        {
+          "part": "leg_fl",
+          "paintedPixels": 35557,
+          "replacedPixels": 35557,
+          "proximalDepth": 280,
+          "rootPivot": [
+            431,
+            490
+          ],
+          "hiddenTip": [
+            490,
+            570
+          ]
+        },
+        {
+          "part": "leg_fr",
+          "paintedPixels": 33827,
+          "replacedPixels": 33827,
+          "proximalDepth": 266,
+          "rootPivot": [
+            760,
+            490
+          ],
+          "hiddenTip": [
+            709,
+            570
+          ]
+        },
+        {
+          "part": "leg_bl",
+          "paintedPixels": 34299,
+          "replacedPixels": 34299,
+          "proximalDepth": 283,
+          "rootPivot": [
+            430,
+            995
+          ],
+          "hiddenTip": [
+            492,
+            930
+          ]
+        },
+        {
+          "part": "leg_br",
+          "paintedPixels": 32919,
+          "replacedPixels": 32919,
+          "proximalDepth": 288,
+          "rootPivot": [
+            755,
+            995
+          ],
+          "hiddenTip": [
+            705,
+            930
+          ]
+        }
+      ]
+    },
+    "assembledChangedPixels": 225707,
+    "changedOutsideApprovedMask": 0
+  },
+  "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
+  "sourceFile": "../../turtle_02/source.png",
+  "resolution": {
+    "id": "turtle_02",
+    "nativeSize": [
+      1218,
+      1292
+    ],
+    "workingSize": [
+      1218,
+      1292
+    ],
+    "masterSize": [
+      3861,
+      4096
+    ],
+    "masterRig": "masters/turtle_02/rig.json",
+    "masterPreview": "masters/turtle_02/assembled-restored.png",
+    "masterType": "Lanczos3 alpha-aware supersampled raster",
+    "recommendedCssLongEdgeAtDpr2": 646,
+    "smoothPreviewCssLongEdgeAtDpr2": 2048,
+    "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
+  }
+}

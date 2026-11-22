@@ -1,0 +1,87 @@
+{
+  "passed": true,
+  "assets": [
+    {
+      "id": "shrimp_04",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "layers": 14,
+      "rootAddedPixels": 5920,
+      "changedOutsideApprovedMask": 0
+    },
+    {
+      "id": "shrimp_05",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "layers": 15,
+      "rootAddedPixels": 9321,
+      "changedOutsideApprovedMask": 0
+    }
+  ],
+  "poses": [
+    {
+      "id": "shrimp_04",
+      "name": "right",
+      "renderer": "webgl-mesh",
+      "active": 52230
+    },
+    {
+      "id": "shrimp_04",
+      "name": "roots-positive",
+      "renderer": "webgl-mesh",
+      "active": 51565
+    },
+    {
+      "id": "shrimp_04",
+      "name": "roots-negative",
+      "renderer": "webgl-mesh",
+      "active": 48663
+    },
+    {
+      "id": "shrimp_04",
+      "name": "left",
+      "renderer": "webgl-mesh",
+      "active": 48922
+    },
+    {
+      "id": "shrimp_04",
+      "name": "idle",
+      "renderer": "webgl-mesh",
+      "active": 50947
+    },
+    {
+      "id": "shrimp_05",
+      "name": "right",
+      "renderer": "webgl-mesh",
+      "active": 67677
+    },
+    {
+      "id": "shrimp_05",
+      "name": "roots-positive",
+      "renderer": "webgl-mesh",
+      "active": 66675
+    },
+    {
+      "id": "shrimp_05",
+      "name": "roots-negative",
+      "renderer": "webgl-mesh",
+      "active": 66065
+    },
+    {
+      "id": "shrimp_05",
+      "name": "left",
+      "renderer": "webgl-mesh",
+      "active": 66827
+    },
+    {
+      "id": "shrimp_05",
+      "name": "idle",
+      "renderer": "webgl-mesh",
+      "active": 67382
+    }
+  ]
+}

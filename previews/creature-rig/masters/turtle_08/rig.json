@@ -1,0 +1,456 @@
+{
+  "version": 3,
+  "id": "turtle_08",
+  "source": "../../turtle_08/source.png",
+  "sourceSize": [
+    3072,
+    4096
+  ],
+  "spine": [
+    [
+      1527.513812154696,
+      268.7292817679558
+    ],
+    [
+      1527.513812154696,
+      735.4696132596684
+    ],
+    [
+      1527.513812154696,
+      1103.2044198895028
+    ],
+    [
+      1527.513812154696,
+      1697.2375690607735
+    ],
+    [
+      1527.513812154696,
+      2404.4198895027625
+    ],
+    [
+      1527.513812154696,
+      3083.3149171270716
+    ],
+    [
+      1527.513812154696,
+      3479.3370165745855
+    ],
+    [
+      1527.513812154696,
+      3790.4972375690604
+    ]
+  ],
+  "nominalLength": 3521.767955801105,
+  "layers": [
+    {
+      "name": "turtle_08_head",
+      "file": "textures/turtle_08_head.png",
+      "croppedFile": "textures/turtle_08_head.png",
+      "bbox": [
+        1121,
+        110,
+        831,
+        1216
+      ],
+      "bounds": [
+        1133,
+        122,
+        1939,
+        1313
+      ],
+      "pixelCount": 67885,
+      "kind": "head",
+      "pivot": [
+        1527.513812154696,
+        1159.7790055248618
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          1527.513812154696,
+          905.1933701657458
+        ],
+        "inner": [
+          1527.513812154696,
+          1159.7790055248618
+        ],
+        "radius": 214.98342541436463,
+        "innerTip": [
+          1527.513812154696,
+          1159.7790055248618
+        ],
+        "paintFile": "../../turtle_08/source.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_08_head.png"
+    },
+    {
+      "name": "turtle_08_leg_fl",
+      "file": "textures/turtle_08_leg_fl.png",
+      "croppedFile": "textures/turtle_08_leg_fl.png",
+      "bbox": [
+        325,
+        907,
+        1128,
+        1111
+      ],
+      "bounds": [
+        337,
+        919,
+        1440,
+        2005
+      ],
+      "pixelCount": 60145,
+      "kind": "leg",
+      "pivot": [
+        1108.8618784530386,
+        1555.8011049723757
+      ],
+      "side": -1,
+      "phase": 0.7,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          834.4751381215469,
+          1318.1878453038673
+        ],
+        "inner": [
+          1108.8618784530386,
+          1555.8011049723757
+        ],
+        "radius": 220.64088397790056,
+        "innerTip": [
+          1315.3591160220994,
+          1810.3867403314916
+        ],
+        "paintFile": "../../repair-plates/turtle_08_legs.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_08_leg_fl.png"
+    },
+    {
+      "name": "turtle_08_leg_fr",
+      "file": "textures/turtle_08_leg_fr.png",
+      "croppedFile": "textures/turtle_08_leg_fr.png",
+      "bbox": [
+        1564,
+        914,
+        1138,
+        1106
+      ],
+      "bounds": [
+        1576,
+        926,
+        2689,
+        2007
+      ],
+      "pixelCount": 56617,
+      "kind": "leg",
+      "pivot": [
+        1963.1381215469612,
+        1555.8011049723757
+      ],
+      "side": 1,
+      "phase": 1.4,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          2231.867403314917,
+          1318.1878453038673
+        ],
+        "inner": [
+          1963.1381215469612,
+          1555.8011049723757
+        ],
+        "radius": 220.64088397790056,
+        "innerTip": [
+          1753.8121546961324,
+          1810.3867403314916
+        ],
+        "paintFile": "../../repair-plates/turtle_08_legs.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_08_leg_fr.png"
+    },
+    {
+      "name": "turtle_08_leg_bl",
+      "file": "textures/turtle_08_leg_bl.png",
+      "croppedFile": "textures/turtle_08_leg_bl.png",
+      "bbox": [
+        411,
+        2520,
+        1041,
+        1115
+      ],
+      "bounds": [
+        423,
+        2532,
+        1439,
+        3622
+      ],
+      "pixelCount": 50623,
+      "kind": "leg",
+      "pivot": [
+        1131.4917127071822,
+        2998.453038674033
+      ],
+      "side": -1,
+      "phase": 2.0999999999999996,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          848.6187845303867,
+          3196.46408839779
+        ],
+        "inner": [
+          1131.4917127071822,
+          2998.453038674033
+        ],
+        "radius": 214.98342541436463,
+        "innerTip": [
+          1329.5027624309391,
+          2828.729281767956
+        ],
+        "paintFile": "../../repair-plates/turtle_08_legs.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_08_leg_bl.png"
+    },
+    {
+      "name": "turtle_08_leg_br",
+      "file": "textures/turtle_08_leg_br.png",
+      "croppedFile": "textures/turtle_08_leg_br.png",
+      "bbox": [
+        1561,
+        2525,
+        1085,
+        1095
+      ],
+      "bounds": [
+        1573,
+        2537,
+        2633,
+        3607
+      ],
+      "pixelCount": 52540,
+      "kind": "leg",
+      "pivot": [
+        1940.5082872928176,
+        2998.453038674033
+      ],
+      "side": 1,
+      "phase": 2.8,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          2223.3812154696134,
+          3196.46408839779
+        ],
+        "inner": [
+          1940.5082872928176,
+          2998.453038674033
+        ],
+        "radius": 214.98342541436463,
+        "innerTip": [
+          1753.8121546961324,
+          2828.729281767956
+        ],
+        "paintFile": "../../repair-plates/turtle_08_legs.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_08_leg_br.png"
+    },
+    {
+      "name": "turtle_08_tail",
+      "file": "textures/turtle_08_tail.png",
+      "croppedFile": "textures/turtle_08_tail.png",
+      "bbox": [
+        1380,
+        3203,
+        285,
+        657
+      ],
+      "bounds": [
+        1392,
+        3215,
+        1652,
+        3847
+      ],
+      "pixelCount": 11823,
+      "kind": "tail",
+      "pivot": [
+        1527.513812154696,
+        3281.3259668508285
+      ],
+      "side": 0,
+      "phase": 3.5,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          1527.513812154696,
+          3479.3370165745855
+        ],
+        "inner": [
+          1527.513812154696,
+          3281.3259668508285
+        ],
+        "radius": 96.1767955801105,
+        "innerTip": [
+          1527.513812154696,
+          3281.3259668508285
+        ],
+        "paintFile": "../../turtle_08/source.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_08_tail.png"
+    },
+    {
+      "name": "turtle_08_shell",
+      "file": "textures/turtle_08_shell.png",
+      "croppedFile": "textures/turtle_08_shell.png",
+      "bbox": [
+        443,
+        918,
+        2160,
+        2596
+      ],
+      "bounds": [
+        455,
+        930,
+        2590,
+        3501
+      ],
+      "pixelCount": 527866,
+      "kind": "body",
+      "pivot": [
+        1527.513812154696,
+        2262.9834254143643
+      ],
+      "side": 0,
+      "phase": 4.199999999999999,
+      "order": 6,
+      "spineRange": [
+        0,
+        1
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/turtle_08_shell.png"
+    }
+  ],
+  "resolution": {
+    "id": "turtle_08",
+    "nativeSize": [
+      1086,
+      1448
+    ],
+    "workingSize": [
+      1086,
+      1448
+    ],
+    "masterSize": [
+      3072,
+      4096
+    ],
+    "masterRig": "masters/turtle_08/rig.json",
+    "masterPreview": "masters/turtle_08/assembled-restored.png",
+    "masterType": "Lanczos3 alpha-aware supersampled raster",
+    "recommendedCssLongEdgeAtDpr2": 724,
+    "smoothPreviewCssLongEdgeAtDpr2": 2048,
+    "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
+  },
+  "restoration": {
+    "status": "applied",
+    "newArt": true,
+    "roots": [
+      {
+        "part": "head",
+        "paintedPixels": 19176,
+        "underHostPixels": 18895,
+        "pivot": [
+          540,
+          410
+        ],
+        "hiddenTip": [
+          540,
+          410
+        ]
+      },
+      {
+        "part": "leg_fl",
+        "paintedPixels": 66091,
+        "underHostPixels": 41339,
+        "pivot": [
+          392,
+          550
+        ],
+        "hiddenTip": [
+          465,
+          640
+        ]
+      },
+      {
+        "part": "leg_fr",
+        "paintedPixels": 62023,
+        "underHostPixels": 38359,
+        "pivot": [
+          694,
+          550
+        ],
+        "hiddenTip": [
+          620,
+          640
+        ]
+      },
+      {
+        "part": "leg_bl",
+        "paintedPixels": 56267,
+        "underHostPixels": 35432,
+        "pivot": [
+          400,
+          1060
+        ],
+        "hiddenTip": [
+          470,
+          1000
+        ]
+      },
+      {
+        "part": "leg_br",
+        "paintedPixels": 56861,
+        "underHostPixels": 36259,
+        "pivot": [
+          686,
+          1060
+        ],
+        "hiddenTip": [
+          620,
+          1000
+        ]
+      },
+      {
+        "part": "tail",
+        "paintedPixels": 6589,
+        "underHostPixels": 6514,
+        "pivot": [
+          540,
+          1160
+        ],
+        "hiddenTip": [
+          540,
+          1160
+        ]
+      }
+    ],
+    "method": "Independent complete shell and reference-pose repainted long legs; original head/tail with hidden extensions"
+  },
+  "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
+  "sourceFile": "../../turtle_08/source.png"
+}

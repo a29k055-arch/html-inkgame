@@ -1,0 +1,17 @@
+{
+  "nativeSource": [
+    1536,
+    1024
+  ],
+  "working": [
+    1536,
+    1024
+  ],
+  "aiPlateNative": [
+    1536,
+    1024
+  ],
+  "workingResampling": false,
+  "isVector": false,
+  "masterExport": "Parent project export supplies separately labeled 4K supersampled masters; this working rig is native resolution"
+}

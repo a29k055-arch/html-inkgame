@@ -1,0 +1,320 @@
+{
+  "version": 3,
+  "id": "fish_04_special",
+  "source": "source.png",
+  "sourceSize": [
+    1218,
+    1292
+  ],
+  "spine": [
+    [
+      252,
+      163
+    ],
+    [
+      290,
+      260
+    ],
+    [
+      332,
+      370
+    ],
+    [
+      373,
+      485
+    ],
+    [
+      420,
+      600
+    ],
+    [
+      492,
+      712
+    ],
+    [
+      597,
+      810
+    ],
+    [
+      703,
+      875
+    ],
+    [
+      797,
+      946
+    ],
+    [
+      876,
+      1046
+    ],
+    [
+      910,
+      1120
+    ]
+  ],
+  "nominalLength": 1197.2947410242916,
+  "layers": [
+    {
+      "name": "fish_04_special_fin_l",
+      "file": "fish_04_special_fin_l.png",
+      "croppedFile": "textures/fish_04_special_fin_l.png",
+      "bbox": [
+        92,
+        423,
+        296,
+        278
+      ],
+      "kind": "fin",
+      "pivot": [
+        365,
+        494
+      ],
+      "side": -1,
+      "phase": 0,
+      "order": 3,
+      "bounds": [
+        100,
+        431,
+        379,
+        692
+      ],
+      "pixelCount": 26501,
+      "rootRepair": {
+        "outer": [
+          270,
+          458
+        ],
+        "inner": [
+          365,
+          494
+        ],
+        "radius": 26,
+        "paintFile": "../repair-plates/fish_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
+    },
+    {
+      "name": "fish_04_special_fin_r",
+      "file": "fish_04_special_fin_r.png",
+      "croppedFile": "textures/fish_04_special_fin_r.png",
+      "bbox": [
+        360,
+        302,
+        430,
+        158
+      ],
+      "kind": "fin",
+      "pivot": [
+        385,
+        420
+      ],
+      "side": 1,
+      "phase": 2.199114857512855,
+      "order": 3,
+      "bounds": [
+        368,
+        310,
+        781,
+        451
+      ],
+      "pixelCount": 26497,
+      "rootRepair": {
+        "outer": [
+          505,
+          365
+        ],
+        "inner": [
+          385,
+          420
+        ],
+        "radius": 29,
+        "paintFile": "../repair-plates/fish_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      }
+    },
+    {
+      "name": "fish_04_special_head",
+      "file": "fish_04_special_head.png",
+      "croppedFile": "textures/fish_04_special_head.png",
+      "bbox": [
+        169,
+        100,
+        319,
+        354
+      ],
+      "kind": "head",
+      "pivot": [
+        295.0654296875,
+        273.09375
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 10,
+      "bounds": [
+        177,
+        108,
+        479,
+        445
+      ],
+      "pixelCount": 64550,
+      "spineRange": [
+        0,
+        0.23
+      ]
+    },
+    {
+      "name": "fish_04_special_body_01",
+      "file": "fish_04_special_body_01.png",
+      "croppedFile": "textures/fish_04_special_body_01.png",
+      "bbox": [
+        268,
+        368,
+        313,
+        416
+      ],
+      "kind": "body",
+      "pivot": [
+        406.3515625,
+        571.4609375
+      ],
+      "side": 0,
+      "phase": 0.7,
+      "order": 6,
+      "bounds": [
+        276,
+        376,
+        572,
+        775
+      ],
+      "pixelCount": 62604,
+      "spineRange": [
+        0.23,
+        0.51
+      ]
+    },
+    {
+      "name": "fish_04_special_body_02",
+      "file": "fish_04_special_body_02.png",
+      "croppedFile": "textures/fish_04_special_body_02.png",
+      "bbox": [
+        421,
+        648,
+        418,
+        335
+      ],
+      "kind": "body",
+      "pivot": [
+        677.3203125,
+        859.1015625
+      ],
+      "side": 0,
+      "phase": 1.4,
+      "order": 6,
+      "bounds": [
+        429,
+        656,
+        830,
+        974
+      ],
+      "pixelCount": 33107,
+      "spineRange": [
+        0.51,
+        0.83
+      ]
+    },
+    {
+      "name": "fish_04_special_tail",
+      "file": "fish_04_special_tail.png",
+      "croppedFile": "textures/fish_04_special_tail.png",
+      "bbox": [
+        766,
+        912,
+        378,
+        308
+      ],
+      "kind": "tail",
+      "pivot": [
+        882.6357421875,
+        1057
+      ],
+      "side": 0,
+      "phase": 2.0999999999999996,
+      "order": 6,
+      "bounds": [
+        774,
+        920,
+        1135,
+        1211
+      ],
+      "pixelCount": 37590,
+      "spineRange": [
+        0.83,
+        1
+      ]
+    }
+  ],
+  "restoration": {
+    "status": "applied",
+    "paintFile": "../repair-plates/fish_04_repair.png",
+    "plateSize": [
+      1218,
+      1292
+    ],
+    "sourceSize": [
+      1218,
+      1292
+    ],
+    "registration": "same-pose source canvas; fit only if dimensions differ",
+    "hostRaisedPixels": 30488,
+    "hostRecoveredSourcePixels": 1068,
+    "rootAddedPixels": 12208,
+    "cleanupPixels": 0,
+    "roots": [
+      {
+        "part": "fin_l",
+        "addedPixels": 5433,
+        "underHostPixels": 4430,
+        "outer": [
+          270,
+          458
+        ],
+        "inner": [
+          365,
+          494
+        ],
+        "radius": 26
+      },
+      {
+        "part": "fin_r",
+        "addedPixels": 6775,
+        "underHostPixels": 5806,
+        "outer": [
+          505,
+          365
+        ],
+        "inner": [
+          385,
+          420
+        ],
+        "radius": 29
+      }
+    ],
+    "assembledChangedPixels": 39495,
+    "changedOutsideApprovedMask": 0
+  },
+  "notes": "Special original-negative-space fish. Approved solid fish_04 is unchanged. Do not fill internal transparent ink gaps. Working geometry/source coordinates remain original native pixels.",
+  "sourceNativeSize": [
+    1218,
+    1292
+  ],
+  "masterSize": [
+    3861,
+    4096
+  ],
+  "variant": {
+    "kind": "negative-space-special",
+    "basedOn": "fish_04",
+    "retained": "Original internal alpha, including zero-alpha ink breaks; original repaired fin roots retained byte-for-byte.",
+    "masterProvenance": "4K master is raster resampling of the original PNG, not new native detail and not vector."
+  }
+}

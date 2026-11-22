@@ -1,0 +1,48 @@
+{
+  "status": "applied",
+  "paintFile": "restoration/repair-plate-native.png",
+  "plateNativeSize": [
+    1536,
+    1024
+  ],
+  "workingSize": [
+    1536,
+    1024
+  ],
+  "registration": "Exact source pose/canvas; only bounded body/root masks accepted",
+  "hostAddedPixels": 12790,
+  "rootAddedPixels": 5920,
+  "hostRecoveredPixels": 94,
+  "assembledChangedPixels": 18067,
+  "changedOutsideApprovedMask": 0,
+  "roots": [
+    {
+      "name": "antenna_01",
+      "addedPixels": 443
+    },
+    {
+      "name": "antenna_02",
+      "addedPixels": 407
+    },
+    {
+      "name": "forearm_l",
+      "addedPixels": 795
+    },
+    {
+      "name": "forearm_r",
+      "addedPixels": 1283
+    },
+    {
+      "name": "leg_walk_01",
+      "addedPixels": 889
+    },
+    {
+      "name": "leg_walk_02",
+      "addedPixels": 825
+    },
+    {
+      "name": "leg_walk_03",
+      "addedPixels": 1278
+    }
+  ]
+}

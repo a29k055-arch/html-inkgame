@@ -1,0 +1,535 @@
+{
+  "version": 2,
+  "id": "shrimp_04",
+  "source": "source.png",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "nativeSourceSize": [
+    1536,
+    1024
+  ],
+  "bodyOrder": 6,
+  "spine": [
+    [
+      528,
+      363
+    ],
+    [
+      600,
+      397
+    ],
+    [
+      678,
+      444
+    ],
+    [
+      758,
+      473
+    ],
+    [
+      836,
+      507
+    ],
+    [
+      915,
+      548
+    ],
+    [
+      994,
+      587
+    ],
+    [
+      1072,
+      627
+    ],
+    [
+      1140,
+      664
+    ],
+    [
+      1200,
+      707
+    ],
+    [
+      1278,
+      779
+    ]
+  ],
+  "nominalLength": 863.2658666617757,
+  "layers": [
+    {
+      "name": "shrimp_04_antenna_01",
+      "file": "shrimp_04_antenna_01.png",
+      "croppedFile": "textures/shrimp_04_antenna_01.png",
+      "bbox": [
+        498,
+        74,
+        804,
+        312
+      ],
+      "kind": "antenna",
+      "pivot": [
+        566,
+        374
+      ],
+      "side": -1,
+      "phase": 0,
+      "order": 12,
+      "pixelCount": 8562,
+      "sourceSpineS": 0.045314687789324654,
+      "rootRepair": {
+        "outer": [
+          523,
+          337
+        ],
+        "inner": [
+          566,
+          374
+        ],
+        "radius": 4,
+        "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
+      }
+    },
+    {
+      "name": "shrimp_04_antenna_02",
+      "file": "shrimp_04_antenna_02.png",
+      "croppedFile": "textures/shrimp_04_antenna_02.png",
+      "bbox": [
+        74,
+        357,
+        504,
+        485
+      ],
+      "kind": "antenna",
+      "pivot": [
+        566,
+        405
+      ],
+      "side": 1,
+      "phase": 0.67,
+      "order": 12,
+      "pixelCount": 6514,
+      "sourceSpineS": 0.06054658822398071,
+      "rootRepair": {
+        "outer": [
+          514,
+          378
+        ],
+        "inner": [
+          566,
+          405
+        ],
+        "radius": 4,
+        "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
+      }
+    },
+    {
+      "name": "shrimp_04_forearm_l",
+      "file": "shrimp_04_forearm_l.png",
+      "croppedFile": "textures/shrimp_04_forearm_l.png",
+      "bbox": [
+        245,
+        424,
+        413,
+        252
+      ],
+      "kind": "leg",
+      "pivot": [
+        638,
+        444
+      ],
+      "side": -1,
+      "phase": 1.34,
+      "order": 3,
+      "pixelCount": 8832,
+      "sourceSpineS": 0.15846723738963742,
+      "rootRepair": {
+        "outer": [
+          603,
+          466
+        ],
+        "inner": [
+          638,
+          444
+        ],
+        "radius": 12,
+        "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
+      }
+    },
+    {
+      "name": "shrimp_04_forearm_r",
+      "file": "shrimp_04_forearm_r.png",
+      "croppedFile": "textures/shrimp_04_forearm_r.png",
+      "bbox": [
+        298,
+        455,
+        402,
+        423
+      ],
+      "kind": "leg",
+      "pivot": [
+        680,
+        475
+      ],
+      "side": 1,
+      "phase": 2.0100000000000002,
+      "order": 3,
+      "pixelCount": 10117,
+      "sourceSpineS": 0.21355743782343956,
+      "rootRepair": {
+        "outer": [
+          669,
+          529
+        ],
+        "inner": [
+          680,
+          475
+        ],
+        "radius": 12,
+        "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
+      }
+    },
+    {
+      "name": "shrimp_04_leg_walk_01",
+      "file": "shrimp_04_leg_walk_01.png",
+      "croppedFile": "textures/shrimp_04_leg_walk_01.png",
+      "bbox": [
+        575,
+        468,
+        139,
+        217
+      ],
+      "kind": "leg",
+      "pivot": [
+        692,
+        484
+      ],
+      "side": 1,
+      "phase": 2.68,
+      "order": 3,
+      "pixelCount": 3123,
+      "sourceSpineS": 0.2283805696469774,
+      "rootRepair": {
+        "outer": [
+          690,
+          540
+        ],
+        "inner": [
+          692,
+          484
+        ],
+        "radius": 8,
+        "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
+      }
+    },
+    {
+      "name": "shrimp_04_leg_walk_02",
+      "file": "shrimp_04_leg_walk_02.png",
+      "croppedFile": "textures/shrimp_04_leg_walk_02.png",
+      "bbox": [
+        635,
+        475,
+        117,
+        225
+      ],
+      "kind": "leg",
+      "pivot": [
+        716,
+        491
+      ],
+      "side": -1,
+      "phase": 3.35,
+      "order": 3,
+      "pixelCount": 3553,
+      "sourceSpineS": 0.2564977992725618,
+      "rootRepair": {
+        "outer": [
+          727,
+          540
+        ],
+        "inner": [
+          716,
+          491
+        ],
+        "radius": 8,
+        "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
+      }
+    },
+    {
+      "name": "shrimp_04_leg_walk_03",
+      "file": "shrimp_04_leg_walk_03.png",
+      "croppedFile": "textures/shrimp_04_leg_walk_03.png",
+      "bbox": [
+        703,
+        466,
+        95,
+        230
+      ],
+      "kind": "leg",
+      "pivot": [
+        741,
+        482
+      ],
+      "side": 1,
+      "phase": 4.0200000000000005,
+      "order": 3,
+      "pixelCount": 3642,
+      "sourceSpineS": 0.2813236239739481,
+      "rootRepair": {
+        "outer": [
+          772,
+          546
+        ],
+        "inner": [
+          741,
+          482
+        ],
+        "radius": 8,
+        "extension": "Bounded AI-painted hidden underlap at this appendage own body node"
+      }
+    },
+    {
+      "name": "shrimp_04_head_chest",
+      "file": "shrimp_04_head_chest.png",
+      "croppedFile": "textures/shrimp_04_head_chest.png",
+      "bbox": [
+        367,
+        300,
+        427,
+        241
+      ],
+      "kind": "head",
+      "pivot": [
+        638.5,
+        420.8125
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 6,
+      "pixelCount": 32997,
+      "sourceSpineS": 0.14470803828699993,
+      "spineRange": [
+        0,
+        0.3
+      ]
+    },
+    {
+      "name": "shrimp_04_abdomen_01",
+      "file": "shrimp_04_abdomen_01.png",
+      "croppedFile": "textures/shrimp_04_abdomen_01.png",
+      "bbox": [
+        730,
+        408,
+        172,
+        170
+      ],
+      "kind": "body",
+      "pivot": [
+        812.5894999999999,
+        496.12800000000004
+      ],
+      "side": 0,
+      "phase": 0.7,
+      "order": 6,
+      "pixelCount": 11872,
+      "sourceSpineS": 0.36511815329674924,
+      "spineRange": [
+        0.3,
+        0.43
+      ]
+    },
+    {
+      "name": "shrimp_04_abdomen_02",
+      "file": "shrimp_04_abdomen_02.png",
+      "croppedFile": "textures/shrimp_04_abdomen_02.png",
+      "bbox": [
+        827,
+        449,
+        171,
+        157
+      ],
+      "kind": "body",
+      "pivot": [
+        907.0954999999999,
+        543.9495000000001
+      ],
+      "side": 0,
+      "phase": 1.4,
+      "order": 6,
+      "pixelCount": 10770,
+      "sourceSpineS": 0.4878401526407972,
+      "spineRange": [
+        0.43,
+        0.55
+      ]
+    },
+    {
+      "name": "shrimp_04_abdomen_03",
+      "file": "shrimp_04_abdomen_03.png",
+      "croppedFile": "textures/shrimp_04_abdomen_03.png",
+      "bbox": [
+        940,
+        486,
+        148,
+        160
+      ],
+      "kind": "body",
+      "pivot": [
+        1001.8855,
+        590.9730000000001
+      ],
+      "side": 0,
+      "phase": 2.0999999999999996,
+      "order": 6,
+      "pixelCount": 9710,
+      "sourceSpineS": 0.6104149032338982,
+      "spineRange": [
+        0.55,
+        0.67
+      ]
+    },
+    {
+      "name": "shrimp_04_abdomen_04",
+      "file": "shrimp_04_abdomen_04.png",
+      "croppedFile": "textures/shrimp_04_abdomen_04.png",
+      "bbox": [
+        1030,
+        177,
+        278,
+        509
+      ],
+      "kind": "body",
+      "pivot": [
+        1093.3870000000002,
+        638.1315
+      ],
+      "side": 0,
+      "phase": 2.8,
+      "order": 6,
+      "pixelCount": 7886,
+      "sourceSpineS": 0.7296601856159802,
+      "spineRange": [
+        0.67,
+        0.79
+      ]
+    },
+    {
+      "name": "shrimp_04_abdomen_05",
+      "file": "shrimp_04_abdomen_05.png",
+      "croppedFile": "textures/shrimp_04_abdomen_05.png",
+      "bbox": [
+        1126,
+        619,
+        124,
+        129
+      ],
+      "kind": "body",
+      "pivot": [
+        1169.375,
+        683.3125
+      ],
+      "side": 0,
+      "phase": 3.5,
+      "order": 6,
+      "pixelCount": 5026,
+      "sourceSpineS": 0.832159731243233,
+      "spineRange": [
+        0.79,
+        0.9
+      ]
+    },
+    {
+      "name": "shrimp_04_tail",
+      "file": "shrimp_04_tail.png",
+      "croppedFile": "textures/shrimp_04_tail.png",
+      "bbox": [
+        1186,
+        676,
+        194,
+        153
+      ],
+      "kind": "tail",
+      "pivot": [
+        1242.75,
+        745.6875
+      ],
+      "side": 0,
+      "phase": 4.199999999999999,
+      "order": 6,
+      "pixelCount": 9573,
+      "sourceSpineS": 0.9438174239636319,
+      "spineRange": [
+        0.9,
+        1
+      ]
+    }
+  ],
+  "resolution": {
+    "nativeSource": [
+      1536,
+      1024
+    ],
+    "working": [
+      1536,
+      1024
+    ],
+    "aiPlateNative": [
+      1536,
+      1024
+    ],
+    "workingResampling": false,
+    "isVector": false,
+    "masterExport": "Parent project export supplies separately labeled 4K supersampled masters; this working rig is native resolution"
+  },
+  "restoration": {
+    "status": "applied",
+    "paintFile": "restoration/repair-plate-native.png",
+    "plateNativeSize": [
+      1536,
+      1024
+    ],
+    "workingSize": [
+      1536,
+      1024
+    ],
+    "registration": "Exact source pose/canvas; only bounded body/root masks accepted",
+    "hostAddedPixels": 12790,
+    "rootAddedPixels": 5920,
+    "hostRecoveredPixels": 94,
+    "assembledChangedPixels": 18067,
+    "changedOutsideApprovedMask": 0,
+    "roots": [
+      {
+        "name": "antenna_01",
+        "addedPixels": 443
+      },
+      {
+        "name": "antenna_02",
+        "addedPixels": 407
+      },
+      {
+        "name": "forearm_l",
+        "addedPixels": 795
+      },
+      {
+        "name": "forearm_r",
+        "addedPixels": 1283
+      },
+      {
+        "name": "leg_walk_01",
+        "addedPixels": 889
+      },
+      {
+        "name": "leg_walk_02",
+        "addedPixels": 825
+      },
+      {
+        "name": "leg_walk_03",
+        "addedPixels": 1278
+      }
+    ]
+  },
+  "notes": "Original selected pale-ink art preserved outside bounded anatomical hidden repair masks. Independent antennae, forearms and each walking foot use their own source-body node pivots; complete assembled body bands share continuous runtime mesh."
+}

@@ -1,21 +1,29 @@
 {
-  "version": 2,
+  "version": 3,
   "creatures": [
     {
       "id": "fish_04",
-      "rig": "fish_04/rig.json"
+      "rig": "fish_04/rig.json",
+      "label": "鱼 04 · 实体衔接版"
     },
+    {"id":"fish_01","rig":"fish_01/rig.json","label":"鱼 01"},
+    {"id":"fish_02","rig":"fish_02/rig.json","label":"鱼 02"},
+    {"id":"fish_04_special","rig":"fish_04_special/rig.json","label":"鱼 04 · 原始透明留白特别版"},
     {
       "id": "dragon_04",
       "rig": "dragon_04/rig.json"
     },
     {
       "id": "turtle_02",
-      "rig": "turtle_02/rig.json"
+      "rig": "turtle_02/rig.json",
+      "label": "乌龟 02 · 已认可版"
     },
+    {"id":"turtle_08","rig":"turtle_08/rig.json","label":"乌龟 08 · 新绘制版"},
     {
       "id": "shrimp_07",
       "rig": "shrimp_07/rig.json"
-    }
+    },
+    {"id":"shrimp_04","rig":"shrimp_04/rig.json","label":"虾 04"},
+    {"id":"shrimp_05","rig":"shrimp_05/rig.json","label":"虾 05"}
   ]
 }

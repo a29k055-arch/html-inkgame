@@ -1,6 +1,6 @@
 /** Canvas 2D ink puppet runtime. Coordinates/input are CSS pixels, seconds and radians. */
-import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r4-joint-polish-20261122';
-export const INK_CREATURE_REV='rig-r4-joint-polish-20261122';
+import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r5-batch2-hires-20261122';
+export const INK_CREATURE_REV='rig-r5-batch2-hires-20261122';
 const TAU = Math.PI * 2;
 const RESOURCE_CACHE=new Map();
 const revisionURL=(value,base)=>{const url=new URL(value,base);url.searchParams.set('inkRigRev',INK_CREATURE_REV);return url;};
@@ -326,7 +326,7 @@ export class InkCreature {
   }
   drawSource(ctx) {
     const src=sampleCurve(this.sourceCurve,0),pivot=this.species==='shrimp'?sampleCurve(this.sourceCurve,.45):src,m=this.rigidTransform({x:this.x,y:this.y},this.heading+Math.PI,Math.atan2(src.ty,src.tx));
-    ctx.save();ctx.transform(m.a,m.b,m.c,m.d,m.x,m.y);ctx.drawImage(this.sourceImage,-pivot.x,-pivot.y);ctx.restore();
+    ctx.save();ctx.transform(m.a,m.b,m.c,m.d,m.x,m.y);ctx.drawImage(this.sourceImage,-pivot.x,-pivot.y,this.rig.sourceSize[0],this.rig.sourceSize[1]);ctx.restore();
   }
   visualBounds() {
     const points=[];

@@ -1,0 +1,431 @@
+{
+  "version": 3,
+  "id": "turtle_08",
+  "source": "source.png",
+  "sourceSize": [
+    1086,
+    1448
+  ],
+  "spine": [
+    [
+      540,
+      95
+    ],
+    [
+      540,
+      260
+    ],
+    [
+      540,
+      390
+    ],
+    [
+      540,
+      600
+    ],
+    [
+      540,
+      850
+    ],
+    [
+      540,
+      1090
+    ],
+    [
+      540,
+      1230
+    ],
+    [
+      540,
+      1340
+    ]
+  ],
+  "nominalLength": 1245,
+  "layers": [
+    {
+      "name": "turtle_08_head",
+      "file": "turtle_08_head.png",
+      "croppedFile": "textures/turtle_08_head.png",
+      "bbox": [
+        393,
+        35,
+        300,
+        437
+      ],
+      "bounds": [
+        401,
+        43,
+        684,
+        463
+      ],
+      "pixelCount": 67885,
+      "kind": "head",
+      "pivot": [
+        540,
+        410
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          540,
+          320
+        ],
+        "inner": [
+          540,
+          410
+        ],
+        "radius": 76,
+        "innerTip": [
+          540,
+          410
+        ],
+        "paintFile": "source.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      }
+    },
+    {
+      "name": "turtle_08_leg_fl",
+      "file": "turtle_08_leg_fl.png",
+      "croppedFile": "textures/turtle_08_leg_fl.png",
+      "bbox": [
+        111,
+        317,
+        406,
+        400
+      ],
+      "bounds": [
+        119,
+        325,
+        508,
+        708
+      ],
+      "pixelCount": 60145,
+      "kind": "leg",
+      "pivot": [
+        392,
+        550
+      ],
+      "side": -1,
+      "phase": 0.7,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          295,
+          466
+        ],
+        "inner": [
+          392,
+          550
+        ],
+        "radius": 78,
+        "innerTip": [
+          465,
+          640
+        ],
+        "paintFile": "../repair-plates/turtle_08_legs.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      }
+    },
+    {
+      "name": "turtle_08_leg_fr",
+      "file": "turtle_08_leg_fr.png",
+      "croppedFile": "textures/turtle_08_leg_fr.png",
+      "bbox": [
+        549,
+        319,
+        410,
+        399
+      ],
+      "bounds": [
+        557,
+        327,
+        950,
+        709
+      ],
+      "pixelCount": 56617,
+      "kind": "leg",
+      "pivot": [
+        694,
+        550
+      ],
+      "side": 1,
+      "phase": 1.4,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          789,
+          466
+        ],
+        "inner": [
+          694,
+          550
+        ],
+        "radius": 78,
+        "innerTip": [
+          620,
+          640
+        ],
+        "paintFile": "../repair-plates/turtle_08_legs.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      }
+    },
+    {
+      "name": "turtle_08_leg_bl",
+      "file": "turtle_08_leg_bl.png",
+      "croppedFile": "textures/turtle_08_leg_bl.png",
+      "bbox": [
+        141,
+        887,
+        376,
+        402
+      ],
+      "bounds": [
+        149,
+        895,
+        508,
+        1280
+      ],
+      "pixelCount": 50623,
+      "kind": "leg",
+      "pivot": [
+        400,
+        1060
+      ],
+      "side": -1,
+      "phase": 2.0999999999999996,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          300,
+          1130
+        ],
+        "inner": [
+          400,
+          1060
+        ],
+        "radius": 76,
+        "innerTip": [
+          470,
+          1000
+        ],
+        "paintFile": "../repair-plates/turtle_08_legs.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      }
+    },
+    {
+      "name": "turtle_08_leg_br",
+      "file": "turtle_08_leg_br.png",
+      "croppedFile": "textures/turtle_08_leg_br.png",
+      "bbox": [
+        548,
+        889,
+        391,
+        394
+      ],
+      "bounds": [
+        556,
+        897,
+        930,
+        1274
+      ],
+      "pixelCount": 52540,
+      "kind": "leg",
+      "pivot": [
+        686,
+        1060
+      ],
+      "side": 1,
+      "phase": 2.8,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          786,
+          1130
+        ],
+        "inner": [
+          686,
+          1060
+        ],
+        "radius": 76,
+        "innerTip": [
+          620,
+          1000
+        ],
+        "paintFile": "../repair-plates/turtle_08_legs.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      }
+    },
+    {
+      "name": "turtle_08_tail",
+      "file": "turtle_08_tail.png",
+      "croppedFile": "textures/turtle_08_tail.png",
+      "bbox": [
+        484,
+        1129,
+        108,
+        239
+      ],
+      "bounds": [
+        492,
+        1137,
+        583,
+        1359
+      ],
+      "pixelCount": 11823,
+      "kind": "tail",
+      "pivot": [
+        540,
+        1160
+      ],
+      "side": 0,
+      "phase": 3.5,
+      "order": 3,
+      "rootRepair": {
+        "outer": [
+          540,
+          1230
+        ],
+        "inner": [
+          540,
+          1160
+        ],
+        "radius": 34,
+        "innerTip": [
+          540,
+          1160
+        ],
+        "paintFile": "source.png",
+        "extension": "Complete long proximal underlap below closed shell"
+      }
+    },
+    {
+      "name": "turtle_08_shell",
+      "file": "turtle_08_shell.png",
+      "croppedFile": "textures/turtle_08_shell.png",
+      "bbox": [
+        153,
+        321,
+        771,
+        925
+      ],
+      "bounds": [
+        161,
+        329,
+        915,
+        1237
+      ],
+      "pixelCount": 527866,
+      "kind": "body",
+      "pivot": [
+        540,
+        800
+      ],
+      "side": 0,
+      "phase": 4.199999999999999,
+      "order": 6,
+      "spineRange": [
+        0,
+        1
+      ]
+    }
+  ],
+  "resolution": {
+    "nativeSize": [
+      1086,
+      1448
+    ],
+    "workingSize": [
+      1086,
+      1448
+    ],
+    "nativeOrigin": "New reference-guided AI ink painting, actual output pixels; no native 4K claim"
+  },
+  "restoration": {
+    "status": "applied",
+    "newArt": true,
+    "roots": [
+      {
+        "part": "head",
+        "paintedPixels": 19176,
+        "underHostPixels": 18895,
+        "pivot": [
+          540,
+          410
+        ],
+        "hiddenTip": [
+          540,
+          410
+        ]
+      },
+      {
+        "part": "leg_fl",
+        "paintedPixels": 66091,
+        "underHostPixels": 41339,
+        "pivot": [
+          392,
+          550
+        ],
+        "hiddenTip": [
+          465,
+          640
+        ]
+      },
+      {
+        "part": "leg_fr",
+        "paintedPixels": 62023,
+        "underHostPixels": 38359,
+        "pivot": [
+          694,
+          550
+        ],
+        "hiddenTip": [
+          620,
+          640
+        ]
+      },
+      {
+        "part": "leg_bl",
+        "paintedPixels": 56267,
+        "underHostPixels": 35432,
+        "pivot": [
+          400,
+          1060
+        ],
+        "hiddenTip": [
+          470,
+          1000
+        ]
+      },
+      {
+        "part": "leg_br",
+        "paintedPixels": 56861,
+        "underHostPixels": 36259,
+        "pivot": [
+          686,
+          1060
+        ],
+        "hiddenTip": [
+          620,
+          1000
+        ]
+      },
+      {
+        "part": "tail",
+        "paintedPixels": 6589,
+        "underHostPixels": 6514,
+        "pivot": [
+          540,
+          1160
+        ],
+        "hiddenTip": [
+          540,
+          1160
+        ]
+      }
+    ],
+    "method": "Independent complete shell and reference-pose repainted long legs; original head/tail with hidden extensions"
+  },
+  "notes": "New top-down ink turtle08. Shell stable, four individually attached long underlap limbs; original approval turtle02 retained separately."
+}

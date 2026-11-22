@@ -1,0 +1,14 @@
+{
+  "generator": "built-in image_gen",
+  "notes": "Native repair generation requested a larger canvas but actually returned original native dimensions; no claim of new 3K/4K native detail. Only bounded body/fin-root repair paint is composited. Original selected source and all original pixels outside repair masks are preserved.",
+  "id": "fish_02",
+  "prompt": "Edit this exact approved top-down Chinese ink koi asset into a repaired painting for real-time layered web-game animation. Keep identical creature identity, original horizontal pose, head RIGHT, long forked tail LEFT, same slender proportions, same small muted vermilion patch on head, same black back islands and sparse gray scales, paired pectoral fins on upper/lower side. Preserve original composition and canvas aspect ratio. Refine native fine ink edges and thin fin rays naturally, not photo texture or vector art. If possible make a large 3072 by 1024 pixel painting, but keep anatomy and pose exact. Repair torso beneath fin attachments with continuous pale ink skin and natural tissue, add strong connected fin roots that extend slightly into torso for future hidden overlaps. Keep original airy ink tone and elegant margins, do not add large transparent gaps through body. Retain original complete assembled animal, no atlas or separated parts. True alpha transparent PNG, unpainted spaces transparent and dilute ink semitransparent; no gray/white/checkerboard/paper background, no water, cast shadow, glow, lettering, seal or scenery. Do not change orientation, red patch placement, fin/tail identity, or make an extra creature.",
+  "nativeSource": [
+    2172,
+    724
+  ],
+  "nativeRepair": [
+    2172,
+    724
+  ]
+}

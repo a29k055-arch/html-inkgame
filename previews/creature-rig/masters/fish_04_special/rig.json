@@ -1,0 +1,354 @@
+{
+  "version": 3,
+  "id": "fish_04_special",
+  "source": "../../fish_04_special/source.png",
+  "sourceSize": [
+    3861,
+    4096
+  ],
+  "spine": [
+    [
+      798.8275862068965,
+      516.7554179566564
+    ],
+    [
+      919.2857142857143,
+      824.2724458204335
+    ],
+    [
+      1052.423645320197,
+      1173.0030959752323
+    ],
+    [
+      1182.3916256157636,
+      1537.5851393188855
+    ],
+    [
+      1331.3793103448277,
+      1902.1671826625388
+    ],
+    [
+      1559.615763546798,
+      2257.2383900928794
+    ],
+    [
+      1892.460591133005,
+      2567.9256965944273
+    ],
+    [
+      2228.475369458128,
+      2773.993808049536
+    ],
+    [
+      2526.4507389162563,
+      2999.0835913312694
+    ],
+    [
+      2776.8768472906404,
+      3316.111455108359
+    ],
+    [
+      2884.655172413793,
+      3550.7120743034056
+    ]
+  ],
+  "nominalLength": 3795.7579405847514,
+  "layers": [
+    {
+      "name": "fish_04_special_fin_l",
+      "file": "textures/fish_04_special_fin_l.png",
+      "croppedFile": "textures/fish_04_special_fin_l.png",
+      "bbox": [
+        304,
+        1353,
+        912,
+        857
+      ],
+      "kind": "fin",
+      "pivot": [
+        1157.0320197044334,
+        1566.1176470588236
+      ],
+      "side": -1,
+      "phase": 0,
+      "order": 3,
+      "bounds": [
+        316,
+        1365,
+        1203,
+        2197
+      ],
+      "pixelCount": 26501,
+      "rootRepair": {
+        "outer": [
+          855.8866995073892,
+          1451.9876160990714
+        ],
+        "inner": [
+          1157.0320197044334,
+          1566.1176470588236
+        ],
+        "radius": 82.42724458204334,
+        "paintFile": "../../repair-plates/fish_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_04_special_fin_l.png"
+    },
+    {
+      "name": "fish_04_special_fin_r",
+      "file": "textures/fish_04_special_fin_r.png",
+      "croppedFile": "textures/fish_04_special_fin_r.png",
+      "bbox": [
+        1156,
+        971,
+        1337,
+        474
+      ],
+      "kind": "fin",
+      "pivot": [
+        1220.4310344827586,
+        1331.5170278637772
+      ],
+      "side": 1,
+      "phase": 2.199114857512855,
+      "order": 3,
+      "bounds": [
+        1168,
+        983,
+        2480,
+        1432
+      ],
+      "pixelCount": 26497,
+      "rootRepair": {
+        "outer": [
+          1600.8251231527095,
+          1157.1517027863779
+        ],
+        "inner": [
+          1220.4310344827586,
+          1331.5170278637772
+        ],
+        "radius": 91.93808049535605,
+        "paintFile": "../../repair-plates/fish_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_04_special_fin_r.png"
+    },
+    {
+      "name": "fish_04_special_head",
+      "file": "textures/fish_04_special_head.png",
+      "croppedFile": "textures/fish_04_special_head.png",
+      "bbox": [
+        551,
+        331,
+        985,
+        1097
+      ],
+      "kind": "head",
+      "pivot": [
+        935.3428768665333,
+        865.7832817337462
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 10,
+      "bounds": [
+        563,
+        343,
+        1523,
+        1415
+      ],
+      "pixelCount": 64550,
+      "spineRange": [
+        0,
+        0.23
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_04_special_head.png"
+    },
+    {
+      "name": "fish_04_special_body_01",
+      "file": "textures/fish_04_special_body_01.png",
+      "croppedFile": "textures/fish_04_special_body_01.png",
+      "bbox": [
+        862,
+        1179,
+        968,
+        1295
+      ],
+      "kind": "body",
+      "pivot": [
+        1288.1144358066504,
+        1811.6904024767803
+      ],
+      "side": 0,
+      "phase": 0.7,
+      "order": 6,
+      "bounds": [
+        874,
+        1191,
+        1817,
+        2461
+      ],
+      "pixelCount": 62604,
+      "spineRange": [
+        0.23,
+        0.51
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_04_special_body_01.png"
+    },
+    {
+      "name": "fish_04_special_body_02",
+      "file": "textures/fish_04_special_body_02.png",
+      "croppedFile": "textures/fish_04_special_body_02.png",
+      "bbox": [
+        1348,
+        2067,
+        1299,
+        1037
+      ],
+      "kind": "body",
+      "pivot": [
+        2147.0720250923646,
+        2723.59133126935
+      ],
+      "side": 0,
+      "phase": 1.4,
+      "order": 6,
+      "bounds": [
+        1360,
+        2079,
+        2634,
+        3091
+      ],
+      "pixelCount": 33107,
+      "spineRange": [
+        0.51,
+        0.83
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_04_special_body_02.png"
+    },
+    {
+      "name": "fish_04_special_tail",
+      "file": "textures/fish_04_special_tail.png",
+      "croppedFile": "textures/fish_04_special_tail.png",
+      "bbox": [
+        2442,
+        2904,
+        1173,
+        952
+      ],
+      "kind": "tail",
+      "pivot": [
+        2797.911823141164,
+        3350.984520123839
+      ],
+      "side": 0,
+      "phase": 2.0999999999999996,
+      "order": 6,
+      "bounds": [
+        2454,
+        2916,
+        3602,
+        3843
+      ],
+      "pixelCount": 37590,
+      "spineRange": [
+        0.83,
+        1
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_04_special_tail.png"
+    }
+  ],
+  "restoration": {
+    "status": "applied",
+    "paintFile": "../repair-plates/fish_04_repair.png",
+    "plateSize": [
+      1218,
+      1292
+    ],
+    "sourceSize": [
+      1218,
+      1292
+    ],
+    "registration": "same-pose source canvas; fit only if dimensions differ",
+    "hostRaisedPixels": 30488,
+    "hostRecoveredSourcePixels": 1068,
+    "rootAddedPixels": 12208,
+    "cleanupPixels": 0,
+    "roots": [
+      {
+        "part": "fin_l",
+        "addedPixels": 5433,
+        "underHostPixels": 4430,
+        "outer": [
+          270,
+          458
+        ],
+        "inner": [
+          365,
+          494
+        ],
+        "radius": 26
+      },
+      {
+        "part": "fin_r",
+        "addedPixels": 6775,
+        "underHostPixels": 5806,
+        "outer": [
+          505,
+          365
+        ],
+        "inner": [
+          385,
+          420
+        ],
+        "radius": 29
+      }
+    ],
+    "assembledChangedPixels": 39495,
+    "changedOutsideApprovedMask": 0
+  },
+  "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
+  "sourceNativeSize": [
+    1218,
+    1292
+  ],
+  "masterSize": [
+    3861,
+    4096
+  ],
+  "variant": {
+    "kind": "negative-space-special",
+    "basedOn": "fish_04",
+    "retained": "Original internal alpha, including zero-alpha ink breaks; original repaired fin roots retained byte-for-byte.",
+    "masterProvenance": "4K master is raster resampling of the original PNG, not new native detail and not vector."
+  },
+  "sourceFile": "../../fish_04_special/source.png",
+  "resolution": {
+    "id": "fish_04_special",
+    "nativeSize": [
+      1218,
+      1292
+    ],
+    "workingSize": [
+      1218,
+      1292
+    ],
+    "masterSize": [
+      3861,
+      4096
+    ],
+    "masterRig": "masters/fish_04_special/rig.json",
+    "masterPreview": "masters/fish_04_special/assembled-restored.png",
+    "masterType": "Lanczos3 alpha-aware supersampled raster",
+    "recommendedCssLongEdgeAtDpr2": 646,
+    "smoothPreviewCssLongEdgeAtDpr2": 2048,
+    "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
+  }
+}

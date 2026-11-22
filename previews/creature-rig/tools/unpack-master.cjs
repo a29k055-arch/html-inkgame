@@ -1,0 +1,5 @@
+/* Restore full aligned RGBA layers from lossless cropped 4K masters + bbox.
+   Usage: node tools/unpack-master.cjs masters/fish_01/rig.json */
+const fs=require('node:fs'),path=require('node:path');
+let sharp;try{sharp=require('sharp');}catch{sharp=require('C:/Users/Nine/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');}
+(async()=>{const input=path.resolve(process.argv[2]||'');if(!fs.existsSync(input)||!input.endsWith('rig.json'))throw Error('Pass a master rig.json path');const rig=JSON.parse(fs.readFileSync(input)),dir=path.dirname(input),out=path.join(dir,'aligned');fs.mkdirSync(out,{recursive:true});for(const l of rig.layers){const [left,top]=l.bbox;await sharp({create:{width:rig.sourceSize[0],height:rig.sourceSize[1],channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite([{input:path.resolve(dir,l.croppedFile),left,top}]).png({compressionLevel:9}).toFile(path.join(out,l.name+'.png'));}console.log('Restored',rig.layers.length,'aligned transparent master layers in',out);})().catch(e=>{console.error(e.message);process.exitCode=1});

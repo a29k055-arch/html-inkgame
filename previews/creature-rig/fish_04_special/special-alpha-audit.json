@@ -1,0 +1,61 @@
+{
+  "id": "fish_04_special",
+  "basedOn": "fish_04",
+  "sourceNativeSize": [
+    1218,
+    1292
+  ],
+  "masterSize": [
+    3861,
+    4096
+  ],
+  "method": "Exact source alpha restored only inside original torso footprint, excluding protected repaired fin roots.",
+  "alphaZeroPositions": 3516,
+  "restoredTransparentPixels": 1851,
+  "reducedAlphaPixels": 27108,
+  "unchangedFinLayerBytes": [
+    "fish_04_special_fin_l",
+    "fish_04_special_fin_r"
+  ],
+  "sourceBodyAlphaViolations": 0,
+  "layers": [
+    {
+      "name": "fish_04_special_fin_l",
+      "changedPixels": 0,
+      "kind": "fin",
+      "pixelCount": 26501
+    },
+    {
+      "name": "fish_04_special_fin_r",
+      "changedPixels": 0,
+      "kind": "fin",
+      "pixelCount": 26497
+    },
+    {
+      "name": "fish_04_special_head",
+      "changedPixels": 5234,
+      "kind": "head",
+      "pixelCount": 64550
+    },
+    {
+      "name": "fish_04_special_body_01",
+      "changedPixels": 15527,
+      "kind": "body",
+      "pixelCount": 62604
+    },
+    {
+      "name": "fish_04_special_body_02",
+      "changedPixels": 6347,
+      "kind": "body",
+      "pixelCount": 33107
+    },
+    {
+      "name": "fish_04_special_tail",
+      "changedPixels": 0,
+      "kind": "tail",
+      "pixelCount": 37590
+    }
+  ],
+  "assembledOriginalHolesFilled": 0,
+  "approvedBaseUnchanged": true
+}

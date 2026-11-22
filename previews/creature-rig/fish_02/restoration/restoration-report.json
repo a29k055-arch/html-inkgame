@@ -1,0 +1,84 @@
+{
+  "status": "applied",
+  "paintFile": "repair-paint-native.png",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "repairNativeSize": [
+    2172,
+    724
+  ],
+  "method": "Original selected pixels preserved; native AI repaint used only in body/fin-root repair masks",
+  "bodyRaisedPixels": 9296,
+  "roots": [
+    {
+      "part": "fin_l",
+      "addedPixels": 12225,
+      "underHostPixels": 12061,
+      "outer": [
+        1677,
+        246
+      ],
+      "inner": [
+        1628,
+        323
+      ],
+      "radius": 50,
+      "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+      "paintFile": "repair-paint-native.png"
+    },
+    {
+      "part": "fin_r",
+      "addedPixels": 13633,
+      "underHostPixels": 13066,
+      "outer": [
+        1675,
+        516
+      ],
+      "inner": [
+        1615,
+        415
+      ],
+      "radius": 49,
+      "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+      "paintFile": "repair-paint-native.png"
+    },
+    {
+      "part": "fin_rear_l",
+      "addedPixels": 3715,
+      "underHostPixels": 3715,
+      "outer": [
+        1118,
+        273
+      ],
+      "inner": [
+        1118,
+        324
+      ],
+      "radius": 29,
+      "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+      "paintFile": "repair-paint-native.png"
+    },
+    {
+      "part": "fin_rear_r",
+      "addedPixels": 3775,
+      "underHostPixels": 3431,
+      "outer": [
+        1105,
+        498
+      ],
+      "inner": [
+        1105,
+        445
+      ],
+      "radius": 27,
+      "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+      "paintFile": "repair-paint-native.png"
+    }
+  ],
+  "assembledChangedPixels": 39276,
+  "changedOutsideApprovedMask": 0,
+  "hostRaisedPixels": 9296,
+  "rootAddedPixels": 33348
+}

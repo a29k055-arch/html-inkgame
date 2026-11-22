@@ -1,0 +1,24 @@
+{
+  "signature": "8575f4ad6ebe4cac16a32f8d586626c84d905be7bff3f9be9e8d7b14bd5eca0e",
+  "resolution": {
+    "id": "turtle_02",
+    "nativeSize": [
+      1218,
+      1292
+    ],
+    "workingSize": [
+      1218,
+      1292
+    ],
+    "masterSize": [
+      3861,
+      4096
+    ],
+    "masterRig": "masters/turtle_02/rig.json",
+    "masterPreview": "masters/turtle_02/assembled-restored.png",
+    "masterType": "Lanczos3 alpha-aware supersampled raster",
+    "recommendedCssLongEdgeAtDpr2": 646,
+    "smoothPreviewCssLongEdgeAtDpr2": 2048,
+    "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
+  }
+}

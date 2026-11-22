@@ -1,0 +1,24 @@
+{
+  "signature": "8c63456c627af99fac8fe7472d6613824fde6548a075ce3fd4b61b078ce32aea",
+  "resolution": {
+    "id": "shrimp_04",
+    "nativeSize": [
+      1536,
+      1024
+    ],
+    "workingSize": [
+      1536,
+      1024
+    ],
+    "masterSize": [
+      4096,
+      2731
+    ],
+    "masterRig": "masters/shrimp_04/rig.json",
+    "masterPreview": "masters/shrimp_04/assembled-restored.png",
+    "masterType": "Lanczos3 alpha-aware supersampled raster",
+    "recommendedCssLongEdgeAtDpr2": 768,
+    "smoothPreviewCssLongEdgeAtDpr2": 2048,
+    "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
+  }
+}

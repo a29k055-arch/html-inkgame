@@ -1,0 +1,85 @@
+{
+  "status": "applied",
+  "newArt": true,
+  "roots": [
+    {
+      "part": "head",
+      "paintedPixels": 19176,
+      "underHostPixels": 18895,
+      "pivot": [
+        540,
+        410
+      ],
+      "hiddenTip": [
+        540,
+        410
+      ]
+    },
+    {
+      "part": "leg_fl",
+      "paintedPixels": 66091,
+      "underHostPixels": 41339,
+      "pivot": [
+        392,
+        550
+      ],
+      "hiddenTip": [
+        465,
+        640
+      ]
+    },
+    {
+      "part": "leg_fr",
+      "paintedPixels": 62023,
+      "underHostPixels": 38359,
+      "pivot": [
+        694,
+        550
+      ],
+      "hiddenTip": [
+        620,
+        640
+      ]
+    },
+    {
+      "part": "leg_bl",
+      "paintedPixels": 56267,
+      "underHostPixels": 35432,
+      "pivot": [
+        400,
+        1060
+      ],
+      "hiddenTip": [
+        470,
+        1000
+      ]
+    },
+    {
+      "part": "leg_br",
+      "paintedPixels": 56861,
+      "underHostPixels": 36259,
+      "pivot": [
+        686,
+        1060
+      ],
+      "hiddenTip": [
+        620,
+        1000
+      ]
+    },
+    {
+      "part": "tail",
+      "paintedPixels": 6589,
+      "underHostPixels": 6514,
+      "pivot": [
+        540,
+        1160
+      ],
+      "hiddenTip": [
+        540,
+        1160
+      ]
+    }
+  ],
+  "method": "Independent complete shell and reference-pose repainted long legs; original head/tail with hidden extensions"
+}

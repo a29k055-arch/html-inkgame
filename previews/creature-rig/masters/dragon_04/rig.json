@@ -1,0 +1,778 @@
+{
+  "version": 2,
+  "id": "dragon_04",
+  "source": "../../dragon_04/source.png",
+  "sourceSize": [
+    2731,
+    4096
+  ],
+  "spine": [
+    [
+      1378.8349609375,
+      253.33333333333331
+    ],
+    [
+      1392.169921875,
+      504
+    ],
+    [
+      1408.171875,
+      760
+    ],
+    [
+      1453.5107421875,
+      1026.6666666666665
+    ],
+    [
+      1466.845703125,
+      1240
+    ],
+    [
+      1352.1650390625,
+      1429.3333333333333
+    ],
+    [
+      1186.8115234375,
+      1605.3333333333333
+    ],
+    [
+      1106.8017578125,
+      1757.3333333333333
+    ],
+    [
+      1149.4736328125,
+      1896
+    ],
+    [
+      1288.1572265625,
+      2029.3333333333333
+    ],
+    [
+      1453.5107421875,
+      2181.333333333333
+    ],
+    [
+      1560.1904296875,
+      2328
+    ],
+    [
+      1600.1953125,
+      2472
+    ],
+    [
+      1557.5234375,
+      2626.6666666666665
+    ],
+    [
+      1453.5107421875,
+      2778.6666666666665
+    ],
+    [
+      1322.828125,
+      2933.333333333333
+    ],
+    [
+      1245.4853515625,
+      3096
+    ],
+    [
+      1266.8212890625,
+      3258.6666666666665
+    ],
+    [
+      1336.1630859375,
+      3421.333333333333
+    ],
+    [
+      1384.1689453125,
+      3573.333333333333
+    ],
+    [
+      1370.833984375,
+      3741.333333333333
+    ],
+    [
+      1317.494140625,
+      3909.333333333333
+    ]
+  ],
+  "nominalLength": 4108.128128595879,
+  "layers": [
+    {
+      "name": "dragon_04_whisker_l",
+      "file": "textures/dragon_04_whisker_l.png",
+      "croppedFile": "textures/dragon_04_whisker_l.png",
+      "bbox": [
+        633,
+        250,
+        716,
+        446
+      ],
+      "kind": "antenna",
+      "pivot": [
+        1322.828125,
+        354.66666666666663
+      ],
+      "side": -1,
+      "phase": 0,
+      "order": 3,
+      "bounds": [
+        645,
+        262,
+        1336,
+        683
+      ],
+      "pixelCount": 3667,
+      "rootRepair": {
+        "outer": [
+          1272.1552734375,
+          293.3333333333333
+        ],
+        "inner": [
+          1322.828125,
+          354.66666666666663
+        ],
+        "radius": 16,
+        "paintFile": "../../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_whisker_l.png"
+    },
+    {
+      "name": "dragon_04_whisker_r",
+      "file": "textures/dragon_04_whisker_r.png",
+      "croppedFile": "textures/dragon_04_whisker_r.png",
+      "bbox": [
+        1404,
+        235,
+        682,
+        405
+      ],
+      "kind": "antenna",
+      "pivot": [
+        1426.8408203125,
+        354.66666666666663
+      ],
+      "side": 1,
+      "phase": 2.199114857512855,
+      "order": 3,
+      "bounds": [
+        1416,
+        247,
+        2073,
+        627
+      ],
+      "pixelCount": 3758,
+      "rootRepair": {
+        "outer": [
+          1466.845703125,
+          288
+        ],
+        "inner": [
+          1426.8408203125,
+          354.66666666666663
+        ],
+        "radius": 16,
+        "paintFile": "../../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_whisker_r.png"
+    },
+    {
+      "name": "dragon_04_horn_l",
+      "file": "textures/dragon_04_horn_l.png",
+      "croppedFile": "textures/dragon_04_horn_l.png",
+      "bbox": [
+        991,
+        599,
+        417,
+        336
+      ],
+      "kind": "detail",
+      "pivot": [
+        1368.1669921875,
+        776
+      ],
+      "side": -1,
+      "phase": 4.39822971502571,
+      "order": 3,
+      "bounds": [
+        1003,
+        611,
+        1395,
+        922
+      ],
+      "pixelCount": 7368,
+      "rootRepair": {
+        "outer": [
+          1256.1533203125,
+          741.3333333333333
+        ],
+        "inner": [
+          1368.1669921875,
+          776
+        ],
+        "radius": 50.666666666666664,
+        "paintFile": "../../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_horn_l.png"
+    },
+    {
+      "name": "dragon_04_horn_r",
+      "file": "textures/dragon_04_horn_r.png",
+      "croppedFile": "textures/dragon_04_horn_r.png",
+      "bbox": [
+        1403,
+        603,
+        358,
+        331
+      ],
+      "kind": "detail",
+      "pivot": [
+        1437.5087890625,
+        776
+      ],
+      "side": 1,
+      "phase": 6.5973445725385655,
+      "order": 3,
+      "bounds": [
+        1415,
+        615,
+        1748,
+        921
+      ],
+      "pixelCount": 6584,
+      "rootRepair": {
+        "outer": [
+          1544.1884765625,
+          746.6666666666666
+        ],
+        "inner": [
+          1437.5087890625,
+          776
+        ],
+        "radius": 50.666666666666664,
+        "paintFile": "../../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_horn_r.png"
+    },
+    {
+      "name": "dragon_04_leg_fl",
+      "file": "textures/dragon_04_leg_fl.png",
+      "croppedFile": "textures/dragon_04_leg_fl.png",
+      "bbox": [
+        783,
+        1179,
+        718,
+        333
+      ],
+      "kind": "leg",
+      "pivot": [
+        1456.177734375,
+        1389.3333333333333
+      ],
+      "side": -1,
+      "phase": 8.79645943005142,
+      "order": 3,
+      "bounds": [
+        795,
+        1191,
+        1488,
+        1499
+      ],
+      "pixelCount": 16405,
+      "rootRepair": {
+        "outer": [
+          1216.1484375,
+          1408
+        ],
+        "inner": [
+          1456.177734375,
+          1389.3333333333333
+        ],
+        "radius": 88,
+        "paintFile": "../../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_leg_fl.png"
+    },
+    {
+      "name": "dragon_04_leg_fr",
+      "file": "textures/dragon_04_leg_fr.png",
+      "croppedFile": "textures/dragon_04_leg_fr.png",
+      "bbox": [
+        1421,
+        1207,
+        525,
+        293
+      ],
+      "kind": "leg",
+      "pivot": [
+        1461.51171875,
+        1389.3333333333333
+      ],
+      "side": 1,
+      "phase": 10.995574287564276,
+      "order": 3,
+      "bounds": [
+        1433,
+        1219,
+        1933,
+        1487
+      ],
+      "pixelCount": 11727,
+      "rootRepair": {
+        "outer": [
+          1645.5341796875,
+          1402.6666666666665
+        ],
+        "inner": [
+          1461.51171875,
+          1389.3333333333333
+        ],
+        "radius": 85.33333333333333,
+        "paintFile": "../../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_leg_fr.png"
+    },
+    {
+      "name": "dragon_04_leg_bl",
+      "file": "textures/dragon_04_leg_bl.png",
+      "croppedFile": "textures/dragon_04_leg_bl.png",
+      "bbox": [
+        872,
+        2498,
+        728,
+        265
+      ],
+      "kind": "leg",
+      "pivot": [
+        1554.8564453125,
+        2632
+      ],
+      "side": -1,
+      "phase": 13.194689145077131,
+      "order": 3,
+      "bounds": [
+        884,
+        2510,
+        1587,
+        2750
+      ],
+      "pixelCount": 15279,
+      "rootRepair": {
+        "outer": [
+          1293.4912109375,
+          2645.333333333333
+        ],
+        "inner": [
+          1554.8564453125,
+          2632
+        ],
+        "radius": 90.66666666666666,
+        "paintFile": "../../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_leg_bl.png"
+    },
+    {
+      "name": "dragon_04_leg_br",
+      "file": "textures/dragon_04_leg_br.png",
+      "croppedFile": "textures/dragon_04_leg_br.png",
+      "bbox": [
+        1509,
+        2495,
+        501,
+        245
+      ],
+      "kind": "leg",
+      "pivot": [
+        1549.5224609375,
+        2632
+      ],
+      "side": 1,
+      "phase": 15.393804002589984,
+      "order": 3,
+      "bounds": [
+        1521,
+        2507,
+        1997,
+        2727
+      ],
+      "pixelCount": 10738,
+      "rootRepair": {
+        "outer": [
+          1720.2099609375,
+          2640
+        ],
+        "inner": [
+          1549.5224609375,
+          2632
+        ],
+        "radius": 90.66666666666666,
+        "paintFile": "../../repair-plates/dragon_04_repair.png",
+        "extension": "Bounded original-pose AI paint provides natural hidden anatomical underlap"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_leg_br.png"
+    },
+    {
+      "name": "dragon_04_head",
+      "file": "textures/dragon_04_head.png",
+      "croppedFile": "textures/dragon_04_head.png",
+      "bbox": [
+        640,
+        161,
+        1064,
+        698
+      ],
+      "kind": "head",
+      "pivot": [
+        1396.6860980987549,
+        599.140625
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 10,
+      "bounds": [
+        652,
+        173,
+        1691,
+        846
+      ],
+      "pixelCount": 26413,
+      "spineRange": [
+        0,
+        0.135
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_head.png"
+    },
+    {
+      "name": "dragon_04_neck",
+      "file": "textures/dragon_04_neck.png",
+      "croppedFile": "textures/dragon_04_neck.png",
+      "bbox": [
+        1138,
+        774,
+        564,
+        578
+      ],
+      "kind": "body",
+      "pivot": [
+        1466.845703125,
+        1240
+      ],
+      "side": 0,
+      "phase": 0.7,
+      "order": 6,
+      "bounds": [
+        1150,
+        786,
+        1689,
+        1339
+      ],
+      "pixelCount": 26379,
+      "spineRange": [
+        0.135,
+        0.25
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_neck.png"
+    },
+    {
+      "name": "dragon_04_body_01",
+      "file": "textures/dragon_04_body_01.png",
+      "croppedFile": "textures/dragon_04_body_01.png",
+      "bbox": [
+        852,
+        1203,
+        762,
+        837
+      ],
+      "kind": "body",
+      "pivot": [
+        1105.6089038848877,
+        1775.3411458333333
+      ],
+      "side": 0,
+      "phase": 1.4,
+      "order": 6,
+      "bounds": [
+        864,
+        1215,
+        1601,
+        2027
+      ],
+      "pixelCount": 41889,
+      "spineRange": [
+        0.25,
+        0.43
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_body_01.png"
+    },
+    {
+      "name": "dragon_04_body_02",
+      "file": "textures/dragon_04_body_02.png",
+      "croppedFile": "textures/dragon_04_body_02.png",
+      "bbox": [
+        900,
+        1822,
+        830,
+        688
+      ],
+      "kind": "body",
+      "pivot": [
+        1560.1904296875,
+        2328
+      ],
+      "side": 0,
+      "phase": 2.0999999999999996,
+      "order": 6,
+      "bounds": [
+        912,
+        1834,
+        1717,
+        2497
+      ],
+      "pixelCount": 39705,
+      "spineRange": [
+        0.43,
+        0.62
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_body_02.png"
+    },
+    {
+      "name": "dragon_04_body_03",
+      "file": "textures/dragon_04_body_03.png",
+      "croppedFile": "textures/dragon_04_body_03.png",
+      "bbox": [
+        1055,
+        2462,
+        677,
+        794
+      ],
+      "kind": "body",
+      "pivot": [
+        1309.9333219528198,
+        2953.2838541666665
+      ],
+      "side": 0,
+      "phase": 2.8,
+      "order": 6,
+      "bounds": [
+        1067,
+        2474,
+        1719,
+        3243
+      ],
+      "pixelCount": 32124,
+      "spineRange": [
+        0.62,
+        0.82
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_body_03.png"
+    },
+    {
+      "name": "dragon_04_tail",
+      "file": "textures/dragon_04_tail.png",
+      "croppedFile": "textures/dragon_04_tail.png",
+      "bbox": [
+        1105,
+        3187,
+        438,
+        824
+      ],
+      "kind": "tail",
+      "pivot": [
+        1385.7108001708984,
+        3593.567708333333
+      ],
+      "side": 0,
+      "phase": 3.5,
+      "order": 6,
+      "bounds": [
+        1117,
+        3199,
+        1530,
+        3998
+      ],
+      "pixelCount": 24036,
+      "spineRange": [
+        0.82,
+        1
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/dragon_04_tail.png"
+    }
+  ],
+  "restoration": {
+    "status": "applied",
+    "paintFile": "../repair-plates/dragon_04_repair.png",
+    "plateSize": [
+      1024,
+      1536
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "registration": "same-pose source canvas; fit only if dimensions differ",
+    "hostRaisedPixels": 10390,
+    "hostRecoveredSourcePixels": 6859,
+    "rootAddedPixels": 21667,
+    "cleanupPixels": 0,
+    "roots": [
+      {
+        "part": "leg_fl",
+        "addedPixels": 6122,
+        "underHostPixels": 6054,
+        "outer": [
+          456,
+          528
+        ],
+        "inner": [
+          546,
+          521
+        ],
+        "radius": 33
+      },
+      {
+        "part": "leg_fr",
+        "addedPixels": 2887,
+        "underHostPixels": 2083,
+        "outer": [
+          617,
+          526
+        ],
+        "inner": [
+          548,
+          521
+        ],
+        "radius": 32
+      },
+      {
+        "part": "leg_bl",
+        "addedPixels": 4768,
+        "underHostPixels": 4105,
+        "outer": [
+          485,
+          992
+        ],
+        "inner": [
+          583,
+          987
+        ],
+        "radius": 34
+      },
+      {
+        "part": "leg_br",
+        "addedPixels": 3799,
+        "underHostPixels": 3315,
+        "outer": [
+          645,
+          990
+        ],
+        "inner": [
+          581,
+          987
+        ],
+        "radius": 34
+      },
+      {
+        "part": "horn_l",
+        "addedPixels": 2000,
+        "underHostPixels": 1975,
+        "outer": [
+          471,
+          278
+        ],
+        "inner": [
+          513,
+          291
+        ],
+        "radius": 19
+      },
+      {
+        "part": "horn_r",
+        "addedPixels": 1559,
+        "underHostPixels": 1324,
+        "outer": [
+          579,
+          280
+        ],
+        "inner": [
+          539,
+          291
+        ],
+        "radius": 19
+      },
+      {
+        "part": "whisker_l",
+        "addedPixels": 254,
+        "underHostPixels": 210,
+        "outer": [
+          477,
+          110
+        ],
+        "inner": [
+          496,
+          133
+        ],
+        "radius": 6
+      },
+      {
+        "part": "whisker_r",
+        "addedPixels": 278,
+        "underHostPixels": 209,
+        "outer": [
+          550,
+          108
+        ],
+        "inner": [
+          535,
+          133
+        ],
+        "radius": 6
+      }
+    ],
+    "assembledChangedPixels": 25500,
+    "changedOutsideApprovedMask": 0
+  },
+  "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
+  "sourceFile": "../../dragon_04/source.png",
+  "resolution": {
+    "id": "dragon_04",
+    "nativeSize": [
+      1024,
+      1536
+    ],
+    "workingSize": [
+      1024,
+      1536
+    ],
+    "masterSize": [
+      2731,
+      4096
+    ],
+    "masterRig": "masters/dragon_04/rig.json",
+    "masterPreview": "masters/dragon_04/assembled-restored.png",
+    "masterType": "Lanczos3 alpha-aware supersampled raster",
+    "recommendedCssLongEdgeAtDpr2": 768,
+    "smoothPreviewCssLongEdgeAtDpr2": 2048,
+    "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
+  }
+}

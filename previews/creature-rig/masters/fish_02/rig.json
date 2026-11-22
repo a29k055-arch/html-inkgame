@@ -1,0 +1,485 @@
+{
+  "version": 2,
+  "id": "fish_02",
+  "source": "../../fish_02/source.png",
+  "sourceSize": [
+    4096,
+    1365
+  ],
+  "spine": [
+    [
+      3847.07182320442,
+      697.5828729281768
+    ],
+    [
+      3620.7734806629837,
+      716.4364640883978
+    ],
+    [
+      3356.7587476979743,
+      725.8632596685082
+    ],
+    [
+      3036.169429097606,
+      735.2900552486188
+    ],
+    [
+      2715.5801104972375,
+      744.7168508287293
+    ],
+    [
+      2357.2744014732966,
+      750.3729281767957
+    ],
+    [
+      1998.9686924493556,
+      737.1754143646409
+    ],
+    [
+      1621.804788213628,
+      727.7486187845304
+    ],
+    [
+      1282.3572744014734,
+      725.8632596685082
+    ],
+    [
+      999.4843462246778,
+      712.6657458563536
+    ],
+    [
+      735.4696132596686,
+      659.8756906077348
+    ],
+    [
+      452.59668508287297,
+      612.7417127071824
+    ],
+    [
+      207.4401473296501,
+      603.3149171270718
+    ]
+  ],
+  "nominalLength": 3651.3388013794624,
+  "bodyOrder": 6,
+  "layers": [
+    {
+      "name": "fish_02_fin_l",
+      "file": "textures/fish_02_fin_l.png",
+      "croppedFile": "textures/fish_02_fin_l.png",
+      "bbox": [
+        2721,
+        4,
+        649,
+        697
+      ],
+      "bounds": [
+        2733,
+        16,
+        3357,
+        688
+      ],
+      "kind": "fin",
+      "pivot": [
+        3070.1141804788213,
+        608.9709944751381
+      ],
+      "side": -1,
+      "phase": 0,
+      "order": 3,
+      "pixelCount": 49917,
+      "rootRepair": {
+        "outer": [
+          3162.519337016575,
+          463.79834254143645
+        ],
+        "inner": [
+          3070.1141804788213,
+          608.9709944751381
+        ],
+        "radius": 94.29097605893186,
+        "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+        "paintFile": "../../fish_02/repair-paint-native.png"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_fin_l.png"
+    },
+    {
+      "name": "fish_02_fin_r",
+      "file": "textures/fish_02_fin_r.png",
+      "croppedFile": "textures/fish_02_fin_r.png",
+      "bbox": [
+        2793,
+        689,
+        471,
+        676
+      ],
+      "bounds": [
+        2805,
+        701,
+        3251,
+        1353
+      ],
+      "kind": "fin",
+      "pivot": [
+        3045.5985267034994,
+        782.4240331491712
+      ],
+      "side": 1,
+      "phase": 1.9,
+      "order": 3,
+      "pixelCount": 45776,
+      "rootRepair": {
+        "outer": [
+          3158.7476979742173,
+          972.8453038674033
+        ],
+        "inner": [
+          3045.5985267034994,
+          782.4240331491712
+        ],
+        "radius": 92.40515653775323,
+        "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+        "paintFile": "../../fish_02/repair-paint-native.png"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_fin_r.png"
+    },
+    {
+      "name": "fish_02_fin_rear_l",
+      "file": "textures/fish_02_fin_rear_l.png",
+      "croppedFile": "textures/fish_02_fin_rear_l.png",
+      "bbox": [
+        1686,
+        424,
+        686,
+        223
+      ],
+      "bounds": [
+        1698,
+        436,
+        2359,
+        634
+      ],
+      "kind": "fin",
+      "pivot": [
+        2108.3462246777167,
+        610.8563535911602
+      ],
+      "side": -1,
+      "phase": 3.8,
+      "order": 3,
+      "pixelCount": 13543,
+      "rootRepair": {
+        "outer": [
+          2108.3462246777167,
+          514.7030386740331
+        ],
+        "inner": [
+          2108.3462246777167,
+          610.8563535911602
+        ],
+        "radius": 54.68876611418048,
+        "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+        "paintFile": "../../fish_02/repair-paint-native.png"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_fin_rear_l.png"
+    },
+    {
+      "name": "fish_02_fin_rear_r",
+      "file": "textures/fish_02_fin_rear_r.png",
+      "croppedFile": "textures/fish_02_fin_rear_r.png",
+      "bbox": [
+        1633,
+        806,
+        529,
+        204
+      ],
+      "bounds": [
+        1645,
+        818,
+        2149,
+        997
+      ],
+      "kind": "fin",
+      "pivot": [
+        2083.8305709023944,
+        838.9848066298342
+      ],
+      "side": 1,
+      "phase": 5.699999999999999,
+      "order": 3,
+      "pixelCount": 8067,
+      "rootRepair": {
+        "outer": [
+          2083.8305709023944,
+          938.9088397790056
+        ],
+        "inner": [
+          2083.8305709023944,
+          838.9848066298342
+        ],
+        "radius": 50.91712707182321,
+        "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+        "paintFile": "../../fish_02/repair-paint-native.png"
+      },
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_fin_rear_r.png"
+    },
+    {
+      "name": "fish_02_head",
+      "file": "textures/fish_02_head.png",
+      "croppedFile": "textures/fish_02_head.png",
+      "bbox": [
+        3055,
+        148,
+        895,
+        1105
+      ],
+      "bounds": [
+        3067,
+        160,
+        3937,
+        1240
+      ],
+      "kind": "head",
+      "pivot": [
+        3558.7476979742173,
+        719.455984547652
+      ],
+      "side": 0,
+      "phase": 0,
+      "order": 6,
+      "pixelCount": 98451,
+      "spineRange": [
+        0,
+        0.21
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_head.png"
+    },
+    {
+      "name": "fish_02_body_01",
+      "file": "textures/fish_02_body_01.png",
+      "croppedFile": "textures/fish_02_body_01.png",
+      "bbox": [
+        2115,
+        64,
+        998,
+        1301
+      ],
+      "bounds": [
+        2127,
+        76,
+        3100,
+        1364
+      ],
+      "kind": "body",
+      "pivot": [
+        2694.2219152854514,
+        745.208443488864
+      ],
+      "side": 0,
+      "phase": 0.7,
+      "order": 6,
+      "pixelCount": 137564,
+      "spineRange": [
+        0.21,
+        0.47
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_body_01.png"
+    },
+    {
+      "name": "fish_02_body_02",
+      "file": "textures/fish_02_body_02.png",
+      "croppedFile": "textures/fish_02_body_02.png",
+      "bbox": [
+        1017,
+        418,
+        1146,
+        542
+      ],
+      "bounds": [
+        1029,
+        430,
+        2150,
+        947
+      ],
+      "kind": "body",
+      "pivot": [
+        1467.640423572744,
+        727.0107695015755
+      ],
+      "side": 0,
+      "phase": 1.4,
+      "order": 6,
+      "pixelCount": 85298,
+      "spineRange": [
+        0.47,
+        0.77
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_body_02.png"
+    },
+    {
+      "name": "fish_02_tail",
+      "file": "textures/fish_02_tail.png",
+      "croppedFile": "textures/fish_02_tail.png",
+      "bbox": [
+        84,
+        139,
+        970,
+        943
+      ],
+      "bounds": [
+        96,
+        151,
+        1041,
+        1069
+      ],
+      "kind": "tail",
+      "pivot": [
+        574.7582872928177,
+        630.4484844734656
+      ],
+      "side": 0,
+      "phase": 2.0999999999999996,
+      "order": 6,
+      "pixelCount": 90506,
+      "spineRange": [
+        0.77,
+        1
+      ],
+      "fileLayout": "cropped-with-global-bbox",
+      "authoringAlignedFile": "aligned/fish_02_tail.png"
+    }
+  ],
+  "restoration": {
+    "status": "applied",
+    "paintFile": "repair-paint-native.png",
+    "sourceSize": [
+      2172,
+      724
+    ],
+    "repairNativeSize": [
+      2172,
+      724
+    ],
+    "method": "Original selected pixels preserved; native AI repaint used only in body/fin-root repair masks",
+    "bodyRaisedPixels": 9296,
+    "roots": [
+      {
+        "part": "fin_l",
+        "addedPixels": 12225,
+        "underHostPixels": 12061,
+        "outer": [
+          1677,
+          246
+        ],
+        "inner": [
+          1628,
+          323
+        ],
+        "radius": 50,
+        "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+        "paintFile": "repair-paint-native.png"
+      },
+      {
+        "part": "fin_r",
+        "addedPixels": 13633,
+        "underHostPixels": 13066,
+        "outer": [
+          1675,
+          516
+        ],
+        "inner": [
+          1615,
+          415
+        ],
+        "radius": 49,
+        "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+        "paintFile": "repair-paint-native.png"
+      },
+      {
+        "part": "fin_rear_l",
+        "addedPixels": 3715,
+        "underHostPixels": 3715,
+        "outer": [
+          1118,
+          273
+        ],
+        "inner": [
+          1118,
+          324
+        ],
+        "radius": 29,
+        "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+        "paintFile": "repair-paint-native.png"
+      },
+      {
+        "part": "fin_rear_r",
+        "addedPixels": 3775,
+        "underHostPixels": 3431,
+        "outer": [
+          1105,
+          498
+        ],
+        "inner": [
+          1105,
+          445
+        ],
+        "radius": 27,
+        "extension": "Native AI paint hidden root underlap, bound to continuous torso by finMesh",
+        "paintFile": "repair-paint-native.png"
+      }
+    ],
+    "assembledChangedPixels": 39276,
+    "changedOutsideApprovedMask": 0,
+    "hostRaisedPixels": 9296,
+    "rootAddedPixels": 33348
+  },
+  "artSpec": {
+    "originalNativeSize": [
+      2172,
+      724
+    ],
+    "repairPaintNativeSize": [
+      2172,
+      724
+    ],
+    "workingSize": [
+      2172,
+      724
+    ],
+    "recommendedDisplayLengthCss": [
+      300,
+      1300
+    ],
+    "highResolutionDelivery": "4K export is managed by the shared package exporter; resampling is not new native detail or vector art"
+  },
+  "notes": "4K alpha-aware Lanczos3 supersampled raster master; native detail resolution is recorded separately. Cropped file+global bbox are authoritative. Local aligned/ copies are supplied for authoring. Original reference is shared with the working package; runtime scales it to the logical canvas.",
+  "sourceFile": "../../fish_02/source.png",
+  "resolution": {
+    "id": "fish_02",
+    "nativeSize": [
+      2172,
+      724
+    ],
+    "workingSize": [
+      2172,
+      724
+    ],
+    "masterSize": [
+      4096,
+      1365
+    ],
+    "masterRig": "masters/fish_02/rig.json",
+    "masterPreview": "masters/fish_02/assembled-restored.png",
+    "masterType": "Lanczos3 alpha-aware supersampled raster",
+    "recommendedCssLongEdgeAtDpr2": 1086,
+    "smoothPreviewCssLongEdgeAtDpr2": 2048,
+    "notes": "4K导出改善边缘采样；原画细节上限取决于原始像素。透明PNG属于位图。"
+  }
+}
