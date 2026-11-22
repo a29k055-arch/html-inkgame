@@ -1,0 +1,1180 @@
+{
+  "ids": [
+    "fish_04",
+    "fish_01",
+    "fish_02",
+    "fish_04_special",
+    "dragon_04",
+    "shrimp_07",
+    "shrimp_04",
+    "shrimp_05",
+    "turtle_02",
+    "turtle_08"
+  ],
+  "files": [
+    {
+      "path": "fish_04/assembled-restored.png",
+      "sha256": "740c8f027e3911c6dbc7fc1b20fe969dc225f99318b8533b64521ec5170a43e4"
+    },
+    {
+      "path": "fish_04/fish_04_body_01.png",
+      "sha256": "7819e0187c85c375bb94a9a8751ecba911bd354a578c585af2edc658a368c761"
+    },
+    {
+      "path": "fish_04/fish_04_body_02.png",
+      "sha256": "1dd7f3bb50b2bfda693127b3e65e46f031627b619c9b9a4b63d9add2e91415c5"
+    },
+    {
+      "path": "fish_04/fish_04_fin_l.png",
+      "sha256": "7d8c0891e214521ecc17b8b9ca9567c9d7349b94b7e1c5904702a76c32d7b440"
+    },
+    {
+      "path": "fish_04/fish_04_fin_r.png",
+      "sha256": "f0b9dfb575ae8f4c22e08003c75d4e0285034d24585f450220506a94a0f0d723"
+    },
+    {
+      "path": "fish_04/fish_04_head.png",
+      "sha256": "5b66e83a7ad0031dda385396b1161023bb0c555034741fd4bb7b1de6c99bd92b"
+    },
+    {
+      "path": "fish_04/fish_04_tail.png",
+      "sha256": "b2387a57fb625aafae505fb542db7561f3429af28de9da298a83b0cb203be179"
+    },
+    {
+      "path": "fish_04/layers-preview.png",
+      "sha256": "fd41411595a04313a4e75aa2c8fbc61db29511f25eea0255a970eeae5da3e8d5"
+    },
+    {
+      "path": "fish_04/restoration/approved-repair-region.png",
+      "sha256": "71a3f53131f81761caed01ed05a8cb6ed8f948b9f366f6c658c9f6a77e947d4b"
+    },
+    {
+      "path": "fish_04/restoration/hidden-root-mask.png",
+      "sha256": "f08bf097851aeadab858e8167b7339810d7a42b31645143e079ab12f2f66bdab"
+    },
+    {
+      "path": "fish_04/restoration/host-repaint-mask.png",
+      "sha256": "98d1c9d076d452233cdc9af95e6fef3099956c9dce0dc316d7cec61aa6bbf958"
+    },
+    {
+      "path": "fish_04/rig.json",
+      "sha256": "bd3084885673759767f1367ea69612733395708ba9bb1226bfa27d3b6aada27e"
+    },
+    {
+      "path": "fish_04/source.png",
+      "sha256": "32abc0703b842a22875fbab22b2b1e24a6d13a44289a027636741b99727da962"
+    },
+    {
+      "path": "fish_04/textures/fish_04_body_01.png",
+      "sha256": "0382de028c74cf218014e8b331b26c2776c4a503cd196a44f0c6c2a35c27a43a"
+    },
+    {
+      "path": "fish_04/textures/fish_04_body_02.png",
+      "sha256": "38ac4753124720d578e5001088c32dc04e9492ef3c548181a38e3e4ae7dd3134"
+    },
+    {
+      "path": "fish_04/textures/fish_04_fin_l.png",
+      "sha256": "542e6df62f80df533fbd778fddef6cd4f196412d4aeec8409b55ab283ac72041"
+    },
+    {
+      "path": "fish_04/textures/fish_04_fin_r.png",
+      "sha256": "1537a48286f2821cdfaba626f0f0b56817b1ca23918d0c09440c4d8ea1b6dbae"
+    },
+    {
+      "path": "fish_04/textures/fish_04_head.png",
+      "sha256": "ac9d85d638b9aa2654be7e9e086be0cf96447c026acdd47c7fdfdcf782053d8a"
+    },
+    {
+      "path": "fish_04/textures/fish_04_tail.png",
+      "sha256": "b516ad297e89fb3669e2dcfd9ae66b5b939da18943b46f4b272ec4a6d0d310b6"
+    },
+    {
+      "path": "fish_01/assembled-restored.png",
+      "sha256": "8b595037dd846e0df7dc46491929db4a3f617adc3d78d5c398560e4de30c776b"
+    },
+    {
+      "path": "fish_01/fish_01_body_01.png",
+      "sha256": "2cbd8dec9b5ea186f2c5f7c3f3746dd2325063918ca96c14af523aa529027c88"
+    },
+    {
+      "path": "fish_01/fish_01_body_02.png",
+      "sha256": "793e0b5854e24bdf66587d1c2e1f03efc1730f44deb8afb0782371cd9aaca640"
+    },
+    {
+      "path": "fish_01/fish_01_fin_l.png",
+      "sha256": "251d1fa00c22e90b0043eb080c7fa41ddcdd059c73208c1a932e5a22e949ca7b"
+    },
+    {
+      "path": "fish_01/fish_01_fin_pelvic_r.png",
+      "sha256": "64b7069c19ec9e5e2a0e7c01dedde1bfedfa6d381142862866585bd9339b9978"
+    },
+    {
+      "path": "fish_01/fish_01_fin_r.png",
+      "sha256": "ffa7100e27bb0007a4a3dea0d196fc1e1fe4b91c08936b45cd19243a40a8388f"
+    },
+    {
+      "path": "fish_01/fish_01_head.png",
+      "sha256": "3586bdd282eb9b4aa0a2d2fe259974bbcf5fc101d25e8cada2c71ce8bdb3a854"
+    },
+    {
+      "path": "fish_01/fish_01_tail.png",
+      "sha256": "524b0b53c42fa58f7d926e3525bba2bcdcc1f59cc880746431963d8146f6e849"
+    },
+    {
+      "path": "fish_01/head-fix-ai-plate.png",
+      "sha256": "a605403819348651a5754c270590ba3d0fb1b4d089a832dba42c8c6a59dac3ce"
+    },
+    {
+      "path": "fish_01/head-fixed-source.png",
+      "sha256": "10162780859d9ba5097330f6c84d1364416797276682504c0322c4cb7c95164d"
+    },
+    {
+      "path": "fish_01/layers-preview.png",
+      "sha256": "88be65b2adde07f902803464d76afa253122ab657b326304061244d3d8975903"
+    },
+    {
+      "path": "fish_01/original-selection.png",
+      "sha256": "89f6de2526f18a083ba3dd1436e4a750f565a73923946cbcb5616243b8a5f7d3"
+    },
+    {
+      "path": "fish_01/repair-paint-native.png",
+      "sha256": "3b02580619dd3cdf0080b0d9ebc0456d5c6005ac8beaeeff6951df56cca252cf"
+    },
+    {
+      "path": "fish_01/restoration/approved-repair-region.png",
+      "sha256": "2b9126ff6670bb5ea28a329c720bfa477bfdbdd549a388843f6e1d45246d53e9"
+    },
+    {
+      "path": "fish_01/restoration/assembled-restored-head-review.png",
+      "sha256": "634fa6a8b5cf04ba06e0e651dedb5405462beda7d2fc71d9fa4279b6ecaf3f85"
+    },
+    {
+      "path": "fish_01/restoration/head-correction-mask.png",
+      "sha256": "7bb06b1d7c7da6acd01d567998c36d09a1c71f4f0b199ceb8852b8f885aeb127"
+    },
+    {
+      "path": "fish_01/restoration/hidden-root-mask.png",
+      "sha256": "b64b74e1188e35b0fff958321bdf9ec6b89fe49f5cb7319175d389510d72b63b"
+    },
+    {
+      "path": "fish_01/restoration/host-repaint-mask.png",
+      "sha256": "806cb6b3ba8dbb9718e1a501cf62bd78153c6257c939e67d96b01f331821c14a"
+    },
+    {
+      "path": "fish_01/restoration/original-selection-head-review.png",
+      "sha256": "ec825f7330fd8b8c3e12aa408f7616ac00548a09bcad78d4843ce4996ea96bcc"
+    },
+    {
+      "path": "fish_01/restoration/source-head-review.png",
+      "sha256": "4acddcffcfcdd0f898c86ea878396ed9e41c28bbf1999f09159758af76fe2b01"
+    },
+    {
+      "path": "fish_01/rig.json",
+      "sha256": "699e3fa1ffb1d2a4c29b3ab570c463e76c05051a6e42f30b50bbb8adf6e1f6ce"
+    },
+    {
+      "path": "fish_01/source.png",
+      "sha256": "10162780859d9ba5097330f6c84d1364416797276682504c0322c4cb7c95164d"
+    },
+    {
+      "path": "fish_01/textures/fish_01_body_01.png",
+      "sha256": "a907820a34e47eb131cd5ea9660ba21293e8e6cd172e8823ec0e53214af80b8a"
+    },
+    {
+      "path": "fish_01/textures/fish_01_body_02.png",
+      "sha256": "a8b7e4d0ed835384e483118e4435ed5ac4d93de8e2a0afc6af6641a1e8df871d"
+    },
+    {
+      "path": "fish_01/textures/fish_01_fin_l.png",
+      "sha256": "f2dead8ca71c03e31eb9722940d42c4fe347c5507a4b7b2191b3dd5977547ea0"
+    },
+    {
+      "path": "fish_01/textures/fish_01_fin_pelvic_r.png",
+      "sha256": "a4eb4517f0be0244ccefbbcf81b67d473e7ffdea38e3c18e1558a404eb74d182"
+    },
+    {
+      "path": "fish_01/textures/fish_01_fin_r.png",
+      "sha256": "a5afc59965cd3cc0c03cda13d21359b58fb27af9ff5bb0b2561b50e1e2f999a8"
+    },
+    {
+      "path": "fish_01/textures/fish_01_head.png",
+      "sha256": "930eda18e47107ba028f8fdbd759d38dc0548d75150e7b3095e9d77d8e45ee06"
+    },
+    {
+      "path": "fish_01/textures/fish_01_tail.png",
+      "sha256": "c21c23ffbbc350199a13b90a0e49847d6deaab02bd5d25addc2b7db6f81ef443"
+    },
+    {
+      "path": "fish_02/assembled-restored.png",
+      "sha256": "04b6a3d17a67fb3f1eef432e4a4503305ef001d26cd4208a53552c9a270ca426"
+    },
+    {
+      "path": "fish_02/fish_02_body_01.png",
+      "sha256": "2a079d2a43ba0ca1a4b566bc1b34e24d20bbff5aaf0b5e236a705bc2252e9e2f"
+    },
+    {
+      "path": "fish_02/fish_02_body_02.png",
+      "sha256": "ded48864e0995d31c84ba9b4e26f983ca5aee0b31f7bcf80e0efd8e888a608bc"
+    },
+    {
+      "path": "fish_02/fish_02_fin_l.png",
+      "sha256": "9c53a85258f28a022dd52b080e8950227226795739032da524d74fb10eaa83b7"
+    },
+    {
+      "path": "fish_02/fish_02_fin_r.png",
+      "sha256": "fb59f7624542baa5f0d49e96905504b3d36a3d11a610990c3a548ad96b5f9908"
+    },
+    {
+      "path": "fish_02/fish_02_fin_rear_l.png",
+      "sha256": "61616bba19baa1f6385e6c3f75a48aee111aef81fb4b8dbd558732b9b1ffa193"
+    },
+    {
+      "path": "fish_02/fish_02_fin_rear_r.png",
+      "sha256": "f9aefaf7deadb2674a7954c1b31395383e9baafcc10b515ccaf9c1414a5766e1"
+    },
+    {
+      "path": "fish_02/fish_02_head.png",
+      "sha256": "9d732a8bedddd4ba6c54dce5421c590af6eb1b94d99dbfb2af22a7925de6ce86"
+    },
+    {
+      "path": "fish_02/fish_02_tail.png",
+      "sha256": "f2ee26cc2d2a00c32a55b84b505c1a77ccfdbd49f0bdc4a7c486e331c3d62aa3"
+    },
+    {
+      "path": "fish_02/layers-preview.png",
+      "sha256": "36053de9e68fa71b56abb18d43e0cbcbafd515ebc60d2e961213544348a8b9fd"
+    },
+    {
+      "path": "fish_02/repair-paint-native.png",
+      "sha256": "bde336f50925db6b358da791e5bb49ef0a38bdd7ea6189aa0694afe688710221"
+    },
+    {
+      "path": "fish_02/restoration/approved-repair-region.png",
+      "sha256": "ac1e06fa5a52cb362775f8d5914d97015372ced56c22cf6e1ef261f6ee9ce2ac"
+    },
+    {
+      "path": "fish_02/restoration/hidden-root-mask.png",
+      "sha256": "f4740e593b8d037cbb14da49a9852ea258682106dab9cda19a2cf167e10f6417"
+    },
+    {
+      "path": "fish_02/restoration/host-repaint-mask.png",
+      "sha256": "bf6a9b107216c0970abd2028e43c0acccf950de824838c1ea5441e4403a75b83"
+    },
+    {
+      "path": "fish_02/rig.json",
+      "sha256": "ff46c59e89e479d419df85cde5746cab1643493d40dec399f6ae98a382e67da5"
+    },
+    {
+      "path": "fish_02/source.png",
+      "sha256": "080c8d1be0e94ef1595e59106aebf0b9df1c6ff465634c01b49e5b229de67ee6"
+    },
+    {
+      "path": "fish_02/textures/fish_02_body_01.png",
+      "sha256": "9897d7bdd399070a1b90371c9603448219522eef5176a35b93d0fe6a590b1912"
+    },
+    {
+      "path": "fish_02/textures/fish_02_body_02.png",
+      "sha256": "e3d7c8c92bb2710afd72a1135e4196671bf6be640cda41624cea6829ce0b32bf"
+    },
+    {
+      "path": "fish_02/textures/fish_02_fin_l.png",
+      "sha256": "b5eea99aff52cd8912ba8e35b7a8dd7b97784401155a1d93efe5556cc2285917"
+    },
+    {
+      "path": "fish_02/textures/fish_02_fin_r.png",
+      "sha256": "84846e80dc225392bc7daa9f252b1677fe688765fa644651eaf0e4b587e19708"
+    },
+    {
+      "path": "fish_02/textures/fish_02_fin_rear_l.png",
+      "sha256": "3f0a577f27faf3e78ee09cd75614ff4ce511ac90abb4ff62f95a426fb9e7107f"
+    },
+    {
+      "path": "fish_02/textures/fish_02_fin_rear_r.png",
+      "sha256": "849aa18159ff31788fd8946bca9c37c12b55651917fe8530d1a9c54fcc074987"
+    },
+    {
+      "path": "fish_02/textures/fish_02_head.png",
+      "sha256": "e37d6c33b0df24b244607559fc202fd10db8c735dd290a55a92ccacdfb802ff8"
+    },
+    {
+      "path": "fish_02/textures/fish_02_tail.png",
+      "sha256": "64713a78166b918769ca144b5c35d95d7568f59273f6e495c448e3fc15a2fba6"
+    },
+    {
+      "path": "fish_04_special/assembled-restored.png",
+      "sha256": "f5cc61bc2e0b0d6e808e1202426170155f71a85ad6d3b0faf88ae9cd3966abe2"
+    },
+    {
+      "path": "fish_04_special/fish_04_special_body_01.png",
+      "sha256": "fccc204035358e3701feac3f7f7c7f64a80360148019619762e6b7c1648580ab"
+    },
+    {
+      "path": "fish_04_special/fish_04_special_body_02.png",
+      "sha256": "f586937b859222f54419354a867289aaceb89744f1e76817cc1198ebf4dd4e6e"
+    },
+    {
+      "path": "fish_04_special/fish_04_special_fin_l.png",
+      "sha256": "7d8c0891e214521ecc17b8b9ca9567c9d7349b94b7e1c5904702a76c32d7b440"
+    },
+    {
+      "path": "fish_04_special/fish_04_special_fin_r.png",
+      "sha256": "f0b9dfb575ae8f4c22e08003c75d4e0285034d24585f450220506a94a0f0d723"
+    },
+    {
+      "path": "fish_04_special/fish_04_special_head.png",
+      "sha256": "59be8d6a0ac0dccb97429f43cd1dbd40c496232152c6b4b3f5bd20e5d9695bb5"
+    },
+    {
+      "path": "fish_04_special/fish_04_special_tail.png",
+      "sha256": "b2387a57fb625aafae505fb542db7561f3429af28de9da298a83b0cb203be179"
+    },
+    {
+      "path": "fish_04_special/original-alpha-restored-mask.png",
+      "sha256": "e6fd5c4d1a9f9ba53207abd6f660ccaf08bcf91b3b7d37531905a97e09d6307a"
+    },
+    {
+      "path": "fish_04_special/rig.json",
+      "sha256": "ae0fb4376ec7a95e86c930be7803a1a15ecf3c093bc3725040f9417fa07366c0"
+    },
+    {
+      "path": "fish_04_special/source.png",
+      "sha256": "32abc0703b842a22875fbab22b2b1e24a6d13a44289a027636741b99727da962"
+    },
+    {
+      "path": "fish_04_special/textures/fish_04_special_body_01.png",
+      "sha256": "310bb2c44879c51541453658ef15c843d912e25b3e638241808de5e8731b2a26"
+    },
+    {
+      "path": "fish_04_special/textures/fish_04_special_body_02.png",
+      "sha256": "dc3089a340bbf127b5fc6ab9e4517712cae620e248248844ddf33ab6ffa969f7"
+    },
+    {
+      "path": "fish_04_special/textures/fish_04_special_fin_l.png",
+      "sha256": "542e6df62f80df533fbd778fddef6cd4f196412d4aeec8409b55ab283ac72041"
+    },
+    {
+      "path": "fish_04_special/textures/fish_04_special_fin_r.png",
+      "sha256": "1537a48286f2821cdfaba626f0f0b56817b1ca23918d0c09440c4d8ea1b6dbae"
+    },
+    {
+      "path": "fish_04_special/textures/fish_04_special_head.png",
+      "sha256": "445aa34eb61035767053d3f6712e21b01cb54f10bb77cd04c54a372aa506177a"
+    },
+    {
+      "path": "fish_04_special/textures/fish_04_special_tail.png",
+      "sha256": "b516ad297e89fb3669e2dcfd9ae66b5b939da18943b46f4b272ec4a6d0d310b6"
+    },
+    {
+      "path": "dragon_04/assembled-restored.png",
+      "sha256": "116cf7f8b5d6b720e20dee2fcbed35ec6883f10cb387dfd6546815f0eb5e3dee"
+    },
+    {
+      "path": "dragon_04/dragon_04_body_01.png",
+      "sha256": "8c2184b303e9e9dbbbf25fe695e21f33eb6a8c6bd6576df253b42a5c14de1ab6"
+    },
+    {
+      "path": "dragon_04/dragon_04_body_02.png",
+      "sha256": "487464f8a1876068c600e08a02dcdc204829e6250eccbb8c6753e851061e8b46"
+    },
+    {
+      "path": "dragon_04/dragon_04_body_03.png",
+      "sha256": "85f3500145f97524558f2a54c4b8b73a453a12be9e85e50820c45aea2ab861b8"
+    },
+    {
+      "path": "dragon_04/dragon_04_head.png",
+      "sha256": "4db7ab306d22916d6d06ce1c0581d65552034bbd936681dfa08ace370545df87"
+    },
+    {
+      "path": "dragon_04/dragon_04_horn_l.png",
+      "sha256": "56e1de6235f6dcf0b4353e551f6c654f3cab4812187833ce6980d4c010cbf311"
+    },
+    {
+      "path": "dragon_04/dragon_04_horn_r.png",
+      "sha256": "c078dc5549f237318de5cafa78b44cf63958bdf604a52a2bd75b58420585019e"
+    },
+    {
+      "path": "dragon_04/dragon_04_leg_bl.png",
+      "sha256": "ba25a571deb8b9ea7a164ed6d71aef9322a454c537b0a0f896f59ec7c058033f"
+    },
+    {
+      "path": "dragon_04/dragon_04_leg_br.png",
+      "sha256": "8265d93b7c8c3882150dae07f676c1b47ff6070fa493c9216f58d37e314a6bb6"
+    },
+    {
+      "path": "dragon_04/dragon_04_leg_fl.png",
+      "sha256": "a758e0a7120b12c765d70c1a3580053fd490062e4045a561c760d0029bd6dcdf"
+    },
+    {
+      "path": "dragon_04/dragon_04_leg_fr.png",
+      "sha256": "fe3b8a93b61333cb8f2a948873559082859b9f0e364c88f794b792efe48a6210"
+    },
+    {
+      "path": "dragon_04/dragon_04_neck.png",
+      "sha256": "a5bb35f9cfbe0878be5034081f33153f382fcf8015e7010d2f39027f94be67d9"
+    },
+    {
+      "path": "dragon_04/dragon_04_tail.png",
+      "sha256": "0eb7fb5f3237d29348820f6e53971eb90039dd6d12c0a8ea104b253199a85fff"
+    },
+    {
+      "path": "dragon_04/dragon_04_whisker_l.png",
+      "sha256": "a4360895f65037b58bdab2f3be04dff4cb834be45c6d9a32f197b3f0ba238240"
+    },
+    {
+      "path": "dragon_04/dragon_04_whisker_r.png",
+      "sha256": "075d6062e93d3fecd1a1ae0078aaf7ce1f01dc3f22676ff7e5fc2bb55e1c63ec"
+    },
+    {
+      "path": "dragon_04/layers-preview.png",
+      "sha256": "084e9e9af80b7b456022864546b7d05dbec289a166c12fd2e9211544b151be7e"
+    },
+    {
+      "path": "dragon_04/restoration/approved-repair-region.png",
+      "sha256": "a10496005e840ffaad2486e13eff83f7ba8c0da426abb499eb3c25184882aa64"
+    },
+    {
+      "path": "dragon_04/restoration/hidden-root-mask.png",
+      "sha256": "6de643f06b59c0de8a1deaf3ea9492e3257576618addbe3884b14f141d50bac8"
+    },
+    {
+      "path": "dragon_04/restoration/host-repaint-mask.png",
+      "sha256": "ac602db56ba2076bd2384a1c6a5ba26742614fa4cfe2ae66bbc773aa11ce50b1"
+    },
+    {
+      "path": "dragon_04/rig.json",
+      "sha256": "a59fe2eb1fb89f2d4de6c5675ada9485e7fe37ff9845c3d4439071e17ea8086d"
+    },
+    {
+      "path": "dragon_04/source.png",
+      "sha256": "ee65bdc4e888b46eb07193281390ea9f63e84aaca8aaa1b55bec8e3663d5158d"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_body_01.png",
+      "sha256": "91e4893dfe5576a1208e411a0cf8f142c36e91d02591bc1dc98719a0637288e4"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_body_02.png",
+      "sha256": "52092afddbdf0e2cbd553ca984c34e55ce86195f6da90df6f40db0e6f5fd6c44"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_body_03.png",
+      "sha256": "cdf1235dbe44e558d065d4445f033677157435cdbabf67a2dc972e4eb799159b"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_head.png",
+      "sha256": "6e3f9d0d8a5176ad99f71e8746961071d51806bc38570dcfccd7d506ffa62a7c"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_horn_l.png",
+      "sha256": "86d5be58c9d315927ec6af6c57cf7bafba510d623797ead7e88b2114d62fb937"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_horn_r.png",
+      "sha256": "ee5a0487a1b7c9d3c5238adfbca00b057837f2a1e7bc830978df07fd05de26ed"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_leg_bl.png",
+      "sha256": "a758f7aae4809c38c15874cb6fa5985cd66b382da2259d72919eb28e0cabdd0f"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_leg_br.png",
+      "sha256": "a974753335544c7768b1200f88c701586c6da7da836719751d87383d84712201"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_leg_fl.png",
+      "sha256": "8eb08b36c0c970107360ab8b7341ff2e31af99aa40e8cecaaa072278cc57f1b5"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_leg_fr.png",
+      "sha256": "de8018c1bf1c7a373726a1b8ae26b78b63ac38b3717d0fe38b39acb0de64e020"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_neck.png",
+      "sha256": "bc81f10a75b3853ee5b9bdbb94f4c64e6cb484575fa67b36c5a9e34d1128749b"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_tail.png",
+      "sha256": "8f8f70d77473bf6b18af76dacef6fd08c481ab05cc080f9614b8592646166a59"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_whisker_l.png",
+      "sha256": "ed624753ec64600688285629cc81e22a0173dfb950e46146a80fe71266f1976c"
+    },
+    {
+      "path": "dragon_04/textures/dragon_04_whisker_r.png",
+      "sha256": "6f9206ce71abe2d2a2928cf1593ef339bbd1e85dcfd0504db8057042449e4813"
+    },
+    {
+      "path": "shrimp_07/assembled-restored.png",
+      "sha256": "c90485a485946ed1902f08474871561875fe3d83c1055d30791956731d33b458"
+    },
+    {
+      "path": "shrimp_07/layers-preview.png",
+      "sha256": "fd2b22456f90d60509e6fb50d5b63c548d43663e72d01537b8cd304b00c6bdde"
+    },
+    {
+      "path": "shrimp_07/restoration/antenna-repair-region.png",
+      "sha256": "8dc8fa70fbcd4b1f273770f95aaef64fa9c47e6fa9a0befd65f8646b54a89317"
+    },
+    {
+      "path": "shrimp_07/restoration/approved-repair-region.png",
+      "sha256": "ed8cefda3c47a30e4bdabcb490322d821ff12b2386545dec4e47849bc2b33d28"
+    },
+    {
+      "path": "shrimp_07/restoration/hidden-root-mask.png",
+      "sha256": "01977e65b30a0c3d924ad4330c4033306e26c5f0899da20a73c8eeef64d7985e"
+    },
+    {
+      "path": "shrimp_07/restoration/host-repaint-mask.png",
+      "sha256": "fd338d89d2a3350b3b84475285e38a124d8addcb8a7bf765861e67c660500c5a"
+    },
+    {
+      "path": "shrimp_07/restoration/walking-leg-repair-region.png",
+      "sha256": "cf52f5da7b309a89b7a728ed006e5812d01b40c02ff0add267739ea29838fb11"
+    },
+    {
+      "path": "shrimp_07/rig.json",
+      "sha256": "b9361fb4203f69ccde01d720a668c72290239acc9147c3f0d5dd8f8c09bf4ade"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_abdomen_01.png",
+      "sha256": "c44ef02b7514fb7cce8a2a0e86f7e915824b9cbe1ec8a8fb2db76d2f8b2b7247"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_abdomen_02.png",
+      "sha256": "0f280c528e1c7015a6becf0d4d734e2a880ac1c5934cabd5bcbb1ee84cda0112"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_abdomen_03.png",
+      "sha256": "941fcb9aca6e4406453980c9307b8df426e61ca53b95998d75867148bf8f3e46"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_abdomen_04.png",
+      "sha256": "c3fae9024635f8642e07b4a876723959524b31361104ba3a59d1525be16af204"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_antenna_01.png",
+      "sha256": "7ed44170eb74752f1168ed6150ed645c30de9272fbb9e08c6c830733275e4eac"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_antenna_02.png",
+      "sha256": "9601148c74153be4d026dacc238f998d3b987b4c611933848dc5d08ef6504272"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_antenna_03.png",
+      "sha256": "9f9e4276fca5f1b3747913db63974c3a732510e40c55eb74beb7cc2d1ed493f5"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_forearm_l.png",
+      "sha256": "fc5436e44ce110e8dc47cdcc752560f6ca4cee2991edfab63046099840cb0257"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_forearm_r.png",
+      "sha256": "d1959e6254ff01ccd43fc7289e160c192241fbb468a4e1d225017cde63c77676"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_head_chest.png",
+      "sha256": "6d166bb7aa39dcbae137fc4d729e5ac8403aa78da50985faa0d1cc763b94aae3"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_01.png",
+      "sha256": "6deb1dbba07369dabd0ee3ffb800aa28a344ba5adca6445ab2ac99942f12bf23"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_02.png",
+      "sha256": "f914230a0f05e1f66d9302b397b01105b2a86d2cb5334f424090037d1919df91"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_03.png",
+      "sha256": "28711b6c04d85685951debe2b8f31727884127968c54d5602f92eab825e3753a"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_04.png",
+      "sha256": "82d3b7b71f811f8e458d721497d9597277dfbacb5c36b66b697dcb063cd11d16"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_05.png",
+      "sha256": "9fa33ae24e8f9fd7681902909d186d1ce9afca6bbcb317e15fce59c9fd56e120"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_06.png",
+      "sha256": "c066c219758f6f23e5cfeef71b51e4444ca478852cfdf00ddf66075aa8a7012a"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_07.png",
+      "sha256": "26fa6ca01f8195bd765fccc961e34d983dcdf649607b4c56f9f7c7079fe784d2"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_08.png",
+      "sha256": "42bf59c5cb6fba8aacbb645a74c26791f7c14e7438922ea7c084e0bbf77497f3"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_leg_walk_09.png",
+      "sha256": "3a5750e8119f864e57244bed603e389ab742297224530f1035b782e71ae5cba8"
+    },
+    {
+      "path": "shrimp_07/shrimp_07_tail.png",
+      "sha256": "286de3de2085059c5fd61e0eecd8c1997638a92e9f125389694052b2d084b651"
+    },
+    {
+      "path": "shrimp_07/source.png",
+      "sha256": "22b6e40671ad8642005e2a77853dbcfdbb89611a46966181e626e6144bdd4a47"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_abdomen_01.png",
+      "sha256": "033948a748fd6f17ff7ca3d8c904a99e73a5827593cbb4de93e78d16755648fa"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_abdomen_02.png",
+      "sha256": "5e2e7232da2b72dd8523cfa70873f37a842c44d2976918fdb3cb61c57db45eac"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_abdomen_03.png",
+      "sha256": "845b89205c622ee4b7abcfd58731f1490103870ca17418133ccfc3c3ac67a662"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_abdomen_04.png",
+      "sha256": "b17c448d5f0a95743047e88fb4937f5422c8ea7c934ee2b6bb2474c5ea0387ce"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_antenna_01.png",
+      "sha256": "0b12124caad281677c29a3334ea66518572a667bec79da47ed1f9c7e27456961"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_antenna_02.png",
+      "sha256": "216b496a4856ce7f8ebda1849229bbdb34336c1e14f499b430ecdb72fe98ffa8"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_antenna_03.png",
+      "sha256": "19ed53ded241645f2dc65c4150837a5990c309495f4e9653f3368c9b6c132a3d"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_forearm_l.png",
+      "sha256": "8328e2560b9ff6b4a5b8d247b2c2be38c5e4446929a24b6d193fdacbc3c2c044"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_forearm_r.png",
+      "sha256": "c0458f38d7a33ea8b591bec892ef634a571215e14c953ac780a844da5e7990d6"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_head_chest.png",
+      "sha256": "8404854fac5232cdffcffa722f0a0f2a9ab06f2629f3b50ef5f483b72f0fd1ef"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_01.png",
+      "sha256": "2e5537122dce77d2eeb79868fc731efd851e861cab7b25d68c7310323c5107c5"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_02.png",
+      "sha256": "5d9f75627eba6ef839baae274e07a7a1160a5cb3d87584c86dd24d00c469791c"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_03.png",
+      "sha256": "333248b643226b9ea06e81b0466fcf3c0d67217d52e047ad17d9dddfdc1245cf"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_04.png",
+      "sha256": "dece7bb1dc5e11525ed07e3c91da6e308122455991f837ede832dc041a352b58"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_05.png",
+      "sha256": "d8469e1236e72c128589703af9712b529c8f9c868ed76fd9563a835602772ef4"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_06.png",
+      "sha256": "06f646460ff1202bf4a58e3173ea3ec80cca90b2d2ea63f9a91cf3906fa17653"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_07.png",
+      "sha256": "9982ca4137a7a9517d1b865cd64a591b5fa1963a4e99e3d8b49c7dc885fbf2a0"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_08.png",
+      "sha256": "a21955dda6237cd191feb99b968c32ee91570a2646468cdf0432a4fa37e2377a"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_leg_walk_09.png",
+      "sha256": "603df3054479078ab2a077bf3ad7a13bb688ec72ec7c085da711f2dad54b6a3c"
+    },
+    {
+      "path": "shrimp_07/textures/shrimp_07_tail.png",
+      "sha256": "5fa8bbb90d8d13a31705b14fd6074b0eb25f963f450fa81c8f71232dcbc94351"
+    },
+    {
+      "path": "shrimp_04/assembled-restored.png",
+      "sha256": "7b7851a9f14021046d430d2d7064577402627716aa78ac3d06e1a4079a02d6f9"
+    },
+    {
+      "path": "shrimp_04/layers-preview.png",
+      "sha256": "eaac14b074926af6229749b071ff6753c8f0433314352dee22a86f7853c912da"
+    },
+    {
+      "path": "shrimp_04/original-selection.png",
+      "sha256": "03de097dd59408bff85152e0bbdd8474673b5641147c04544c485b413bab7cfb"
+    },
+    {
+      "path": "shrimp_04/restoration/approved-repair-region.png",
+      "sha256": "ebfc110230dcdc71ca07a319557740fcc7dd5780af25103dc93c4546a1e88cf4"
+    },
+    {
+      "path": "shrimp_04/restoration/hidden-root-mask.png",
+      "sha256": "f59defeabc16d104dc760020b64764c4375fc0c0936767f30da357fddb81c5ab"
+    },
+    {
+      "path": "shrimp_04/restoration/host-repaint-mask.png",
+      "sha256": "58e803dbe15ce1eb3311f1c494835662d6808ff343056d829a35d4880e5920c0"
+    },
+    {
+      "path": "shrimp_04/restoration/repair-plate-native.png",
+      "sha256": "f5d21f57278c3a763038b2e4c69a8c7716291746746d3005a8f045d5ce967b96"
+    },
+    {
+      "path": "shrimp_04/restoration/source-grid-qa.png",
+      "sha256": "17956b2efbc0b073c5ed395495f10638e884fb8eff232e0983980892f836c287"
+    },
+    {
+      "path": "shrimp_04/rig.json",
+      "sha256": "9c7c0e4f46f1d01f2dddb79c708b56be651d675d28de9f7d39b262b0bc76eb8d"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_abdomen_01.png",
+      "sha256": "f1513b2cc8516dfac6767d9bd9bd7a37e284ebae3482ccef6835e462ec71d36d"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_abdomen_02.png",
+      "sha256": "72d00c2770b3ee56bec7b7a5b0a946e2763ffbd926da66cb7147dd2dedd0ae71"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_abdomen_03.png",
+      "sha256": "0e8a7449174404f9e3583a239988a8cec58bd7a6df21a1e474236a15353c568d"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_abdomen_04.png",
+      "sha256": "17d04eb0b8bb4b6231d7c0897878f6c780f030edc801746ea97a05d80cec5e11"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_abdomen_05.png",
+      "sha256": "90ca24d3abb07471d01e63d02a49110b8254c26a99c333696a2ab699017f74db"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_antenna_01.png",
+      "sha256": "181bb02a4ab8fc024880b3f761c3cee5180877bd5a66c19b3a1b4a402564b176"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_antenna_02.png",
+      "sha256": "7db22759c0c3c86ccad3b5ee07412ac2e2c04d65fe07683a8c09cba7c1078c42"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_forearm_l.png",
+      "sha256": "0d3dd19021c1401c7b2898a402904606cfbf0a8bb35c37e68e993a583e81f1c1"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_forearm_r.png",
+      "sha256": "923bd83396293b19e108893483fe4511dcac650156d8cd34710f88cb49a66561"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_head_chest.png",
+      "sha256": "bec1c820229e0e05b64407b6276f3bbe3c1b77a975487b7672f7ddba5f3804fa"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_leg_walk_01.png",
+      "sha256": "d3403359508c76bfab86a364dd6cfad47777f46cd8d6d25693dd252e1746fef4"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_leg_walk_02.png",
+      "sha256": "47dfe3dd7e1d16f13fe9ee24b94c52c071b8c8efc23c683f7f5d2beb4fa259b6"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_leg_walk_03.png",
+      "sha256": "19b1d0978621faf2d19227b235c4eb74afc27a9fa2ba25f38a530572c561b48c"
+    },
+    {
+      "path": "shrimp_04/shrimp_04_tail.png",
+      "sha256": "7ae976eb22cc4fc17621e8b588076943478b2af791e54647ef39e41e6df4c0a0"
+    },
+    {
+      "path": "shrimp_04/source.png",
+      "sha256": "e84b87a88ae521f82c8af044e68c2917b8a2e3f96e4267472376cfc251cca4b7"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_abdomen_01.png",
+      "sha256": "46644b4d8fef8e589b26040254a3fe45d227972708a9722bbbbbee46c482b3f1"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_abdomen_02.png",
+      "sha256": "b4bf782cd453f053fb5f251a9096ca566b7f86f385959ad9ea122f15fa4fc9ba"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_abdomen_03.png",
+      "sha256": "b5a4e661ec2415ad31f04980883e2715a935b656799e80dc068c54ad5ec35b16"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_abdomen_04.png",
+      "sha256": "9dad9da477e2c257437444d08e81d90df2e82d778fe9397f3711f872e121c440"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_abdomen_05.png",
+      "sha256": "a2c71ae937b96584dc92014dc6c6862a4bcca3fee42ce417d2c2a22938663043"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_antenna_01.png",
+      "sha256": "c6e1ee3279333946b659eb970e296f394ebd904324b7dc4d4075b6b8cddb4854"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_antenna_02.png",
+      "sha256": "ce237e978effbb1ee04518cf6363ba603acd6255f79dc6308061f25b10207347"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_forearm_l.png",
+      "sha256": "580c28e1b92f0cec928dcbd0d0db46098723677c886b8f2e06f2514d0da84e90"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_forearm_r.png",
+      "sha256": "2b0a9affc52d58a66b64450e05887c1ffe7705f39bd99642b99b729c9c674e52"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_head_chest.png",
+      "sha256": "eb5c94a2b756584ea1c0ce863029ce1c6ce7edb2975984d95cd576ddb5c91397"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_leg_walk_01.png",
+      "sha256": "69aa23bb413622bf458e258117c60266a5b08c130b65324921b336f755d324b2"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_leg_walk_02.png",
+      "sha256": "2f19b851fc0653cf681a87360a509107678dc5b7bb37a24287e0a3dd7ee80c7f"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_leg_walk_03.png",
+      "sha256": "9ff35f656d833089b965bc2d64246fbb390f82998c4c69ec04c32a0b98f2c1c4"
+    },
+    {
+      "path": "shrimp_04/textures/shrimp_04_tail.png",
+      "sha256": "13d15f6c6c6978d9036dbca6d251e87582a998f5995fc0fc1520a02e5ee4220c"
+    },
+    {
+      "path": "shrimp_05/assembled-restored.png",
+      "sha256": "e03d1be60723649acbc6b5527c07f57ef6df5a4fee7938de3b97c6c00115c1a8"
+    },
+    {
+      "path": "shrimp_05/layers-preview.png",
+      "sha256": "2cf4190d986cc658540e22ac04e3f39ae09050962bd11513776ba1c123d5d136"
+    },
+    {
+      "path": "shrimp_05/restoration/approved-repair-region.png",
+      "sha256": "0ef343e58589751189d26a93b714da4a3fd36698530aa9bd319707b9d44dc495"
+    },
+    {
+      "path": "shrimp_05/restoration/hidden-root-mask.png",
+      "sha256": "12d9db8ffb3bb1a4525e4b79e99afe58d8d7db99f839c7c923f3cf58869b7232"
+    },
+    {
+      "path": "shrimp_05/restoration/host-repaint-mask.png",
+      "sha256": "90379a53658eed8c07c875d54e5963e6bc68aa78db97116a7abc06c298080d01"
+    },
+    {
+      "path": "shrimp_05/restoration/repair-plate-native.png",
+      "sha256": "d225ebf2f39d5d61bfc581dc659327dbc182fa37461a623c0dbe970ecb9668e9"
+    },
+    {
+      "path": "shrimp_05/restoration/source-grid-qa.png",
+      "sha256": "120850f85a79f97f0a82a53175fe2558f2aa03e0b4aaf63c274c0c5274d4ccb7"
+    },
+    {
+      "path": "shrimp_05/rig.json",
+      "sha256": "1b1fb776ba8e69cb337d55262529c8df85a6138c2c886fd0f17042d30b9aff2b"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_abdomen_01.png",
+      "sha256": "fe5a1a7106ff8f45a56d823d3d0b142aad239d6b9a0f70cef5c8515126b723dc"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_abdomen_02.png",
+      "sha256": "541a3b286054984df8446093563163a32c0420c10125873476a64c057b8f542f"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_abdomen_03.png",
+      "sha256": "dfa5eb953abfac5ef621fafa20f9aea44d6fe79e1da56be2b0fd6a9305effdee"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_abdomen_04.png",
+      "sha256": "42ea0a059589842286c78094a6f94ecd3ee562623dbce0a8af4ea8905c70821c"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_abdomen_05.png",
+      "sha256": "c4e8b1df26c0b42b928209fd519617c19d7ab6cf8cd7edb4bf6eddc44453e516"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_antenna_01.png",
+      "sha256": "d33992e72690f3b27d525c3a77c987af0c06861a6c7fea8a2813727324b5a770"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_antenna_02.png",
+      "sha256": "917f92012e6e6cfa30dcd0cf446642b9bb28213e44bfd99a05e94a8bde7c7681"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_forearm_l.png",
+      "sha256": "27fdc94acb8f008db8ec6004b9aca43ff8970254b7d15bc258c270e8a6dea77f"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_forearm_r.png",
+      "sha256": "1cbe9f3395eb634593c75b80675ad380cbdeca49be6d4da934f7c644990c439b"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_head_chest.png",
+      "sha256": "2080cc7b37543bd0a02743ff6c0d6697e4f34080b5202af05b0195a89e198791"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_leg_walk_01.png",
+      "sha256": "9bcf782ca909ffdb410957cdcabb111218bc9364f35858efeeb706b01b167fa2"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_leg_walk_02.png",
+      "sha256": "b02e5b21c19e730155381179191f93737ae33a838bd2ca93a8c776ca5a0822ef"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_leg_walk_03.png",
+      "sha256": "02cdd76a08fc852d858420b3f686cfa538c11b327686341070f32cab7b43117b"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_leg_walk_04.png",
+      "sha256": "17a0e5814d6eff5ab6a41485e49d46a1c8f3f0f98821729232c01bed8d8e0518"
+    },
+    {
+      "path": "shrimp_05/shrimp_05_tail.png",
+      "sha256": "605367fba7cb6a6c2a782128d01741a0eca1e8e7033175231748f015199cf999"
+    },
+    {
+      "path": "shrimp_05/source.png",
+      "sha256": "95a42d0000bba2e63a658d00707cb77dd315ae943383f096b96e130ccf768434"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_abdomen_01.png",
+      "sha256": "47ddbe7561a444c8473da5b57a0fdf15435545e09ce8ab4f4e659ddf55f78f2f"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_abdomen_02.png",
+      "sha256": "a5010d6f9d4b4e4afa3d58a493172da176fd3a36b56cd33b33c0a2a18a4b60d3"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_abdomen_03.png",
+      "sha256": "eaabf2c95a87dbd04dddae92a4f6f3f4d2c0f11238e8e611d1d8ed2830d77fa4"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_abdomen_04.png",
+      "sha256": "cd665e21d277e60d2dc03bb9b989b1befcc23b905a6acd1b92c8c138ddd5018a"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_abdomen_05.png",
+      "sha256": "bc4ab9c906a16e19d0311cf774efe9d45d3f57f5846f808cf7bbb7c883878097"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_antenna_01.png",
+      "sha256": "1ab576f71f5e25dc869e9d06e9ab282486ad13d524626e216d710a7bc491d281"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_antenna_02.png",
+      "sha256": "63fa584031f7cc7de9d6f84ce369161bab2e704c8b8df0a86529152fbc2a09e5"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_forearm_l.png",
+      "sha256": "f6a2e84f51077e013991dc552c77068121d3eb92a71b4f6344e89c3a9f504ea5"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_forearm_r.png",
+      "sha256": "7bb9d0cacf260c2980f29b7902538324953799b7b0a13acf14fbe42fb4c920ef"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_head_chest.png",
+      "sha256": "f6fa809d0d46e40e960ab9c97baecf8606ba2fa8497d7188e9e009a2f55fe792"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_leg_walk_01.png",
+      "sha256": "a4be950258dededc1cfa20e91b630944e7423168c62affc1feba08e2189d399b"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_leg_walk_02.png",
+      "sha256": "7d6fa100fe99e6d92391fc045a83db6048a1870def5dc8d842258bdd4bc7f616"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_leg_walk_03.png",
+      "sha256": "ff6a930e11608845f180a227a4df5e556724957069a958ef77f8b8f1d7623323"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_leg_walk_04.png",
+      "sha256": "306bd00e6fc3bb3f793373a4d7f5e9bfc50ebfa6f4e4854647ffc465aa038aa2"
+    },
+    {
+      "path": "shrimp_05/textures/shrimp_05_tail.png",
+      "sha256": "16f419f48d3a7430a98b6591d01c19457d9c0c4a782ef206e61ce4e40b0df1cb"
+    },
+    {
+      "path": "turtle_02/assembled-restored.png",
+      "sha256": "4b20176daa1304736ba1e37030b8354674079db53e52573ef9a1d5418dafc26b"
+    },
+    {
+      "path": "turtle_02/layers-preview.png",
+      "sha256": "71c0a179533f862b72d2f0a9d36d3ea6e01a1dff1afd81d9a53f65c507555074"
+    },
+    {
+      "path": "turtle_02/restoration/approved-repair-region.png",
+      "sha256": "4e3ffa31702ca80950ccd51120c06857c337643ea0cbdbf28ea9cf8d9e4554f6"
+    },
+    {
+      "path": "turtle_02/restoration/hidden-root-mask.png",
+      "sha256": "a0cf3cc214f9b64f9b3466d7a0126da473678b6cc0d6fea6bd7ea214dcd74983"
+    },
+    {
+      "path": "turtle_02/restoration/host-repaint-mask.png",
+      "sha256": "adcbea2015cfa550a45682fc446588950900cf9b806d0374d30c0dcb836fcf04"
+    },
+    {
+      "path": "turtle_02/rig.json",
+      "sha256": "8a44f67b9346f3983875aa347f1c09773aa9539efcbb0659f9750a80a51091b1"
+    },
+    {
+      "path": "turtle_02/source.png",
+      "sha256": "f853d3e6b4b667573a5a2522864046ba224fca30b415bfdc5c71e8ebc77a8f91"
+    },
+    {
+      "path": "turtle_02/textures/turtle_02_head.png",
+      "sha256": "46f5dee00a6b09bc68cbef6c86e2233775db8a308d403fb638f9256ac739e4d1"
+    },
+    {
+      "path": "turtle_02/textures/turtle_02_leg_bl.png",
+      "sha256": "0a3f33203b7357ef3737b411d076801d9e6aae16eb42327b067f3fdf64557875"
+    },
+    {
+      "path": "turtle_02/textures/turtle_02_leg_br.png",
+      "sha256": "228a6e614d8040341a2697d775fde6c4a44c8907ad0699bc2b062335846cd9cc"
+    },
+    {
+      "path": "turtle_02/textures/turtle_02_leg_fl.png",
+      "sha256": "50a72e81e323387f14aa3377fb814cbbbaf00be074889c9ffd6df6560538506f"
+    },
+    {
+      "path": "turtle_02/textures/turtle_02_leg_fr.png",
+      "sha256": "992f2dfd579f5f1765ca2f5a09edc0b79cdeb429fddcf7117c8e4a5a22907148"
+    },
+    {
+      "path": "turtle_02/textures/turtle_02_shell.png",
+      "sha256": "7e90516eb850e247d47766472008405cd2ebde07c0785a61f70b01ebfcad8c91"
+    },
+    {
+      "path": "turtle_02/textures/turtle_02_tail.png",
+      "sha256": "a1115f29da76c93cf19eabab88e58fa4915e7cbe59851fe9a882dae8b181b867"
+    },
+    {
+      "path": "turtle_02/turtle_02_head.png",
+      "sha256": "ef05dd626de2ad935b4378145d02e6a0b1a78104b2819f399b8e9806c62ad3b4"
+    },
+    {
+      "path": "turtle_02/turtle_02_leg_bl.png",
+      "sha256": "e519022b2b157f1260f4643336eed64f9c6c1fda9c0ca5762cf7dde16cf00671"
+    },
+    {
+      "path": "turtle_02/turtle_02_leg_br.png",
+      "sha256": "d799a03867d2a798ba51cd429d000ca4afe8d36406944d39ee518baa2cbcc3d7"
+    },
+    {
+      "path": "turtle_02/turtle_02_leg_fl.png",
+      "sha256": "b7c185a0e00c0af9c45dcfaad8e52e58b188fc43d7d9e82600ba80629c12bf4a"
+    },
+    {
+      "path": "turtle_02/turtle_02_leg_fr.png",
+      "sha256": "d8df1f7d72ef4848092bcabfdbd64e0be4970a9ceb6870a6ce9dc2cee260ecae"
+    },
+    {
+      "path": "turtle_02/turtle_02_shell.png",
+      "sha256": "d0ec21aac33aa1b9f5fc9bfc7ec98f1ac36dc15c4ccd8f6bbff28faa2135a464"
+    },
+    {
+      "path": "turtle_02/turtle_02_tail.png",
+      "sha256": "a85ad69318e8d6213cc545290d4b1920fdf99c45cdb0ce250c5493884bb94f46"
+    },
+    {
+      "path": "turtle_08/assembled-restored.png",
+      "sha256": "0a29fafc371a25c7fbe9ba1ba91eb9e69c7e2597c03bf7c7127a185ef55529d7"
+    },
+    {
+      "path": "turtle_08/layers-preview.png",
+      "sha256": "d8abcca1f74316a4d5287a8578594012d647afcc84b9985241a0472aab39ac42"
+    },
+    {
+      "path": "turtle_08/restoration/approved-repair-region.png",
+      "sha256": "41b1b044af59dfb8728696918f660d695a8145fd49b287add855303a769addd9"
+    },
+    {
+      "path": "turtle_08/restoration/neck-r6-mask.png",
+      "sha256": "445eb4f3c938b1ca0f866f8df3dff2203b693a964647cd3cf68997db2dbf3cd0"
+    },
+    {
+      "path": "turtle_08/rig.json",
+      "sha256": "c477677a91725f335ca6f1232f0c2f1049d2489fbd227811193a774cd180b9b6"
+    },
+    {
+      "path": "turtle_08/source.png",
+      "sha256": "c96e60c03656f31035df89166a3989d213bf95bce5b9b6dd99b1366586a5d5be"
+    },
+    {
+      "path": "turtle_08/textures/turtle_08_head.png",
+      "sha256": "efd072366f6b4e96832c83be13cdda554c9243cab49875376bcee53463b38060"
+    },
+    {
+      "path": "turtle_08/textures/turtle_08_leg_bl.png",
+      "sha256": "633eff10b46ab851aee08268fb03a2debca24c869c562c4875c2d6bc9b984298"
+    },
+    {
+      "path": "turtle_08/textures/turtle_08_leg_br.png",
+      "sha256": "f442c46f3f787011ad2bbb50b38b7c0de6474dacaa051dd5b678c68dd3c5843c"
+    },
+    {
+      "path": "turtle_08/textures/turtle_08_leg_fl.png",
+      "sha256": "c8b1885e4fb4aa6fa98dbf1731630813ed5ab48fff44851afb2a1ca6dceebc20"
+    },
+    {
+      "path": "turtle_08/textures/turtle_08_leg_fr.png",
+      "sha256": "db033687f6f3aa70030085c61bfcaba7a8533a1283ebde5502b0d15a60c5be1f"
+    },
+    {
+      "path": "turtle_08/textures/turtle_08_shell.png",
+      "sha256": "37ca648938dd3849dc294a79779cff89fb053d96152650b1616b9e35041b12b8"
+    },
+    {
+      "path": "turtle_08/textures/turtle_08_tail.png",
+      "sha256": "82618aaca7bfbadb3c0c20dc46c694ecad568ec477c2ec46fe88cb61847723e3"
+    },
+    {
+      "path": "turtle_08/turtle_08_head.png",
+      "sha256": "b5a70d52ad48a660d51769f28fb68fd263225a4e40e05357f13993f856116fbc"
+    },
+    {
+      "path": "turtle_08/turtle_08_leg_bl.png",
+      "sha256": "9d42361ca459652ecc7d9977f9fc76b26eb5960946487a8538cc18e650767a83"
+    },
+    {
+      "path": "turtle_08/turtle_08_leg_br.png",
+      "sha256": "0b8e7d6453dd2a1d759dbeea2f64794619c8b6fdece56b22b2f540531f8711d1"
+    },
+    {
+      "path": "turtle_08/turtle_08_leg_fl.png",
+      "sha256": "38b58d55adf10bace96ae2e2fc079521e2197cd55d23488b1ab70b36290d4246"
+    },
+    {
+      "path": "turtle_08/turtle_08_leg_fr.png",
+      "sha256": "2e7f59c3f30a40ff0669b3ce12ea466dc068fcc1a35a4f3f3b26b4ea5e837f92"
+    },
+    {
+      "path": "turtle_08/turtle_08_shell.png",
+      "sha256": "51d04d73f4cce7dc437a73375833ec61189d96c4c81c164c415f14de8cc89383"
+    },
+    {
+      "path": "turtle_08/turtle_08_tail.png",
+      "sha256": "dcf34d4b467d99b55c53a1ef16b37f57d94b83f54893174cf89de37b83145052"
+    }
+  ],
+  "publishedR6": {
+    "path": "D:\\ink_game_codex\\publish-creature-rig-20261120\\previews\\creature-rig",
+    "differences": []
+  }
+}

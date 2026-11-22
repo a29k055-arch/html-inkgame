@@ -1,6 +1,6 @@
 /** Canvas 2D ink puppet runtime. Coordinates/input are CSS pixels, seconds and radians. */
-import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r6-zoom-and-joints-20261122';
-export const INK_CREATURE_REV='rig-r6-zoom-and-joints-20261122';
+import {WebGLMeshSurface} from './mesh-webgl.mjs?rev=rig-r7-smooth-performance-20261123';
+export const INK_CREATURE_REV='rig-r7-smooth-performance-20261123';
 const TAU = Math.PI * 2;
 const RESOURCE_CACHE=new Map();
 const revisionURL=(value,base)=>{const url=new URL(value,base);url.searchParams.set('inkRigRev',INK_CREATURE_REV);return url;};
@@ -8,10 +8,14 @@ export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const wrapAngle = a => Math.atan2(Math.sin(a), Math.cos(a));
 export const damp = (a, b, rate, dt) => a + (b - a) * (1 - Math.exp(-rate * dt));
 const smoothstep=x=>{x=clamp(x,0,1);return x*x*(3-2*x);};
-export function steeringStep(angle,velocity,target,profile,dt) {
-  let error=wrapAngle(target-angle);
-  if(Math.abs(error)>Math.PI-.025&&Math.abs(velocity)>.05)error=Math.sign(velocity)*Math.abs(error);
-  const acceleration=clamp(profile.stiffness**2*error-2*profile.stiffness*velocity,-profile.maxAngularAcceleration,profile.maxAngularAcceleration);
+export function steeringStep(angle,velocity,target,profile,dt,previousAcceleration=0,cyclic=true) {
+  let error=cyclic?wrapAngle(target-angle):target-angle;
+  if(cyclic&&Math.abs(error)>Math.PI-.025&&Math.abs(velocity)>.05)error=Math.sign(velocity)*Math.abs(error);
+  const softLimit=profile.maxAngularVelocity*.9;
+  const desiredVelocity=softLimit*Math.tanh(profile.stiffness*error/(2*softLimit));
+  const desired=clamp(2*profile.stiffness*(desiredVelocity-velocity),-profile.maxAngularAcceleration,profile.maxAngularAcceleration);
+  // Ease the force as well as the heading: quick reversals must not snap acceleration.
+  const acceleration=Number.isFinite(profile.maxAngularJerk)?previousAcceleration+clamp(desired-previousAcceleration,-profile.maxAngularJerk*dt,profile.maxAngularJerk*dt):desired;
   const nextVelocity=clamp(velocity+acceleration*dt,-profile.maxAngularVelocity,profile.maxAngularVelocity);
   return {angle:angle+(velocity+nextVelocity)*.5*dt,velocity:nextVelocity,acceleration};
 }
@@ -52,14 +56,14 @@ export function makeCurve(points, smooth=true) {
   if(lengths.at(-1)<1e-5) throw Error('Spine needs distinct points');
   return {points:p,lengths,length:lengths.at(-1)};
 }
-export function sampleCurve(curve,s) {
+export function sampleCurve(curve,s,out={}) {
   const {points:p,lengths:l,length:L}=curve; const distance=s*L;
   let i=0;
   if(distance>=L) i=p.length-2;
   else if(distance>0) {let lo=0,hi=l.length-1;while(hi-lo>1){let m=(lo+hi)>>1;if(l[m]<=distance)lo=m;else hi=m;}i=lo;}
   const dx=p[i+1][0]-p[i][0],dy=p[i+1][1]-p[i][1],len=Math.hypot(dx,dy)||1;
   const t=(distance-l[i])/len;
-  return {x:p[i][0]+dx*t,y:p[i][1]+dy*t,tx:dx/len,ty:dy/len};
+  out.x=p[i][0]+dx*t;out.y=p[i][1]+dy*t;out.tx=dx/len;out.ty=dy/len;return out;
 }
 export function projectPoint(curve,x,y) {
   let best=Infinity,result;const p=curve.points,l=curve.lengths;
@@ -75,10 +79,10 @@ export function projectPoint(curve,x,y) {
 }
 
 const PROFILES={
-  fish:{amplitude:.42,idle:.07,hz:1.85,idleHz:.38,waves:1.1,delay:.34,stiffness:6,maxAngularVelocity:3.5,maxAngularAcceleration:12,appendage:.18,speedScale:1},
-  dragon:{amplitude:1.0,idle:.88,hz:.48,idleHz:.16,waves:1.9,delay:.95,stiffness:4,maxAngularVelocity:1.8,maxAngularAcceleration:5,appendage:.09,speedScale:.82},
-  shrimp:{amplitude:.035,idle:.012,hz:.9,idleHz:.24,waves:.7,delay:.12,stiffness:5,maxAngularVelocity:2.0,maxAngularAcceleration:7,appendage:.05,speedScale:.72},
-  turtle:{amplitude:0,idle:0,hz:.28,idleHz:.28,waves:0,delay:0,stiffness:3,maxAngularVelocity:1.2,maxAngularAcceleration:3,appendage:.19,speedScale:.42}
+  fish:{amplitude:.38,idle:.07,hz:1.55,idleHz:.38,waves:1.1,delay:.38,stiffness:5.2,maxAngularVelocity:3.1,maxAngularAcceleration:10,maxAngularJerk:48,appendage:.18,speedScale:1},
+  dragon:{amplitude:1.0,idle:.88,hz:.42,idleHz:.16,waves:1.9,delay:.95,stiffness:3.6,maxAngularVelocity:1.65,maxAngularAcceleration:4.2,maxAngularJerk:18,appendage:.09,speedScale:.82},
+  shrimp:{amplitude:.035,idle:.012,hz:.9,idleHz:.24,waves:.7,delay:.12,stiffness:5,maxAngularVelocity:2.0,maxAngularAcceleration:7,maxAngularJerk:36,appendage:.05,speedScale:.72},
+  turtle:{amplitude:0,idle:0,hz:.28,idleHz:.28,waves:0,delay:0,stiffness:3,maxAngularVelocity:1.2,maxAngularAcceleration:3,maxAngularJerk:14,appendage:.19,speedScale:.42}
 };
 const getCanvas=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
 async function imageAt(url) {
@@ -88,6 +92,11 @@ function readBounds(data,w,h) {
   let x0=w,y0=h,x1=-1,y1=-1;
   for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(data[(y*w+x)*4+3]>2){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y);}
   return x1<0?null:{x:x0,y:y0,w:x1-x0+1,h:y1-y0+1};
+}
+function compactMesh(vertices,triangles) {
+  const indices=new Int32Array(vertices.length).fill(-1),kept=[];
+  for(const triangle of triangles)for(const index of triangle)if(indices[index]<0){indices[index]=kept.length;kept.push(vertices[index]);}
+  return{vertices:kept,triangles:triangles.map(t=>t.map(i=>indices[i])),activeIndices:Array.from({length:kept.length},(_,i)=>i)};
 }
 // Source-space skinning keeps fin roots on the same material curve as the torso.
 // Only distal fin vertices receive independent flap, rather than rotating a hard cut.
@@ -106,7 +115,7 @@ function createFinMesh(image,bounds,curve,root,pixelScale=[1,1]) {
   const occupied=new Uint8Array(nx*ny);
   for(let y=0;y<image.height;y++)for(let x=0;x<image.width;x++)if(pixels[(y*image.width+x)*4+3]>2)occupied[Math.min(ny-1,Math.floor(y/image.height*ny))*nx+Math.min(nx-1,Math.floor(x/image.width*nx))]=1;
   for(let y=0;y<ny;y++)for(let x=0;x<nx;x++)if(occupied[y*nx+x]){const a=y*(nx+1)+x,b=a+1,c=a+nx+1,d=c+1;triangles.push([a,b,d],[a,d,c]);}
-  return {vertices,triangles,activeIndices:[...new Set(triangles.flat())]};
+  return compactMesh(vertices,triangles);
 }
 function textureTriangle(ctx,image,a,b,c,A,B,C) {
   const det=(b.x-a.x)*(c.y-a.y)-(c.x-a.x)*(b.y-a.y);if(Math.abs(det)<1e-8)return;
@@ -142,9 +151,9 @@ export class InkCreature {
     if(!this.profile)throw Error('Unknown creature profile');
     this.sourceCurve=makeCurve(rig.spine);this.length=length;this.maxSpeed=speed;this.x=x;this.y=y;
     this.heading=this.species==='shrimp'?0:-Math.PI/2;this.targetHeading=this.heading;this.angularVelocity=0;this.angularAcceleration=0;
-    this.facing=1;this.desiredFacing=1;this.shrimpTurnProgress=0;this.shrimpTurnVelocity=0;this.inclination=0;this.inclinationVelocity=0;
+    this.facing=1;this.desiredFacing=1;this.shrimpTurnProgress=0;this.shrimpTurnVelocity=0;this.inclination=0;this.targetInclination=0;this.inclinationVelocity=0;
     this.vx=0;this.vy=0;this.input={x:0,y:0};this.time=0;this.drive=0;this.locomotion=0;this.wavePhase=this.species==='dragon'?Math.PI*.4:0;this.finPhase=0;this.gaitPhase=0;
-    this.mode='manual';this.history=[{t:-10,a:this.heading},{t:0,a:this.heading}];this.layers=[];this.offsets=new Map();this.finSurfaces=new Map();
+    this.mode='manual';this.history=[{t:-10,a:this.heading,v:0},{t:0,a:this.heading,v:0}];this.layers=[];this.offsets=new Map();this.finSurfaces=new Map();
     this.pose=this.buildPose();this.targetCurve=makeCurve(this.pose,false);this.disposed=false;
   }
   async loadImages(url) {
@@ -189,18 +198,25 @@ export class InkCreature {
     const occupied=new Uint8Array(nx*ny);
     for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(alpha[(y*w+x)*4+3]>2)occupied[Math.min(ny-1,Math.floor(y/h*ny))*nx+Math.min(nx-1,Math.floor(x/w*nx))]=1;
     for(let y=0;y<ny;y++)for(let x=0;x<nx;x++)if(occupied[y*nx+x]) {const a=y*(nx+1)+x,b=a+1,c=a+nx+1,d=c+1;triangles.push([a,b,d],[a,d,c]);}
-    this.mesh={vertices,triangles,activeIndices:[...new Set(triangles.flat())]};
+    this.mesh=compactMesh(vertices,triangles);
   }
   setInput(x,y) {x=Number.isFinite(x)?x:0;y=Number.isFinite(y)?y:0;const mag=Math.hypot(x,y);this.input={x:x/Math.max(1,mag),y:y/Math.max(1,mag)};return this;}
   setLayerOffset(name,{rotation=0,opacity=1}={}) {this.offsets.set(name,{rotation,opacity:clamp(opacity,0,1)});return this;}
   setMode(mode) {if(!['manual','auto','idle','straight','rest'].includes(mode))throw Error('Unknown mode');this.mode=mode;return this;}
   reset(x=this.x,y=this.y,heading=this.species==='shrimp'?0:-Math.PI/2) {
     this.x=x;this.y=y;this.heading=heading;this.targetHeading=heading;this.angularVelocity=0;this.angularAcceleration=0;
-    this.facing=Math.cos(heading)<-.22?-1:1;this.inclination=this.facing===1?wrapAngle(heading):wrapAngle(Math.PI-heading);this.inclinationVelocity=0;
+    this.facing=Math.cos(heading)<-.22?-1:1;this.inclination=this.facing===1?wrapAngle(heading):wrapAngle(Math.PI-heading);this.targetInclination=this.inclination;this.inclinationVelocity=0;
     this.desiredFacing=this.facing;this.shrimpTurnProgress=this.facing===1?0:1;this.shrimpTurnVelocity=0;
-    this.vx=0;this.vy=0;this.drive=0;this.locomotion=0;this.history=[{t:this.time-10,a:heading},{t:this.time,a:heading}];this.pose=this.buildPose();this.targetCurve=makeCurve(this.pose,false);return this;
+    this.vx=0;this.vy=0;this.drive=0;this.locomotion=0;this.history=[{t:this.time-10,a:heading,v:0},{t:this.time,a:heading,v:0}];this.pose=this.buildPose();this.targetCurve=makeCurve(this.pose,false);return this;
   }
-  angleAt(t) {const h=this.history;for(let i=h.length-1;i>0;i--)if(h[i-1].t<=t){const f=clamp((t-h[i-1].t)/(h[i].t-h[i-1].t||1),0,1);return h[i-1].a+wrapAngle(h[i].a-h[i-1].a)*f;}return h[0].a;}
+  angleAt(t) {
+    const h=this.history;if(t<=h[0].t)return h[0].a;if(t>=h.at(-1).t)return h.at(-1).a;
+    let lo=0,hi=h.length-1;while(hi-lo>1){const mid=(lo+hi)>>1;if(h[mid].t<=t)lo=mid;else hi=mid;}
+    const a=h[lo],b=h[hi],span=b.t-a.t,f=(t-a.t)/span,delta=wrapAngle(b.a-a.a);
+    if(!Number.isFinite(a.v)||!Number.isFinite(b.v))return a.a+delta*f;
+    const f2=f*f,f3=f2*f;
+    return a.a+(f3-2*f2+f)*span*a.v+(-2*f3+3*f2)*delta+(f3-f2)*span*b.v;
+  }
   buildPose() {
     const p=this.profile,N=48,points=[[this.x,this.y]],straight=this.mode==='straight';
     const amp=straight?0:p.idle+(p.amplitude-p.idle)*this.drive;
@@ -226,27 +242,29 @@ export class InkCreature {
     const mag=Math.min(1,Math.hypot(ix,iy));
     if(this.species==='shrimp') {
       if(mag>.02) {
-        const present=shrimpPresentation(this.desiredFacing,ix/mag,iy/mag);this.desiredFacing=present.facing;
-        const state=steeringStep(this.inclination,this.inclinationVelocity,present.inclination,this.profile,dt);
-        this.inclination=clamp(state.angle,-Math.PI/2,Math.PI/2);this.inclinationVelocity=state.velocity;this.angularAcceleration=state.acceleration;
-      } else this.inclinationVelocity=damp(this.inclinationVelocity,0,6,dt);
+        const present=shrimpPresentation(this.desiredFacing,ix/mag,iy/mag);this.desiredFacing=present.facing;this.targetInclination=present.inclination;
+      }
+      // Pitch is an interval, not a circular heading. Up/down reversals must pass through
+      // horizontal rather than taking a wrapped shortcut around the back of the puppet.
+      const state=steeringStep(this.inclination,this.inclinationVelocity,this.targetInclination,this.profile,dt,this.angularAcceleration,false);
+      this.inclination=state.angle;this.inclinationVelocity=state.velocity;this.angularAcceleration=state.acceleration;
       const turn=stepShrimpTurn(this.shrimpTurnProgress,this.shrimpTurnVelocity,this.desiredFacing===1?0:1,dt);
       this.shrimpTurnProgress=turn.progress;this.shrimpTurnVelocity=turn.velocity;
       this.facing=this.shrimpTurnProgress<=.5?1:-1;
       this.heading=this.facing===1?this.inclination:Math.PI-this.inclination;this.angularVelocity=this.inclinationVelocity;
     } else {
       if(mag>.02)this.targetHeading=Math.atan2(iy,ix);
-      const state=steeringStep(this.heading,this.angularVelocity,this.targetHeading,this.profile,dt);
+      const state=steeringStep(this.heading,this.angularVelocity,this.targetHeading,this.profile,dt,this.angularAcceleration);
       this.heading=state.angle;this.angularVelocity=state.velocity;this.angularAcceleration=state.acceleration;
     }
     const desiredSpeed=mag*this.maxSpeed*this.profile.speedScale;
     const dx=this.species==='shrimp'&&mag>.02?ix/mag:Math.cos(this.heading),dy=this.species==='shrimp'&&mag>.02?iy/mag:Math.sin(this.heading);
     this.vx=damp(this.vx,dx*desiredSpeed,5,dt);this.vy=damp(this.vy,dy*desiredSpeed,5,dt);
-    this.x+=this.vx*dt;this.y+=this.vy*dt;this.drive=damp(this.drive,mag,5,dt);
+    this.x+=this.vx*dt;this.y+=this.vy*dt;this.drive=damp(this.drive,mag,3.8,dt);
     this.locomotion=damp(this.locomotion,mag>.025?1:0,2,dt);
     this.wavePhase+=TAU*(this.profile.idleHz+(this.profile.hz-this.profile.idleHz)*this.drive)*dt;
-    this.finPhase+=(2+6*this.drive)*dt;this.gaitPhase+=TAU*.28*dt;
-    this.history.push({t:this.time,a:this.heading});while(this.history.length>2&&this.history[1].t<this.time-3)this.history.shift();
+    this.finPhase+=(2+5*this.drive)*dt;this.gaitPhase+=TAU*.28*dt;
+    this.history.push({t:this.time,a:this.heading,v:this.angularVelocity});while(this.history.length>2&&this.history[1].t<this.time-3)this.history.shift();
   }
   get handedness(){return this.species==='shrimp'?this.facing:1;}
   get presentationWidth(){
@@ -260,7 +278,12 @@ export class InkCreature {
     const pivot=sampleCurve(this.targetCurve,.45);
     return{x:this.x+(p.x-pivot.x)*this.presentationWidth,y:this.y+p.y-pivot.y};
   }
-  mapPoint(s,t) {const p=sampleCurve(this.targetCurve,s),sign=this.handedness;return this.presentationPoint({x:p.x-p.ty*t*this.length*sign,y:p.y+p.tx*t*this.length*sign});}
+  mapPoint(s,t,out={}) {
+    const p=sampleCurve(this.targetCurve,s,this._mapSample||(this._mapSample={})),sign=this.handedness;
+    let x=p.x-p.ty*t*this.length*sign,y=p.y+p.tx*t*this.length*sign;
+    if(this.species==='shrimp'){const pivot=sampleCurve(this.targetCurve,.45,this._pivotSample||(this._pivotSample={}));x=this.x+(x-pivot.x)*this.presentationWidth;y=this.y+y-pivot.y;}
+    out.x=x;out.y=y;return out;
+  }
   layerMotion(layer) {
     if(this.mode==='straight'||this.mode==='rest')return 0;
     const {kind,side=1,phase=0}=layer;const t=this.time;
@@ -286,19 +309,33 @@ export class InkCreature {
     return {a:width*k*(C*c-S*h*s),b:k*(S*c+C*h*s),c:width*k*(-C*s-S*h*c),d:k*(-S*s+C*h*c),x:anchor.x,y:anchor.y};
   }
   attachmentPivots() {return this.layers.map(l=>{const m=this.layerTransform(l);return{name:l.name,kind:l.kind,x:m.x,y:m.y,rotation:m.rotation,handedness:this.handedness};});}
-  mapFinVertex(layer,v) {
-    const p=this.mapPoint(v.s,v.t),a=this.mapPoint(layer.anchor.s,layer.anchor.t);
+  mapFinVertex(layer,v,out={}) {
+    const p=this.mapPoint(v.s,v.t,this._finPoint||(this._finPoint={})),a=this.mapPoint(layer.anchor.s,layer.anchor.t,this._finAnchor||(this._finAnchor={}));
     const angle=(this.layerMotion(layer)+(this.offsets.get(layer.name)?.rotation||0))*v.flap,c=Math.cos(angle),s=Math.sin(angle),dx=p.x-a.x,dy=p.y-a.y;
-    return {x:a.x+c*dx-s*dy,y:a.y+s*dx+c*dy};
+    out.x=a.x+c*dx-s*dy;out.y=a.y+s*dx+c*dy;return out;
+  }
+  mapMesh(mesh,layer=null) {
+    const cache=this._mappedMeshes||(this._mappedMeshes=new WeakMap());let mapped=cache.get(mesh);
+    if(!mapped){mapped=mesh.vertices.map(()=>({x:0,y:0}));cache.set(mesh,mapped);}
+    if(!layer){for(let i=0;i<mesh.vertices.length;i++){const v=mesh.vertices[i];this.mapPoint(v.s,v.t,mapped[i]);}return mapped;}
+    const anchor=this.mapPoint(layer.anchor.s,layer.anchor.t),angle=this.layerMotion(layer)+(this.offsets.get(layer.name)?.rotation||0),fullC=Math.cos(angle),fullS=Math.sin(angle);
+    for(let i=0;i<mesh.vertices.length;i++){const v=mesh.vertices[i],p=this.mapPoint(v.s,v.t,mapped[i]);if(!v.flap)continue;const c=v.flap===1?fullC:Math.cos(angle*v.flap),s=v.flap===1?fullS:Math.sin(angle*v.flap),dx=p.x-anchor.x,dy=p.y-anchor.y;p.x=anchor.x+c*dx-s*dy;p.y=anchor.y+s*dx+c*dy;}
+    return mapped;
+  }
+  meshCommand(layer=null) {
+    if(layer){let surface=this.finSurfaces.get(layer.name);if(surface===undefined){try{surface=new WebGLMeshSurface(layer.image,layer.finMesh);}catch{surface=null;}this.finSurfaces.set(layer.name,surface);}return{surface,vertices:this.mapMesh(layer.finMesh,layer),opacity:this.offsets.get(layer.name)?.opacity??1,layer};}
+    if(this.gpuSurface===undefined){try{this.gpuSurface=new WebGLMeshSurface(this.bodyImage,this.mesh);}catch(error){this.gpuSurface=null;console.warn('WebGL unavailable, using Canvas mesh fallback:',error.message);}}
+    return{surface:this.gpuSurface,vertices:this.mapMesh(this.mesh),opacity:1,layer:null};
+  }
+  drawMeshCommands(ctx,commands) {
+    const accumulate=stats=>{if(stats){if(!this.renderStats)this.renderStats={};for(const key in stats)this.renderStats[key]=(this.renderStats[key]||0)+stats[key];}};
+    const fallback=command=>{ctx.save();ctx.globalAlpha*=command.opacity;if(command.layer){const mesh=command.layer.finMesh;for(const[a,b,c]of mesh.triangles)textureTriangle(ctx,command.layer.image,mesh.vertices[a],mesh.vertices[b],mesh.vertices[c],command.vertices[a],command.vertices[b],command.vertices[c]);}else this.drawCanvasMesh(ctx,command.vertices);ctx.restore();};
+    let batch=[];const flush=()=>{if(!batch.length)return;try{accumulate(WebGLMeshSurface.drawBatchTo(ctx,batch));}catch(error){for(const command of batch){command.surface?.dispose();if(command.layer)this.finSurfaces.set(command.layer.name,null);else this.gpuSurface=null;fallback(command);}if(!this._meshWarning){console.warn('WebGL mesh unavailable, using Canvas fallback:',error.message);this._meshWarning=true;}}batch=[];};
+    for(const command of commands){if(command.surface)batch.push(command);else{flush();fallback(command);}}flush();
   }
   drawLayer(ctx,layer) {
     if(layer.finMesh){
-      const mapped=layer.finMesh.vertices.map(v=>this.mapFinVertex(layer,v));let surface=this.finSurfaces.get(layer.name);
-      if(surface===undefined){try{surface=new WebGLMeshSurface(layer.image,layer.finMesh);}catch{surface=null;}this.finSurfaces.set(layer.name,surface);}
-      ctx.save();ctx.globalAlpha*=this.offsets.get(layer.name)?.opacity??1;
-      let rendered=false;if(surface){try{surface.drawTo(ctx,mapped);rendered=true;}catch{surface.dispose();this.finSurfaces.set(layer.name,null);}}
-      if(!rendered)for(const [a,b,c] of layer.finMesh.triangles)textureTriangle(ctx,layer.image,layer.finMesh.vertices[a],layer.finMesh.vertices[b],layer.finMesh.vertices[c],mapped[a],mapped[b],mapped[c]);
-      ctx.restore();return;
+      this.drawMeshCommands(ctx,[this.meshCommand(layer)]);return;
     }
     const m=this.layerTransform(layer);
     ctx.save();ctx.globalAlpha*=m.opacity;ctx.transform(m.a,m.b,m.c,m.d,m.x,m.y);
@@ -306,6 +343,7 @@ export class InkCreature {
   }
   draw(ctx,{debug=false}={}) {
     if(this.disposed||!this.bodyImage)return;
+    if(!this.shrimpEdgePass)this.renderStats={gpuBatches:0,meshDrawCalls:0,compositePixels:0,vertexCount:0,triangleCount:0};
     if(this.species==='shrimp'&&!this.shrimpEdgePass&&this.paperEdgeOpacity>0){
       // A paper puppet has a thin ink-bearing edge, rather than vanishing for one frame.
       const opacity=this.paperEdgeOpacity;this.shrimpEdgePass=true;ctx.save();ctx.globalAlpha*=opacity;
@@ -313,18 +351,16 @@ export class InkCreature {
     }
     if(this.mode==='rest'){this.drawSource(ctx);if(debug)this.drawDebug(ctx);return;}
     const before=this.layers.filter(l=>(l.order??0)<this.bodyOrder),after=this.layers.filter(l=>(l.order??0)>=this.bodyOrder);
-    before.forEach(l=>this.drawLayer(ctx,l));
+    let queue=[];const flush=()=>{this.drawMeshCommands(ctx,queue);queue=[];},drawLayer=layer=>{if(layer.finMesh)queue.push(this.meshCommand(layer));else{flush();this.drawLayer(ctx,layer);}};
+    before.forEach(drawLayer);
     if(this.species==='turtle') {
+      flush();
       const src=sampleCurve(this.sourceCurve,0),target=sampleCurve(this.targetCurve,0);
       ctx.save();ctx.translate(target.x,target.y);ctx.rotate(Math.atan2(target.ty,target.tx)-Math.atan2(src.ty,src.tx));ctx.scale(this.length/this.sourceCurve.length,this.length/this.sourceCurve.length);ctx.drawImage(this.bodyImage,-src.x,-src.y);ctx.restore();
     } else {
-      const mapped=this.mesh.vertices.map(v=>this.mapPoint(v.s,v.t));
-      if(this.gpuSurface===undefined){try{this.gpuSurface=new WebGLMeshSurface(this.bodyImage,this.mesh);}catch(error){this.gpuSurface=null;console.warn('WebGL unavailable, using Canvas mesh fallback:',error.message);}}
-      let rendered=false;
-      if(this.gpuSurface){try{this.gpuSurface.drawTo(ctx,mapped);rendered=true;}catch(error){this.gpuSurface.dispose();this.gpuSurface=null;console.warn('WebGL mesh unavailable, using Canvas fallback:',error.message);}}
-      if(!rendered)this.drawCanvasMesh(ctx,mapped);
+      queue.push(this.meshCommand());
     }
-    after.forEach(l=>this.drawLayer(ctx,l));if(debug)this.drawDebug(ctx);
+    after.forEach(drawLayer);flush();if(debug)this.drawDebug(ctx);
   }
   drawCanvasMesh(ctx,mapped) {
       const width=ctx.canvas.width,height=ctx.canvas.height;
@@ -363,7 +399,7 @@ export class InkCreature {
     ctx.save();ctx.lineWidth=1.5;ctx.strokeStyle='#a7482c';ctx.fillStyle='#a7482c';ctx.beginPath();points.forEach(({x,y},i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
     points.forEach(({x,y},i)=>{if(i%4===0){ctx.beginPath();ctx.arc(x,y,3,0,TAU);ctx.fill();}});ctx.restore();
   }
-  snapshot() {return{revision:INK_CREATURE_REV,id:this.id,position:{x:this.x,y:this.y},heading:this.heading,angularVelocity:this.angularVelocity,angularAcceleration:this.angularAcceleration,speed:Math.hypot(this.vx,this.vy),drive:this.drive,mode:this.mode,wavePhase:this.wavePhase,gaitPhase:this.gaitPhase,finPhase:this.finPhase,mirrorX:this.handedness<0,facing:this.facing,desiredFacing:this.desiredFacing,turnProgress:this.shrimpTurnProgress,presentationWidth:this.presentationWidth,turnCenter:this.species==='shrimp'?{x:this.x,y:this.y,spineS:.45}:null,paperEdgeWidth:this.species==='shrimp'?.012:0,paperEdgeOpacity:this.paperEdgeOpacity,inclination:this.inclination,profile:{...this.profile},attachments:this.attachmentPivots(),spine:this.pose.map(([x,y])=>this.presentationPoint({x,y})),loaded:!!this.bodyImage,triangles:this.mesh?.triangles.length||0,renderer:this.species==='turtle'?'canvas-rigid':this.gpuSurface?'webgl-mesh':'canvas-fallback'};}
+  snapshot() {return{revision:INK_CREATURE_REV,id:this.id,position:{x:this.x,y:this.y},heading:this.heading,angularVelocity:this.angularVelocity,angularAcceleration:this.angularAcceleration,speed:Math.hypot(this.vx,this.vy),drive:this.drive,mode:this.mode,wavePhase:this.wavePhase,gaitPhase:this.gaitPhase,finPhase:this.finPhase,mirrorX:this.handedness<0,facing:this.facing,desiredFacing:this.desiredFacing,turnProgress:this.shrimpTurnProgress,presentationWidth:this.presentationWidth,turnCenter:this.species==='shrimp'?{x:this.x,y:this.y,spineS:.45}:null,paperEdgeWidth:this.species==='shrimp'?.012:0,paperEdgeOpacity:this.paperEdgeOpacity,inclination:this.inclination,profile:{...this.profile},attachments:this.attachmentPivots(),spine:this.pose.map(([x,y])=>this.presentationPoint({x,y})),loaded:!!this.bodyImage,triangles:this.mesh?.triangles.length||0,renderStats:{...this.renderStats},renderer:this.species==='turtle'?'canvas-rigid':this.gpuSurface?'webgl-mesh':'canvas-fallback'};}
   dispose() {
     if(this.disposed)return;this.disposed=true;
     for(const surface of this.finSurfaces.values())surface?.dispose();this.finSurfaces.clear();

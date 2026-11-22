@@ -1,0 +1,296 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "id": "fish_04",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 30761,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.00008873456790123456,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 133824,
+        "vertexCount": 659,
+        "triangleCount": 1022,
+        "surfacePixels": 163840,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "fish_01",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 29602,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.00011959876543209877,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 4,
+        "compositePixels": 117500,
+        "vertexCount": 729,
+        "triangleCount": 1118,
+        "surfacePixels": 163840,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "fish_02",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 22263,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.00019097222222222223,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 5,
+        "compositePixels": 81174,
+        "vertexCount": 876,
+        "triangleCount": 1346,
+        "surfacePixels": 163840,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "fish_04_special",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 28785,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.00009387860082304527,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 133824,
+        "vertexCount": 659,
+        "triangleCount": 1022,
+        "surfacePixels": 163840,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "dragon_04",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 14948,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.000028935185185185186,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 58566,
+        "vertexCount": 280,
+        "triangleCount": 422,
+        "surfacePixels": 163840,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "shrimp_07",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 34692,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.0003112139917695473,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 206812,
+        "vertexCount": 311,
+        "triangleCount": 396,
+        "surfacePixels": 225280,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "shrimp_04",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 28204,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.0003054269547325103,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 203965,
+        "vertexCount": 160,
+        "triangleCount": 224,
+        "surfacePixels": 270336,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "shrimp_05",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 28806,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.00009259259259259259,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 142190,
+        "vertexCount": 193,
+        "triangleCount": 272,
+        "surfacePixels": 270336,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "turtle_02",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 83108,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0,
+      "stats": {
+        "gpuBatches": 0,
+        "meshDrawCalls": 0,
+        "compositePixels": 0,
+        "vertexCount": 0,
+        "triangleCount": 0
+      }
+    },
+    {
+      "id": "turtle_08",
+      "master": false,
+      "zoom": 1,
+      "dpr": 1,
+      "edge": false,
+      "visible": 78098,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0,
+      "stats": {
+        "gpuBatches": 0,
+        "meshDrawCalls": 0,
+        "compositePixels": 0,
+        "vertexCount": 0,
+        "triangleCount": 0
+      }
+    },
+    {
+      "id": "fish_04",
+      "master": true,
+      "zoom": 4,
+      "dpr": 1,
+      "edge": false,
+      "visible": 419756,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.0008127572016460906,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 1300320,
+        "vertexCount": 670,
+        "triangleCount": 1038,
+        "surfacePixels": 1382400,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "dragon_04",
+      "master": true,
+      "zoom": 4,
+      "dpr": 1,
+      "edge": false,
+      "visible": 216099,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.0002494855967078189,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 730080,
+        "vertexCount": 290,
+        "triangleCount": 438,
+        "surfacePixels": 1382400,
+        "viewportPixels": 1555200
+      }
+    },
+    {
+      "id": "fish_04",
+      "master": true,
+      "zoom": 4,
+      "dpr": 2,
+      "edge": true,
+      "visible": 942387,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.0002636316872427984,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 3,
+        "compositePixels": 4668936,
+        "vertexCount": 670,
+        "triangleCount": 1038,
+        "surfacePixels": 4870144,
+        "viewportPixels": 6220800
+      }
+    },
+    {
+      "id": "dragon_04",
+      "master": true,
+      "zoom": 4,
+      "dpr": 2,
+      "edge": true,
+      "visible": 537285,
+      "changed": 0,
+      "changedRatio": 0,
+      "alphaLoss": 0,
+      "meanPixelError": 0.00019917052469135802,
+      "stats": {
+        "gpuBatches": 1,
+        "meshDrawCalls": 1,
+        "compositePixels": 2082986,
+        "vertexCount": 290,
+        "triangleCount": 438,
+        "surfacePixels": 4870144,
+        "viewportPixels": 6220800
+      }
+    }
+  ],
+  "note": "Identical injected pose/time/input/scale, old and new renderer. Edge AA differences are measured; visual review remains necessary."
+}

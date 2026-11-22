@@ -1,0 +1,654 @@
+{
+  "baseline": true,
+  "revision": "rig-r6-zoom-and-joints-20261122",
+  "browser": "158.0.4370.33",
+  "conditions": {
+    "viewport": [
+      1440,
+      1080
+    ],
+    "dpr": 1,
+    "rafSampleMs": 2400,
+    "warmupMs": 700,
+    "cpuSamples": 60,
+    "source": "D:\\InkGame Unity\\Artifacts\\CreaturePublish\\r7-baseline"
+  },
+  "rows": [
+    {
+      "id": "fish_04",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665277777777778,
+        "p50": 16.699999999999818,
+        "p95": 16.799999999999955,
+        "max": 16.90000000000009
+      },
+      "fps": 60.00500041670139,
+      "longFrames": 0,
+      "taskMs": 181.683,
+      "taskPerFrame": 1.2616874999999999,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.01500000109275182,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.34166666567325593,
+        "p50": 0.30000001192092896,
+        "p95": 0.5999999940395355,
+        "max": 0.800000011920929
+      },
+      "textureSize": [
+        1218,
+        1292
+      ],
+      "displayLengthPx": 320,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "fish_01",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665277777777778,
+        "p50": 16.699999999999818,
+        "p95": 16.800000000000182,
+        "max": 16.900000000000546
+      },
+      "fps": 60.00500041670139,
+      "longFrames": 0,
+      "taskMs": 228.69599999999994,
+      "taskPerFrame": 1.5881666666666663,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.024999999503294627,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.44000000059604644,
+        "p50": 0.4000000059604645,
+        "p95": 0.7999999821186066,
+        "max": 1.199999988079071
+      },
+      "textureSize": [
+        1536,
+        1024
+      ],
+      "displayLengthPx": 320,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "fish_02",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.66388888888889,
+        "p50": 16.69999999999891,
+        "p95": 16.799999999999272,
+        "max": 16.899999999999636
+      },
+      "fps": 60.01000166694448,
+      "longFrames": 0,
+      "taskMs": 258.486,
+      "taskPerFrame": 1.7950416666666666,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.01833333373069763,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.5133333330353101,
+        "p50": 0.5,
+        "p95": 0.800000011920929,
+        "max": 0.9000000059604645
+      },
+      "textureSize": [
+        2172,
+        724
+      ],
+      "displayLengthPx": 320,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "fish_04_special",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665277777777774,
+        "p50": 16.69999999999891,
+        "p95": 16.80000000000109,
+        "max": 16.899999999999636
+      },
+      "fps": 60.00500041670141,
+      "longFrames": 0,
+      "taskMs": 261.2509999999999,
+      "taskPerFrame": 1.814243055555555,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.016666666666666666,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.46833333323399223,
+        "p50": 0.5,
+        "p95": 0.699999988079071,
+        "max": 1.0999999940395355
+      },
+      "textureSize": [
+        1218,
+        1292
+      ],
+      "displayLengthPx": 320,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "dragon_04",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665277777777774,
+        "p50": 16.69999999999891,
+        "p95": 16.80000000000109,
+        "max": 16.900000000001455
+      },
+      "fps": 60.00500041670141,
+      "longFrames": 0,
+      "taskMs": 212.76099999999997,
+      "taskPerFrame": 1.4775069444444442,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.03333333283662796,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.5
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.25166666706403096,
+        "p50": 0.20000001788139343,
+        "p95": 0.4000000059604645,
+        "max": 0.5
+      },
+      "textureSize": [
+        1024,
+        1536
+      ],
+      "displayLengthPx": 430,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "shrimp_07",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665972222222234,
+        "p50": 16.700000000000728,
+        "p95": 16.799999999999272,
+        "max": 16.80000000000291
+      },
+      "fps": 60.00250010417097,
+      "longFrames": 0,
+      "taskMs": 215.10400000000018,
+      "taskPerFrame": 1.493777777777779,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.026666667560736337,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.5
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.3333333323399226,
+        "p50": 0.30000001192092896,
+        "p95": 0.5,
+        "max": 1
+      },
+      "textureSize": [
+        1536,
+        1024
+      ],
+      "displayLengthPx": 230,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "shrimp_04",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665277777777774,
+        "p50": 16.69999999999709,
+        "p95": 16.799999999999272,
+        "max": 16.900000000001455
+      },
+      "fps": 60.00500041670141,
+      "longFrames": 0,
+      "taskMs": 198.0179999999998,
+      "taskPerFrame": 1.3751249999999986,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.01833333373069763,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.24000000009934108,
+        "p50": 0.20000001788139343,
+        "p95": 0.5,
+        "max": 0.699999988079071
+      },
+      "textureSize": [
+        1536,
+        1024
+      ],
+      "displayLengthPx": 230,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "shrimp_05",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665277777777774,
+        "p50": 16.69999999999709,
+        "p95": 16.799999999999272,
+        "max": 16.80000000000291
+      },
+      "fps": 60.00500041670141,
+      "longFrames": 0,
+      "taskMs": 206.97600000000006,
+      "taskPerFrame": 1.4373333333333338,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.015000000596046448,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.2783333331346512,
+        "p50": 0.29999998211860657,
+        "p95": 0.5,
+        "max": 0.7000000178813934
+      },
+      "textureSize": [
+        1536,
+        1024
+      ],
+      "displayLengthPx": 230,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "turtle_02",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665972222222234,
+        "p50": 16.700000000000728,
+        "p95": 16.799999999999272,
+        "max": 16.900000000001455
+      },
+      "fps": 60.00250010417097,
+      "longFrames": 0,
+      "taskMs": 146.39000000000024,
+      "taskPerFrame": 1.016597222222224,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.00833333283662796,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.09999999403953552
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.023333333929379783,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.20000001788139343
+      },
+      "textureSize": [
+        1218,
+        1292
+      ],
+      "displayLengthPx": 245,
+      "renderer": "canvas-rigid"
+    },
+    {
+      "id": "turtle_08",
+      "mode": "working",
+      "zoom": 1,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.665277777777774,
+        "p50": 16.69999999999709,
+        "p95": 16.799999999999272,
+        "max": 16.80000000000291
+      },
+      "fps": 60.00500041670141,
+      "longFrames": 0,
+      "taskMs": 152.59200000000027,
+      "taskPerFrame": 1.0596666666666685,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.0066666662693023685,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.09999999403953552
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.020000000794728596,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.10000002384185791
+      },
+      "textureSize": [
+        1086,
+        1448
+      ],
+      "displayLengthPx": 245,
+      "renderer": "canvas-rigid"
+    },
+    {
+      "id": "fish_04",
+      "mode": "master",
+      "zoom": 4,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.664583333333365,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 16.80000000000291
+      },
+      "fps": 60.00750093761709,
+      "longFrames": 0,
+      "taskMs": 270.15300000000053,
+      "taskPerFrame": 1.8760625000000037,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.023333332935969033,
+        "p50": 0,
+        "p95": 0.09999999403953552,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.5466666673620542,
+        "p50": 0.5,
+        "p95": 0.9000000059604645,
+        "max": 1.2999999821186066
+      },
+      "textureSize": [
+        3861,
+        4096
+      ],
+      "displayLengthPx": 1280,
+      "renderer": "webgl-mesh"
+    },
+    {
+      "id": "dragon_04",
+      "mode": "master",
+      "zoom": 4,
+      "rafMs": {
+        "n": 144,
+        "mean": 16.6652777777778,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 16.900000000001455
+      },
+      "fps": 60.005000416701314,
+      "longFrames": 0,
+      "taskMs": 196.39499999999987,
+      "taskPerFrame": 1.3638541666666657,
+      "updateMs": {
+        "n": 60,
+        "mean": 0.01666666716337204,
+        "p50": 0,
+        "p95": 0.10000002384185791,
+        "max": 0.10000002384185791
+      },
+      "drawMs": {
+        "n": 60,
+        "mean": 0.23166666626930238,
+        "p50": 0.19999998807907104,
+        "p95": 0.4000000059604645,
+        "max": 0.800000011920929
+      },
+      "textureSize": [
+        2731,
+        4096
+      ],
+      "displayLengthPx": 1720,
+      "renderer": "webgl-mesh"
+    }
+  ],
+  "motion": [
+    {
+      "id": "fish_04",
+      "maxStep": 0.029166666666666785,
+      "maxOmega": 3.5,
+      "maxAcceleration": 12.00000000000001,
+      "finite": true,
+      "profile": {
+        "amplitude": 0.42,
+        "idle": 0.07,
+        "hz": 1.85,
+        "idleHz": 0.38,
+        "waves": 1.1,
+        "delay": 0.34,
+        "stiffness": 6,
+        "maxAngularVelocity": 3.5,
+        "maxAngularAcceleration": 12,
+        "appendage": 0.18,
+        "speedScale": 1
+      }
+    },
+    {
+      "id": "fish_01",
+      "maxStep": 0.029166666666666785,
+      "maxOmega": 3.5,
+      "maxAcceleration": 12.00000000000001,
+      "finite": true,
+      "profile": {
+        "amplitude": 0.42,
+        "idle": 0.07,
+        "hz": 1.85,
+        "idleHz": 0.38,
+        "waves": 1.1,
+        "delay": 0.34,
+        "stiffness": 6,
+        "maxAngularVelocity": 3.5,
+        "maxAngularAcceleration": 12,
+        "appendage": 0.18,
+        "speedScale": 1
+      }
+    },
+    {
+      "id": "fish_02",
+      "maxStep": 0.029166666666666785,
+      "maxOmega": 3.5,
+      "maxAcceleration": 12.00000000000001,
+      "finite": true,
+      "profile": {
+        "amplitude": 0.42,
+        "idle": 0.07,
+        "hz": 1.85,
+        "idleHz": 0.38,
+        "waves": 1.1,
+        "delay": 0.34,
+        "stiffness": 6,
+        "maxAngularVelocity": 3.5,
+        "maxAngularAcceleration": 12,
+        "appendage": 0.18,
+        "speedScale": 1
+      }
+    },
+    {
+      "id": "fish_04_special",
+      "maxStep": 0.029166666666666785,
+      "maxOmega": 3.5,
+      "maxAcceleration": 12.00000000000001,
+      "finite": true,
+      "profile": {
+        "amplitude": 0.42,
+        "idle": 0.07,
+        "hz": 1.85,
+        "idleHz": 0.38,
+        "waves": 1.1,
+        "delay": 0.34,
+        "stiffness": 6,
+        "maxAngularVelocity": 3.5,
+        "maxAngularAcceleration": 12,
+        "appendage": 0.18,
+        "speedScale": 1
+      }
+    },
+    {
+      "id": "dragon_04",
+      "maxStep": 0.015000000000000124,
+      "maxOmega": 1.8,
+      "maxAcceleration": 5.000000000000009,
+      "finite": true,
+      "profile": {
+        "amplitude": 1,
+        "idle": 0.88,
+        "hz": 0.48,
+        "idleHz": 0.16,
+        "waves": 1.9,
+        "delay": 0.95,
+        "stiffness": 4,
+        "maxAngularVelocity": 1.8,
+        "maxAngularAcceleration": 5,
+        "appendage": 0.09,
+        "speedScale": 0.82
+      }
+    },
+    {
+      "id": "shrimp_07",
+      "maxStep": 3.141592653589793,
+      "maxOmega": 2,
+      "maxAcceleration": 7.000000000000002,
+      "finite": true,
+      "profile": {
+        "amplitude": 0.035,
+        "idle": 0.012,
+        "hz": 0.9,
+        "idleHz": 0.24,
+        "waves": 0.7,
+        "delay": 0.12,
+        "stiffness": 5,
+        "maxAngularVelocity": 2,
+        "maxAngularAcceleration": 7,
+        "appendage": 0.05,
+        "speedScale": 0.72
+      }
+    },
+    {
+      "id": "shrimp_04",
+      "maxStep": 3.141592653589793,
+      "maxOmega": 2,
+      "maxAcceleration": 7.000000000000002,
+      "finite": true,
+      "profile": {
+        "amplitude": 0.035,
+        "idle": 0.012,
+        "hz": 0.9,
+        "idleHz": 0.24,
+        "waves": 0.7,
+        "delay": 0.12,
+        "stiffness": 5,
+        "maxAngularVelocity": 2,
+        "maxAngularAcceleration": 7,
+        "appendage": 0.05,
+        "speedScale": 0.72
+      }
+    },
+    {
+      "id": "shrimp_05",
+      "maxStep": 3.141592653589793,
+      "maxOmega": 2,
+      "maxAcceleration": 7.000000000000002,
+      "finite": true,
+      "profile": {
+        "amplitude": 0.035,
+        "idle": 0.012,
+        "hz": 0.9,
+        "idleHz": 0.24,
+        "waves": 0.7,
+        "delay": 0.12,
+        "stiffness": 5,
+        "maxAngularVelocity": 2,
+        "maxAngularAcceleration": 7,
+        "appendage": 0.05,
+        "speedScale": 0.72
+      }
+    },
+    {
+      "id": "turtle_02",
+      "maxStep": 0.010000000000000009,
+      "maxOmega": 1.2,
+      "maxAcceleration": 3.0000000000000027,
+      "finite": true,
+      "profile": {
+        "amplitude": 0,
+        "idle": 0,
+        "hz": 0.28,
+        "idleHz": 0.28,
+        "waves": 0,
+        "delay": 0,
+        "stiffness": 3,
+        "maxAngularVelocity": 1.2,
+        "maxAngularAcceleration": 3,
+        "appendage": 0.19,
+        "speedScale": 0.42
+      }
+    },
+    {
+      "id": "turtle_08",
+      "maxStep": 0.010000000000000009,
+      "maxOmega": 1.2,
+      "maxAcceleration": 3.0000000000000027,
+      "finite": true,
+      "profile": {
+        "amplitude": 0,
+        "idle": 0,
+        "hz": 0.28,
+        "idleHz": 0.28,
+        "waves": 0,
+        "delay": 0,
+        "stiffness": 3,
+        "maxAngularVelocity": 1.2,
+        "maxAngularAcceleration": 3,
+        "appendage": 0.19,
+        "speedScale": 0.42
+      }
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-22T18:56:42.374Z"
+}

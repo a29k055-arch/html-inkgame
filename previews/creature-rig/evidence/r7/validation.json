@@ -1,0 +1,1830 @@
+{
+  "passed": true,
+  "conditions": {
+    "viewport": [
+      1440,
+      1080
+    ],
+    "dpr": 1,
+    "rafSampleMs": 2400,
+    "warmupMs": 700,
+    "cpuSamples": 60,
+    "source": "D:\\InkGame Unity\\BOKU_ASSETS\\09_ANIMATED_CREATURES"
+  },
+  "browser": "158.0.4370.33",
+  "rows": [
+    {
+      "id": "fish_04",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.2616874999999999,
+      "newTaskMs": 0.9661319444444444,
+      "taskReductionPercent": 23.425416797388856,
+      "oldDrawMeanMs": 0.34166666567325593,
+      "newDrawMeanMs": 0.18166666626930236,
+      "drawReductionPercent": 46.82926825438846,
+      "oldDrawP95": 0.5999999940395355,
+      "newDrawP95": 0.4000000059604645,
+      "oldFps": 60.00500041670139,
+      "newFps": 60.00500041670139,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "fish_01",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.5881666666666663,
+      "newTaskMs": 0.9456041666666661,
+      "taskReductionPercent": 40.45938713401198,
+      "oldDrawMeanMs": 0.44000000059604644,
+      "newDrawMeanMs": 0.19833333194255828,
+      "drawReductionPercent": 54.92424280138959,
+      "oldDrawP95": 0.7999999821186066,
+      "newDrawP95": 0.5,
+      "oldFps": 60.00500041670139,
+      "newFps": 60.00750093761718,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "fish_02",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.7950416666666666,
+      "newTaskMs": 0.8790277777777772,
+      "taskReductionPercent": 51.03022987705334,
+      "oldDrawMeanMs": 0.5133333330353101,
+      "newDrawMeanMs": 0.19499999930461248,
+      "drawReductionPercent": 62.0129871263982,
+      "oldDrawP95": 0.800000011920929,
+      "newDrawP95": 0.4000000059604645,
+      "oldFps": 60.01000166694448,
+      "newFps": 60.00250010417102,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "fish_04_special",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.814243055555555,
+      "newTaskMs": 0.8683472222222214,
+      "taskReductionPercent": 52.13721669964904,
+      "oldDrawMeanMs": 0.46833333323399223,
+      "newDrawMeanMs": 0.14999999950329462,
+      "drawReductionPercent": 67.97153034837464,
+      "oldDrawP95": 0.699999988079071,
+      "newDrawP95": 0.20000001788139343,
+      "oldFps": 60.00500041670141,
+      "newFps": 60.00750093761718,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "dragon_04",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.4775069444444442,
+      "newTaskMs": 0.9353055555555557,
+      "taskReductionPercent": 36.69704504114944,
+      "oldDrawMeanMs": 0.25166666706403096,
+      "newDrawMeanMs": 0.1199999988079071,
+      "drawReductionPercent": 52.31788134366806,
+      "oldDrawP95": 0.4000000059604645,
+      "newDrawP95": 0.20000001788139343,
+      "oldFps": 60.00500041670141,
+      "newFps": 60.00250010417102,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "shrimp_07",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.493777777777779,
+      "newTaskMs": 0.9960972222222235,
+      "taskReductionPercent": 33.316907170484946,
+      "oldDrawMeanMs": 0.3333333323399226,
+      "newDrawMeanMs": 0.14333333373069762,
+      "drawReductionPercent": 56.99999975264072,
+      "oldDrawP95": 0.5,
+      "newDrawP95": 0.3999999761581421,
+      "oldFps": 60.00250010417097,
+      "newFps": 60.005000416701314,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "shrimp_04",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.3751249999999986,
+      "newTaskMs": 0.979437499999998,
+      "taskReductionPercent": 28.7746568493774,
+      "oldDrawMeanMs": 0.24000000009934108,
+      "newDrawMeanMs": 0.10000000049670538,
+      "drawReductionPercent": 58.333333143619484,
+      "oldDrawP95": 0.5,
+      "newDrawP95": 0.29999998211860657,
+      "oldFps": 60.00500041670141,
+      "newFps": 60.005000416701314,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "shrimp_05",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.4373333333333338,
+      "newTaskMs": 0.9330000000000007,
+      "taskReductionPercent": 35.0881261595547,
+      "oldDrawMeanMs": 0.2783333331346512,
+      "newDrawMeanMs": 0.12666666607062022,
+      "drawReductionPercent": 54.49101814573469,
+      "oldDrawP95": 0.5,
+      "newDrawP95": 0.29999998211860657,
+      "oldFps": 60.00500041670141,
+      "newFps": 60.00413821642872,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "turtle_02",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.016597222222224,
+      "newTaskMs": 0.7523888888888872,
+      "taskReductionPercent": 25.989480155748634,
+      "oldDrawMeanMs": 0.023333333929379783,
+      "newDrawMeanMs": 0.023333333929379783,
+      "drawReductionPercent": 0,
+      "oldDrawP95": 0.10000002384185791,
+      "newDrawP95": 0.10000002384185791,
+      "oldFps": 60.00250010417097,
+      "newFps": 60.00750093761718,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "turtle_08",
+      "mode": "working",
+      "zoom": 1,
+      "oldTaskMs": 1.0596666666666685,
+      "newTaskMs": 0.7292222222222207,
+      "taskReductionPercent": 31.183810422565017,
+      "oldDrawMeanMs": 0.020000000794728596,
+      "newDrawMeanMs": 0.021666666865348815,
+      "drawReductionPercent": -8.333330021964303,
+      "oldDrawP95": 0.10000002384185791,
+      "newDrawP95": 0.10000002384185791,
+      "oldFps": 60.00500041670141,
+      "newFps": 60.00750093761718,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "fish_04",
+      "mode": "master",
+      "zoom": 4,
+      "oldTaskMs": 1.8760625000000037,
+      "newTaskMs": 1.060333333333336,
+      "taskReductionPercent": 43.48091636961274,
+      "oldDrawMeanMs": 0.5466666673620542,
+      "newDrawMeanMs": 0.20833333333333334,
+      "drawReductionPercent": 61.890243950916556,
+      "oldDrawP95": 0.9000000059604645,
+      "newDrawP95": 0.4000000059604645,
+      "oldFps": 60.00750093761709,
+      "newFps": 60.00750093761728,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    },
+    {
+      "id": "dragon_04",
+      "mode": "master",
+      "zoom": 4,
+      "oldTaskMs": 1.3638541666666657,
+      "newTaskMs": 0.8754375000000018,
+      "taskReductionPercent": 35.81150232948887,
+      "oldDrawMeanMs": 0.23166666626930238,
+      "newDrawMeanMs": 0.15500000019868215,
+      "drawReductionPercent": 33.09352497933327,
+      "oldDrawP95": 0.4000000059604645,
+      "newDrawP95": 0.4000000059604645,
+      "oldFps": 60.005000416701314,
+      "newFps": 60.005000416701506,
+      "oldLongFrames": 0,
+      "newLongFrames": 0
+    }
+  ],
+  "assets": {
+    "matched": 290,
+    "changed": []
+  },
+  "visual": {
+    "passed": true,
+    "rows": [
+      {
+        "id": "fish_04",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 30761,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.00008873456790123456,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 3,
+          "compositePixels": 133824,
+          "vertexCount": 659,
+          "triangleCount": 1022,
+          "surfacePixels": 163840,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "fish_01",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 29602,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.00011959876543209877,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 4,
+          "compositePixels": 117500,
+          "vertexCount": 729,
+          "triangleCount": 1118,
+          "surfacePixels": 163840,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "fish_02",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 22263,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.00019097222222222223,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 5,
+          "compositePixels": 81174,
+          "vertexCount": 876,
+          "triangleCount": 1346,
+          "surfacePixels": 163840,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "fish_04_special",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 28785,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.00009387860082304527,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 3,
+          "compositePixels": 133824,
+          "vertexCount": 659,
+          "triangleCount": 1022,
+          "surfacePixels": 163840,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "dragon_04",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 14948,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.000028935185185185186,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 1,
+          "compositePixels": 58566,
+          "vertexCount": 280,
+          "triangleCount": 422,
+          "surfacePixels": 163840,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "shrimp_07",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 34692,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.0003112139917695473,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 1,
+          "compositePixels": 206812,
+          "vertexCount": 311,
+          "triangleCount": 396,
+          "surfacePixels": 225280,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "shrimp_04",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 28204,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.0003054269547325103,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 1,
+          "compositePixels": 203965,
+          "vertexCount": 160,
+          "triangleCount": 224,
+          "surfacePixels": 270336,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "shrimp_05",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 28806,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.00009259259259259259,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 1,
+          "compositePixels": 142190,
+          "vertexCount": 193,
+          "triangleCount": 272,
+          "surfacePixels": 270336,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "turtle_02",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 83108,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0,
+        "stats": {
+          "gpuBatches": 0,
+          "meshDrawCalls": 0,
+          "compositePixels": 0,
+          "vertexCount": 0,
+          "triangleCount": 0
+        }
+      },
+      {
+        "id": "turtle_08",
+        "master": false,
+        "zoom": 1,
+        "dpr": 1,
+        "edge": false,
+        "visible": 78098,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0,
+        "stats": {
+          "gpuBatches": 0,
+          "meshDrawCalls": 0,
+          "compositePixels": 0,
+          "vertexCount": 0,
+          "triangleCount": 0
+        }
+      },
+      {
+        "id": "fish_04",
+        "master": true,
+        "zoom": 4,
+        "dpr": 1,
+        "edge": false,
+        "visible": 419756,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.0008127572016460906,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 3,
+          "compositePixels": 1300320,
+          "vertexCount": 670,
+          "triangleCount": 1038,
+          "surfacePixels": 1382400,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "dragon_04",
+        "master": true,
+        "zoom": 4,
+        "dpr": 1,
+        "edge": false,
+        "visible": 216099,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.0002494855967078189,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 1,
+          "compositePixels": 730080,
+          "vertexCount": 290,
+          "triangleCount": 438,
+          "surfacePixels": 1382400,
+          "viewportPixels": 1555200
+        }
+      },
+      {
+        "id": "fish_04",
+        "master": true,
+        "zoom": 4,
+        "dpr": 2,
+        "edge": true,
+        "visible": 942387,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.0002636316872427984,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 3,
+          "compositePixels": 4668936,
+          "vertexCount": 670,
+          "triangleCount": 1038,
+          "surfacePixels": 4870144,
+          "viewportPixels": 6220800
+        }
+      },
+      {
+        "id": "dragon_04",
+        "master": true,
+        "zoom": 4,
+        "dpr": 2,
+        "edge": true,
+        "visible": 537285,
+        "changed": 0,
+        "changedRatio": 0,
+        "alphaLoss": 0,
+        "meanPixelError": 0.00019917052469135802,
+        "stats": {
+          "gpuBatches": 1,
+          "meshDrawCalls": 1,
+          "compositePixels": 2082986,
+          "vertexCount": 290,
+          "triangleCount": 438,
+          "surfacePixels": 4870144,
+          "viewportPixels": 6220800
+        }
+      }
+    ],
+    "note": "Identical injected pose/time/input/scale, old and new renderer. Edge AA differences are measured; visual review remains necessary."
+  },
+  "motion": {
+    "baseline": false,
+    "shrimpRapid": {
+      "samples": 672,
+      "maxJerk": 36.00000000000243,
+      "maxActualJerk": 36.00000000042769,
+      "maxTurnStep": 0.01833333333333334,
+      "maxPitchDegrees": 88.79215985244983,
+      "randomPitchDegrees": 89.99998967021594,
+      "randomSamples": 19336,
+      "profile": {
+        "amplitude": 0.035,
+        "idle": 0.012,
+        "hz": 0.9,
+        "idleHz": 0.24,
+        "waves": 0.7,
+        "delay": 0.12,
+        "stiffness": 5,
+        "maxAngularVelocity": 2,
+        "maxAngularAcceleration": 7,
+        "maxAngularJerk": 36,
+        "appendage": 0.05,
+        "speedScale": 0.72
+      }
+    },
+    "results": [
+      {
+        "id": "fish_04",
+        "profile": {
+          "amplitude": 0.38,
+          "idle": 0.07,
+          "hz": 1.55,
+          "idleHz": 0.38,
+          "waves": 1.1,
+          "delay": 0.38,
+          "stiffness": 5.2,
+          "maxAngularVelocity": 3.1,
+          "maxAngularAcceleration": 10,
+          "maxAngularJerk": 48,
+          "appendage": 0.18,
+          "speedScale": 1
+        },
+        "scenarios": [
+          {
+            "hz": 15,
+            "maxJerk": 48.00000000000006,
+            "maxAccel": 10,
+            "maxOmega": 2.856965347537679,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 80.54574418974494,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 7.8774423906509545
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 154.63494555875332,
+                "y": 39.242426254244634,
+                "heading": 2.049544702447202,
+                "omega": 2.3312013949383306,
+                "wavePhase": 17.57473654050342
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 88.9583815312559,
+                "y": 58.72972204189731,
+                "heading": 4.3153975790608285,
+                "omega": 1.286669168013637,
+                "wavePhase": 27.312742178873023
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 102.37270369371777,
+                "y": -20.23843970061945,
+                "heading": 6.046044467451982,
+                "omega": 0.8525917467958418,
+                "wavePhase": 37.05165856466417
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 171.28092715845406,
+                "y": -73.49767163077175,
+                "heading": 4.197244672889765,
+                "omega": -2.301020451065153,
+                "wavePhase": 46.790595324578085
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 104.65404876814672,
+                "y": -91.29458094244663,
+                "heading": 1.954450102493261,
+                "omega": -1.2540188497596891,
+                "wavePhase": 56.529532540276904
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 93.05112753723886,
+                "y": -77.61541123554093,
+                "heading": 1.5776850004363197,
+                "omega": -0.030267809626813913,
+                "wavePhase": 60.77863779224926
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 92.97294766895047,
+                "y": -77.5232417150643,
+                "heading": 1.5708737131777852,
+                "omega": -0.0003514211600915379,
+                "wavePhase": 63.207891285248174
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 30,
+            "maxJerk": 48.00000000000071,
+            "maxAccel": 10.000000000000004,
+            "maxOmega": 2.856965347537679,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 80.54574418974494,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 7.8774423906509545
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 154.63494555875332,
+                "y": 39.242426254244634,
+                "heading": 2.049544702447202,
+                "omega": 2.3312013949383306,
+                "wavePhase": 17.57473654050342
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 88.9583815312559,
+                "y": 58.72972204189731,
+                "heading": 4.3153975790608285,
+                "omega": 1.286669168013637,
+                "wavePhase": 27.312742178873023
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 102.37270369371777,
+                "y": -20.23843970061945,
+                "heading": 6.046044467451982,
+                "omega": 0.8525917467958418,
+                "wavePhase": 37.05165856466417
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 171.28092715845406,
+                "y": -73.49767163077175,
+                "heading": 4.197244672889765,
+                "omega": -2.301020451065153,
+                "wavePhase": 46.790595324578085
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 104.65404876814672,
+                "y": -91.29458094244663,
+                "heading": 1.954450102493261,
+                "omega": -1.2540188497596891,
+                "wavePhase": 56.529532540276904
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 93.05112753723886,
+                "y": -77.61541123554093,
+                "heading": 1.5776850004363197,
+                "omega": -0.030267809626813913,
+                "wavePhase": 60.77863779224926
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 92.97294766895047,
+                "y": -77.5232417150643,
+                "heading": 1.5708737131777852,
+                "omega": -0.0003514211600915379,
+                "wavePhase": 63.207891285248174
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 60,
+            "maxJerk": 48.00000000000111,
+            "maxAccel": 10.000000000000004,
+            "maxOmega": 2.856965347537679,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 80.54574418974494,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 7.8774423906509545
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 154.63494555875332,
+                "y": 39.242426254244634,
+                "heading": 2.049544702447202,
+                "omega": 2.3312013949383306,
+                "wavePhase": 17.57473654050342
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 88.9583815312559,
+                "y": 58.72972204189731,
+                "heading": 4.3153975790608285,
+                "omega": 1.286669168013637,
+                "wavePhase": 27.312742178873023
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 102.37270369371777,
+                "y": -20.23843970061945,
+                "heading": 6.046044467451982,
+                "omega": 0.8525917467958418,
+                "wavePhase": 37.05165856466417
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 171.28092715845406,
+                "y": -73.49767163077175,
+                "heading": 4.197244672889765,
+                "omega": -2.301020451065153,
+                "wavePhase": 46.790595324578085
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 104.65404876814672,
+                "y": -91.29458094244663,
+                "heading": 1.954450102493261,
+                "omega": -1.2540188497596891,
+                "wavePhase": 56.529532540276904
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 93.05112753723886,
+                "y": -77.61541123554093,
+                "heading": 1.5776850004363197,
+                "omega": -0.030267809626813913,
+                "wavePhase": 60.77863779224926
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 92.97294766895047,
+                "y": -77.5232417150643,
+                "heading": 1.5708737131777852,
+                "omega": -0.0003514211600915379,
+                "wavePhase": 63.207891285248174
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 120,
+            "maxJerk": 48.000000000004306,
+            "maxAccel": 10.000000000000004,
+            "maxOmega": 2.8573142853415665,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 80.54574418974494,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 7.8774423906509545
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 154.63494555875332,
+                "y": 39.242426254244634,
+                "heading": 2.049544702447202,
+                "omega": 2.3312013949383306,
+                "wavePhase": 17.57473654050342
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 88.9583815312559,
+                "y": 58.72972204189731,
+                "heading": 4.3153975790608285,
+                "omega": 1.286669168013637,
+                "wavePhase": 27.312742178873023
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 102.37270369371777,
+                "y": -20.23843970061945,
+                "heading": 6.046044467451982,
+                "omega": 0.8525917467958418,
+                "wavePhase": 37.05165856466417
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 171.28092715845406,
+                "y": -73.49767163077175,
+                "heading": 4.197244672889765,
+                "omega": -2.301020451065153,
+                "wavePhase": 46.790595324578085
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 104.65404876814672,
+                "y": -91.29458094244663,
+                "heading": 1.954450102493261,
+                "omega": -1.2540188497596891,
+                "wavePhase": 56.529532540276904
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 93.05112753723886,
+                "y": -77.61541123554093,
+                "heading": 1.5776850004363197,
+                "omega": -0.030267809626813913,
+                "wavePhase": 60.77863779224926
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 92.97294766895047,
+                "y": -77.5232417150643,
+                "heading": 1.5708737131777852,
+                "omega": -0.0003514211600915379,
+                "wavePhase": 63.207891285248174
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          }
+        ]
+      },
+      {
+        "id": "dragon_04",
+        "profile": {
+          "amplitude": 1,
+          "idle": 0.88,
+          "hz": 0.42,
+          "idleHz": 0.16,
+          "waves": 1.9,
+          "delay": 0.95,
+          "stiffness": 3.6,
+          "maxAngularVelocity": 1.65,
+          "maxAngularAcceleration": 4.2,
+          "maxAngularJerk": 18,
+          "appendage": 0.09,
+          "speedScale": 0.82
+        },
+        "scenarios": [
+          {
+            "hz": 15,
+            "maxJerk": 18.000000000000018,
+            "maxAccel": 4.200000000000004,
+            "maxOmega": 1.471006760006899,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 66.04751023559085,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 3.481909371456366
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 142.70923952699874,
+                "y": 17.99701622296211,
+                "heading": 1.0344993515946754,
+                "omega": 1.4702949679109,
+                "wavePhase": 6.1115931835215935
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 170.89291287477417,
+                "y": 91.92148743410833,
+                "heading": 0.931802797642517,
+                "omega": -1.4447008079671881,
+                "wavePhase": 8.750323993035078
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 234.84371144593158,
+                "y": 135.14143691128504,
+                "heading": 0.10695919630883763,
+                "omega": -0.2864081749408708,
+                "wavePhase": 11.38925719086446
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 310.58180478376164,
+                "y": 159.10404544726532,
+                "heading": 1.058113130701235,
+                "omega": 1.4687910957079349,
+                "wavePhase": 14.028194916276684
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 331.1187536741257,
+                "y": 234.74025181197058,
+                "heading": 1.5657295741030466,
+                "omega": 0.027715303491667433,
+                "wavePhase": 16.66713274297444
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 331.5705523247187,
+                "y": 250.6382026403223,
+                "heading": 1.5708910256874764,
+                "omega": -0.0001247028896725006,
+                "wavePhase": 18.086107911066318
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 331.57359652008074,
+                "y": 250.74532219039767,
+                "heading": 1.5708047871230124,
+                "omega": -0.000024426913919608394,
+                "wavePhase": 19.100671577164086
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 30,
+            "maxJerk": 18.000000000000416,
+            "maxAccel": 4.200000000000004,
+            "maxOmega": 1.471006760006899,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 66.04751023559085,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 3.481909371456366
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 142.70923952699874,
+                "y": 17.99701622296211,
+                "heading": 1.0344993515946754,
+                "omega": 1.4702949679109,
+                "wavePhase": 6.1115931835215935
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 170.89291287477417,
+                "y": 91.92148743410833,
+                "heading": 0.931802797642517,
+                "omega": -1.4447008079671881,
+                "wavePhase": 8.750323993035078
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 234.84371144593158,
+                "y": 135.14143691128504,
+                "heading": 0.10695919630883763,
+                "omega": -0.2864081749408708,
+                "wavePhase": 11.38925719086446
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 310.58180478376164,
+                "y": 159.10404544726532,
+                "heading": 1.058113130701235,
+                "omega": 1.4687910957079349,
+                "wavePhase": 14.028194916276684
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 331.1187536741257,
+                "y": 234.74025181197058,
+                "heading": 1.5657295741030466,
+                "omega": 0.027715303491667433,
+                "wavePhase": 16.66713274297444
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 331.5705523247187,
+                "y": 250.6382026403223,
+                "heading": 1.5708910256874764,
+                "omega": -0.0001247028896725006,
+                "wavePhase": 18.086107911066318
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 331.57359652008074,
+                "y": 250.74532219039767,
+                "heading": 1.5708047871230124,
+                "omega": -0.000024426913919608394,
+                "wavePhase": 19.100671577164086
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 60,
+            "maxJerk": 18.000000000001215,
+            "maxAccel": 4.200000000000004,
+            "maxOmega": 1.471006760006899,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 66.04751023559085,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 3.481909371456366
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 142.70923952699874,
+                "y": 17.99701622296211,
+                "heading": 1.0344993515946754,
+                "omega": 1.4702949679109,
+                "wavePhase": 6.1115931835215935
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 170.89291287477417,
+                "y": 91.92148743410833,
+                "heading": 0.931802797642517,
+                "omega": -1.4447008079671881,
+                "wavePhase": 8.750323993035078
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 234.84371144593158,
+                "y": 135.14143691128504,
+                "heading": 0.10695919630883763,
+                "omega": -0.2864081749408708,
+                "wavePhase": 11.38925719086446
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 310.58180478376164,
+                "y": 159.10404544726532,
+                "heading": 1.058113130701235,
+                "omega": 1.4687910957079349,
+                "wavePhase": 14.028194916276684
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 331.1187536741257,
+                "y": 234.74025181197058,
+                "heading": 1.5657295741030466,
+                "omega": 0.027715303491667433,
+                "wavePhase": 16.66713274297444
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 331.5705523247187,
+                "y": 250.6382026403223,
+                "heading": 1.5708910256874764,
+                "omega": -0.0001247028896725006,
+                "wavePhase": 18.086107911066318
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 331.57359652008074,
+                "y": 250.74532219039767,
+                "heading": 1.5708047871230124,
+                "omega": -0.000024426913919608394,
+                "wavePhase": 19.100671577164086
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 120,
+            "maxJerk": 18.000000000002814,
+            "maxAccel": 4.200000000000004,
+            "maxOmega": 1.471006760006899,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 66.04751023559085,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 3.481909371456366
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 142.70923952699874,
+                "y": 17.99701622296211,
+                "heading": 1.0344993515946754,
+                "omega": 1.4702949679109,
+                "wavePhase": 6.1115931835215935
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 170.89291287477417,
+                "y": 91.92148743410833,
+                "heading": 0.931802797642517,
+                "omega": -1.4447008079671881,
+                "wavePhase": 8.750323993035078
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 234.84371144593158,
+                "y": 135.14143691128504,
+                "heading": 0.10695919630883763,
+                "omega": -0.2864081749408708,
+                "wavePhase": 11.38925719086446
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 310.58180478376164,
+                "y": 159.10404544726532,
+                "heading": 1.058113130701235,
+                "omega": 1.4687910957079349,
+                "wavePhase": 14.028194916276684
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 331.1187536741257,
+                "y": 234.74025181197058,
+                "heading": 1.5657295741030466,
+                "omega": 0.027715303491667433,
+                "wavePhase": 16.66713274297444
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 331.5705523247187,
+                "y": 250.6382026403223,
+                "heading": 1.5708910256874764,
+                "omega": -0.0001247028896725006,
+                "wavePhase": 18.086107911066318
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 331.57359652008074,
+                "y": 250.74532219039767,
+                "heading": 1.5708047871230124,
+                "omega": -0.000024426913919608394,
+                "wavePhase": 19.100671577164086
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          }
+        ]
+      },
+      {
+        "id": "shrimp_07",
+        "profile": {
+          "amplitude": 0.035,
+          "idle": 0.012,
+          "hz": 0.9,
+          "idleHz": 0.24,
+          "waves": 0.7,
+          "delay": 0.12,
+          "stiffness": 5,
+          "maxAngularVelocity": 2,
+          "maxAngularAcceleration": 7,
+          "maxAngularJerk": 36,
+          "appendage": 0.05,
+          "speedScale": 0.72
+        },
+        "scenarios": [
+          {
+            "hz": 15,
+            "maxJerk": 36.000000000000036,
+            "maxAccel": 7.000000000000002,
+            "maxOmega": 1.7375000000000003,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 57.99293581661638,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 4.604792766705143
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 13.91268532730327,
+                "y": 0,
+                "heading": 3.141592653589793,
+                "omega": 0,
+                "wavePhase": 10.236168577062417
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 0.09374293635036872,
+                "y": -57.99293581661638,
+                "heading": 4.3485524581413255,
+                "omega": -1.0354445317632948,
+                "wavePhase": 15.89050984248063
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 57.99356745155309,
+                "y": -71.90562114391959,
+                "heading": -0.3310340895049098,
+                "omega": 0.9716033450898602,
+                "wavePhase": 21.54536486285459
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 13.91268958322603,
+                "y": -71.99936408026994,
+                "heading": 3.1493226177731115,
+                "omega": 0.032368109735374864,
+                "wavePhase": 27.200231376323455
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 0.09374296502658218,
+                "y": -14.007059898590274,
+                "heading": 1.9366926349933011,
+                "omega": 1.0393107600887153,
+                "wavePhase": 32.85509814690172
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 0.0006316351299631648,
+                "y": -0.09437882720977835,
+                "heading": 1.5797362485813624,
+                "omega": 0.03731147966817388,
+                "wavePhase": 35.41313663024969
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 0.0000042559241053854236,
+                "y": -0.0006359195356371719,
+                "heading": 1.5709183298269918,
+                "omega": 0.000532154744610425,
+                "wavePhase": 36.944592070074144
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 30,
+            "maxJerk": 36.00000000000004,
+            "maxAccel": 7.000000000000002,
+            "maxOmega": 1.7491666666666668,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 57.99293581661638,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 4.604792766705143
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 13.91268532730327,
+                "y": 0,
+                "heading": 3.141592653589793,
+                "omega": 0,
+                "wavePhase": 10.236168577062417
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 0.09374293635036872,
+                "y": -57.99293581661638,
+                "heading": 4.3485524581413255,
+                "omega": -1.0354445317632948,
+                "wavePhase": 15.89050984248063
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 57.99356745155309,
+                "y": -71.90562114391959,
+                "heading": -0.3310340895049098,
+                "omega": 0.9716033450898602,
+                "wavePhase": 21.54536486285459
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 13.91268958322603,
+                "y": -71.99936408026994,
+                "heading": 3.1493226177731115,
+                "omega": 0.032368109735374864,
+                "wavePhase": 27.200231376323455
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 0.09374296502658218,
+                "y": -14.007059898590274,
+                "heading": 1.9366926349933011,
+                "omega": 1.0393107600887153,
+                "wavePhase": 32.85509814690172
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 0.0006316351299631648,
+                "y": -0.09437882720977835,
+                "heading": 1.5797362485813624,
+                "omega": 0.03731147966817388,
+                "wavePhase": 35.41313663024969
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 0.0000042559241053854236,
+                "y": -0.0006359195356371719,
+                "heading": 1.5709183298269918,
+                "omega": 0.000532154744610425,
+                "wavePhase": 36.944592070074144
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 60,
+            "maxJerk": 36.00000000000083,
+            "maxAccel": 7.000000000000002,
+            "maxOmega": 1.7491666666666668,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 57.99293581661638,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 4.604792766705143
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 13.91268532730327,
+                "y": 0,
+                "heading": 3.141592653589793,
+                "omega": 0,
+                "wavePhase": 10.236168577062417
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 0.09374293635036872,
+                "y": -57.99293581661638,
+                "heading": 4.3485524581413255,
+                "omega": -1.0354445317632948,
+                "wavePhase": 15.89050984248063
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 57.99356745155309,
+                "y": -71.90562114391959,
+                "heading": -0.3310340895049098,
+                "omega": 0.9716033450898602,
+                "wavePhase": 21.54536486285459
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 13.91268958322603,
+                "y": -71.99936408026994,
+                "heading": 3.1493226177731115,
+                "omega": 0.032368109735374864,
+                "wavePhase": 27.200231376323455
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 0.09374296502658218,
+                "y": -14.007059898590274,
+                "heading": 1.9366926349933011,
+                "omega": 1.0393107600887153,
+                "wavePhase": 32.85509814690172
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 0.0006316351299631648,
+                "y": -0.09437882720977835,
+                "heading": 1.5797362485813624,
+                "omega": 0.03731147966817388,
+                "wavePhase": 35.41313663024969
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 0.0000042559241053854236,
+                "y": -0.0006359195356371719,
+                "heading": 1.5709183298269918,
+                "omega": 0.000532154744610425,
+                "wavePhase": 36.944592070074144
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 120,
+            "maxJerk": 36.00000000000243,
+            "maxAccel": 7.000000000000002,
+            "maxOmega": 1.7500000000000002,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 57.99293581661638,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 4.604792766705143
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 13.91268532730327,
+                "y": 0,
+                "heading": 3.141592653589793,
+                "omega": 0,
+                "wavePhase": 10.236168577062417
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 0.09374293635036872,
+                "y": -57.99293581661638,
+                "heading": 4.3485524581413255,
+                "omega": -1.0354445317632948,
+                "wavePhase": 15.89050984248063
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 57.99356745155309,
+                "y": -71.90562114391959,
+                "heading": -0.3310340895049098,
+                "omega": 0.9716033450898602,
+                "wavePhase": 21.54536486285459
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 13.91268958322603,
+                "y": -71.99936408026994,
+                "heading": 3.1493226177731115,
+                "omega": 0.032368109735374864,
+                "wavePhase": 27.200231376323455
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 0.09374296502658218,
+                "y": -14.007059898590274,
+                "heading": 1.9366926349933011,
+                "omega": 1.0393107600887153,
+                "wavePhase": 32.85509814690172
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 0.0006316351299631648,
+                "y": -0.09437882720977835,
+                "heading": 1.5797362485813624,
+                "omega": 0.03731147966817388,
+                "wavePhase": 35.41313663024969
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 0.0000042559241053854236,
+                "y": -0.0006359195356371719,
+                "heading": 1.5709183298269918,
+                "omega": 0.000532154744610425,
+                "wavePhase": 36.944592070074144
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          }
+        ]
+      },
+      {
+        "id": "turtle_02",
+        "profile": {
+          "amplitude": 0,
+          "idle": 0,
+          "hz": 0.28,
+          "idleHz": 0.28,
+          "waves": 0,
+          "delay": 0,
+          "stiffness": 3,
+          "maxAngularVelocity": 1.2,
+          "maxAngularAcceleration": 3,
+          "maxAngularJerk": 14,
+          "appendage": 0.19,
+          "speedScale": 0.42
+        },
+        "scenarios": [
+          {
+            "hz": 15,
+            "maxJerk": 14.000000000000037,
+            "maxAccel": 3.0000000000000027,
+            "maxOmega": 1.0716996061336037,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 33.82921255969287,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 1.7592918860102817
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 74.37134458808994,
+                "y": 6.85493302353936,
+                "heading": 0.7419807352125894,
+                "omega": 1.0716996061336037,
+                "wavePhase": 3.518583772020563
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 101.05470188287283,
+                "y": 38.26743964555388,
+                "heading": 0.6842605725145318,
+                "omega": -1.0182104283830409,
+                "wavePhase": 5.277875658030845
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 137.80864651663225,
+                "y": 55.93244466771856,
+                "heading": 0.10104781289723973,
+                "omega": -0.22534363965854248,
+                "wavePhase": 7.037167544041126
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 177.99526751378798,
+                "y": 65.71662941614022,
+                "heading": 0.768405259775451,
+                "omega": 1.0695005298650189,
+                "wavePhase": 8.796459430051456
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 199.14233968107024,
+                "y": 100.09046901090035,
+                "heading": 1.429126684369307,
+                "omega": 0.30071722206773843,
+                "wavePhase": 10.555751316061844
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 200.95409179394326,
+                "y": 108.00282752484348,
+                "heading": 1.55722433168569,
+                "omega": 0.03387105552101669,
+                "wavePhase": 12.315043202072232
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 200.96629928365533,
+                "y": 108.05614057714818,
+                "heading": 1.5697546222591638,
+                "omega": 0.002727909068295312,
+                "wavePhase": 14.07433508808262
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 30,
+            "maxJerk": 14.00000000000019,
+            "maxAccel": 3.0000000000000027,
+            "maxOmega": 1.0716996061336037,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 33.82921255969287,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 1.7592918860102817
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 74.37134458808994,
+                "y": 6.85493302353936,
+                "heading": 0.7419807352125894,
+                "omega": 1.0716996061336037,
+                "wavePhase": 3.518583772020563
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 101.05470188287283,
+                "y": 38.26743964555388,
+                "heading": 0.6842605725145318,
+                "omega": -1.0182104283830409,
+                "wavePhase": 5.277875658030845
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 137.80864651663225,
+                "y": 55.93244466771856,
+                "heading": 0.10104781289723973,
+                "omega": -0.22534363965854248,
+                "wavePhase": 7.037167544041126
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 177.99526751378798,
+                "y": 65.71662941614022,
+                "heading": 0.768405259775451,
+                "omega": 1.0695005298650189,
+                "wavePhase": 8.796459430051456
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 199.14233968107024,
+                "y": 100.09046901090035,
+                "heading": 1.429126684369307,
+                "omega": 0.30071722206773843,
+                "wavePhase": 10.555751316061844
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 200.95409179394326,
+                "y": 108.00282752484348,
+                "heading": 1.55722433168569,
+                "omega": 0.03387105552101669,
+                "wavePhase": 12.315043202072232
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 200.96629928365533,
+                "y": 108.05614057714818,
+                "heading": 1.5697546222591638,
+                "omega": 0.002727909068295312,
+                "wavePhase": 14.07433508808262
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 60,
+            "maxJerk": 14.00000000000059,
+            "maxAccel": 3.0000000000000027,
+            "maxOmega": 1.0716996061336037,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 33.82921255969287,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 1.7592918860102817
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 74.37134458808994,
+                "y": 6.85493302353936,
+                "heading": 0.7419807352125894,
+                "omega": 1.0716996061336037,
+                "wavePhase": 3.518583772020563
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 101.05470188287283,
+                "y": 38.26743964555388,
+                "heading": 0.6842605725145318,
+                "omega": -1.0182104283830409,
+                "wavePhase": 5.277875658030845
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 137.80864651663225,
+                "y": 55.93244466771856,
+                "heading": 0.10104781289723973,
+                "omega": -0.22534363965854248,
+                "wavePhase": 7.037167544041126
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 177.99526751378798,
+                "y": 65.71662941614022,
+                "heading": 0.768405259775451,
+                "omega": 1.0695005298650189,
+                "wavePhase": 8.796459430051456
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 199.14233968107024,
+                "y": 100.09046901090035,
+                "heading": 1.429126684369307,
+                "omega": 0.30071722206773843,
+                "wavePhase": 10.555751316061844
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 200.95409179394326,
+                "y": 108.00282752484348,
+                "heading": 1.55722433168569,
+                "omega": 0.03387105552101669,
+                "wavePhase": 12.315043202072232
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 200.96629928365533,
+                "y": 108.05614057714818,
+                "heading": 1.5697546222591638,
+                "omega": 0.002727909068295312,
+                "wavePhase": 14.07433508808262
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          },
+          {
+            "hz": 120,
+            "maxJerk": 14.000000000002188,
+            "maxAccel": 3.0000000000000027,
+            "maxOmega": 1.0716996061336037,
+            "reverseCount": 0,
+            "states": [
+              {
+                "time": 0.9999999999999989,
+                "x": 33.82921255969287,
+                "y": 0,
+                "heading": 0,
+                "omega": 0,
+                "wavePhase": 1.7592918860102817
+              },
+              {
+                "time": 1.9999999999999953,
+                "x": 74.37134458808994,
+                "y": 6.85493302353936,
+                "heading": 0.7419807352125894,
+                "omega": 1.0716996061336037,
+                "wavePhase": 3.518583772020563
+              },
+              {
+                "time": 2.999999999999992,
+                "x": 101.05470188287283,
+                "y": 38.26743964555388,
+                "heading": 0.6842605725145318,
+                "omega": -1.0182104283830409,
+                "wavePhase": 5.277875658030845
+              },
+              {
+                "time": 3.9999999999999885,
+                "x": 137.80864651663225,
+                "y": 55.93244466771856,
+                "heading": 0.10104781289723973,
+                "omega": -0.22534363965854248,
+                "wavePhase": 7.037167544041126
+              },
+              {
+                "time": 5.000000000000038,
+                "x": 177.99526751378798,
+                "y": 65.71662941614022,
+                "heading": 0.768405259775451,
+                "omega": 1.0695005298650189,
+                "wavePhase": 8.796459430051456
+              },
+              {
+                "time": 6.000000000000088,
+                "x": 199.14233968107024,
+                "y": 100.09046901090035,
+                "heading": 1.429126684369307,
+                "omega": 0.30071722206773843,
+                "wavePhase": 10.555751316061844
+              },
+              {
+                "time": 7.000000000000138,
+                "x": 200.95409179394326,
+                "y": 108.00282752484348,
+                "heading": 1.55722433168569,
+                "omega": 0.03387105552101669,
+                "wavePhase": 12.315043202072232
+              },
+              {
+                "time": 8.000000000000187,
+                "x": 200.96629928365533,
+                "y": 108.05614057714818,
+                "heading": 1.5697546222591638,
+                "omega": 0.002727909068295312,
+                "wavePhase": 14.07433508808262
+              }
+            ],
+            "maxPositionDeviation": 0,
+            "maxHeadingDeviation": 0
+          }
+        ]
+      }
+    ],
+    "revision": "rig-r7-smooth-performance-20261123"
+  },
+  "notes": [
+    "Single same-machine sequential benchmark; display refresh capped near60Hz. No claim of higher visible FPS or real mobile hardware performance.",
+    "CPU TaskDuration includes whole demo script work; draw CPU values are separate isolated72-frame loop after12 warmup samples. Sub-.1ms differences approach clock resolution."
+  ]
+}

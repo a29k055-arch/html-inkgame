@@ -1,6 +1,6 @@
-import {InkCreature,damp,sampleCurve,makeCurve,INK_CREATURE_REV} from '../runtime/ink-creature.mjs?rev=rig-r6-zoom-and-joints-20261122';
-const $=id=>document.getElementById(id),canvas=$('stage'),ctx=canvas.getContext('2d'),keys=new Set();
-$('build-label').textContent=INK_CREATURE_REV.startsWith('rig-r6-')?'11月22日修订 R6 · 放大检查 / 关节修补':'素材动画 · 版本待核对';
+import {InkCreature,damp,sampleCurve,makeCurve,INK_CREATURE_REV} from '../runtime/ink-creature.mjs?rev=rig-r7-smooth-performance-20261123';
+const $=id=>document.getElementById(id),canvas=$('stage'),ctx=canvas.getContext('2d',{alpha:false}),keys=new Set();
+$('build-label').textContent=INK_CREATURE_REV.startsWith('rig-r7-')?'11月23日修订 R7 · 柔和游动 / 绘制优化':'素材动画 · 版本待核对';
 const state={rig:null,selected:'fish_04',mode:'manual',width:1000,height:600,camera:{x:0,y:0},pan:{x:0,y:0},joystick:{x:0,y:0},loading:0,pendingId:null,pendingTextureMode:null,textureMode:'working',rigURL:null,zoom:1,clipped:false,frames:0,fps:0,lastTelemetry:0};
 const profiles={
  fish_04:{label:'鱼 04 · 实体衔接版',length:320,note:'柔和转向 · 身体摆动 · 尾鳍推进'},
@@ -52,7 +52,7 @@ function setPan(x,y){state.pan={x:Number.isFinite(Number(x))?Number(x):0,y:Numbe
 function centerView(){return setPan(0,0);}
 function resetZoom(){setZoom(1);centerView();}
 function transferMotion(from,to){
- for(const key of ['x','y','heading','targetHeading','angularVelocity','angularAcceleration','facing','desiredFacing','shrimpTurnProgress','shrimpTurnVelocity','inclination','inclinationVelocity','vx','vy','time','drive','locomotion','wavePhase','finPhase','gaitPhase','mode','length','maxSpeed'])to[key]=from[key];
+ for(const key of ['x','y','heading','targetHeading','angularVelocity','angularAcceleration','facing','desiredFacing','shrimpTurnProgress','shrimpTurnVelocity','inclination','targetInclination','inclinationVelocity','vx','vy','time','drive','locomotion','wavePhase','finPhase','gaitPhase','mode','length','maxSpeed'])to[key]=from[key];
  to.input={...from.input};to.history=from.history.map(item=>({...item}));to.offsets=new Map(from.offsets);to.pose=to.buildPose();to.targetCurve=makeCurve(to.pose,false);
 }
 async function loadCreature(id,textureMode,preserveMotion=false){
@@ -78,12 +78,16 @@ function setTextureMode(mode){
 }
 function setMode(mode){state.mode=mode;$('mode').value=mode;state.rig?.setMode(mode);keys.clear();state.joystick={x:0,y:0};if(mode==='straight'||mode==='rest')center();}
 function background(){const {width:w,height:h,camera,zoom,pan}=state;ctx.fillStyle='#e3e9dd';ctx.fillRect(0,0,w,h);ctx.save();ctx.strokeStyle='#82967413';ctx.lineWidth=1;const gap=90*zoom,ox=((w/2+pan.x-camera.x*zoom)%gap+gap)%gap,oy=((h/2+pan.y-camera.y*zoom)%gap+gap)%gap;for(let x=ox;x<w;x+=gap){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}for(let y=oy;y<h;y+=gap){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}ctx.restore();}
-let previous=performance.now();
+let previous=performance.now(),lastInspection=-Infinity;
+state.lastTelemetry=previous;
+document.addEventListener('visibilitychange',()=>{previous=performance.now();state.lastTelemetry=previous;state.frames=0;keys.clear();});
 function frame(now){const dt=Math.min((now-previous)/1000,.05);previous=now;const rig=state.rig;
  if(rig){let ix=(keys.has('ArrowRight')||keys.has('d')?1:0)-(keys.has('ArrowLeft')||keys.has('a')?1:0),iy=(keys.has('ArrowDown')||keys.has('s')?1:0)-(keys.has('ArrowUp')||keys.has('w')?1:0);if(Math.hypot(state.joystick.x,state.joystick.y)>.01){ix=state.joystick.x;iy=state.joystick.y;}if(state.mode==='auto'){ix=Math.cos(rig.time*.38);iy=Math.sin(rig.time*.38)*.8;}rig.setInput(ix,iy);rig.maxSpeed=Number($('speed').value);rig.update(dt);
  const focus=viewCenter(rig),tracking=14*Math.max(1,state.zoom);state.camera.x=damp(state.camera.x,focus.x,tracking,dt);state.camera.y=damp(state.camera.y,focus.y,tracking,dt);
+ // Inspection labels and full mesh bounds need not be recomputed at display refresh rate.
+ if(now-lastInspection>=100){lastInspection=now;
  const bounds=rig.visualBounds(),a=screenPoint({x:bounds.minX,y:bounds.minY}),b=screenPoint({x:bounds.maxX,y:bounds.maxY});state.clipped=a.x<0||a.y<0||b.x>state.width||b.y>state.height;
- $('zoom-crop-note').hidden=!state.clipped;$('view-metrics').textContent=`${state.zoom.toFixed(2)}× · 角色屏幕长 ${Math.round(rig.length*state.zoom)}px · ${state.textureMode==='master'?'4K母版':'工作贴图'} ${rig.bodyImage.width} × ${rig.bodyImage.height}`;}
+ $('zoom-crop-note').hidden=!state.clipped;$('view-metrics').textContent=`${state.zoom.toFixed(2)}× · 角色屏幕长 ${Math.round(rig.length*state.zoom)}px · ${state.textureMode==='master'?'4K母版':'工作贴图'} ${rig.bodyImage.width} × ${rig.bodyImage.height}`;}}
  background();if(rig){ctx.save();ctx.translate(state.width/2+state.pan.x,state.height/2+state.pan.y);ctx.scale(state.zoom,state.zoom);ctx.translate(-state.camera.x,-state.camera.y);rig.draw(ctx,{debug:$('debug').checked});ctx.restore();}
  state.frames++;if(now-state.lastTelemetry>650){state.fps=Math.round(state.frames*1000/(now-state.lastTelemetry));state.frames=0;state.lastTelemetry=now;$('telemetry').textContent=rig?`${Math.round(Math.hypot(rig.vx,rig.vy))} px/s · ${state.fps} fps`:'';}
  requestAnimationFrame(frame);}

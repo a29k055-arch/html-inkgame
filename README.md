@@ -20,7 +20,7 @@
 - [水墨视觉效果 README](prototypes/ink/README.md)
 - [水墨视觉测试 · 冻结历史候选](https://a29k055-arch.github.io/html-inkgame/visual-effects/)
 - [V4共享水墨测试](https://a29k055-arch.github.io/html-inkgame/v4/visual-effects/v4.html)
-- [生物分层动画测试 · 鱼／龙／虾／乌龟](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/?rev=rig-r6-zoom-and-joints-20261122)（R6：0.25～6倍放大检查／拖动查看／工作与4K切换／头颈修复；V5本轮仍使用首批四套）
+- [生物分层动画测试 · 鱼／龙／虾／乌龟](https://a29k055-arch.github.io/html-inkgame/previews/creature-rig/?rev=rig-r7-smooth-performance-20261123)（R7：柔和转向／鱼龙绘制优化／0.25～6倍放大／工作与4K切换；V5本轮仍使用首批四套）
 - [水墨效果对比实验室](https://a29k055-arch.github.io/html-inkgame/visual-effects/lab.html)
 - [视觉来源与参数](visual-effects/REFERENCE.md)
 
