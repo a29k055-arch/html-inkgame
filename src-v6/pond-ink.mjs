@@ -4,6 +4,8 @@ import {RevealMask,consumeBloomRadius} from '../src-v5/reveal/mask.js';
 import {RevealPainter} from '../src-v5/reveal/painter.js';
 import {REVEAL_CONFIG} from '../src-v5/reveal/config.js';
 import {livingShapeEmitters} from '../src-v5/ink/living-fluid.js';
+import {createInkDrift} from './ink-drift.mjs';
+import {createFoodPainter} from './food-painter.mjs';
 
 const images=new Map();
 
@@ -24,6 +26,8 @@ export function createGround(world,url) {
   const config={...REVEAL_CONFIG,width:world.width,height:world.height};
   const mask=new RevealMask(config),run={world,config,mask};
   const image=painting(url);
+  const drift=createInkDrift();
+  const drawFood=createFoodPainter(world.foodField);
   let painter,clock=0,seen=world.events.length,lastX=NaN,lastY=NaN;
   function markRoute(){
     const p=world.player;
@@ -36,14 +40,17 @@ export function createGround(world,url) {
     }
     lastX=p.x;lastY=p.y;
   }
-  return {image,draw(ctx) {
+  return {image,get layer(){return painter?.layer;},draw(ctx) {
     if(image.complete && image.naturalWidth) {
       painter??=new RevealPainter(image,run);
       painter.draw(ctx);
     }else{
       ctx.fillStyle='#eee5d1';ctx.fillRect(0,0,world.width,world.height);
     }
+    drift.draw(ctx,world.time);
+    drawFood(ctx,this.bounds);
   },update(dt) {
+    drift.update(world,dt);
     for(;seen<world.events.length;seen++){
       const e=world.events[seen];
       if(e.type==='eat'&&(e.target==='spike'||e.target==='hole')){
@@ -58,19 +65,33 @@ export function createGround(world,url) {
 
 export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=false) {
   const renderer=createRevealRenderer(canvas,quality,{world,ground,npcPainter:npcs,TrailClass:CometTrail,
-    body:{smallHalo:2.15,largeHalo:1.35}},forceFallback);
+    body:{smallHalo:2.15,largeHalo:1.35},collisionOutline:{enabled:false}},forceFallback);
+  renderer.collisionOutline.enabled=false;
   let camera=renderer.camera;
   renderer.followCamera=()=>camera;
   renderer.motionSpeedLimit=()=>world.speed;
   // The original V5 shader controls opacity, vorticity, relative motion and
   // size adaptation. Paid ink uses the same solver with longer dye retention.
-  const fluid=renderer.fluid,base=fluid.preset;
-  const jet=base&&{...base,decay:base.decay*.65,slowWake:{...base.slowWake,decay:base.slowWake.decay*.78}};
-  let lastJet=-Infinity,previousShrimp=[];
+  const fluid=renderer.fluid;
+  let lastJet=-Infinity,previousShrimp=[],jetMix=0,frameProfile;
+  if(!renderer.fallback){
+    const inherited=fluid.motionProfile.bind(fluid);
+    fluid.motionProfile=()=>{
+      if(frameProfile)return frameProfile;
+      const profile=inherited();
+      // Preserve V5's native advection, curls and body injection. Damp detached
+      // density faster on an ordinary stroke. Ease the rate back after a jet.
+      const moving=Math.min(1,Math.hypot(world.player.vx,world.player.vy)/32);
+      frameProfile={...profile,tailFade:.78+moving*(2.5-1.15*jetMix),
+        decay:.48+moving*(.47-.23*jetMix),wakeRetention:1.12+.34*moving*(1-jetMix)};
+      return frameProfile;
+    };
+  }
+  const nativeTrail=renderer.trail.preset;
   return {renderer,reset(next,nextGround) {
     world=next;renderer.world=next;renderer.ground=nextGround;
     renderer.cameraReady=false;renderer.clock=0;renderer.relativeSpeed=0;
-    renderer.clearTrails();fluid.clear();renderer.body.reset();lastJet=-Infinity;previousShrimp=[];
+    renderer.clearTrails();fluid.clear();renderer.body.reset();lastJet=-Infinity;previousShrimp=[];jetMix=0;frameProfile=null;
   },updateView(view) {
     camera={x:view.x-renderer.viewW/(2*view.scale),y:view.y-renderer.viewH/(2*view.scale),scale:view.scale};
     if(!renderer.cameraReady||camera.x!==renderer.camera.x||camera.y!==renderer.camera.y||camera.scale!==renderer.camera.scale){
@@ -78,7 +99,12 @@ export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=fal
     }
   },step(dt,p) {
     const released=world.player.emitting && p.form?.species!=='fish' && p.form?.species!=='dragon';
-    if(base)fluid.preset=released?jet:base;
+    jetMix+=(Number(released)-jetMix)*(1-Math.exp(-dt*(released?10:2)));
+    frameProfile=null;
+    if(renderer.fallback){
+      renderer.trail.preset={...nativeTrail,life:.43+.52*jetMix,maxLife:.78+.65*jetMix,
+        length:65+55*jetMix,opacity:.19+.065*jetMix};
+    }
     renderer.step(dt,p);
     if(renderer.fallback)return;
     // V5's shrimp lives in a glass bubble. V6 also wets the painted animal
@@ -103,8 +129,8 @@ export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=fal
       lastJet=world.time;
       const a=world.player.angle,cam=renderer.camera,s=cam.scale,dx=Math.cos(a),dy=Math.sin(a);
       fluid.inject({living:!!p.form,x:(p.x-dx*p.r*.83-cam.x)*s/renderer.viewW,
-        y:(p.y-dy*p.r*.83-cam.y)*s/renderer.viewH,vx:-dx*36,vy:-dy*36,
-        radius:Math.max(.001,p.r*s/renderer.viewH*.53),intensity:1.1});
+        y:(p.y-dy*p.r*.83-cam.y)*s/renderer.viewH,vx:-dx*33,vy:-dy*33,
+        radius:Math.max(.001,p.r*s/renderer.viewH*.50),intensity:.86});
     }
   }};
 }

@@ -30,7 +30,7 @@ const v6Imports = Object.fromEntries(v6Modules.map(name => {
   return [url, url + '?v=' + revision];
 }));
 const pondHtml = pondSource.replace('</head>', '<script type="importmap">' + JSON.stringify({imports:v6Imports}) + '</script></head>')
-  .replace(/((?:src|href)="src-v6\/(?:app\.mjs|ui\.css|opening\.html))"/g, '$1?v=' + revision + '"');
+  .replace(/((?:src|href)="src-v6\/(?:app\.mjs|[\w-]+\.css|opening\.html))"/g, '$1?v=' + revision + '"');
 if (!/<head>/i.test(pondHtml) || /<base\b/i.test(pondHtml)) {
   throw new Error('v6.html must have a head and use project-relative URLs');
 }

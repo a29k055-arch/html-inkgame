@@ -53,7 +53,7 @@ assert.ok(zooms.at(-1).factor>1);
 assert.equal(zooms.at(-1).x,130);
 send(window,'keydown',{code:'KeyW'});
 send(window,'keydown',{code:'ShiftLeft'});
-assert.deepEqual(input.read(),{x:0,y:-1,action:true});
+assert.deepEqual(input.read(),{x:0,y:-1,action:true,keyboard:true});
 send(window,'blur');
 assert.deepEqual(input.read(),rest);
 // A composited canvas can lose pointer capture on the first mouse movement

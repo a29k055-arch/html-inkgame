@@ -1,4 +1,4 @@
-> 当前制作版本为 **V6 水墨池塘**。从《墨》封面的 Play 展开竹简，选一片入池。[直接游玩 V6](https://a29k055-arch.github.io/html-inkgame/v6/) · [V6 玩法企划](docs/v6/pond-gameplay-v1.0.md)
+> 当前制作版本为 **V6 水墨池塘**。从《墨》封面的 Play 展开竹简，选简预览原画，再点「进入画作」入池。[直接游玩 V6](https://a29k055-arch.github.io/html-inkgame/v6/) · [V6 玩法企划](docs/v6/pond-gameplay-v1.0.md)
 
 # 墨—BOKU—
 
@@ -6,7 +6,7 @@
 
 | 版本 | 直接游玩 | 冻结引用与来源 |
 |---|---|---|
-| **V6｜水墨池塘** | **[打开 V6](https://a29k055-arch.github.io/html-inkgame/v6/)** | 沿用 V5 的封面与形体水墨，四段习墨、六幅画卷，独立存档 |
+| **V6｜水墨池塘** | **[打开 V6](https://a29k055-arch.github.io/html-inkgame/v6/)** | 沿用 V5 的封面与形体水墨，四段可跳过的教学、六幅画卷，独立存档 |
 | V5｜生灵游墨 | [打开 V5](https://a29k055-arch.github.io/html-inkgame/v5/) | 独立 src-v5 与 boku.save.v5；[V5 开发报告](docs/V5-SHAPE-FLOW-20261123.md) |
 | V4｜水墨吞噬显画留档 | [打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/) | v4-ink-reveal → 10ef89b，完整源码和资源冻结 |
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |

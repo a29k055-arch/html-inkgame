@@ -6,6 +6,7 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
   const directions = {ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0],
     KeyW:[0,-1],KeyS:[0,1],KeyA:[-1,0],KeyD:[1,0]};
   let origin = null, axisX = 0, axisY = 0, actionPointer = null;
+  let keyboard=false;
   let pinchDistance = 0, pinching = false, actionBlocked = false;
   const held = () => actionPointer !== null || keys.has('ShiftLeft') || keys.has('ShiftRight') || keys.has('Space');
   function hideStick() {
@@ -16,6 +17,7 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
     stick.style.transform = '';
   }
   function reset() {
+    keyboard=false;
     pointers.clear();
     keys.clear();
     actionPointer = null;
@@ -30,6 +32,7 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
   canvas.addEventListener('pointerdown', e => {
     if (!active() || (e.pointerType === 'mouse' && e.button !== 0)) return;
     e.preventDefault();
+    keyboard=false;
     canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
     if (pointers.size === 1) {
@@ -100,6 +103,7 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
     if (!active() || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.code==='Space' && e.target instanceof HTMLButtonElement && e.target!==actionButton) return;
     if (directions[e.code] || ['ShiftLeft','ShiftRight','Space'].includes(e.code)) {
+      if(directions[e.code])keyboard=true;
       e.preventDefault(); keys.add(e.code);
     }
   });
@@ -111,6 +115,8 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
     let x=axisX,y=axisY;
     for(const key of keys) if(directions[key]){x+=directions[key][0];y+=directions[key][1];}
     const scale=Math.max(1,Math.hypot(x,y));
-    return {x:x/scale,y:y/scale,action:held()&&!actionBlocked};
+    const intent={x:x/scale,y:y/scale,action:held()&&!actionBlocked};
+    if(keyboard)intent.keyboard=true;
+    return intent;
   }};
 }

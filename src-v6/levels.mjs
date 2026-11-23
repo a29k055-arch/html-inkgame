@@ -3,29 +3,29 @@
 const words = (zh, ja, en) => ({ zh, ja, en });
 
 export const LEVELS = [
-  [words('浅汀','浅瀬','Shallow Shoal'), words('吞下淡蓝圈的猎物。墨量超过池中最大的对手，第一幅画就会显现。','水色の輪をまとった相手を吸い込もう。池でいちばん大きくなると、最初の絵が現れる。','Absorb creatures with pale blue rings. Grow larger than every rival to reveal the first painting.')],
-  [words('荷隙','蓮のすきま','Lotus Passage'), words('喷墨穿隙，或沿荷岸绕行。','墨を吐いて抜けるか、蓮の岸を回ろう。','Shed ink to slip through, or follow the lotus bank.')],
-  [words('双刺渡','双棘の渡し','Twin Spines'), words('借一颗刺球，打开另一颗守着的水口。','トゲ玉どうしをぶつけて、水路を開こう。','Nudge two spiked balls together to open the crossing.')],
-  [words('分墨湾','墨分かれの入り江','Divided Bay'), words('赶在黑洞之前，选定觅食的岸。','黒い渦より先に、墨を集める岸を選ぼう。','Choose a feeding bank before the whirl reaches it.')],
-  [words('夹岸','はざまの岸','Narrow Banks'), words('沿外岸蓄墨，在窄口换路。','岸辺で墨を蓄え、狭い水路を渡ろう。','Gather ink on the outer bank, then change course at a narrow gate.')],
-  [words('合塘','合流の池','Confluence'), words('两岸合流，选择养花、截食或推开刺门。','二つの流れが合う池で、花と押す力を使おう。','Two basins meet. Grow a flower, intercept a mote, or open the thorn gate.')]
+  [words('壹','一','I'), words('先吃水中的浮墨，再去吞淡蓝光圈里的对手。成为池中最大的墨团，就能揭开这幅画。','まずは水に浮かぶ墨を集めよう。水色に光る相手を吸収して、池でいちばん大きくなると絵が現れる。','Gather floating ink, then absorb rivals with a pale blue glow. Grow bigger than every rival to reveal the painting.')],
+  [words('貳','二','II'), words('喷墨缩身，穿过荷叶之间的窄隙，也可以沿岸绕行。','墨を吐いて小さくなれば、ハスの葉の間を通れる。岸沿いに回ってもいい。','Shed ink to slip through, or follow the lotus bank.')],
+  [words('參','三','III'), words('让两颗刺球相撞，给自己挤出一条水路。','トゲ玉どうしをぶつけて、水路を開こう。','Nudge two spiked balls together to open the crossing.')],
+  [words('肆','四','IV'), words('赶在黑洞之前，选定觅食的岸。','黒い渦より先に、墨を集める岸を選ぼう。','Choose a feeding bank before the whirl reaches it.')],
+  [words('伍','五','V'), words('沿外岸蓄墨，在窄口换路。','岸辺で墨を蓄え、狭い水路を渡ろう。','Gather ink on the outer bank, then change course at a narrow gate.')],
+  [words('陸','六','VI'), words('两岸合流，选择养花、截食或推开刺门。','二つの流れが合う池で、花と押す力を使おう。','Two basins meet. Grow a flower, intercept a mote, or open the thorn gate.')]
 ].map(([title,subtitle],index)=>({id:'level-'+(index+1),kind:'level',index,title,subtitle}));
 
 export const TUTORIALS = [
-  [words('游与食','泳ぎと吸収','Swim & Absorb'), words('移动、停住、辨认淡蓝圈。','泳ぐ、止まる、水色の輪を見分ける。','Steer, slow down and recognize an edible ring.')],
-  [words('辨敌','相手を知る','Recognize Rivals'), words('观察两种敌人怎样交换或失去墨。','二種類の敵が墨を移し、失う様子を見よう。','See which encounters transfer ink and which wear both bodies down.')],
-  [words('四形','四つの姿','Four Forms'), words('拾取、保存，再亲手使用四种生物。','生き物を拾い、好きな時に姿を変えよう。','Collect a creature, store it, then choose when to change.')],
-  [words('放墨与养花','墨と蓮の花','Ink & Blossom'), words('向后喷墨推动目标，再用荷花补回质量。','墨で後ろの球を押し、蓮の花で育とう。','Push a mote with your jet and regain ink from a blossom.')]
+  [words('移动与吞食','移動と吸収','Move and eat'), words('移动、停住、辨认淡蓝圈。','泳ぐ、止まる、水色の輪を見分ける。','Steer, slow down and recognize an edible ring.')],
+  [words('敌人碰撞','敵との接触','Enemy contact'), words('观察两种敌人怎样交换或失去墨。','トゲ玉に触れたときと、黒い渦に触れたときの違いを見てみよう。','See which encounters transfer ink and which wear both bodies down.')],
+  [words('使用道具','アイテムの使い方','Use items'), words('先把游来的生物收入道具栏，再选择使用时机。','生き物を集めて、好きなタイミングで変身しよう。','Collect a creature, store it, then choose when to change.')],
+  [words('喷墨与养花','墨とハスの花','Jet ink and grow flowers'), words('向后喷墨可以推开对手。把墨留在荷叶上，等花开了再吃。','後ろに墨を吐いて相手を押そう。ハスの葉に墨をためると花が咲く。','Push a mote with your jet and regain ink from a blossom.')]
 ].map(([title,subtitle],index)=>({id:'tutorial-'+(index+1),kind:'tutorial',index,title,subtitle}));
 
 const plans = [
 // width, height, number of enemies, visibly drifting fraction, player speed
   [5350,3000,15,.60,100],
-  [6250,3270,21,.30,103],
+  [6900,3460,21,.30,103],
   [6620,3340,24,.20,105],
-  [6280,3440,26,.60,108],
+  [7530,3900,26,.60,108],
   [6860,3610,30,.20,110],
-  [6900,3610,34,.56,112]
+  [7460,3890,34,.56,112]
 ];
 
 function randomFor(seed) {
@@ -71,7 +71,7 @@ export function makeLevel(id, seed=1) {
   const [width,height,count,driftFraction,speed]=plans[index];
   const flip = rng() < .5;
   const point = (u,v) => ({x:u*width, y:(flip?1-v:v)*height});
-  const cfg = {id:meta.id,kind:'level',index,seed,width,height,speed,tutorial:false,spawnItems:true,flowerMass:30,
+  const cfg = {id:meta.id,kind:'level',index,seed,width,height,speed,tutorial:false,spawnItems:true,flowerMass:30,foodSpacing:79,
     player:{...point(.18,.50),mass:100,angle:0},enemies:[],leaves:[],drops:[],items:[]};
   const enemies=cfg.enemies;
   const add = (key,type,mass,p,extra={}) => {
@@ -170,7 +170,7 @@ export function makeLevel(id, seed=1) {
   }
   // The leading creature has a reachable food budget even if the player
   // spent ink at several gates. Its initial home is clear of easy feeding chains.
-  const leadMass=Math.round(budget*.55);
+  const leadMass=Math.round(budget*.82);
   let lead=point(.59,.14);
   if(!clearSpot(lead,leadMass)) {
     for(let i=0;i<200;i++) {
@@ -187,6 +187,8 @@ export function makeLevel(id, seed=1) {
     const angle=rng()*Math.PI*2, v=(e.bankMajor?.035+.015*rng():.10+.12*rng())*speed;
     e.vx=Math.cos(angle)*v;e.vy=Math.sin(angle)*v;
   }
+  // Black whirls cross a bank more slowly than the lighter thorn seeds.
+  for(const e of enemies)if(e.type==='hole'){e.vx*=.60;e.vy*=.60;}
   const forms=['fish','shrimp','turtle','dragon'];
   cfg.items.push({id:'near-form',type:forms[index%3],...atOffset(first,85,70),vx:0,vy:0});
   cfg.items.push({id:'far-form',type:forms[(index+1)%forms.length],...point(.67,.69),vx:-4,vy:1});

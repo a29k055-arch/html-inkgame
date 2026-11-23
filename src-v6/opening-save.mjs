@@ -2,7 +2,13 @@
 const progressKey='boku.v6.pond.progress.1',settingsKey='boku.v6.cover.settings.1';
 export const galleryIDs=['ink-06','ink-01','ink-07','ink-08','ink-12','ink-13'];
 function read(key){try{return JSON.parse(localStorage.getItem(key)||'{}')||{};}catch{return {};}}
-export function coverSettings(){return read(settingsKey);}
+export function coverSettings(){
+ const prefs=read(settingsKey);
+ if(!prefs.migratedMute && read(progressKey).sound===false){
+   Object.assign(prefs,{bgmMuted:true,sfxMuted:true,migratedMute:true});updateSettings(prefs);
+ }
+ return prefs;
+}
 export function updateSettings(settings){try{localStorage.setItem(settingsKey,JSON.stringify(settings));}catch{}}
 export function getSave(){
  const progress=read(progressKey),completed=Array.isArray(progress.levels)?progress.levels:[];
@@ -12,3 +18,5 @@ export function getSave(){
 export function unlockedArtworks(){return new Set(galleryIDs.filter(id=>getSave().progress.revealArtworks[id].completed));}
 export function fragmentIds(){return [];}
 export function restoreArtwork(){return false;}
+
+export function resetPondSave(){try{localStorage.removeItem(progressKey);localStorage.removeItem(settingsKey);}catch{}}

@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {InkCreature,projectPoint} from '../previews/creature-rig/runtime/ink-creature.mjs';
+import {steerCreature} from '../src-v6/creature-painter.mjs';
 import {LIVING_VARIANTS} from '../src-v5/game/living-rigs.js';
+import {makeLevel} from '../src-v6/levels.mjs';
+import {visibleFood} from '../src-v6/food-field.mjs';
 import {createWorld,stepWorld,useItem,spawnItem,spawnEnemy,spawnDrop,radius,canEat} from '../src-v6/sim.mjs';
 const tick=(w,input={},seconds=1)=>{for(let i=0;i<Math.round(seconds*60);i++)stepWorld(w,input,1/60);};
 const base=(extra={})=>createWorld({width:1600,height:900,player:{x:500,y:400,mass:100},tutorial:true,spawnItems:false,...extra});
@@ -7,6 +12,51 @@ const near=(a,b,tol=1e-7)=>assert.ok(Math.abs(a-b)<tol,`${a} differs from ${b}`)
 const activate=(w,type)=>{const item=spawnItem(w,{type,x:w.player.x,y:w.player.y});tick(w,{},1/60);assert.ok(useItem(w,0));assert.equal(w.player.activeItem,item);return item;};
 const counts={};
 function test(name,f){f();counts[name]='pass';}
+test('all ten rigs turn the head before the body while the turtle shell holds its joints',()=>{
+  for(const ids of Object.values(LIVING_VARIANTS)){
+    for(const id of ids){
+      const url=new URL('../previews/creature-rig/'+id+'/rig.json',import.meta.url);
+      const rig=JSON.parse(readFileSync(url,'utf8'));
+      const c=new InkCreature(rig,{length:100,speed:0});
+      c.layers=rig.layers.map(layer=>({...layer,anchor:projectPoint(c.sourceCurve,...layer.pivot)}));
+      const actor={aim:{x:1,y:0}};
+      steerCreature(c,actor);
+      const legs=c.layers.filter(l=>l.kind==='leg');
+      const jointSpan=()=>{
+        const a=c.layerTransform(legs[0]),b=c.layerTransform(legs[1]);
+        return Math.hypot(a.x-b.x,a.y-b.y);
+      };
+      const turtle=c.species==='turtle',before=turtle?jointSpan():0;
+      actor.aim.x=-1;
+      for(let i=0;i<6;i++)c.update(1/60);
+      assert.ok(Math.abs(c.heading)>1.1,id+' head should already be turning');
+      assert.ok(Math.abs(c.angleAt(c.time-.20))<.1,id+' rear should still follow the earlier course');
+      if(turtle){
+        near(jointSpan(),before,.001);
+        assert.ok(Math.abs(c.neckTurn)>.3);
+      }
+      actor.aim.x=0;actor.aim.y=-1;
+      for(let i=0;i<60;i++)c.update(1/60);
+      assert.ok(Math.sin(c.heading)<-.99,id+' must face vertically');
+    }
+  }
+});
+test('covering a painted head collects once and the same rig fades in the water',()=>{
+  const w=base(),p=w.player;
+  const item=spawnItem(w,{type:'fish',x:p.x+p.r+1,y:p.y,r:13});
+  tick(w,{},1/60);
+  assert.equal(p.inventory.length,0,'contact with the trailing body must not collect the animal');
+  item.x=p.x+p.r;
+  tick(w,{},1/60);
+  assert.equal(p.inventory[0],item);
+  assert.equal(w.items.length,0);
+  assert.equal(w.departingItems[0],item);
+  tick(w,{},.26);
+  assert.ok(item.opacity>.3 && item.opacity<.8);
+  assert.equal(p.inventory.length,1);
+  tick(w,{},.34);
+  assert.equal(w.departingItems.length,0);
+});
 test('all ten V5 appearances persist from the swimming pickup into the active player',()=>{
  const w=base({seed:42,tutorial:false,spawnItems:false,enemies:[{type:'hole',x:1200,y:800,mass:900}]});
  const originalRng=w.rng,seen=new Set();
@@ -139,5 +189,60 @@ test('leaf edge protects the player, outside jet deposits only once, full leaf s
  const q=base({player:{x:610,y:400,mass:100},leaves:[{x:500,y:400,r:80}]});
  tick(q,{action:true},.4);tick(q,{},.6);assert.ok(q.events.some(e=>e.type==='store'));
  near(q.player.mass+q.leaves[0].stored-q.time+q.drops.reduce((s,d)=>s+d.mass,0),100);
+});
+test('paid ink fans out as individual polygons and retains the same mass when it settles',()=>{
+ const w=base({seed:73}),seen=new Map(),times=[];
+ for(let i=0;i<240;i++){
+  tick(w,{action:true},1/60);
+  for(const s of w.shots)if(!seen.has(s.id)){seen.set(s.id,{...s});times.push(w.time);}
+ }
+ const shots=[...seen.values()],angles=shots.map(s=>Math.atan2(s.dy,-s.dx)*180/Math.PI);
+ assert.ok(Math.min(...angles)<-10 && Math.max(...angles)>10);
+ assert.ok(angles.every(a=>Math.abs(a)<=24.01));
+ assert.equal(new Set(shots.map(s=>s.shape)).size,4);
+ assert.ok(Math.max(...shots.map(s=>Math.hypot(s.vx,s.vy)))-Math.min(...shots.map(s=>Math.hypot(s.vx,s.vy)))>70);
+ assert.ok(new Set(times.slice(1).map((t,i)=>Math.round((t-times[i])*60))).size>=4);
+ tick(w,{},1.5);
+ near(w.player.mass+w.drops.reduce((n,d)=>n+d.mass,0),100);
+ assert.equal(new Set(w.drops.map(d=>d.shape)).size,4);
+ const f=base({seed:73});activate(f,'fish');const directions=[];
+ for(let i=0;i<240;i++){
+  tick(f,{action:true},1/60);
+  for(const s of f.shots)directions.push(Math.atan2(s.dy,s.dx)*180/Math.PI);
+ }
+ assert.ok(Math.min(...directions)<-4 && Math.max(...directions)>4);
+ assert.ok(directions.every(a=>Math.abs(a)<=9.01));
+ near(f.player.mass,100);near(f.player.x,500);
+});
+test('dense pond ink is edible, local, shared by both sides and safe to harvest once',()=>{
+ const w=createWorld(makeLevel('level-1',37)),field=w.foodField;
+ assert.ok(field.count>2200);
+ const nearby=[...visibleFood(field,w.player.x-245,w.player.y-245,w.player.x+245,w.player.y+245)];
+ assert.ok(nearby.length>=26);
+ assert.equal(new Set(nearby.map(d=>d.shape)).size,4);
+ const far=field.slots[0],atRest={x:far.x,y:far.y,rot:far.rot};
+ field.time=4;
+ const [drifting]=visibleFood(field,0,0,field.cw,field.ch);
+ assert.equal(drifting,far);
+ assert.ok(Math.hypot(far.x-atRest.x,far.y-atRest.y)>.25);
+ assert.notEqual(far.rot,atRest.rot);
+ field.time=w.time;
+ const d=nearby.find(d=>Math.hypot(d.x-w.player.x,d.y-w.player.y)>100),before=w.player.mass;
+ w.player.x=d.x;w.player.y=d.y;tick(w,{},1/60);
+ assert.equal(field.slots[d.slot],null);
+ assert.ok(w.player.mass>=before+d.mass);
+ assert.equal(w.events.filter(e=>e.id===d.id && e.type==='eat').length,1);
+ assert.equal(base().foodField,null);
+});
+test('keyboard taps make rounded turns with coasting while an analogue release remains precise',()=>{
+ const w=base();
+ tick(w,{x:1,keyboard:true},1);tick(w,{y:1,keyboard:true},.1);
+ assert.ok(w.player.vx>35 && w.player.vy>35);
+ const bearing=Math.atan2(w.player.vy,w.player.vx);
+ near(w.player.angle,bearing);
+ const keyStop=base(),stickStop=base();
+ for(const t of [keyStop,stickStop])tick(t,{x:1},1);
+ const x=keyStop.player.x;tick(keyStop,{keyboard:true},.24);tick(stickStop,{},.24);
+ assert.ok(keyStop.player.x-x>2*(stickStop.player.x-x));
 });
 console.log(JSON.stringify(counts,null,2));

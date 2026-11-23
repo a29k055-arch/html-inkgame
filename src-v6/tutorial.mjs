@@ -1,35 +1,36 @@
 import {spawnEnemy, spawnItem, spawnDrop, spawnLeaf, radius} from './sim.mjs';
+import {introductions,results,LESSON_INTRO,LESSON_HOLD,LESSON_DISSOLVE} from './lesson-scenes.mjs';
 
 const line=(zh,ja,en)=>({zh,ja,en});
 const forms=['fish','shrimp','turtle','dragon'];
 const hints={
-  move:line('按住水面拖动，轻推摇杆向淡蓝圈游去。','水面を押したまま少し動かし、水色の輪へ泳ごう。','Hold the water and drag a little to swim toward the pale blue ring.'),
-  eat:line('碰到淡蓝圈，就能吞下它；远处的红圈先绕开。','水色の輪に触れて吸収しよう。赤い輪はよけよう。','Touch the blue ring to absorb it. Give the red ring space.'),
-  grew:line('第一口墨入体，身形与上方的墨量一起增长。','最初の墨を吸収。体と上の墨量が一緒に増えた。','Your first catch grew your body and the ink bar above.'),
-  spike:line('贴住红圈刺球片刻，观察双方各自损失相同的墨量。','赤いトゲ玉に少しの間触れよう。どちらも同じ量の墨を失う。','Stay against the red spiked ball briefly. Both bodies lose the same amount of ink.'),
-  hole:line('贴住红圈黑洞片刻。沿着墨流看，你失去的墨正让它长大。','赤い渦に少しの間触れよう。君の墨が流れ込み、渦が育つ。','Stay against the red whirl briefly. Follow the ink from your shrinking body into the growing whirl.'),
-  spikePair:line('游近两颗刺球，观察它们接触：双方损失相同的墨量。','二つのトゲ玉に近づこう。触れると同じ量の墨を失う。','Approach the two spiked balls. Watch both lose equal ink on contact.'),
-  holePair:line('游近两颗黑洞。黑洞碰到同类也会同时变小。','二つの渦に近づこう。渦どうしも一緒に縮む。','Approach the twin whirls. Two whirls also lose ink together.'),
-  mixedPair:line('游到两者身旁。黑洞比刺球大，正在吸走它的墨。','二つに近づこう。大きな渦は小さなトゲ玉から墨を吸う。','Approach the pair. The larger whirl draws ink from the smaller spiked ball.'),
-  intercept:line('刺球已成淡蓝圈，现在可以截住它。','トゲ玉が水色になった。今なら吸収できる。','The spiked ball has turned blue. Intercept it now.'),
-  fishTake:line('游过去拾取鲤鱼。先把它收入右侧的空格。','鯉を拾おう。まずは右の空いた枠へ。','Swim to the carp to store it in a slot on the right.'),
-  fishUse:line('点右侧鲤鱼变形，再看右下交互键。','右の鯉を選び、右下の技ボタンを見よう。','Select the carp in your inventory. See the action button change.'),
-  fishTry:line('面向前方的刺球，按住交互键吐泡推开它；再游过空隙。','前のトゲ玉に向き、技ボタンで泡を吐いて押し、すきまへ泳ごう。','Face the spiked ball and hold Action to push it with bubbles, then swim through the gap.'),
-  shrimpTake:line('下一只生物是虾。游过去收入道具格。','次はエビ。近づいて枠に入れよう。','The shrimp is next. Swim over to collect it.'),
-  shrimpUse:line('点虾，靠近散墨和淡蓝圈。','エビを選び、墨の粒と水色の輪へ近づこう。','Activate the shrimp and approach the ink and blue ring.'),
-  shrimpTry:line('靠近两种目标：散墨较快，蓝圈敌人较慢；红圈不会被吸来。','二つに近づこう。墨の粒は速く、水色の敵はゆっくり近づく。赤い敵は動かない。','Draw both close. Loose ink comes quickly, blue foes slowly; red foes resist.'),
-  turtleTake:line('拾取游来的龟。','泳いできたカメを拾おう。','Collect the turtle as it drifts near.'),
-  turtleUse:line('点龟，准备从红圈旁通过。','カメを選び、赤い輪のそばを通ろう。','Activate the turtle to pass beside the red ring.'),
-  turtleTry:line('用龟身轻碰红圈。游速稍慢，碰撞时能守住墨量。','カメで赤い輪に触れよう。泳ぎは少し遅く、触れても墨は減らない。','Brush the red ring as a turtle. You move a little slower and keep your ink.'),
-  dragonTake:line('最后拾取龙。','最後に竜を拾おう。','Collect the dragon last.'),
-  dragonUse:line('点龙。守墨、磁吸、吐泡同时生效二十秒。','竜を選ぼう。守り、引き寄せ、泡が同時に20秒続く。','Activate the dragon. Protection, magnetism and bubbles last twenty seconds together.'),
-  dragonTry:line('靠近红圈承受接触，吸近散墨，并按交互键向前吐泡。','赤い輪に触れ、墨の粒を引き寄せながら、技ボタンで前に泡を吐こう。','Brush the red ring, draw ink close, and press Action to blow bubbles.'),
-  jet:line('朝右轻推摇杆。按住交互键向后喷墨，让身后的刺球退开。','右を向き、技ボタンを長押し。後ろに墨を放ち、後方のトゲ玉を押そう。','Face right and hold Action to jet ink backward. Push the ball behind you.'),
-  store:line('游到荷叶上，再按住交互键，把墨存入叶面。','ハスの葉へ泳ぎ、技ボタンを押して葉に墨をためよう。','Swim onto the lotus leaf and hold Action to deposit ink.'),
-  fullLeaf:line('荷叶已开满三朵花。先吃一朵，腾出位置再存墨。','葉には花が三輪。まず一輪食べてから、墨をためよう。','The leaf holds three blossoms. Eat one to make room for your ink.'),
-  bloom:line('继续向叶面喷墨，直到花苞展开。','つぼみが開くまで葉に墨を注ごう。','Keep the jet on the leaf until its bud opens.'),
-  flower:line('松开放墨，游近刚开的荷花，把墨量补回来。','技を放し、咲いた花へ泳いで墨を取り戻そう。','Release Action and touch the new blossom to regain ink.'),
-  done:line('习成','修了','Lesson complete')
+  move:line('按住水面向右拖动，带着墨球游向淡蓝色的光。','水面を押したまま右に動かして、水色に光る相手に近づきましょう。','Hold the water and drag right. Swim toward the pale blue glow.'),
+  eat:line('再近一点，碰到淡蓝圈就能把它吃下去。','もう少し近づいて、水色の輪に触れてみましょう。','Move a little closer. Touch the pale blue rim to absorb it.'),
+  grew:line('你吃下了第一颗墨球。','最初の相手を吸収できました。','You absorbed your first rival.'),
+  spike:line('游到右边，轻轻贴住红圈刺球，看看两边的墨量。','右に泳いで、赤いトゲ玉に少し触れてみましょう。','Swim right and stay against the red spiked ball for a moment.'),
+  hole:line('这次贴住红圈黑洞。观察墨从哪里流向哪里。','今度は赤い渦に触れて、墨の流れを見てみましょう。','This time, touch the red whirl. Watch which way the ink flows.'),
+  spikePair:line('游近一点，看两颗刺球怎样碰到一起。','少し近づいて、2つのトゲ玉がぶつかる様子を見ましょう。','Approach the two spiked balls and watch them touch.'),
+  holePair:line('游近这两个黑洞。猜一猜，哪一个会变小？','2つの渦に近づきましょう。小さくなるのはどちらでしょう？','Approach the two whirls. Which one will shrink?'),
+  mixedPair:line('游近刺球和黑洞，留意较小的那一个。','トゲ玉と渦に近づいて、小さい方を見てみましょう。','Approach the spiked ball and the whirl. Keep an eye on the smaller one.'),
+  intercept:line('刺球已经泛起淡蓝光，现在游过去吃掉它。','トゲ玉が水色に変わりました。今なら吸収できます。','The spiked ball now glows blue. Swim into it to absorb it.'),
+  fishTake:line('游向鲤鱼，让墨球碰到它的头。','コイの頭にそっと触れて、拾いましょう。','Swim up to the carp and touch its head to collect it.'),
+  fishUse:line('鲤鱼已经在右侧道具格里。点它，变成鲤鱼。','右の道具欄にコイが入りました。選んでコイに変身しましょう。','The carp is in a slot on the right. Select it to take its form.'),
+  fishTry:line('朝刺球吐泡，把它推开，再游过空隙。','トゲ玉に泡を吐いて押しのけ、すき間を通りましょう。','Blow bubbles at the spiked ball, then swim through the gap.'),
+  shrimpTake:line('游过去，碰到虾的头就能收下它。','エビの頭に触れて拾いましょう。','Touch the shrimp’s head to collect it.'),
+  shrimpUse:line('点右侧的虾，变身后靠近散墨。','右のエビを選んで変身し、墨の粒に近づきましょう。','Select the shrimp on the right, then approach the loose ink.'),
+  shrimpTry:line('靠近散墨和淡蓝圈，看看谁先被虾吸过来。','墨の粒と水色の相手に近づきましょう。先に寄ってくるのはどちらでしょう？','Move near the loose ink and the blue rival. Which one comes to you first?'),
+  turtleTake:line('接下来，游到龟的头边收下它。','次はカメです。頭に触れて拾いましょう。','Next, touch the turtle’s head to collect it.'),
+  turtleUse:line('点右侧的龟，准备靠近红圈。','右のカメを選んで変身しましょう。','Select the turtle on the right to take its form.'),
+  turtleTry:line('用龟壳碰一下红圈，观察自己的墨量。','甲羅で赤い輪に触れて、自分の墨の量を見てみましょう。','Brush the red rim with your shell. Watch your ink bar.'),
+  dragonTake:line('最后一只游来的是龙。碰它的头，将它收进道具格。','最後は龍です。頭に触れて拾いましょう。','The last creature is a dragon. Touch its head to collect it.'),
+  dragonUse:line('点右侧的龙。龙形态持续二十秒。','右の龍を選びましょう。変身は20秒間続きます。','Select the dragon. Its form lasts twenty seconds.'),
+  dragonTry:line('靠近红圈，让散墨被吸过来，同时试着向前吐泡。','赤い輪に触れてみましょう。墨の粒が寄ってきたら、前に泡を吐いてみてください。','Approach the red rim. As ink drifts toward you, blow bubbles ahead.'),
+  jet:line('面向右边，按住放墨键，用喷出的墨推开身后的刺球。','右を向いて墨を吐くボタンを長押しし、後ろのトゲ玉を押してみましょう。','Face right and hold the ink button. Use the jet to push the ball behind you.'),
+  store:line('游进荷叶，在叶面上按住放墨键。','ハスの葉に乗って、墨を吐くボタンを長押ししましょう。','Swim onto the lotus leaf and hold the ink button.'),
+  fullLeaf:line('这片叶子已经开了三朵花。先吃一朵，腾出位置。','この葉にはもう3輪咲いています。1輪食べて場所を空けましょう。','This leaf already has three flowers. Eat one to make room.'),
+  bloom:line('再喷一点，看看叶面上的花苞。','もう少し墨を注いで、つぼみを見てみましょう。','Give it a little more ink. Watch the bud on the leaf.'),
+  flower:line('松开放墨键，游到荷花上，把墨补回来。','ボタンを離して、咲いた花に触れましょう。墨が戻ります。','Release the button. Swim into the blossom to regain ink.'),
+  done:line('教学完成。','練習できました。','Lesson complete.')
 };
 const sequences=[
   ['move','eat','grew'],
@@ -41,15 +42,27 @@ const sequences=[
 export function createTutorial(id){
   const index=Number(String(typeof id==='object'?id.id:id).split('-').pop())-1;
   if(!sequences[index]) throw new RangeError('Unknown lesson: '+id);
-  return {index,step:0,key:sequences[index][0],done:false,cursor:0,entered:null,seen:new Set(),pairStarted:false,contactAt:null,firstEat:false};
+  return {index,step:0,key:sequences[index][0],phase:'intro',elapsed:0,done:false,cursor:0,entered:null,seen:new Set(),pairStarted:false,contactAt:null,firstEat:false};
 }
-export function tutorialHint(t,lang='zh'){
+const touchMove=line('手指按住水面，往右轻轻一拖，游向淡蓝色的光。','水面に指を置き、右に軽くスライドして水色の相手に近づきましょう。','Touch the water and slide your finger right, toward the pale blue glow.');
+const keyboardMove=line('按住水面向右拖动，也可以按 D 或 →，游向淡蓝色的光。','水面を右にドラッグするか、D か → を押して水色の相手に近づきましょう。','Drag right on the water, or hold D or →, to swim toward the pale blue glow.');
+const keyboardJet=line('面向右边，按住 Shift 向后喷墨，试着推开身后的刺球。','右を向いて Shift キーを長押しし、後ろのトゲ玉を墨で押してみましょう。','Face right and hold Shift. Use your backward jet to push the spiked ball.');
+const actionClue={
+  touch:line('按住右下按钮。','右下のボタンを長押しします。','Hold the button at the bottom right.'),
+  keyboard:line('按住 Shift 或右下按钮。','Shift キーか右下のボタンを長押しします。','Hold Shift or the button at the bottom right.')
+};
+export function tutorialHint(t,lang='zh',touch=false){
+  if(t.phase==='intro')return introductions[t.index][lang];
+  if((t.phase==='hold'||t.phase==='fade-out')&&results[t.key])return results[t.key][lang];
+  if(t.key==='move')return (touch?touchMove:keyboardMove)[lang];
+  if(t.key==='jet'&&!touch)return keyboardJet[lang];
   const s=hints[t.done?'done':t.key==='store'&&t.fullLeaf?'fullLeaf':t.key];
-  return s[lang]||s.zh;
+  const control=['fishTry','dragonTry'].includes(t.key)?actionClue[touch?'touch':'keyboard'][lang]:'';
+  return [s[lang]||s.zh,control].filter(Boolean).join(lang==='en'?' ':'');
 }
 
 function clearExercise(w){
-  for(const key of ['enemies','items','drops','leaves','shots','safePath']) w[key].length=0;
+  for(const key of ['enemies','items','departingItems','drops','leaves','shots','safePath']) w[key].length=0;
   w.contacts.clear();
   w.cueTimes.clear();
   w.packet=0;w.packetTime=0;w.bubbleDelay=0;
@@ -110,10 +123,37 @@ function enter(t,w){
     spawnLeaf(w,{id:'lesson-leaf',x:540,y:330,r:71,stored:19,flowers:0});
   }
 }
-function proceed(t,w){
-  if(++t.step>=sequences[t.index].length){t.done=true;t.key='done';return;}
+function enterNext(t,w){
+  t.step++;
   t.key=sequences[t.index][t.step];
   enter(t,w);
+}
+function proceed(t,w){
+  if(t.phase!=='active')return;
+  if(results[t.key]){t.phase='hold';t.elapsed=0;return;}
+  // A freshly activated form stays in the inventory position until its short
+  // dissolve covers the new practice arrangement. Its timer is frozen here.
+  if(t.key.endsWith('Use')){t.phase='fade-out';t.elapsed=0;return;}
+  enterNext(t,w);
+}
+export function advanceTutorialBeat(t,w,dt){
+  if(!t||t.done||t.phase==='active')return;
+  t.elapsed+=Math.max(0,dt);
+  if(t.phase==='intro'&&t.elapsed>=LESSON_INTRO){
+    t.phase='active';t.elapsed=0;
+    if(t.entered===null)t.entered=w.time;
+  }else if(t.phase==='hold'&&t.elapsed>=LESSON_HOLD){
+    if(t.step===sequences[t.index].length-1){
+      t.done=true;t.phase='finished';t.key='done';
+    }else{
+      t.phase='fade-out';t.elapsed=0;
+    }
+  }else if(t.phase==='fade-out'&&t.elapsed>=LESSON_DISSOLVE){
+    enterNext(t,w);
+    t.phase='fade-in';t.elapsed=0;
+  }else if(t.phase==='fade-in'&&t.elapsed>=LESSON_DISSOLVE){
+    t.phase='active';t.elapsed=0;
+  }
 }
 function eventIs(events,type,test=()=>true){return events.some(e=>e.type===type&&test(e));}
 function live(t,w,id){return w.enemies.find(e=>e.id===id&&e.mass>0);}
@@ -128,7 +168,7 @@ function runPair(t,w,events){
   const left=live(t,w,'demo-left'),right=live(t,w,'demo-right');
   if(eventIs(events,'eat',e=>e.id==='demo-left'))t.firstEat=true;
   if(!left||!right){
-    if(t.key==='mixedPair'&&t.firstEat){proceed(t,w);proceed(t,w);return;}
+    if(t.key==='mixedPair'&&t.firstEat){enterNext(t,w);proceed(t,w);return;}
     enter(t,w);return;
   }
   if(Math.hypot(w.player.x-(left.x+right.x)/2,w.player.y-(left.y+right.y)/2)<155)t.pairStarted=true;
@@ -185,6 +225,7 @@ function recoverExercise(t,w){
 }
 export function updateTutorial(t,w,newEvents){
   if(!t||t.done)return Boolean(t?.done);
+  if(t.phase!=='active')return false;
   if(t.entered===null)t.entered=w.time;
   const events=readEvents(t,w,newEvents);
   if(w.status==='lost'||w.player.mass<12){recoverExercise(t,w);return false;}
@@ -193,7 +234,7 @@ export function updateTutorial(t,w,newEvents){
     if(eventIs(events,'eat',e=>e.id==='first-blue'))t.firstEat=true;
     if(k==='move'&&(eventIs(events,'move')||t.firstEat))proceed(t,w);
     if(t.key==='eat'&&t.firstEat)proceed(t,w);
-    if(t.key==='grew'&&w.time-t.entered>1.5)proceed(t,w);
+    if(t.key==='grew')proceed(t,w);
   }else if(k==='spike'||k==='hole'){
     const rival=live(t,w,'touch-'+k);
     if(rival){
@@ -233,6 +274,8 @@ export function updateTutorial(t,w,newEvents){
 
 export function tutorialFocus(t,w){
   if(!t||t.done)return null;
+  if(t.phase==='intro')return t.index===0?w.player:null;
+  if(t.phase==='hold'||t.phase==='fade-out')return null;
   const k=t.key, e=id=>live(t,w,id);
   if(k==='move'||k==='eat')return e('first-blue');
   if(k==='spike'||k==='hole')return e('touch-'+k);

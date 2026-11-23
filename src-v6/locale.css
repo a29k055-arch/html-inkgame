@@ -1,0 +1,10 @@
+/* Prefer the regional glyphs for the active language, including form controls. */
+:lang(zh){--boku-serif:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun","Noto Serif CJK SC","Microsoft YaHei",serif;}
+:lang(ja){--boku-serif:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP","Source Han Serif JP","Noto Serif CJK JP","MS PMincho",serif;}
+:lang(en){--boku-serif:Georgia,"Times New Roman",serif;}
+html[lang] body,html[lang] .bamboo-level-name,html[lang] .bamboo-level-no,
+html[lang] button,html[lang] input,html[lang] select,html[lang] option {font-family:var(--boku-serif);}
+#v6-opening[data-settings-only]{background:transparent!important;}
+#pause-actions{display:grid;gap:10px;}
+body.mobile #action kbd{display:none;}
+body[data-controls=pc] #action kbd{display:block;}

@@ -1,6 +1,7 @@
 import {createWorld,stepWorld,useItem} from './sim.mjs';
 import {makeLevel,LEVELS,TUTORIALS} from './levels.mjs';
-import {createTutorial,updateTutorial,tutorialHint,tutorialFocus} from './tutorial.mjs';
+import {advanceTutorialBeat,createTutorial,updateTutorial,tutorialHint,tutorialFocus} from './tutorial.mjs';
+import {showLessonBeat} from './lesson-scenes.mjs';
 import {createRenderer} from './render.mjs';
 import {createUI,paintings} from './ui.mjs';
 import {createInput} from './input.mjs';
@@ -10,7 +11,7 @@ import {connectOpening} from './opening.mjs';
 
 const canvas=document.querySelector('#world');
 const draw=createRenderer(canvas),camera=createCamera(canvas);
-const minimap=createMinimap(document.querySelector('#minimap'));
+const minimap=createMinimap(document.querySelector('#minimap'),(x,y)=>{if(running())camera.inspect(world,x,y);});
 const sound=createInkSound();
 const STEP=1/60;
 let world=null,tutorial=null,kind='level',index=0,seed=0,inSeries=false;
@@ -28,8 +29,9 @@ const ui=createUI({
   onPause:()=>{input.reset();accumulator=0;previous=0;},
   onLanguage:lang=>{opening?.setLanguage(lang);lastHint='';hudAt=0;},
   onSound:enabled=>{sound.setEnabled(enabled);if(enabled)sound.unlock();},
+  onSettings:onReturn=>opening.showSettings(onReturn),
   onCover:()=>{input.reset();opening.show();},
-  onLeave:()=>changeScene(()=>{world=null;tutorial=null;ending=false;ui.home();})
+  onLeave:()=>changeScene(()=>{world=null;tutorial=null;ending=false;showLessonBeat(null);ui.home();},Boolean(tutorial))
 });
 const input=createInput({
   canvas,actionButton:document.querySelector('#action'),joystick:document.querySelector('#joystick'),stick:document.querySelector('#stick'),
@@ -45,7 +47,11 @@ opening=connectOpening({
   getLanguage:()=>ui.lang,
   onLanguage:lang=>{if(ui.lang!==lang)ui.setLanguage(lang);},
   onSoundUnlock:()=>sound.unlock(),
-  onPreferences:prefs=>{sound.configure(prefs);if(prefs.quality)draw.setQuality(prefs.quality);},
+  onPreferences:prefs=>{
+    sound.configure(prefs);if(prefs.quality)draw.setQuality(prefs.quality);
+    document.body.dataset.controls=prefs.controls||'auto';
+    document.body.classList.toggle('mobile',prefs.controls==='mobile'||(prefs.controls!=='pc'&&matchMedia('(pointer:coarse)').matches));
+  },
   prepare:()=>draw.prepare(),
   onPlay:()=>showCatalogue(),
   onHelp:()=>{showCatalogue('tutorial',0);},
@@ -56,10 +62,10 @@ function running(){return Boolean(world&&!ui.paused&&!switching&&!ending&&!docum
 function newSeed(){
   const bits=new Uint32Array(1);crypto.getRandomValues(bits);return bits[0];
 }
-async function changeScene(change){
+async function changeScene(change,lessonFade=false){
   if(switching)return;
   switching=true;input.reset();accumulator=0;previous=0;
-  try{await ui.transition(change);}
+  try{await ui.transition(change,lessonFade);}
   finally{switching=false;previous=0;}
 }
 function start(nextKind,nextIndex,{keepSeed=false,series=false}={}){
@@ -76,8 +82,10 @@ function start(nextKind,nextIndex,{keepSeed=false,series=false}={}){
     eventOffset=world.events.length;
     scaleMax=Math.max(1,Math.ceil(Math.max(world.largest,world.player.mass)*1.25));
     ending=false;resultOpen=false;endedTime=0;hudAt=0;lastHint='';
-    ui.begin(kind,index);camera.reset(world);refresh(true);paint(0);
-  });
+    ui.begin(kind,index);camera.reset(world);
+    if(tutorial)camera.introduce(world,3);
+    refresh(true);paint(0);
+  },nextKind==='tutorial'||Boolean(tutorial));
 }
 function advanceTutorial(completed){
   if(switching||kind!=='tutorial'||!world)return;
@@ -95,17 +103,19 @@ function refresh(force=false){
   const p=world.player;
   if(Math.max(p.mass,world.largest)>scaleMax*.97)scaleMax=Math.ceil(Math.max(p.mass,world.largest)*1.22);
   ui.update({mass:p.mass,maxMass:world.largest,scaleMax,elapsed:world.time,items:p.inventory,form:p.form,formRemaining:p.formTime,actionHeld:p.emitting});
-  const hint=tutorial?tutorialHint(tutorial,ui.lang):'';
+  showLessonBeat(tutorial);
+  const hint=tutorial?tutorialHint(tutorial,ui.lang,matchMedia('(pointer:coarse)').matches):'';
   if(hint!==lastHint||force){lastHint=hint;ui.hint(hint);}
 }
 function paint(dt){
   const view=camera.update(world,dt);
   const artwork=paintings[kind==='tutorial'?0:index];
   draw.render(world,view,{artwork,focus:tutorial?tutorialFocus(tutorial,world):null,reveal:ending&&kind==='level'&&world.status==='won'?Math.min(1,endedTime/1.1):0});
-  minimap(world,view,canvas);
+  minimap(world,view,canvas,draw.mapLayer);
 }
 function update(){
   const control=input.read(),lastForm=world.player.form;
+  if(Math.abs(control.x)+Math.abs(control.y)>.02)camera.follow();
   stepWorld(world,control,STEP);
   if(world.player.form!==lastForm)input.blockAction();
   const events=world.events.slice(eventOffset);eventOffset=world.events.length;
@@ -121,11 +131,17 @@ function update(){
 function frame(now){
   requestAnimationFrame(frame);
   if(!world||resultOpen||document.hidden){previous=0;return;}
-  const dt=previous?Math.min(.1,(now-previous)/1000):0; previous=now;
+  const elapsed=previous?(now-previous)/1000:0;
+  const dt=Math.min(.1,elapsed);previous=now;
   if(ui.paused){accumulator=0;return;}
-  if(running()){
+  if(running()&&tutorial&&tutorial.phase!=='active'){
+    accumulator=0;
+    advanceTutorialBeat(tutorial,world,elapsed);
+    showLessonBeat(tutorial);
+    if(tutorial.done){advanceTutorial(true);return;}
+  }else if(running()){
     accumulator+=dt;
-    while(accumulator+1e-9>=STEP&&running()){
+    while(accumulator+1e-9>=STEP&&running()&&(!tutorial||tutorial.phase==='active')){
       accumulator-=STEP;update();
     }
   }

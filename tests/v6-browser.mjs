@@ -193,7 +193,7 @@ async function watchLoading(rpc) {
     const proto=CanvasRenderingContext2D.prototype, original=proto.drawImage;
     proto.drawImage=function(source,...args){
       const result=original.call(this,source,...args);
-      const url=source?.currentSrc;
+      const url=source?.currentSrc && new URL(source.currentSrc).pathname;
       if(!url || !document.querySelector('#field')?.getClientRects().length)return result;
       if(url.endsWith('/urchin-breath.webp')||url.endsWith('/urchin-ink.webp'))window.__pondPainted.spike=true;
       if(url.endsWith('/vortex-ink.webp'))window.__pondPainted.hole=true;
@@ -217,7 +217,7 @@ async function enterCatalogue(s,{capture,checkLoad=false}={}) {
         if(d.querySelector('#loading')?.hidden)return;
         const amount=d.querySelector('#loadingResources')?.textContent||'';
         const name=d.querySelector('#loadingCurrent')?.textContent?.trim()||'';
-        const progress=d.querySelector('#loadProgress')?.value;
+        const progress=Number(d.querySelector('#bamboo-load')?.getAttribute('aria-valuenow')||0);
         const last=arr.at(-1);
         if(!last||last.amount!==amount||last.name!==name||last.progress!==progress)arr.push({amount,name,progress});
       };
@@ -248,6 +248,9 @@ async function enterCatalogue(s,{capture,checkLoad=false}={}) {
     }).filter(Boolean);
     assert.ok(transfers.some(t=>t.total>0 && t.loaded<t.total),'Missing an intermediate byte count. '+
       JSON.stringify({count:cover.resources.length,start:cover.resources.slice(0,3),end:cover.resources.slice(-2)}));
+    const progress=cover.resources.map(step=>step.progress);
+    assert.ok(progress.some(n=>n>0&&n<100) && progress.includes(100),'Total progress must reach 100.');
+    assert.ok(progress.every((n,i)=>i===0||n>=progress[i-1]),'Loading progress moved backwards.');
     receivedMb=Math.max(...transfers.map(t=>t.loaded));assert.ok(receivedMb>0,'Never saw downloaded data.');
     resourceExample=transfers.find(t=>/\.(png|webp|svg|json|jpe?g)/i.test(t.name))?.name;
     assert.ok(resourceExample,'No resource name displayed during startup.');
@@ -310,22 +313,41 @@ async function exercise(endpoint,mobile) {
     const slipImage=await js('document.querySelector("#slips .bamboo-level")?.getBoundingClientRect().height');
     assert.ok(slipImage>40,'Actual playable slip must have a touch-sized target.');
     await capture('catalogue');
-    await click('#settings-open');await waitVisible('#options');
-    await click('#options [data-lang=en]');await until(()=>js('document.documentElement.lang==="en"'),'English');
-    await click('#options [data-lang=ja]');await until(()=>js('document.documentElement.lang==="ja"'),'Japanese');
-    await click('#options [data-lang=zh]');await until(()=>js('document.documentElement.lang==="zh"'),'Chinese');
-    await click('#close-options');
+    await click('#settings-open');
+    const coverDoc='document.querySelector("#v6-opening").contentDocument';
+    await until(()=>js(coverDoc+'.querySelector("#settings").open'),'original V5 settings opened');
+    for(const lang of ['en','ja','zh']){
+      await js(coverDoc+'.querySelector("#language").focus()');
+      const index=await js(coverDoc+'.querySelector("#language option[value='+lang+']").index');
+      for(const [key,code] of [['Home',36],...Array.from({length:index},()=>['ArrowDown',40])]){
+        await rpc('Input.dispatchKeyEvent',{type:'keyDown',key,code:key,windowsVirtualKeyCode:code});
+        await rpc('Input.dispatchKeyEvent',{type:'keyUp',key,code:key,windowsVirtualKeyCode:code});
+      }
+      await until(()=>js('document.documentElement.lang.startsWith("'+lang+'")'),lang+' selected');
+    }
+    await click('#closeSettings',true);
+    await click('#slips [data-kind=level][data-index="1"]');
+    await waitVisible('#catalog-preview');
+    assert.ok(await js('document.querySelector("#start").disabled || document.querySelector("#start").hidden'));
+    assert.equal(await visible('#field'),false);
+    await click('#preview-back');
     await click('#slips [data-kind=tutorial][data-index="0"]');
+    await waitVisible('#catalog-preview');
+    await js('Promise.all(document.querySelector("#catalog-preview").getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})))');
+    await capture('preview');
+    assert.equal(await visible('#field'),false);
+    await click('#start');
     await waitText('#lesson-line');
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'input enabled');
     const lessonOne=await text('#pond-name');
     const amountBefore=Number(await text('#mass-value'));
     assert.ok(amountBefore>0);
     // Reach the first edible creature through the actual input path.
+    await until(()=>js('document.querySelector("#lesson").dataset.phase==="active"'),'player introduction ends',30000);
     await steerRight();
     await until(async()=>Number(await text('#mass-value'))>amountBefore || await text('#pond-name')!==lessonOne,'first uptake',22000);
     await stopSteering();
-    await until(async()=>await text('#pond-name')==='辨敌' && (await text('#lesson-line')).includes('刺球'),'automatic tutorial transition to the first spine');
+    await until(()=>js('document.querySelector("#lesson").dataset.lesson==="2" && document.querySelector("#lesson").dataset.phase==="active"'),'second tutorial after its introduction',45000);
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'transition cleared');
     // The second lesson uses 100 against 175 for the spine, then resets to
     // 100 against 177 for the ink well. The displayed loss must reach the well.
@@ -340,7 +362,7 @@ async function exercise(endpoint,mobile) {
     await click('#pause');await waitVisible('#options');await click('#exit-run');await waitVisible('#library');
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'catalogue ready');
     // Explicitly select the first main painting. This also works after completing a lesson.
-    await click('#level-tab');await click('#slips [data-kind=level][data-index="0"]');
+    await click('#slips [data-kind=level][data-index="0"]');await click('#start');
     await waitVisible('#field');await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'pond ready');
     assert.equal(await visible('#lesson'),false);
     await until(async()=>Number(await text('#rival-value'))>Number(await text('#mass-value')),'competing masses');
@@ -366,7 +388,7 @@ async function exercise(endpoint,mobile) {
     // Watch one draw call so a delivered but ignored gesture cannot satisfy the test.
     await js(`(()=>{
       const c=document.querySelector('#minimap').getContext('2d'),fn=c.strokeRect;
-      c.strokeRect=function(x,y,w,h){window.__cameraBox={w,h};return fn.call(this,x,y,w,h);};
+      c.strokeRect=function(x,y,w,h){window.__cameraBox={x,y,w,h};return fn.call(this,x,y,w,h);};
     })()`);
     const beforeZoom=await until(()=>js('window.__cameraBox?.w'),'minimap viewport before zoom');
     if(mobile){
@@ -375,6 +397,15 @@ async function exercise(endpoint,mobile) {
       await touch('touchEnd',[]);
     }else await rpc('Input.dispatchMouseEvent',{type:'mouseWheel',x:580,y:480,deltaX:0,deltaY:-300});
     const afterZoom=await until(()=>js('window.__cameraBox?.w<'+(beforeZoom*.98)+' && window.__cameraBox.w'),'zoom changes the actual minimap bounds');
+    const beforeMap=await js('window.__cameraBox.x');
+    const mapPoint=await js(`(()=>{const r=document.querySelector('#minimap').getBoundingClientRect();
+      return {x:r.left+r.width*.78,y:r.top+r.height*.5};})()`);
+    if(mobile)await touch('touchStart',[{...mapPoint,id:1}]);
+    else await rpc('Input.dispatchMouseEvent',{type:'mousePressed',...mapPoint,button:'left',buttons:1,clickCount:1});
+    assert.equal(await js('document.querySelector("#joystick").hidden'),true,'Map press intercepted by joystick.');
+    await until(()=>js('Math.abs(window.__cameraBox.x-'+beforeMap+')>1'),'map press moves the actual camera frame');
+    if(mobile)await touch('touchEnd',[]);
+    else await rpc('Input.dispatchMouseEvent',{type:'mouseReleased',...mapPoint,button:'left',buttons:0,clickCount:1});
     const view=await js('({w:document.querySelector("#world").width,h:document.querySelector("#world").height,map:document.querySelector("#minimap").width,slots:document.querySelectorAll("#inventory .slot").length})');
     assert.ok(view.w>100 && view.h>100 && view.map>25);
     assert.equal(view.slots,3);
@@ -409,7 +440,7 @@ async function endToNextPainting(endpoint) {
     await rpc('Page.navigate',{url:base+'__qa__/finish.html'});
     await enterCatalogue(s);
     await until(()=>js(q(card(1))+'?.dataset.locked==="true"'),'second painting initially locked');
-    await click('#level-tab');await click(card(0));
+    await click(card(0));await click('#start');
     await until(()=>js(q('#paintingView')+'?.dataset.phase==="interactive"'),'full painting inspection',25000);
     assert.ok(await js(q('#paintingCanvas')+'.width>100 && '+q('#paintingCanvas')+'.height>100'));
     await click('#paintingContinue');
@@ -424,7 +455,7 @@ async function endToNextPainting(endpoint) {
     await enterCatalogue(s);
     await until(()=>js(q(card(1))+'?.dataset.locked==="false"'),'next painting unlocked after reload');
     assert.equal(await js(q(card(2))+'.dataset.locked'),'true');
-    await click('#level-tab');await click(card(1));await until(()=>showing('#field'),'re-enter unlocked painting');
+    await click(card(1));await click('#start');await until(()=>showing('#field'),'re-enter unlocked painting');
     const next=await js(q('#pond-name')+'.textContent');
     assert.notEqual(name,next);
     assert.deepEqual(problems,[]);

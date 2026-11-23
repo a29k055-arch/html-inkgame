@@ -4,16 +4,16 @@
 <title>墨 — BOKU</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="../src-v5/ui/game.css">
-<link rel="stylesheet" href="../assets/ui/bamboo-scroll/bamboo-scroll.css?v=be7646f">
-<link rel="stylesheet" href="./opening.css">
+<link rel="stylesheet" href="../assets/ui/bamboo-scroll/bamboo-scroll.css?v=4296ecc">
+<link rel="stylesheet" href="./opening.css"><link rel="stylesheet" href="./locale.css">
 <script type="importmap">{"imports":{"../src-v5/data/save.js":"./opening-save.mjs"}}</script>
 </head><body data-experience="reveal" data-version="v6" data-home-visual="paper" class="loading-scroll">
 <main id="stage" aria-label="墨 — BOKU">
  <canvas id="homeFluid" aria-hidden="true"></canvas><div id="homeWash" aria-hidden="true"></div>
  <div id="homeScroll" aria-hidden="true" data-state="loading"><div class="scroll-panel scroll-left"><i class="scroll-rod"></i></div><div class="scroll-panel scroll-right"><i class="scroll-rod"></i></div></div>
- <section id="home" inert><button id="homeHelp" class="help-button" data-i18n-aria="tutorial">?</button><h1 class="title-mark" aria-label="墨"><img src="../assets/home/menu-reference.png" alt="" draggable="false"></h1><nav class="menu"><button id="grindBtn" class="brush selected" data-i18n="grind">开始</button><button id="albumBtn" class="brush" data-i18n="gallery">画廊</button><button id="settingsBtn" class="brush" data-i18n="settings">设定</button></nav></section>
+ <section id="home" inert><h1 class="title-mark" aria-label="墨"><img src="../assets/home/menu-reference.png" alt="" draggable="false"></h1><nav class="menu"><button id="grindBtn" class="brush selected" data-i18n="grind">开始</button><button id="albumBtn" class="brush" data-i18n="gallery">画廊</button><button id="settingsBtn" class="brush" data-i18n="settings">设定</button></nav></section>
  <div id="homeFoot"><span class="version-badge">V6</span><span id="backgroundCaption"></span><button id="nextBackground" data-i18n="changeScene"></button></div>
- <section id="loading" aria-busy="true" class="overlay"><div class="panel loading-panel"><p id="loadingText" data-i18n="loading">正在准备水墨……</p><canvas id="bamboo-load" role="progressbar" aria-label="载入" aria-valuemin="0" aria-valuemax="100"></canvas><progress id="loadProgress" max="1" value="0" aria-hidden="true"></progress><p id="loadingCurrent" dir="auto"></p><button class="ink-button" data-retry data-i18n="retry" hidden>重试</button></div></section>
+ <section id="loading" aria-busy="true" class="overlay"><div class="panel loading-panel"><div class="loading-caption"><p id="loadingText" data-i18n="loading">正在准备水墨……</p><span id="loading-percent" aria-hidden="true">0%</span></div><canvas id="bamboo-load" role="progressbar" aria-label="载入" aria-valuemin="0" aria-valuemax="100"></canvas><progress id="loadProgress" max="1" value="0" aria-hidden="true"></progress><p id="loadingCurrent" dir="auto"></p><button class="ink-button" data-retry data-i18n="retry" hidden>重试</button></div></section>
 </main>
 <dialog id="settings"><div class="panel">
 <h2 data-i18n="settings"></h2>
@@ -23,16 +23,24 @@
 <label class="vol-row"><span data-i18n="sfxVolume"></span><input type="range" id="sfxVolume" min="0" max="100" step="5"><span class="vol-out"><button id="sfxMute" class="mute-btn" type="button" aria-pressed="false" data-i18n-aria="muteAudio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7"/><path class="off" d="M16 9l5 6M21 9l-5 6"/></svg></button><output id="sfxValue"></output></span></label>
 <label><span data-i18n="sfxStyle"></span><select id="sfxStyle"><option value="water" data-i18n="sfxStyleWater"></option><option value="guzheng" data-i18n="sfxStyleGuzheng"></option><option value="pipa" data-i18n="sfxStylePipa"></option></select></label>
 <label><span data-i18n="quality"></span><select id="quality"><option value="high" data-i18n="high"></option><option value="balanced" data-i18n="balanced"></option><option value="performance" data-i18n="performance"></option></select></label>
+<label><span data-i18n="controls"></span><select id="controls"><option value="auto" data-i18n="auto"></option><option value="pc" data-i18n="pc"></option><option value="mobile" data-i18n="mobile"></option></select></label>
 <label><span data-i18n="homeVisual"></span><select id="homeVisual"><option value="paper" data-i18n="paperHome"></option><option value="painting" data-i18n="paintingHome"></option></select></label>
+<label><span data-i18n="background"></span><select id="backgroundPolicy"><option value="fixed" data-i18n="fixed"></option><option value="random" data-i18n="random"></option><option value="rotate" data-i18n="rotate"></option><option value="unlocked" data-i18n="unlockedPool"></option></select></label>
+<button id="resetData" class="ink-button secondary" data-i18n="reset"></button>
 <button id="materialNoticeBtn" type="button" class="text-link" data-i18n="materialNotice"></button>
 <button id="closeSettings" class="ink-button" data-i18n="back"></button></div></dialog>
+<dialog id="resetConfirm"><div class="panel"><h2 data-i18n="resetQuestion"></h2><p data-i18n="resetWarning"></p><button id="cancelReset" class="ink-button" data-i18n="back"></button><button id="confirmReset" class="ink-button secondary" data-i18n="resetConfirm"></button></div></dialog>
 <dialog id="materialNotice"><div class="panel material-notice"><h2 data-i18n="materialNotice"></h2><p data-i18n="materialNoticeText"></p><button id="closeMaterialNotice" class="ink-button secondary" data-i18n="back"></button></div></dialog>
 <script type="module">
 import('./opening-scene.mjs').catch(error=>{
  console.error('BOKU opening:',error);
  const overlay=document.getElementById('loading'),retry=overlay.querySelector('[data-retry]');
  overlay.classList.add('load-failed');overlay.setAttribute('aria-busy','false');
- document.getElementById('loadingText').textContent='加载失败 / 読み込みに失敗しました / Load failed';
+ let lang=document.documentElement.lang.split('-')[0];
+ try{lang=JSON.parse(localStorage.getItem('boku.v6.pond.progress.1')||'{}').lang||lang;}catch{}
+ document.documentElement.lang=lang;
+ document.getElementById('loadingText').textContent=({zh:'加载失败',ja:'読み込めませんでした',en:'Could not load the game'})[lang]||'加载失败';
+ retry.textContent=({zh:'重试',ja:'もう一度試す',en:'Retry'})[lang]||'重试';
  retry.hidden=false;retry.onclick=()=>parent.location.reload();
 });
 </script>

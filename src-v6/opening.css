@@ -7,3 +7,14 @@
 #loading.load-failed #bamboo-load {opacity:.5}
 @media(max-height:520px) {#bamboo-load {height:32px}#loading .loading-panel {gap:0px}#loadingCurrent,#loadingPreparation {font-size:9px!important}}
 @media(prefers-reduced-motion:reduce){#loading{transition-duration:0s}}
+
+html[data-settings-only],html[data-settings-only] body{background:transparent;}
+html[data-settings-only] #stage{visibility:hidden;pointer-events:none;}
+#loading .loading-caption{display:flex;align-items:baseline;justify-content:center;gap:.8em;}
+#loading-percent{color:var(--ink);font-size:12px;font-variant-numeric:tabular-nums;}
+#loading .loading-panel{top:auto;bottom:max(env(safe-area-inset-bottom,0px),2.4dvh);}
+#loadingCurrent{min-height:1.4em;}
+#loading.load-failed .loading-panel{top:auto;}
+@media(max-height:460px){body.loading-scroll #home{transform:translateY(-7dvh);}
+#loading .loading-panel{bottom:max(3px,env(safe-area-inset-bottom,0px));}
+#bamboo-load{height:clamp(20px,7.2dvh,32px);}}

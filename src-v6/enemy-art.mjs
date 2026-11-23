@@ -1,8 +1,8 @@
 // Independent painted materials. The collision and edible-state rings belong to the
 // simulation and HUD; the brushwork is allowed to breathe inside that silhouette.
 export const enemyArtFiles = Object.freeze({
-  urchin: new URL('./art/urchin-ink.webp', import.meta.url).href,
-  spines: new URL('./art/urchin-breath.webp', import.meta.url).href,
+  urchin: new URL('./art/urchin-ink.webp?paint=2', import.meta.url).href,
+  spines: new URL('./art/urchin-breath.webp?paint=2', import.meta.url).href,
   vortex: new URL('./art/vortex-ink.webp', import.meta.url).href
 });
 
@@ -87,10 +87,10 @@ export function createEnemyArt() {
       const absorption = enemy.absorption;
       const age = absorption ? Math.max(0, worldTime - absorption.lastAt) : Infinity;
       const pull = Math.exp(-age * 3.5);
-      context.rotate(phase + worldTime * .19);
+      context.rotate(phase + worldTime * .055);
       square(context, vortex, radius);
-      context.rotate(.27 * Math.sin(worldTime * .64 + phase) + .22 * pull);
-      const throatRadius = radius * (1 + .018 * Math.sin(worldTime * 1.45 + phase) - .075 * pull);
+      context.rotate(.14 * Math.sin(worldTime * .29 + phase) + .12 * pull);
+      const throatRadius = radius * (1 + .012 * Math.sin(worldTime * .63 + phase) - .075 * pull);
       square(context, vortexThroat, throatRadius);
     } else {
       context.rotate(.48 * Math.sin(phase) + .055 * Math.sin(worldTime * .59 + phase));

@@ -1,24 +1,35 @@
-import {LivingPainter,LIVING_RIGS,preloadLivingCreatures} from '../src-v5/ink/living-painter.js';
+import {HeadFirstPainter} from './creature-painter.mjs';
+import {LIVING_RIGS,preloadLivingCreatures} from '../src-v5/ink/living-painter.js';
 import {PondEffects} from '../src-v5/reveal/pond-effects.js';
 import {preloadPondPickups} from '../src-v5/reveal/pickups.js';
 import {canEat} from './sim.mjs';
 import {createEnemyArt} from './enemy-art.mjs';
 import {createGround,createPondInk} from './pond-ink.mjs';
+import {visibleFood} from './food-field.mjs';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
+// The highest-opacity part of each wash sits on the logical contact radius.
+// Feather inward and outward separately. There is no second debug outline.
+function pigmentRim(c,x,y,r,scale,rgb,opacity,width){
+  if(!(r>0))return;
+  const half=Math.min(r*.42,Math.max(1.55/scale,r*width));
+  const inner=r-half,outer=r+half;
+  const wash=c.createRadialGradient(x,y,inner,x,y,outer);
+  for(const [stop,a] of [[0,0],[.23,.12],[.41,.52],[.5,1],[.60,.63],[.77,.21],[1,0]]){
+    wash.addColorStop(stop,'rgba('+rgb+','+opacity*a+')');
+  }
+  c.fillStyle=wash;c.fillRect(x-outer,y-outer,outer*2,outer*2);
+}
 function drawRim(c,e,p,scale) {
-  const blue=canEat(p,e),radius=e.r+Math.max(2/scale,e.r*.055);
-  c.save();c.lineWidth=clamp(e.r*scale*.052,1.45,2.35)/scale;
-  c.strokeStyle=blue?'rgba(106,175,191,.95)':'rgba(183,107,99,.92)';
-  if(!blue)c.setLineDash([Math.max(4/scale,radius*.24),Math.max(3/scale,radius*.13)]);
-  c.beginPath();c.arc(e.x,e.y,radius,0,TAU);c.stroke();c.restore();
+  const edible=canEat(p,e);
+  pigmentRim(c,e.x,e.y,e.r,scale,edible?'76,170,190':'196,91,86',.78,.112);
 }
 
 // Let the native V5 renderer sort animal rigs, the ink body and painted rivals
 // together. Only V6's two new species use an alternate material.
-class PondPainter extends LivingPainter {
+class PondPainter extends HeadFirstPainter {
   constructor(assets,enemyArt) {
     super({assets});this.enemyArt=enemyArt;this.pond=null;this.miniature={id:'player-miniature'};
   }
@@ -88,13 +99,16 @@ function drawProjectiles(c,w,z) {
   for(const s of w.shots){
     c.save();c.translate(s.x,s.y);
     if(s.type==='bubble'){
-      const r=s.r;
-      c.fillStyle='rgba(217,238,229,.28)';c.strokeStyle='rgba(70,112,103,.72)';c.lineWidth=1.2/z;
-      c.beginPath();c.arc(0,0,r,0,TAU);c.fill();c.stroke();
-      c.strokeStyle='rgba(255,255,241,.93)';c.beginPath();c.arc(0,0,r*.77,3.6,4.8);c.stroke();
+      pigmentRim(c,0,0,s.r,z,'55,61,60',.58,.18);
     }else{
-      c.rotate(Math.atan2(s.vy,s.vx));c.fillStyle='rgba(38,42,36,.78)';
-      c.beginPath();c.ellipse(0,0,Math.max(2,s.r)*1.65,Math.max(1.2,s.r*.63),0,0,TAU);c.fill();
+      c.rotate(s.angle||0);c.fillStyle='rgba(38,42,36,.73)';c.beginPath();
+      if(!s.shape||s.shape==='circle')c.arc(0,0,s.r,0,TAU);
+      else {
+        const sides=s.shape==='triangle'?3:s.shape==='square'?4:5;
+        for(let i=0;i<sides;i++){const a=i*TAU/sides-Math.PI/2;c.lineTo(Math.cos(a)*s.r,Math.sin(a)*s.r);}
+        c.closePath();
+      }
+      c.fill();
     }
     c.restore();
   }
@@ -104,10 +118,7 @@ function drawFocus(c,focus,cam,w,h,t) {
   if(!focus||!Number.isFinite(focus.x))return;
   const x=(focus.x-cam.x)*cam.scale,y=(focus.y-cam.y)*cam.scale;
   c.save();c.lineWidth=1.5;c.strokeStyle='#987342';
-  if(x>10&&x<w-10&&y>10&&y<h-10){
-    const r=(focus.r||8)*cam.scale+7;
-    for(let k=0;k<4;k++){const a=k*Math.PI*.5+t*.25;c.beginPath();c.arc(x,y,r,a,a+.44);c.stroke();}
-  }else{
+  if(x<=10||x>=w-10||y<=10||y>=h-10){
     const dx=x-w/2,dy=y-h/2,k=Math.min((w*.45)/Math.max(.01,Math.abs(dx)),(h*.38)/Math.max(.01,Math.abs(dy)));
     c.translate(w/2+dx*k,h/2+dy*k);c.rotate(Math.atan2(dy,dx));
     c.fillStyle='rgba(244,232,206,.86)';c.beginPath();c.arc(0,0,11,0,TAU);c.fill();
@@ -149,15 +160,16 @@ export function createRenderer(canvas) {
     hero.effects.manualRush=p.emitting&&species!=='fish'&&species!=='dragon';
     hero.effects.giant=false;hero.effects.water=false;
   }
-  function scene(w) {
+  function scene(w,view) {
     syncHero(w.player);
-    const animals=w.items.map(item=>{
+    const animals=w.items.concat(w.departingItems).map(item=>{
       let animal=proxies.get(item);
       if(!animal){
-        animal={id:item.id,species:item.type,rigId:item.rigId||LIVING_RIGS[item.type],aim:{x:Math.cos(item.angle),y:Math.sin(item.angle)}};
+        animal={id:item.id,pickupArt:true,species:item.type,rigId:item.rigId||LIVING_RIGS[item.type],aim:{x:Math.cos(item.angle),y:Math.sin(item.angle)}};
         proxies.set(item,animal);
       }
-      Object.assign(animal,{x:item.x,y:item.y,vx:item.vx,vy:item.vy,r:item.r*.74});
+      animal.aim.x=Math.cos(item.angle);animal.aim.y=Math.sin(item.angle);
+      Object.assign(animal,{x:item.x,y:item.y,vx:item.vx,vy:item.vy,r:item.r*.74,opacity:item.opacity??1});
       return animal;
     });
     const plants=[];
@@ -165,8 +177,12 @@ export function createRenderer(canvas) {
       plants.push({x:l.x,y:l.y,r:l.r,renderSize:l.r*2.1,kind:'leaf',variant:0});
       for(const f of l.flowers)plants.push({x:f.x,y:f.y,r:f.r,renderSize:f.r*2.45,kind:'flower',variant:f.slot%3});
     }
-    return {player:hero,entities:[hero,...animals,...w.enemies],items:plants,
-      foods:w.drops.map(d=>({x:d.x,y:d.y,r:d.r,rot:0,alpha:d.ready?.74:.28,shape:'circle'})),
+    const hw=canvas.clientWidth/(2*view.scale)+12,hh=canvas.clientHeight/(2*view.scale)+12;
+    const bounds={left:view.x-hw,top:view.y-hh,right:view.x+hw,bottom:view.y+hh};
+    ground.bounds=view.scale<.48?bounds:null;
+    const foods=ground.bounds?[]:[...visibleFood(w.foodField,bounds.left,bounds.top,bounds.right,bounds.bottom)];
+    for(const d of w.drops)foods.push({x:d.x,y:d.y,r:d.r,rot:d.angle||0,alpha:d.ready?.74:.28,shape:d.shape||'circle'});
+    return {player:hero,entities:[hero,...animals,...w.enemies],items:plants,foods,
       waves:[],speed:()=>w.speed,magnetField:{active:hero.effects.magnet,reach:135+hero.r}};
   }
   function render(w,view,options={}) {
@@ -181,10 +197,10 @@ export function createRenderer(canvas) {
       const next=quality==='performance'||pixelRadius<(fieldQuality==='performance'?9:6)?'performance':quality;
       if(next!==fieldQuality){renderer.setQuality(next);fieldQuality=next;}
     }
-    renderer.mobile=matchMedia('(pointer:coarse)').matches;
+    renderer.mobile=document.body.dataset.controls?document.body.classList.contains('mobile'):matchMedia('(pointer:coarse)').matches;
     const dt=previousTime<0?1/60:clamp(w.time-previousTime,0,.1);
     previousTime=w.time;
-    const arena=scene(w);
+    const arena=scene(w,view);
     ink.updateView(view);
     const cam=renderer.camera,width=renderer.viewW,height=renderer.viewH,viewport={width,height,mobile:renderer.mobile,camera:cam};
     npcs.update(dt,arena,cam,viewport);
@@ -197,6 +213,7 @@ export function createRenderer(canvas) {
     const c=renderer.ctx;
     renderer.beginWorldClip();c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);
     effects.drawWorld(c,arena,cam.scale);drawProjectiles(c,w,cam.scale);
+    if(!hero.form&&!hero.dead) pigmentRim(c,hero.x,hero.y,w.player.r,cam.scale,'79,87,81',.46,.075);
     for(const e of w.enemies)if(e.type==='hole')flowToVortex(c,w,e,cam.scale);
     c.restore();renderer.endWorldClip();renderer.drawTopItems(arena);renderer.drawWorldFrame();
     effects.drawScreen(c,hero,viewport,cam);
@@ -224,7 +241,7 @@ export function createRenderer(canvas) {
     ink=createPondInk(canvas,world,ground,npcs,fieldQuality,true);
   }
   document.addEventListener('boku:render-error',onRenderError);
-  return {render,setQuality,prepare,dispose(){
+  return {render,setQuality,prepare,get mapLayer(){return ground?.layer;},dispose(){
     document.removeEventListener('boku:render-error',onRenderError);
     if(ink)ink.renderer.dispose();
     ink=null;npcs=null;world=null;

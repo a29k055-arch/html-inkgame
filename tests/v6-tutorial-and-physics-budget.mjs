@@ -3,7 +3,7 @@ import {performance} from 'node:perf_hooks';
 import {arch,cpus,platform} from 'node:os';
 import {createWorld,stepWorld,spawnDrop,spawnItem,useItem} from '../src-v6/sim.mjs';
 import {makeLevel} from '../src-v6/levels.mjs';
-import {createTutorial,tutorialFocus,updateTutorial} from '../src-v6/tutorial.mjs';
+import {advanceTutorialBeat,createTutorial,tutorialFocus,updateTutorial,tutorialHint} from '../src-v6/tutorial.mjs';
 
 function steer(p,target){
   if(!target)return {x:0,y:0};
@@ -17,9 +17,19 @@ for(let i=1;i<=4;i++){
   const id='tutorial-'+i, w=createWorld(makeLevel(id,784)),t=createTutorial(id);
   const history=[];
   let firstDrain=null,lastDrain=null,transferred=0;
+  let resultSeconds=0;
+  const holds=[];
+  for(const language of ['zh','ja','en'])assert.ok(tutorialHint(t,language).length>8);
   for(let step=0;step<60*240&&!t.done;step++){
     const key=t.key;
     if(key!==history.at(-1))history.push(key);
+    if(t.phase!=='active'){
+      const previous=t.phase;
+      if(previous==='hold')resultSeconds+=1/60;
+      advanceTutorialBeat(t,w,1/60);
+      if(previous==='hold'&&t.phase!==previous){holds.push(resultSeconds);resultSeconds=0;}
+      continue;
+    }
     const f=tutorialFocus(t,w);
     const command=steer(w.player,f);
     if(key.endsWith('Use') && w.player.inventory.length)useItem(w,0);
@@ -38,6 +48,7 @@ for(let i=1;i<=4;i++){
   }
   console.log(id,{status:t.done?'completed':t.key,seconds:+w.time.toFixed(2),stations:history.length});
   assert.ok(t.done, id+' stopped at '+t.key+' after '+history.join(', '));
+  assert.ok(holds.length>0 && holds.every(sec=>sec>=3 && sec<3.03),'each solved lesson or demonstration leaves its result visible for three seconds');
   if(i===2){
     assert.ok(lastDrain-firstDrain>=1.4,'the learner must see the red whirl drawing ink before the next demonstration');
     assert.ok(transferred>=7,'the two displayed masses must change perceptibly');

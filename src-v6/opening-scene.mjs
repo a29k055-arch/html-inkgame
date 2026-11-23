@@ -3,17 +3,17 @@ import {HomeArtwork} from '../src-v5/ink/home-artwork.js';
 import {setupGallery} from '../src-v5/ui/gallery-records.js';
 import {applyTranslations,setLanguage,getLanguage,t,artTitle} from '../src-v5/ui/i18n.js';
 import {V4_ARTWORKS} from '../src-v5/data/v4-artworks.js';
-import {createBambooLoader} from '../assets/ui/bamboo-scroll/bamboo-scroll.js?v=be7646f';
-import {coverSettings,updateSettings,galleryIDs,unlockedArtworks} from './opening-save.mjs';
+import {createBambooLoader} from '../assets/ui/bamboo-scroll/bamboo-scroll.js?v=4296ecc';
+import {coverSettings,updateSettings,galleryIDs,unlockedArtworks,resetPondSave} from './opening-save.mjs';
 
 const $=id=>document.getElementById(id);
 const words={zh:{assets:'游戏资源',file:'正在加载',ready:'素材就绪',prepare:'准备动画',elapsed:'已用',retry:'重试'},
- ja:{assets:'ゲーム素材',file:'読み込み中',ready:'素材の準備完了',prepare:'アニメーションの準備',elapsed:'経過',retry:'再試行'},
+ ja:{assets:'ゲーム素材',file:'読み込み中',ready:'素材の準備完了',prepare:'動きを準備しています',elapsed:'経過',retry:'再試行'},
  en:{assets:'Game assets',file:'Loading',ready:'Assets ready',prepare:'Preparing animation',elapsed:'Elapsed',retry:'Retry'}};
 const art=galleryIDs.map(id=>V4_ARTWORKS.find(a=>a.id===id));
-const cfg={bgmVolume:.28,volume:.3,bgmMuted:false,sfxMuted:false,bgmTrack:'shuffle',sfxStyle:'water',quality:'balanced',homeVisual:'paper',...coverSettings()};
+const cfg={bgmVolume:.28,volume:.3,bgmMuted:false,sfxMuted:false,bgmTrack:'shuffle',sfxStyle:'water',quality:'balanced',controls:'auto',homeVisual:'paper',backgroundPolicy:'fixed',...coverSettings()};
 let state={phase:'start',loadedBytes:0,totalBytes:0,completed:0,total:0,preparation:0},visible=true;
-let bamboo=null,album=null,ink=null,picture=null,pointerTime=0,lastFrame=0,ending=false,done=false,host=false;
+let bamboo=null,album=null,ink=null,picture=null,pointerTime=0,lastFrame=0,ending=false,done=false,host=false,settingsOnly=false;
 const action=(name,value)=>window.frameElement?.openingAction?.(name,value);
 const size=bytes=>(Math.max(0,bytes||0)/1e6).toFixed(2);
 const wordsFor=()=>words[getLanguage()]||words.zh;
@@ -22,23 +22,29 @@ const progressCanvas=$('bamboo-load');
 document.body.dataset.homeVisual=cfg.homeVisual;
 
 class PondLoadingScroll extends LoadingScroll {
- renderResourceLines(now){
+ renderResourceLines(){
    const l=wordsFor(),s=state;
-   if(!s.totalBytes)return;
-   const fraction=Math.min(1,s.loadedBytes/Math.max(1,s.totalBytes)),pct=fraction===1?100:Math.min(99,Math.round(fraction*100));
-   const readyBytes=(s.phase==='download-ready'||s.phase==='prepare'||s.phase==='ready');
-   this.resourceLine.hidden=false;
-   const bytesLine=s.sizeComplete?l.assets+' '+size(s.loadedBytes)+' / '+size(s.totalBytes)+' MB · '+pct+'%':l.assets+' '+size(s.loadedBytes)+' MB · '+estimating[getLanguage()];
-   this.resourceLine.textContent=bytesLine+' · '+l.elapsed+' '+Math.floor((s.elapsedMs||0)/1000)+(getLanguage()==='en'?'s':'秒');
-   this.prepareLine.hidden=!readyBytes;
-   if(readyBytes)this.prepareLine.textContent=l.prepare+' '+Math.round(100*Math.min(1,s.preparation||0))+'%';
-   $('loadingCurrent').textContent=readyBytes?l.ready:s.current?l.file+' · '+s.current:'';
-   if(s.sizeComplete&&bamboo&&this.drawnFraction!==fraction){bamboo.setProgress(fraction);progressCanvas.setAttribute('aria-valuenow',pct);progressCanvas.setAttribute('aria-label',l.assets+' '+pct+'%');this.drawnFraction=fraction;}
-   if(s.sizeComplete)$('loadProgress').value=fraction;
-   if(!this.alignedResources||readyBytes&&!this.alignedPreparation){this.align();this.alignedResources=true;if(readyBytes)this.alignedPreparation=true;}
+   // The same displayed work fraction drives the title, the scroll and its label.
+   // Only a completed and prepared scene can reach 100%.
+   const fraction=this.ready&&this.progress>.998?1:Math.min(.999,this.progress);
+   const percent=Math.floor(fraction*100);
+   const lang=getLanguage(),isPreparing=['download-ready','prepare','ready'].includes(s.phase);
+   document.body.style.setProperty('--title-reveal',fraction);
+   this.scroll.style.setProperty('--unfold',fraction);
+   if(bamboo&&this.drawnFraction!==fraction){bamboo.setProgress(fraction);this.drawnFraction=fraction;}
+   progressCanvas.setAttribute('aria-valuenow',percent);progressCanvas.setAttribute('aria-label',l.assets);
+   $('loading-percent').textContent=percent+'%';$('loadProgress').value=fraction;
+   this.resourceLine.hidden=!s.totalBytes;
+   if(s.totalBytes){
+     const volume=size(s.loadedBytes)+(s.sizeComplete?' / '+size(s.totalBytes)+' MB':' MB · '+estimating[lang]);
+     this.resourceLine.textContent=l.assets+' '+volume+' · '+l.elapsed+' '+Math.floor((s.elapsedMs||0)/1000)+(lang==='en'?'s':'秒');
+   }
+   $('loadingCurrent').textContent=isPreparing?(this.ready?l.ready:l.prepare):s.current?l.file+' · '+s.current:'';
+   if(this.resourceLine.hidden!==this.lastLineHidden){this.lastLineHidden=this.resourceLine.hidden;this.align();}
  }
 }
-const loader=new PondLoadingScroll($('loading'),{title:1,bamboo:1,creatures:8});
+const loader=new PondLoadingScroll($('loading'),{title:1,bamboo:1,menu:1,pond:97});
+
 function fail(error){
  if(loader.failed||done)return;
  loader.fail();$('loading').setAttribute('aria-busy','false');$('loadingText').textContent=t('loadError');
@@ -54,11 +60,11 @@ function updateBoot(){
  if(loader.failed||done)return;
  loader.resourceState=state;loader.resourceUpdated=performance.now();
  const bytes=Math.max(0,Math.min(1,state.progress||0)),prep=Math.max(0,Math.min(1,state.preparation||0));
- loader.partials.set('creatures',Math.min(.99,bytes*.87+prep*.13));loader.updateTarget();
+ loader.partials.set('pond',Math.min(.99,bytes*.77+prep*.21));loader.updateTarget();
  if(state.phase==='ready'&&!ending){
    ending=true;
    (async()=>{
-     await visualAssets;await loader.track('creatures',Promise.resolve(),{required:true});
+     await Promise.all([visualAssets,menuAssets]);await loader.track('pond',Promise.resolve(),{required:true});
      await loader.finish();
      done=true;bamboo?.setProgress(1);progressCanvas.setAttribute('aria-valuenow',100);
      $('loading').setAttribute('aria-busy','false');$('home').inert=false;
@@ -75,12 +81,15 @@ $('home').addEventListener('keydown',e=>{
  e.preventDefault();menu[(Math.max(0,i)+(e.key==='ArrowDown'?1:menu.length-1))%menu.length].focus();
 });
 $('grindBtn').onclick=()=>action('play');
-$('homeHelp').onclick=()=>action('help');
 $('settingsBtn').onclick=()=>$('settings').showModal();
 $('closeSettings').onclick=()=>$('settings').close();
 $('materialNoticeBtn').onclick=()=>$('materialNotice').showModal();
 $('closeMaterialNotice').onclick=()=>$('materialNotice').close();
-document.addEventListener('keydown',e=>{if(done&&e.key==='F1'&&!document.querySelector('dialog[open]')){e.preventDefault();action('help');}});
+$('settings').addEventListener('close',()=>{if(settingsOnly){settingsOnly=false;action('settings-closed');}});
+$('resetData').onclick=()=>$('resetConfirm').showModal();
+$('cancelReset').onclick=()=>$('resetConfirm').close();
+$('confirmReset').onclick=()=>{resetPondSave();parent.location.reload();};
+$('controls').onchange=e=>{cfg.controls=e.target.value;persist();};
 document.addEventListener('pointerdown',()=>action('unmute'),{passive:true});
 function persist(){updateSettings({...cfg,language:getLanguage()});action('preferences',{...cfg});}
 function displayPrefs(){
@@ -88,12 +97,26 @@ function displayPrefs(){
  $('sfxVolume').value=Math.round(cfg.volume*100);$('sfxValue').textContent=$('sfxVolume').value+'%';
  $('sfxStyle').value=cfg.sfxStyle;
  for(const channel of ['bgm','sfx'])$(channel+'Mute').setAttribute('aria-pressed',String(cfg[channel+'Muted']));
- $('quality').value=cfg.quality;$('homeVisual').value=cfg.homeVisual;$('bgmTrack').value=cfg.bgmTrack;
+ $('controls').value=cfg.controls;$('backgroundPolicy').value=cfg.backgroundPolicy;$('quality').value=cfg.quality;$('homeVisual').value=cfg.homeVisual;$('bgmTrack').value=cfg.bgmTrack;
  $('backgroundCaption').textContent=cfg.homeVisual==='painting'&&picture?artTitle(picture):'';
+}
+const japaneseSettings={
+ bgmVolume:'BGMの音量',bgmTrack:'BGMの選択',sfxVolume:'効果音の音量',sfxStyle:'効果音の種類',controls:'操作方法',
+ homeVisual:'タイトル画面',background:'背景の切り替え',paperHome:'和紙',paintingHome:'絵を表示',
+ fixed:'固定',random:'ランダム',rotate:'順番に切り替える',unlockedPool:'解放した絵から選ぶ',
+ auto:'自動',pc:'マウス・キーボード',mobile:'タッチ操作',reset:'セーブデータを消去',
+ resetQuestion:'セーブデータを消去しますか？',resetWarning:'クリアしたステージと設定が初期化されます。',
+ resetConfirm:'消去する',loading:'水墨画を準備しています…'
+};
+function refreshLanguage(){
+ applyTranslations();
+ if(getLanguage()==='ja')for(const el of document.querySelectorAll('[data-i18n]')){
+   const native=japaneseSettings[el.dataset.i18n];if(native)el.textContent=native;
+ }
 }
 function localize(lang,notify=false){
  if(!['zh','ja','en'].includes(lang))return;
- if(lang!==getLanguage())setLanguage(lang);else applyTranslations();
+ if(lang!==getLanguage())setLanguage(lang);refreshLanguage();
  displayPrefs();if(notify)action('language',lang);
 }
 $('language').onchange=e=>localize(e.target.value,true);
@@ -116,18 +139,33 @@ async function background(id){
    cfg.backgroundId=entry.id;displayPrefs();
  }catch{if(current===revision){cfg.homeVisual='paper';document.body.dataset.homeVisual='paper';displayPrefs();}}
 }
-$('homeVisual').onchange=e=>{cfg.homeVisual=e.target.value;background(cfg.backgroundId).then(persist);};
-$('nextBackground').onclick=()=>{
- const options=art.filter(a=>a===art.at(-1)||unlockedArtworks().has(a.id));
- background(options[(options.indexOf(picture)+1)%options.length].id).then(persist);
-};
+// V5's fixed, random, rotating and unlocked pools use the paintings won in this campaign.
+let rotationAge=0;
+function chooseBackground(next=false){
+ const cleared=unlockedArtworks();
+ let pool=art.filter(entry=>cleared.has(entry.id)||(cfg.backgroundPolicy!=='unlocked'&&(entry===art[0]||entry===art.at(-1))));
+ if(!pool.length)pool=[art.at(-1)];
+ let chosen;
+ if(cfg.backgroundPolicy==='random'||cfg.backgroundPolicy==='unlocked'){
+   const alternatives=pool.filter(entry=>entry!==picture);
+   const choices=alternatives.length?alternatives:pool;chosen=choices[Math.floor(Math.random()*choices.length)];
+ }else if(next||cfg.backgroundPolicy==='rotate'){
+   chosen=pool[(pool.indexOf(picture)+1)%pool.length];
+ }else chosen=pool.find(entry=>entry.id===cfg.backgroundId)||art.at(-1);
+ rotationAge=0;return background(chosen.id);
+}
+$('backgroundPolicy').onchange=e=>{cfg.backgroundPolicy=e.target.value;chooseBackground().then(persist);};
+$('homeVisual').onchange=e=>{cfg.homeVisual=e.target.value;chooseBackground().then(()=>{persist();startBackgroundLoop();});};
+$('nextBackground').onclick=()=>chooseBackground(true).then(persist);
 for(const ev of ['pointerdown','pointermove'])$('stage').addEventListener(ev,e=>{
  if(!ink||!visible||e.target.closest('button,dialog')||(ev==='pointermove'&&e.timeStamp-pointerTime<65))return;
  pointerTime=e.timeStamp;ink.interact(e.clientX,e.clientY,ev==='pointerdown');
 });
 let frame=0;
 function startBackgroundLoop(){if(!visible||!ink||frame)return;lastFrame=0;
- const draw=now=>{frame=0;if(!visible||!ink)return;ink.draw(lastFrame?Math.min(.05,(now-lastFrame)/1000):0);lastFrame=now;frame=requestAnimationFrame(draw);};
+ const draw=now=>{frame=0;if(!visible||!ink)return;const dt=lastFrame?Math.min(.1,(now-lastFrame)/1000):0;
+   if(!document.querySelector('dialog[open]')){ink.draw(dt);if(cfg.backgroundPolicy==='rotate'&&(rotationAge+=dt)>=35)chooseBackground(true).then(persist);}
+   lastFrame=now;frame=requestAnimationFrame(draw);};
  frame=requestAnimationFrame(draw);
 }
 $('stage').addEventListener('pointermove',startBackgroundLoop,{passive:true});
@@ -136,11 +174,12 @@ function setVisible(value){
  visible=!!value;if(!visible){cancelAnimationFrame(frame);frame=0;for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();}
  else{album?.refresh();if(done)$('grindBtn').focus({preventScroll:true});startBackgroundLoop();}
 }
-setupGallery(id=>{cfg.homeVisual='painting';background(id).then(persist);},()=>{},()=>{$('grindBtn').focus();},{
+const menuAssets=loader.track('menu',Promise.all([setupGallery(id=>{cfg.homeVisual='painting';cfg.backgroundPolicy='fixed';background(id).then(()=>{persist();startBackgroundLoop();});},()=>{},()=>{$('grindBtn').focus();},{
  mode:'reveal',artworks:art,onSelectLevel:id=>{for(const d of document.querySelectorAll('dialog[open]'))d.close();action('gallery',Math.max(0,galleryIDs.indexOf(id)));},
  selectedLevel:()=>null
-}).then(value=>{album=value;applyTranslations();}).catch(fail);
-localize(getLanguage());background(cfg.backgroundId).then(startBackgroundLoop);
+}).then(value=>{album=value;refreshLanguage();}),chooseBackground().then(startBackgroundLoop)]),{required:true});
+menuAssets.catch(fail);
+localize(getLanguage());
 window.addEventListener('message',e=>{
  if(e.origin!==location.origin||e.source!==parent||e.data?.scope!=='boku-v6-cover')return;
  const q=e.data;
@@ -151,7 +190,12 @@ window.addEventListener('message',e=>{
  else if(q.type==='state'){state=q.value;updateBoot();}
  else if(q.type==='error')fail(q.message);
  else if(q.type==='language')localize(q.lang);
- else if(q.type==='visibility')setVisible(q.open);
+ else if(q.type==='settings'){
+   settingsOnly=true;document.documentElement.dataset.settingsOnly='true';$('stage').inert=true;
+   displayPrefs();if(!$('settings').open)$('settings').showModal();
+ }else if(q.type==='visibility'){
+   delete document.documentElement.dataset.settingsOnly;$('stage').inert=false;setVisible(q.open);
+ }
 });
 parent.postMessage({scope:'boku-v6-cover',type:'hello'},location.origin);action('hello');
-setTimeout(()=>{if(!host)fail('未能连接游戏 / ゲームに接続できません / Game could not start');},25000);
+setTimeout(()=>{if(!host)fail(({zh:'无法连接游戏',ja:'ゲームに接続できませんでした。',en:'Could not connect to the game.'})[getLanguage()]);},25000);

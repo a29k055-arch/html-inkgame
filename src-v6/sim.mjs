@@ -1,5 +1,6 @@
 // Deterministic pond physics. All positions and radii use painting coordinates.
 import {resolveLivingRig} from '../src-v5/game/living-rigs.js';
+import {createFoodField,visibleFood,removeFood,regrowFood} from './food-field.mjs';
 
 const TICK = 1 / 60;
 const EPSILON = 1e-8;
@@ -11,11 +12,16 @@ const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 const touching = (a, b, tolerance = 0) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <= (a.r + b.r + tolerance) ** 2;
 const shielded = p => p.form === 'turtle' || p.form === 'dragon';
 const bubbles = p => p.form === 'fish' || p.form === 'dragon';
+const flakeShapes=['circle','triangle','square','pentagon'];
 export const canEat = (player, enemy) => player.mass > enemy.mass && enemy.mass > EPSILON;
 
 function random(w) {
   w.rng = (Math.imul(1664525, w.rng) + 1013904223) >>> 0;
   return w.rng / 4294967296;
+}
+function emissionRoll(w){
+  w.emissionRng=(Math.imul(1664525,w.emissionRng)+1013904223)>>>0;
+  return w.emissionRng/4294967296;
 }
 function event(w, type, details = {}) {
   w.events.push({ seq: ++w.sequence, time: w.time, type, ...details });
@@ -46,6 +52,7 @@ export function spawnEnemy(w, def) {
   e.mass = Math.max(EPSILON, def.mass ?? 50);
   e.r = radius(e.mass);
   e.type = def.type ?? 'spike';
+  if(e.homeRadius){e.homeX=e.x;e.homeY=e.y;}
   e.kickX = 0; e.kickY = 0;
   w.enemies.push(e);
   return e;
@@ -63,7 +70,9 @@ export function spawnItem(w, def) {
 export function spawnDrop(w, def) {
   const d = body(w, def, 'drop');
   d.mass = def.mass ?? 2;
-  d.r = Math.max(1.6, radius(d.mass) * .76);
+  d.r = def.r ?? clamp(radius(d.mass)*1.22,1.9,9);
+  d.shape=def.shape ?? flakeShapes[Math.floor(emissionRoll(w)*flakeShapes.length)];
+  d.angle=def.angle ?? emissionRoll(w)*TAU;
   d.readyAt = w.time + (def.delay ?? (def.ready === false ? .45 : 0));
   d.ready = w.time >= d.readyAt;
   w.drops.push(d);
@@ -99,12 +108,14 @@ export function createWorld(config = {}) {
     spawnItems:config.spawnItems ?? !config.tutorial, nextItem:config.nextItem ?? 9,
     itemInterval:config.itemInterval ?? 13, flowerMass:config.flowerMass ?? 30,
     idCounter:0,sequence:0,events:[],cueTimes:new Map(),contacts:new Map(),
-    enemies:[], drops:[], leaves:[], items:[], shots:[], safePath:[],
-    largest:0, held:false, waitRelease:false, packet:0, packetTime:0, bubbleDelay:0,
+    enemies:[], drops:[], leaves:[], items:[], departingItems:[], shots:[], safePath:[],
+    largest:0, held:false, waitRelease:false, packet:0, packetTime:0, packetInterval:.12, bubbleDelay:0,
+    emissionRng:(rigSeed^0x2ef54bc1)>>>0,
     travel:0, recordedMove:false};
   const p = w.player = body(w,{x:w.width/2,y:w.height/2,mass:100,...config.player},'player');
   p.form='ink'; p.formTime=0; p.activeItem=null; p.emitting=false; p.inventory=[];
   syncPlayer(p);
+  w.foodField=createFoodField(w.width,w.height,config.foodSpacing,rigSeed);
   for (const def of config.enemies ?? []) spawnEnemy(w,def);
   for (const def of config.drops ?? []) spawnDrop(w,def);
   for (const def of config.leaves ?? []) spawnLeaf(w,def);
@@ -124,21 +135,28 @@ function bank(w,leaf,ink) {
   }
   return amount;
 }
-function paidInk(w,x,y,mass,vx=0,vy=0) {
-  if(mass>EPSILON) spawnDrop(w,{x:clamp(x,3,w.width-3),y:clamp(y,3,w.height-3),vx,vy,mass,delay:.48});
+function paidInk(w,shot,mass,vx=0,vy=0) {
+  if(mass>EPSILON)spawnDrop(w,{x:clamp(shot.x,3,w.width-3),y:clamp(shot.y,3,w.height-3),
+    vx,vy,mass,shape:shot.shape,angle:shot.angle,r:shot.r,delay:.48});
 }
 function deposit(w,leaf,shot) {
   const stored=bank(w,leaf,shot.mass);
   if(stored>EPSILON) cue(w,'store',{id:leaf.id,mass:stored},'store:'+leaf.id,.18);
-  paidInk(w,shot.x,shot.y,shot.mass-stored);
+  paidInk(w,shot,shot.mass-stored);
 }
 function shoot(w,type,mass=0) {
   const p=w.player;
-  const sign=type==='bubble' ? 1 : -1;
-  const dx=Math.cos(p.angle)*sign,dy=Math.sin(p.angle)*sign;
-  const v = type==='bubble' ? 260 : 235;
+  const bubble=type==='bubble';
+  const mid=p.angle+(bubble?0:Math.PI);
+  const spread=(bubble?9:24)*Math.PI/180;
+  const bearing=mid+(2*emissionRoll(w)-1)*spread;
+  const dx=Math.cos(bearing),dy=Math.sin(bearing);
+  const v=bubble?215+emissionRoll(w)*78:172+emissionRoll(w)*122;
+  const r=bubble?3.9+emissionRoll(w)*2.6:clamp(radius(mass)*1.25,1.9,9);
   const shot=body(w,{type,x:p.x+dx*(p.r+2),y:p.y+dy*(p.r+2),
-    vx:dx*v,vy:dy*v,dx,dy,mass,r:type==='bubble'?5:3,age:0},'shot');
+    vx:dx*v,vy:dy*v,dx,dy,mass,r,angle:emissionRoll(w)*TAU,
+    shape:bubble?'circle':flakeShapes[Math.floor(emissionRoll(w)*flakeShapes.length)],
+    lifetime:bubble?.79+.16*emissionRoll(w):.29+.22*emissionRoll(w),age:0},'shot');
   if(type==='spray'){
     const leaf=w.leaves.find(l=>distance(l,p)<=l.r || distance(l,shot)<=l.r);
     if(leaf){ deposit(w,leaf,shot); return; }
@@ -146,7 +164,10 @@ function shoot(w,type,mass=0) {
   w.shots.push(shot);
 }
 function flush(w) {
-  if(w.packet>EPSILON) shoot(w,'spray',w.packet);
+  if(w.packet>EPSILON) {
+    shoot(w,'spray',w.packet);
+    w.packetInterval=.076+emissionRoll(w)*.13;
+  }
   w.packet=0;w.packetTime=0;
 }
 function restoreClearance(w) {
@@ -189,14 +210,15 @@ function playerStep(w,input,dt) {
   }
   const ix=Number(input.x)||0,iy=Number(input.y)||0;
   const len=Math.hypot(ix,iy),strength=Math.min(1,len);
-  if(len>.015) p.angle=Math.atan2(iy,ix);
+  const heading=len>.015?Math.atan2(iy,ix):p.angle;
+  if(!input.keyboard||Math.hypot(p.vx,p.vy)<1)p.angle=heading;
   p.emitting=w.held&&!w.waitRelease;
   let speed=w.speed*(p.form==='turtle'?.85:1)*strength;
   if(p.emitting && !bubbles(p)) {
     const lost=p.mass*(1-Math.pow(.92,dt));
     p.mass-=lost; w.packet+=lost; w.packetTime+=dt;
     cue(w,'spray',{},'spray',.3);
-    if(w.packetTime>=.15) flush(w);
+    if(w.packetTime>=w.packetInterval) flush(w);
     speed+=w.speed*.12;
     syncPlayer(p);
   } else {
@@ -204,13 +226,17 @@ function playerStep(w,input,dt) {
     if(p.emitting) {
       w.bubbleDelay-=dt;
       if(w.bubbleDelay<=0) {
-        shoot(w,'bubble'); event(w,'bubble',{form:p.form}); w.bubbleDelay=.29;
+        shoot(w,'bubble'); event(w,'bubble',{form:p.form}); w.bubbleDelay=.22+emissionRoll(w)*.14;
       }
     } else w.bubbleDelay=0;
   }
-  const vx=Math.cos(p.angle)*speed,vy=Math.sin(p.angle)*speed;
-  const ease=1-Math.exp(-dt*19);
+  const vx=Math.cos(heading)*speed,vy=Math.sin(heading)*speed;
+  // A digital key jumps straight to each new heading. Damping the actual
+  // velocity rounds a sequence of four turns; the analogue stick stays precise.
+  const response=input.keyboard?(strength>0?6.2:6.8):19;
+  const ease=1-Math.exp(-dt*response);
   p.vx+=(vx-p.vx)*ease; p.vy+=(vy-p.vy)*ease;
+  if(input.keyboard && Math.hypot(p.vx,p.vy)>1)p.angle=Math.atan2(p.vy,p.vx);
   if(speed===0 && Math.hypot(p.vx,p.vy)<.1) p.vx=p.vy=0;
   p.x+=p.vx*dt;p.y+=p.vy*dt;
   bounded(w,p);
@@ -244,8 +270,8 @@ function projectileStep(w,dt) {
       e.kickX+=s.dx*impulse;e.kickY+=s.dy*impulse;
       event(w,'push',{id:e.id,target:e.type,source:s.type,form:w.player.form});
     }
-    if(e || s.age>=(s.type==='bubble'?.88:.34) || s.x<2 || s.x>w.width-2 || s.y<2 || s.y>w.height-2) {
-      if(s.type==='spray') paidInk(w,s.x,s.y,s.mass,s.vx*.12,s.vy*.12);
+    if(e || s.age>=s.lifetime || s.x<2 || s.x>w.width-2 || s.y<2 || s.y>w.height-2) {
+      if(s.type==='spray') paidInk(w,s,s.mass,s.vx*.18,s.vy*.18);
       s.done=true;
     }
   }
@@ -264,6 +290,13 @@ function magnet(w,obj,dt,kind) {
 function drift(w,dt) {
   for(const e of w.enemies) {
     e.x+=(e.vx+e.kickX)*dt; e.y+=(e.vy+e.kickY)*dt;
+    if(e.homeRadius){
+      // The large foragers patrol their own banks. Reflect their natural drift
+      // at its rim; bubbles and paid jets can still push them out of the bank.
+      const dx=e.x-e.homeX,dy=e.y-e.homeY,d=Math.hypot(dx,dy);
+      const outward=dx*e.vx+dy*e.vy;
+      if(d>=e.homeRadius && outward>0){e.vx-=2*outward*dx/(d*d);e.vy-=2*outward*dy/(d*d);}
+    }
     const drag=Math.exp(-dt*1.45);
     e.kickX*=drag;e.kickY*=drag;
     magnet(w,e,dt,e.type);
@@ -280,6 +313,30 @@ function drift(w,dt) {
 }
 function foods(w) {
   const p=w.player;
+  // The current carries a dense, edible field. Query only neighbouring squares
+  // for each body. A magnet promotes individual flecks to drifting particles
+  // without leaving a second copy in the field.
+  const field=w.foodField;
+  if(field){
+    field.time=w.time;
+    const nibble=(b,player)=>{
+      const attracts=player&&(p.form==='shrimp'||p.form==='dragon');
+      const reach=b.r+(attracts?135:5);
+      for(const d of visibleFood(field,b.x-reach,b.y-reach,b.x+reach,b.y+reach)){
+        const dist2=(d.x-b.x)**2+(d.y-b.y)**2;
+        if((!player||d.mass<b.mass) && dist2<=(b.r+d.r)**2){
+          removeFood(field,d);b.mass+=d.mass;
+          if(player){syncPlayer(p);event(w,'eat',{target:'drop',id:d.id,mass:d.mass});}
+          else b.r=radius(b.mass);
+        }else if(attracts && d.mass<p.mass && dist2<reach*reach){
+          removeFood(field,d);spawnDrop(w,{x:d.x,y:d.y,mass:d.mass,shape:d.shape,r:d.r,angle:d.rot});
+        }
+      }
+    };
+    nibble(p,true);
+    for(const e of w.enemies)if(e.mass>EPSILON)nibble(e,false);
+    regrowFood(field,w);
+  }
   for(const d of w.drops) {
     if(!d.ready) continue;
     if(d.mass<p.mass && touching(p,d)) {
@@ -398,11 +455,20 @@ function itemStep(w,dt) {
     if(w.items.length<7) enterItem(w);
     w.nextItem=w.time+w.itemInterval*(.8+.4*random(w));
   }
+  // A collected swimmer is immediately removed from gameplay while the
+  // original rig finishes its last stroke at the point of collection.
+  for(const item of w.departingItems){
+    const t=clamp((w.time-item.pickedAt)/.56,0,1);
+    item.opacity=1-t*t*(3-2*t);
+    item.x+=item.vx*dt*(1-t);item.y+=item.vy*dt*(1-t);
+  }
+  w.departingItems=w.departingItems.filter(item=>item.opacity>0);
   for(const item of w.items) {
     item.x+=item.vx*dt;item.y+=item.vy*dt;
     if(Math.abs(item.vx)+Math.abs(item.vy)>.01) item.angle=Math.atan2(item.vy,item.vx);
-    if(touching(w.player,item) && w.player.inventory.length<3){
-      w.player.inventory.push(item); item.picked=true;
+    if(distance(w.player,item)<=w.player.r && w.player.inventory.length<3){
+      w.player.inventory.push(item);item.picked=true;item.pickedAt=w.time;
+      w.departingItems.push(item);
       event(w,'pickup',{id:item.id,form:item.type});
     }
   }
