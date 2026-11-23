@@ -28,8 +28,35 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Package frozen V2-V4 and current V5
+      - name: Set up Node for release checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Package V2–V5 and the independent V6 pond
         run: node tools/package-versions.cjs
+
+      - name: Check V5 isolation and V6 gameplay
+        run: |
+          node tests/v5-publication-isolation.mjs
+          node tests/v6-physics.mjs
+          node tests/v6-input.mjs
+          node tests/v6-seeds.mjs
+          node tests/v6-tutorial-and-physics-budget.mjs
+
+      - name: Play the packaged V6 in Chrome
+        env:
+          V6_QA_SCREENSHOTS: ${{ runner.temp }}/v6-screenshots
+        run: node tests/v6-browser.mjs --site-root dist-pages
+
+      - name: Keep V6 acceptance screenshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: v6-acceptance-screenshots
+          path: ${{ runner.temp }}/v6-screenshots
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

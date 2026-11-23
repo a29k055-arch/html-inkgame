@@ -1,0 +1,64 @@
+// Deterministic pointer ownership regression. The browser/device UI pass is reported separately.
+import assert from 'node:assert/strict';
+import {createInput} from '../src-v6/input.mjs';
+
+class Surface extends EventTarget {
+  style = {};
+  classList = {add(){}, remove(){}};
+  setPointerCapture(){}
+  getBoundingClientRect(){ return {width:90}; }
+}
+globalThis.window = new EventTarget();
+globalThis.document = new EventTarget();
+globalThis.HTMLButtonElement = Surface;
+const canvas = new Surface(), actionButton = new Surface(), joystick = new Surface(), stick = new Surface();
+const zooms = [];
+let playing = true;
+const input = createInput({canvas,actionButton,joystick,stick,active:()=>playing,
+  zoom:(factor,x,y)=>zooms.push({factor,x,y})});
+const send = (surface,type,fields={}) => {
+  const evt = Object.assign(new Event(type,{cancelable:true}),fields);
+  surface.dispatchEvent(evt);
+};
+const finger = (id,x,y) => ({pointerType:'touch',pointerId:id,button:0,clientX:x,clientY:y});
+const rest = {x:0,y:0,action:false};
+
+send(canvas,'pointerdown',finger(1,100,200));
+send(canvas,'pointermove',finger(1,175,200));
+assert.equal(input.read().x,1);
+send(actionButton,'pointerdown',finger(2,350,500));
+assert.deepEqual(input.read(),{x:1,y:0,action:true});
+assert.equal(zooms.length,0);
+input.blockAction();
+assert.equal(input.read().action,false);
+send(actionButton,'lostpointercapture',finger(2,350,500));
+send(actionButton,'pointerdown',finger(3,350,500));
+assert.equal(input.read().action,true);
+send(actionButton,'pointerup',finger(3,350,500));
+send(canvas,'pointerdown',finger(4,200,200));
+assert.deepEqual(input.read(),rest);
+send(canvas,'pointermove',finger(4,260,200));
+assert.ok(zooms.at(-1).factor>1);
+send(canvas,'pointerup',finger(4,260,200));
+send(canvas,'pointermove',finger(1,180,200));
+assert.deepEqual(input.read(),rest);
+send(canvas,'pointerup',finger(1,180,200));
+send(canvas,'pointerdown',finger(5,220,260));
+send(canvas,'pointermove',finger(5,224,260));
+assert.ok(input.read().x>0 && input.read().x<.25);
+send(canvas,'pointercancel',finger(5,224,260));
+assert.deepEqual(input.read(),rest);
+send(canvas,'wheel',{deltaY:-120,deltaMode:0,clientX:130,clientY:140});
+assert.ok(zooms.at(-1).factor>1);
+assert.equal(zooms.at(-1).x,130);
+send(window,'keydown',{code:'KeyW'});
+send(window,'keydown',{code:'ShiftLeft'});
+assert.deepEqual(input.read(),{x:0,y:-1,action:true});
+send(window,'blur');
+assert.deepEqual(input.read(),rest);
+playing=false;
+send(canvas,'pointerdown',finger(5,0,0));
+send(canvas,'pointermove',finger(5,100,0));
+send(actionButton,'pointerdown',finger(6,20,20));
+assert.deepEqual(input.read(),rest);
+console.log('V6 input event regression passed (desktop axes, buttons, touch ownership, pinch, wheel, cancellation and blur).');

@@ -17,4 +17,28 @@ for(const [name,[ref,expected]] of Object.entries(releases)){const sha=execFileS
 unpack('v3-reveal',path.join(out,'previews','reveal-scroll'));
 unpack('v3-reveal',path.join(out,'archive','reveal-v3'));
 unpack('v2-scroll',path.join(out,'archive','scroll-v2'));
+
+// V6 has its own entry and save data. Its source, artwork and rigs already
+// exist in the root archive, so both URLs can load the same release files.
+const pondHtml = fs.readFileSync(path.join(out, 'v6.html'), 'utf8');
+if (!/<head>/i.test(pondHtml) || /<base\b/i.test(pondHtml)) {
+  throw new Error('v6.html must have a head and use project-relative URLs');
+}
+const pondDir = path.join(out, 'v6');
+fs.mkdirSync(pondDir, { recursive: true });
+fs.writeFileSync(
+  path.join(pondDir, 'index.html'),
+  pondHtml.replace(/<head>/i, '<head><base href="../">')
+);
+const pondAssets = [
+  'src-v6/app.mjs',
+  'src-v5/ink/start-transitions.js',
+  ...[1, 2].map(n => `assets/effects/start/start-0${n}.webp`),
+  ...[1, 2, 3, 4, 6, 7].map(n => `assets/artworks/v4-cropped/${n}.png`)
+];
+for (const file of pondAssets) {
+  if (!fs.statSync(path.join(out, file)).isFile()) throw new Error('Missing V6 asset: ' + file);
+}
+manifest.versions.v6 = { ref: rootRef, sha: manifest.deployment, entry: 'v6/' };
+
 fs.writeFileSync(path.join(out,'versions.json'),JSON.stringify(manifest,null,2));console.log(JSON.stringify(manifest,null,2));
