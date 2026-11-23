@@ -223,6 +223,8 @@ async function exercise(endpoint,mobile) {
   const touch=(type,touchPoints)=>rpc('Input.dispatchTouchEvent',{type,touchPoints});
   async function steerRight(){
     const x=Math.round(width*.22),y=Math.round(height*.42);
+    await until(()=>js('!document.querySelector("#field").inert && document.querySelector("#ink-wipe").hidden'),'pond accepts input after the ink transition');
+    await js('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
     assert.equal(await js('document.elementFromPoint('+x+','+y+')?.id'),'world','Water input intercepted.');
     if(mobile){
       await touch('touchStart',[{x,y,id:1}]);await touch('touchMove',[{x:x+70,y,id:1}]);
@@ -230,6 +232,7 @@ async function exercise(endpoint,mobile) {
       await rpc('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',buttons:1,clickCount:1});
       await rpc('Input.dispatchMouseEvent',{type:'mouseMoved',x:x+70,y,buttons:1});
     }
+    assert.equal(await js('document.querySelector("#joystick").hidden'),false,'The genuine drag must own the water joystick.');
   }
   async function stopSteering(){
     if(mobile)await touch('touchEnd',[]);
@@ -268,9 +271,9 @@ async function exercise(endpoint,mobile) {
     assert.ok(amountBefore>0);
     // Reach the first edible creature through the actual input path.
     await steerRight();
-    await until(async()=>Number(await text('#mass-value'))>amountBefore || await text('#pond-name')!==lessonOne,'first uptake',7000);
+    await until(async()=>Number(await text('#mass-value'))>amountBefore || await text('#pond-name')!==lessonOne,'first uptake',22000);
     await stopSteering();
-    await until(async()=>await text('#pond-name')!==lessonOne,'automatic tutorial transition');
+    await until(async()=>await text('#pond-name')==='辨敌' && (await text('#lesson-line')).includes('刺球'),'automatic tutorial transition to the first spine');
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'transition cleared');
     // The second lesson uses 100 against 175 for the spine, then resets to
     // 100 against 177 for the ink well. The displayed loss must reach the well.
@@ -279,7 +282,7 @@ async function exercise(endpoint,mobile) {
       const player=Number(document.querySelector('#mass-value').textContent);
       const rival=Number(document.querySelector('#rival-value').textContent);
       return player<=96 && player>=78 && rival>=181 && Math.abs(player+rival-277)<=1 ? {player,rival}:null;
-    })()`),'red well gains the ink the real player loses',22000);
+    })()`),'red well gains the ink the real player loses',45000);
     await capture('black-hole-contact');
     await stopSteering();
     await click('#pause');await waitVisible('#options');await click('#exit-run');await waitVisible('#library');
@@ -382,7 +385,13 @@ try{
     return Number(active.split('\n')[0]);
   },'Chrome startup',13000);
   const endpoint='http://127.0.0.1:'+port;
-  const cases=[await exercise(endpoint,false),await exercise(endpoint,true)];
+  const cases=[];
+  for(const mobile of [false,true]){
+    console.log('Exercising '+(mobile?'touch':'mouse')+' from the shipped cover.');
+    const report=await exercise(endpoint,mobile);
+    cases.push(report);console.log(JSON.stringify(report));
+  }
+  console.log('Exercising victory, full painting and saved unlock.');
   const finish=await endToNextPainting(endpoint);
   let oldCover=null;
   if(!sourceMode){

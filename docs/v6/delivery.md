@@ -14,7 +14,7 @@
 | 玩家看到的变化 | 实际来源与行为 |
 |---|---|
 | 题字、云纹、纸卷、画廊、赏画及音效 | 直接调用 V5 的样式、题字素材、LoadingScroll、画廊及 PaintingView、BgmAudio 和 WaterPickupAudio。V6 独立记录六幅画的通关状态。 |
-| 加载与选关 | 使用素材作者提交 a09727d 内的透明单片、整卷、端面及配套组件。加载条随资源进度展开；进入目录后，四枚教学签和六枚主线签各用一片，文字实时竖排。 |
+| 加载与选关 | 使用素材作者的竹片与配套组件，加载动画已跟进 R2 连续螺旋展开（be7646f）。加载条随资源进度展开；进入目录后，四枚教学签和六枚主线签各用一片，文字实时竖排。 |
 | 战斗与变形 | 正式战斗使用 V5 的 GameRenderer、LivingPainter、形体水墨、拖尾、荷叶荷花及显画。原四鱼、三虾、二龟、一龙的骨骼编号随拾取物一起保留，背包与变形按相同编号取画。 |
 | 两种敌人 | 海胆与漩涡使用独立绘制的 1152 像素透明原画；海胆带短刺收展图集，漩涡在吸收时内层墨线收紧。淡蓝实圈、淡红虚圈继续标明可食性。 |
 | 接触黑洞 | 修复玩家缩小时洞缘提前断开，以及教程接触首帧就复位的问题。质量沿接触方向流入黑洞，双方同屏显示等量增减，玩家脱离接触后停止转移。 |
@@ -48,7 +48,7 @@
 
 ## 四　发布、文件与复验
 
-[原版封面实景](images/desktop-cover.webp) · [竹简目录](images/desktop-catalogue.webp) · [黑洞接触](images/desktop-black-hole-contact.webp) · [手机尺寸池塘](images/mobile-pond.webp)
+[竹简加载实景](images/bamboo-loading.webp) · [原版封面实景](images/desktop-cover.webp) · [竹简目录](images/desktop-catalogue.webp) · [黑洞接触](images/desktop-black-hole-contact.webp) · [手机尺寸池塘](images/mobile-pond.webp)
 
 | 文件或目录 | 用途 |
 |---|---|
