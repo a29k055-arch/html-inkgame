@@ -62,7 +62,9 @@ const base='http://127.0.0.1:'+srv.address().port+prefix;
 const profile=await mkdtemp(path.join(tmpdir(),'boku-v6-qa-'));
 const proc=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-background-networking',
   '--disable-sync','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'],
-  {stdio:'ignore',windowsHide:true});
+  {stdio:['ignore','ignore','pipe'],windowsHide:true});
+let startupLog='';
+proc.stderr.setEncoding('utf8').on('data',chunk=>{startupLog=(startupLog+chunk).slice(-2400);});
 let chromeError=null;
 proc.on('error',error=>{chromeError=error;});
 async function until(fn,description,timeout=12000) {
@@ -380,10 +382,10 @@ async function endToNextPainting(endpoint) {
 }
 try{
   const port=await until(async()=>{
-    if(chromeError || proc.exitCode!==null) throw new Error('Chrome exited: '+(chromeError?.message??proc.exitCode));
+    if(chromeError || proc.exitCode!==null || proc.signalCode) throw Object.assign(new Error('Chrome exited: '+(chromeError?.message??proc.exitCode??proc.signalCode)+' '+startupLog),{fatal:true});
     const active=await readFile(path.join(profile,'DevToolsActivePort'),'utf8');
     return Number(active.split('\n')[0]);
-  },'Chrome startup',13000);
+  },'Chrome startup',60000).catch(error=>{throw new Error(error.message+' '+startupLog);});
   const endpoint='http://127.0.0.1:'+port;
   const cases=[];
   for(const mobile of [false,true]){
