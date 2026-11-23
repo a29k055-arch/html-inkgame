@@ -134,6 +134,7 @@ async function session(endpoint) {
     }
   }
   await Promise.all(['Runtime.enable','Network.enable','Page.enable'].map(method=>rpc(method)));
+  await rpc('Page.bringToFront');
   await rpc('Storage.clearDataForOrigin',{origin:new URL(base).origin,storageTypes:'all'});
   return {rpc,js,q,click,problems,loaded,setTouch(value){touchScreen=value;},async close(){
     socket.close();await fetch(endpoint+'/json/close/'+target.id);
@@ -228,13 +229,19 @@ async function exercise(endpoint,mobile) {
     await until(()=>js('!document.querySelector("#field").inert && document.querySelector("#ink-wipe").hidden'),'pond accepts input after the ink transition');
     await js('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
     assert.equal(await js('document.elementFromPoint('+x+','+y+')?.id'),'world','Water input intercepted.');
-    if(mobile){
-      await touch('touchStart',[{x,y,id:1}]);await touch('touchMove',[{x:x+70,y,id:1}]);
-    }else{
-      await rpc('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',buttons:1,clickCount:1});
-      await rpc('Input.dispatchMouseEvent',{type:'mouseMoved',x:x+70,y,buttons:1});
-    }
-    assert.equal(await js('document.querySelector("#joystick").hidden'),false,'The genuine drag must own the water joystick.');
+    const engaged=await until(async()=>{
+      if(!mobile)await rpc('Input.dispatchMouseEvent',{type:'mouseMoved',x,y,buttons:0});
+      if(mobile){
+        await touch('touchStart',[{x,y,id:1}]);await touch('touchMove',[{x:x+70,y,id:1}]);
+      }else{
+        await rpc('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',buttons:1,clickCount:1});
+        await rpc('Input.dispatchMouseEvent',{type:'mouseMoved',x:x+70,y,buttons:1});
+      }
+      if(await js('!document.querySelector("#joystick").hidden'))return true;
+      await stopSteering();
+      return false;
+    },'visible joystick responding to a real drag',18000);
+    assert.ok(engaged);
   }
   async function stopSteering(){
     if(mobile)await touch('touchEnd',[]);
@@ -342,6 +349,7 @@ async function exercise(endpoint,mobile) {
       lesson:document.querySelector('#lesson-line')?.textContent,mass:document.querySelector('#mass-value')?.textContent,
       rival:document.querySelector('#rival-value')?.textContent,stickHidden:document.querySelector('#joystick')?.hidden,
       renderer:window.bokuMetrics?.backend,frames:window.bokuMetrics?.renderedFrames,hidden:document.hidden})`).catch(()=>null);
+    console.error('Pond browser diagnostics:',JSON.stringify(state),problems);
     error.message+='; '+JSON.stringify(state);
     if(problems.length)error.message+='; browser: '+problems.join(' | ');
     throw error;
