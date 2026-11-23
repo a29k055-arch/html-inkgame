@@ -8,9 +8,11 @@
   scrollbar-color: #95774c #e4dac7;
   cursor: grab;
   touch-action: pan-x pan-y;
+  --bamboo-selection-lift: 10px;
   user-select: none;
   -webkit-user-select: none;
 }
+.bamboo-levels-r3, .bamboo-levels-r3 .bamboo-level { touch-action: pan-y; }
 .bamboo-levels.is-dragging { cursor: grabbing; }
 .bamboo-level-track {
   display: flex;
@@ -34,6 +36,17 @@
 }
 .bamboo-level-track::before { top: 8.5%; }
 .bamboo-level-track::after { top: 91.2%; }
+.bamboo-level-track-r3 { padding: 14px 3px 10px; }
+.bamboo-level-track-r3::before, .bamboo-level-track-r3::after { display: none; }
+.bamboo-level-cords {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 5;
+}
 .bamboo-level {
   flex: none;
   width: var(--slip-width);
@@ -51,6 +64,7 @@
   color: #39281b;
   font-family: "Yu Mincho", "Noto Serif CJK SC", "Songti SC", SimSun, serif;
   cursor: pointer;
+  isolation: isolate;
   -webkit-tap-highlight-color: transparent;
 }
 .bamboo-level::before {
@@ -59,12 +73,15 @@
   inset: 0;
   z-index: -1;
   background: url("./bamboo-slip.png") center / 100% 100% no-repeat;
+  transition: filter .20s ease;
 }
 .bamboo-level:nth-child(even)::before { transform: scaleX(-1); filter: brightness(.97); }
 .bamboo-level:hover::before { filter: brightness(1.08); }
 .bamboo-level:focus-visible { outline: 2px solid #8c382a; outline-offset: -4px; }
-.bamboo-level[aria-pressed="true"] { color: #732c23; }
-.bamboo-level[aria-pressed="true"]::before { filter: brightness(1.09) saturate(.9); }
+.bamboo-level[aria-pressed="true"] { color: #732c23; z-index: 2; }
+.bamboo-level[aria-pressed="true"]::before {
+  filter: brightness(1.12) saturate(.91) drop-shadow(0 5px 4px #4a2e1c85);
+}
 .bamboo-level[aria-pressed="true"]::after {
   content: "";
   width: 38%; height: 5px;
@@ -86,6 +103,9 @@
 .bamboo-level:disabled .bamboo-level-name { text-decoration: line-through; }
 .bamboo-loading-canvas { display: block; width: 100%; height: 150px; }
 @media (max-width: 600px) {
-  .bamboo-levels { --slip-height: 360px; }
+  .bamboo-levels { --slip-height: 360px; --bamboo-selection-lift: 8px; }
   .bamboo-loading-canvas { height: 125px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bamboo-level::before { transition: none; }
 }

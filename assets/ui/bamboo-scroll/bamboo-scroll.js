@@ -1,13 +1,27 @@
 const imageURL = (name) => new URL(name, import.meta.url).href;
 const clamp = (v, lo=0, hi=1) => Math.max(lo, Math.min(hi,v));
 
-/** One slat = one level. Pass actual names/locked state from your game. */
-export function createLevelScroll(viewport, levels, onSelect = () => {}) {
-  viewport.classList.add('bamboo-levels');
+/** Exponential coast: frame-rate independent position and velocity. */
+export function bambooCoastStep(position, velocity, ms, decayMs = 155) {
+  const factor = Math.exp(-Math.max(0,ms)/decayMs);
+  return {position:position+velocity*decayMs*(1-factor),velocity:velocity*factor};
+}
+
+/** One slat = one level. Pass actual names/locked state from your game.
+ * Options are optional; this remains compatible with the original interface.
+ */
+export function createLevelScroll(viewport, levels, onSelect = () => {}, options = {}) {
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const decay = Number.isFinite(options.decayMs) ? clamp(options.decayMs,60,500) : 155;
+  const maxSpeed = Number.isFinite(options.maxSpeed) ? clamp(options.maxSpeed,.2,4) : 2.2;
+  const listens = (target,name,fn,opts = {}) => target.addEventListener(name,fn,{...opts,signal});
+  viewport.classList.add('bamboo-levels','bamboo-levels-r3');
   viewport.tabIndex = 0;
   viewport.setAttribute('aria-label', '竹简选关，可左右滚动');
   const track = document.createElement('div');
-  track.className = 'bamboo-level-track';
+  track.className = 'bamboo-level-track bamboo-level-track-r3';
   const buttons = levels.map((level, i) => {
     const button = document.createElement('button');
     button.type = 'button';
@@ -21,56 +35,199 @@ export function createLevelScroll(viewport, levels, onSelect = () => {}) {
     no.className = 'bamboo-level-no';
     no.textContent = String(i + 1).padStart(2,'0');
     button.append(label,no);
-    button.addEventListener('click', () => {
-      if (suppressClick) return;
+    listens(button,'click', () => {
       select(i);
       onSelect(level,i);
     });
     track.append(button);
     return button;
   });
-  viewport.replaceChildren(track);
-  let pointer = null, moved = false, suppressClick = false;
-  let startX = 0, startScroll = 0;
-  viewport.addEventListener('pointerdown', e => {
-    if (e.pointerType !== 'mouse' || e.button !== 0) return;
-    pointer = e.pointerId; moved = false; suppressClick = false;
-    startX = e.clientX; startScroll = viewport.scrollLeft;
+  // Two continuous cords pass through every slat, including the raised one.
+  // Keep the original button markup so existing game consumers remain valid.
+  const ns = 'http://www.w3.org/2000/svg';
+  const cords = document.createElementNS(ns,'svg');
+  cords.setAttribute('class','bamboo-level-cords');
+  cords.setAttribute('aria-hidden','true');
+  cords.setAttribute('focusable','false');
+  cords.setAttribute('width','0');
+  cords.setAttribute('height','0');
+  const strands = [0,1].map(() => {
+    const base=document.createElementNS(ns,'path'), braid=document.createElementNS(ns,'path');
+    for (const path of [base,braid]) {
+      path.setAttribute('fill','none');
+      path.setAttribute('stroke-linecap','round');
+      path.setAttribute('vector-effect','non-scaling-stroke');
+      cords.append(path);
+    }
+    base.setAttribute('stroke','#735536');
+    base.setAttribute('stroke-width','3.2');
+    braid.setAttribute('stroke','#c1a16d');
+    braid.setAttribute('stroke-width','1.65');
+    braid.setAttribute('stroke-dasharray','2.3 1.8');
+    return [base,braid];
   });
-  viewport.addEventListener('pointermove', e => {
-    if (pointer !== e.pointerId) return;
-    if (!moved && Math.abs(e.clientX - startX) > 5) {
-      moved = true;
-      viewport.setPointerCapture(pointer);
+  track.append(cords);
+  viewport.replaceChildren(track);
+  let measurements=[], lifts=buttons.map(()=>0), liftFrame=0;
+  let liftAmount=10;
+  function renderCords() {
+    if (!measurements.length) return;
+    const first=measurements[0],last=measurements.at(-1);
+    [0.085,0.912].forEach((fraction,i) => {
+      const points = [
+        {x:first.x-first.w/2,y:first.y+first.h*fraction},
+        ...measurements.map((p,j)=>({x:p.x,y:p.y+p.h*fraction-lifts[j]})),
+        {x:last.x+last.w/2,y:last.y+last.h*fraction}
+      ];
+      let d=`M ${points[0].x} ${points[0].y}`;
+      for(let j=1;j<points.length;j++){
+        const a=points[j-1],b=points[j],dx=(b.x-a.x)*.40;
+        d+=` C ${a.x+dx} ${a.y} ${b.x-dx} ${b.y} ${b.x} ${b.y}`;
+      }
+      for(const path of strands[i]) path.setAttribute('d',d);
+    });
+  }
+  function measureCords() {
+    const rect=track.getBoundingClientRect();
+    if(rect.width<1 || rect.height<1) return;
+    cords.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);
+    const css=parseFloat(getComputedStyle(viewport).getPropertyValue('--bamboo-selection-lift'));
+    liftAmount=clamp(Number.isFinite(options.liftPx)?options.liftPx:Number.isFinite(css)?css:10,0,12);
+    measurements=buttons.map((button,i)=>{
+      const b=button.getBoundingClientRect();
+      return {x:b.left-rect.left+b.width/2,y:b.top-rect.top+lifts[i],w:b.width,h:b.height};
+    });
+    renderCords();
+  }
+  function paintLifts(values) {
+    for(let i=0;i<buttons.length;i++) {
+      if(values[i]!==lifts[i]) {
+        lifts[i]=values[i];
+        buttons[i].style.transform=values[i]>.001?`translateY(${-values[i]}px)`:'';
+      }
+    }
+    renderCords();
+  }
+  function syncSelection() {
+    cancelAnimationFrame(liftFrame);liftFrame=0;
+    const from=[...lifts],to=buttons.map(b=>b.getAttribute('aria-pressed')==='true'?liftAmount:0);
+    if(from.every((v,i)=>Math.abs(v-to[i])<.01) || reduced.matches){paintLifts(to);return;}
+    const start=performance.now();
+    function frame(time) {
+      const t=clamp((time-start)/215),eased=1-(1-t)**3;
+      paintLifts(from.map((v,i)=>v+(to[i]-v)*eased));
+      if(t<1) liftFrame=requestAnimationFrame(frame);
+      else {liftFrame=0;paintLifts(to);}
+    }
+    liftFrame=requestAnimationFrame(frame);
+  }
+  // Other consumers (including catalogues with external state) may update
+  // aria-pressed themselves. The visual and cords follow those changes too.
+  const selectionObserver=new MutationObserver(records=>{
+    if(!records.some(r=>r.oldValue!==r.target.getAttribute('aria-pressed')))return;
+    if(scrollMode==='coast')stopMotion();
+    syncSelection();
+  });
+  selectionObserver.observe(track,{attributes:true,subtree:true,attributeOldValue:true,attributeFilter:['aria-pressed']});
+  const sizeObserver=new ResizeObserver(()=>{measureCords();syncSelection();});
+  sizeObserver.observe(track);
+  measureCords();
+
+  let pointer=null, moved=false, suppressUntil=0, samples=[];
+  let startX=0,startY=0,startScroll=0,lastMove=0;
+  let scrollFrame=0, scrollMode='', target=0;
+  const maxScroll=()=>Math.max(0,viewport.scrollWidth-viewport.clientWidth);
+  function stopMotion(){
+    cancelAnimationFrame(scrollFrame);scrollFrame=0;scrollMode='';
+  }
+  function setScroll(x){viewport.scrollLeft=clamp(x,0,maxScroll());}
+  function coast(velocity){
+    stopMotion();
+    if(reduced.matches || options.inertia===false || Math.abs(velocity)<.045) return;
+    let position=viewport.scrollLeft, v=clamp(velocity,-maxSpeed,maxSpeed),last=performance.now();
+    scrollMode='coast';
+    function frame(time) {
+      const next=bambooCoastStep(position,v,Math.min(40,Math.max(0,time-last)),decay);
+      last=time;position=next.position;v=next.velocity;
+      setScroll(position);
+      if(Math.abs(v)>.025 && position>0 && position<maxScroll())scrollFrame=requestAnimationFrame(frame);
+      else stopMotion();
+    }
+    scrollFrame=requestAnimationFrame(frame);
+  }
+  function easeTo(value){
+    target=clamp(value,0,maxScroll());
+    if(reduced.matches){stopMotion();setScroll(target);return;}
+    if(scrollMode==='ease')return;
+    stopMotion();scrollMode='ease';
+    let position=viewport.scrollLeft,last=performance.now();
+    function frame(time){
+      target=clamp(target,0,maxScroll());
+      const dt=Math.min(50,Math.max(0,time-last));last=time;
+      position+=(target-position)*(1-Math.exp(-dt/82));
+      setScroll(position);
+      if(Math.abs(position-target)>.5)scrollFrame=requestAnimationFrame(frame);
+      else {setScroll(target);stopMotion();}
+    }
+    scrollFrame=requestAnimationFrame(frame);
+  }
+  function sample(time){samples.push({time,x:viewport.scrollLeft});while(samples.length>2 && time-samples[0].time>105)samples.shift();}
+  listens(viewport,'pointerdown',e=>{
+    if(pointer!==null || e.button!==0 || e.isPrimary===false)return;
+    stopMotion();suppressUntil=0;
+    pointer=e.pointerId;moved=false;
+    startX=e.clientX;startY=e.clientY;startScroll=viewport.scrollLeft;
+    lastMove=performance.now();samples=[{time:lastMove,x:startScroll}];
+  });
+  listens(viewport,'pointermove',e=>{
+    if(pointer!==e.pointerId)return;
+    const dx=e.clientX-startX,dy=e.clientY-startY;
+    if(!moved){
+      if(e.pointerType!=='mouse'&&Math.abs(dy)>7&&Math.abs(dy)>Math.abs(dx)*1.15){pointer=null;return;}
+      if(Math.abs(dx)<(e.pointerType==='mouse'?5:8) || Math.abs(dx)<Math.abs(dy)*.9)return;
+      moved=true;viewport.setPointerCapture(pointer);
       viewport.classList.add('is-dragging');
     }
-    if (moved) viewport.scrollLeft = startScroll - (e.clientX - startX);
+    setScroll(startScroll-dx);lastMove=performance.now();sample(lastMove);
   });
-  function finishPointer(e) {
-    if (e.pointerId !== pointer) return;
-    suppressClick = moved;
-    pointer = null;
+  function finishPointer(e,release=false){
+    if(e.pointerId!==pointer)return;
+    const wasMoved=moved,now=performance.now();
+    if(wasMoved)suppressUntil=now+400;
+    pointer=null;moved=false;
     viewport.classList.remove('is-dragging');
-    if (suppressClick) setTimeout(() => { suppressClick = false; },0);
+    if(release&&wasMoved&&now-lastMove<95&&samples.length>1){
+      // Inertia depends on recent movement, not total gesture distance.
+      const recent=samples.at(-1),old=samples.find(s=>recent.time-s.time<=115&&s!==recent)??samples[0];
+      const elapsed=recent.time-old.time;
+      if(elapsed>0)coast((recent.x-old.x)/Math.max(16,elapsed));
+    }
   }
-  viewport.addEventListener('pointerup',finishPointer);
-  viewport.addEventListener('pointercancel',finishPointer);
-  viewport.addEventListener('lostpointercapture',finishPointer);
-  viewport.addEventListener('pointerleave', e => { if (!moved) finishPointer(e); });
-  viewport.addEventListener('wheel', e => {
+  listens(viewport,'pointerup',e=>finishPointer(e,true));
+  listens(viewport,'pointercancel',e=>finishPointer(e));
+  // On touch, capture transfers from the tapped slat to the viewport when a
+  // drag begins. Its bubbling lostpointercapture is not the end of the drag.
+  listens(viewport,'lostpointercapture',e=>{if(e.target===viewport)finishPointer(e);});
+  listens(viewport,'pointerleave',e=>{if(!moved)finishPointer(e);});
+  listens(viewport,'click',e=>{
+    if(e.detail!==0&&performance.now()<suppressUntil){e.preventDefault();e.stopImmediatePropagation();}
+  },{capture:true});
+  listens(viewport,'wheel', e => {
     if (e.ctrlKey || viewport.scrollWidth <= viewport.clientWidth) return;
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     const scale = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? viewport.clientWidth : 1;
     const max = viewport.scrollWidth - viewport.clientWidth;
     if ((delta > 0 && viewport.scrollLeft < max-1) || (delta < 0 && viewport.scrollLeft > 0)) {
       e.preventDefault();
-      viewport.scrollLeft += delta * scale;
+      // A horizontal trackpad already sends real momentum. Don't add a second coast.
+      if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){stopMotion();setScroll(viewport.scrollLeft+delta*scale);}
+      else easeTo((scrollMode==='ease'?target:viewport.scrollLeft)+delta*scale);
     }
   },{passive:false});
   function scrollBy(direction) {
-    viewport.scrollBy({left:direction * viewport.clientWidth * .72,behavior:'smooth'});
+    easeTo((scrollMode==='ease'?target:viewport.scrollLeft)+direction*viewport.clientWidth*.72);
   }
-  viewport.addEventListener('keydown', e => {
+  listens(viewport,'keydown', e => {
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       e.preventDefault();
       scrollBy(e.key === 'ArrowRight' ? 1 : -1);
@@ -79,10 +236,21 @@ export function createLevelScroll(viewport, levels, onSelect = () => {}) {
   function select(i, reveal = false) {
     if (!buttons[i] || buttons[i].disabled) return false;
     buttons.forEach((b,j) => b.setAttribute('aria-pressed',String(i === j)));
-    if (reveal) buttons[i].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+    if (reveal) {
+      const at=buttons[i].offsetLeft+buttons[i].offsetWidth/2-viewport.clientWidth/2;
+      easeTo(at);
+    }
     return true;
   }
-  return {select,scrollBy,buttons};
+  function destroy(){
+    stopMotion();cancelAnimationFrame(liftFrame);
+    selectionObserver.disconnect();sizeObserver.disconnect();
+    controller.abort();
+    if(pointer!==null&&viewport.hasPointerCapture(pointer))viewport.releasePointerCapture(pointer);
+    pointer=null;viewport.classList.remove('is-dragging','bamboo-levels-r3');
+    if(track.parentElement===viewport)track.remove();
+  }
+  return {select,scrollBy,buttons,stopMotion,destroy};
 }
 
 /**

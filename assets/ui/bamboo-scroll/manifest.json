@@ -1,0 +1,36 @@
+{
+  "package": "boku-bamboo-ui",
+  "version": "menu-r3-loader-r2",
+  "components": {
+    "levelSelect": {
+      "revision": "R3",
+      "entry": "bamboo-scroll.js#createLevelScroll",
+      "style": "bamboo-scroll.css",
+      "primaryTexture": "bamboo-slip.png",
+      "optionalStaticMaster": "bamboo-scroll-open-24.png",
+      "defaults": {"decayMs": 155, "maxSpeedPxPerMs": 2.2, "liftDesktopPx": 10, "liftMobilePx": 8, "liftDurationMs": 215},
+      "cordAnchorFractions": [0.085, 0.912],
+      "methods": ["select", "scrollBy", "stopMotion", "destroy"],
+      "demoLevels": 24,
+      "levelCount": "dynamic"
+    },
+    "loading": {
+      "revision": "R2",
+      "entry": "bamboo-scroll.js#createBambooLoader",
+      "geometry": "bamboo-scroll.js#buildBambooGeometry",
+      "style": "bamboo-scroll.css",
+      "primaryTexture": "bamboo-slip.png",
+      "optionalStaticReference": "bamboo-roll-cross-section.png",
+      "progressRange": [0, 1],
+      "methods": ["setProgress", "draw", "destroy"]
+    }
+  },
+  "textures": [
+    {"file": "bamboo-slip.png", "width": 183, "height": 1436, "alpha": true},
+    {"file": "bamboo-scroll-open-24.png", "width": 4438, "height": 1436, "alpha": true},
+    {"file": "bamboo-roll-cross-section.png", "width": 1122, "height": 1153, "alpha": true}
+  ],
+  "preview": "../../../previews/bamboo-scroll/index.html",
+  "documentation": "README.md",
+  "sourcePrompts": "image-prompts.json"
+}

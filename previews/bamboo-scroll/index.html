@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>墨 — BOKU — · 竹简 UI 素材</title>
-<link rel="stylesheet" href="../../assets/ui/bamboo-scroll/bamboo-scroll.css">
+<link rel="stylesheet" href="../../assets/ui/bamboo-scroll/bamboo-scroll.css?rev=menu-r3">
 <style>
 :root{color-scheme:light;--paper:#f4f0e5;--ink:#343a31;--red:#923d31}
 *{box-sizing:border-box}
@@ -36,11 +36,11 @@ h2{font-size:21px;letter-spacing:.13em;font-weight:500;margin:0}
 <main>
 <header><div><p class="kicker">BOKU / MATERIAL STUDY</p><h1>竹简 · 展卷</h1><p class="note">《墨》选关与读取动画独立素材演示</p></div><div class="seal" aria-hidden="true">墨</div></header>
 <section class="panel" aria-label="选关竹简演示">
-  <div class="sectionhead"><div><span class="number">01 / LEVEL SELECT</span><h2>摊开的竹简</h2></div>
+  <div class="sectionhead"><div><span class="number">01 / LEVEL SELECT · R3</span><h2>摊开的竹简</h2></div>
     <div class="controls"><button id="previous" aria-label="向左滚动">←</button><button id="next" aria-label="向右滚动">→</button></div>
   </div>
   <div class="stage"><div id="level-scroll"></div></div>
-  <div class="selection"><div id="selected" aria-live="polite">已选择：第 01 关</div><p class="note">拖动、触摸横滑、滚轮或方向键 · 24 个示例竹片</p></div>
+  <div class="selection"><div id="selected" aria-live="polite">已选择：第 01 关</div><p class="note">拖动后缓缓停下 · 选中竹片轻轻抬起 · 24 个示例关卡</p></div>
 </section>
 <section class="panel" aria-label="加载动画演示">
   <div class="sectionhead"><div><span class="number">02 / LOADING · R2</span><h2>竹简连续卷开</h2></div><output id="percent" class="percent">0%</output></div>
@@ -52,7 +52,7 @@ h2{font-size:21px;letter-spacing:.13em;font-weight:500;margin:0}
 <div class="assets"><a href="../../assets/ui/bamboo-scroll/bamboo-slip.png">单片竹简 PNG · 183 × 1436</a><a href="../../assets/ui/bamboo-scroll/bamboo-scroll-open-24.png">展开竹简 PNG · 4438 × 1436</a><a href="../../assets/ui/bamboo-scroll/bamboo-roll-cross-section.png">卷竹简端面 PNG · 1122 × 1153</a></div></section>
 </main>
 <script type="module">
-import {createLevelScroll,createBambooLoader} from '../../assets/ui/bamboo-scroll/bamboo-scroll.js?rev=continuous-r2';
+import {createLevelScroll,createBambooLoader} from '../../assets/ui/bamboo-scroll/bamboo-scroll.js?rev=menu-r3';
 const $ = id => document.getElementById(id);
 const chinese = n => n<11?'一二三四五六七八九十'[n-1]:n<20?'十'+'一二三四五六七八九'[n-11]:n===20?'二十':'二十'+'一二三四'[n-21];
 const levels = Array.from({length:24},(_,i)=>({name:'第'+chinese(i+1)+'关',id:i+1}));
