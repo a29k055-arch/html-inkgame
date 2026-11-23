@@ -56,6 +56,15 @@ send(window,'keydown',{code:'ShiftLeft'});
 assert.deepEqual(input.read(),{x:0,y:-1,action:true});
 send(window,'blur');
 assert.deepEqual(input.read(),rest);
+// A composited canvas can lose pointer capture on the first mouse movement
+// while buttons still indicates a held drag. Continue until the real release.
+const mouse={pointerType:'mouse',pointerId:20,button:0,buttons:1,clientX:100,clientY:120};
+send(canvas,'pointerdown',mouse);
+send(canvas,'lostpointercapture',mouse);
+send(window,'pointermove',{...mouse,clientX:170});
+assert.equal(input.read().x,1);
+send(window,'pointerup',{...mouse,buttons:0});
+assert.deepEqual(input.read(),rest);
 playing=false;
 send(canvas,'pointerdown',finger(5,0,0));
 send(canvas,'pointermove',finger(5,100,0));

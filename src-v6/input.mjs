@@ -42,8 +42,10 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
       pinchDistance = centerAndDistance().d;
     }
   });
-  canvas.addEventListener('pointermove', e => {
+  function moveWorld(e) {
     if (!pointers.has(e.pointerId) || !active()) return;
+    // A mouse released outside the window may re-enter without a pointerup.
+    if(e.pointerType==='mouse' && e.buttons===0){releaseWorld(e);return;}
     pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
     if (pinching) {
       if (pointers.size === 2) {
@@ -59,14 +61,26 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
     const scale=Math.max(limit,distance);
     axisX=dx/scale; axisY=dy/scale;
     stick.style.transform='translate(-50%,-50%) translate('+axisX*limit+'px,'+axisY*limit+'px)';
-  });
+  }
+  canvas.addEventListener('pointermove',moveWorld);
   function releaseWorld(e) {
     if (!pointers.delete(e.pointerId)) return;
     if (origin?.id===e.pointerId) hideStick();
     if (pointers.size===0) {pinching=false; pinchDistance=0;}
     else if (pinching && pointers.size===2) pinchDistance=centerAndDistance().d;
   }
-  for (const event of ['pointerup','pointercancel','lostpointercapture']) canvas.addEventListener(event,releaseWorld);
+  for (const event of ['pointerup','pointercancel']) canvas.addEventListener(event,releaseWorld);
+  canvas.addEventListener('lostpointercapture',e=>{
+    // Chromium can revoke native capture while the primary mouse button is
+    // still pressed. The drag continues to belong to its original water point.
+    if(e.pointerType==='mouse' && (e.buttons&1))return;
+    releaseWorld(e);
+  });
+  window.addEventListener('pointermove',e=>{
+    if(e.pointerType==='mouse' && e.target!==canvas)moveWorld(e);
+  });
+  window.addEventListener('pointerup',releaseWorld);
+  window.addEventListener('pointercancel',releaseWorld);
   canvas.addEventListener('wheel',e=>{
     if (!active()) return;
     e.preventDefault();
