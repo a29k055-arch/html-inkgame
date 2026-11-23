@@ -70,12 +70,11 @@ function run(level, seed, policy) {
   const world = createWorld(config);
   assert.ok(world.enemies.length && world.player.mass > 0);
   const p = world.player;
-  const initialMass = p.mass;
   const radius = (policy === 'local' ? 0.27 : 2) * Math.min(world.width, world.height);
   const throttle = policy === 'local' ? 0.7 : 1;
   const corners = [[.78,.22],[.78,.78],[.22,.78],[.22,.22],[.5,.5]];
   let corner = seed % corners.length, first = null, eaten = 0, nextScan = 0, nextEvent = 0;
-  let input = {x:0,y:0,action:false}, target = null, beforeEnemies = world.enemies.length;
+  let input = {x:0,y:0,action:false}, target = null;
   let maxMass = p.mass;
   while (world.status === 'playing' && world.time < timeLimit) {
     if (policy !== 'idle' && world.time >= nextScan) {
@@ -97,14 +96,12 @@ function run(level, seed, policy) {
     // Some engines keep the whole event log, others emit per-tick. Accept either.
     if (events.length < nextEvent) nextEvent = 0;
     for (let i=nextEvent; i<events.length; i++) {
-      if (events[i].type === 'eat') {
+      if (events[i].type === 'eat' && ['spike','hole'].includes(events[i].target)) {
         eaten++;
         first ??= world.time;
       }
     }
     nextEvent = events.length;
-    if (first === null && p.mass > initialMass && world.enemies.length < beforeEnemies) first = world.time;
-    beforeEnemies = world.enemies.length;
     maxMass = Math.max(maxMass,p.mass);
     assert.ok(Number.isFinite(world.time) && Number.isFinite(p.mass) && p.mass >= 0);
   }

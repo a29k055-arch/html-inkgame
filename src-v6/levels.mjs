@@ -3,7 +3,7 @@
 const words = (zh, ja, en) => ({ zh, ja, en });
 
 export const LEVELS = [
-  [words('浅汀','浅瀬','Shallow Shoal'), words('在疏朗的水面，截住第一颗浮墨。','開けた浅瀬で、最初の墨をとらえよう。','Meet a drifting mote in open water.')],
+  [words('浅汀','浅瀬','Shallow Shoal'), words('吞下淡蓝圈的猎物。墨量超过池中最大的对手，第一幅画就会显现。','水色の輪をまとった相手を吸い込もう。池でいちばん大きくなると、最初の絵が現れる。','Absorb creatures with pale blue rings. Grow larger than every rival to reveal the first painting.')],
   [words('荷隙','蓮のすきま','Lotus Passage'), words('喷墨穿隙，或沿荷岸绕行。','墨を吐いて抜けるか、蓮の岸を回ろう。','Shed ink to slip through, or follow the lotus bank.')],
   [words('双刺渡','双棘の渡し','Twin Spines'), words('借一颗刺球，打开另一颗守着的水口。','トゲ玉どうしをぶつけて、水路を開こう。','Nudge two spiked balls together to open the crossing.')],
   [words('分墨湾','墨分かれの入り江','Divided Bay'), words('赶在黑洞之前，选定觅食的岸。','黒い渦より先に、墨を集める岸を選ぼう。','Choose a feeding bank before the whirl reaches it.')],

@@ -26,6 +26,7 @@ const hints={
   dragonTry:line('靠近红圈承受接触，吸近散墨，并按交互键向前吐泡。','赤い輪に触れ、墨の粒を引き寄せながら、技ボタンで前に泡を吐こう。','Brush the red ring, draw ink close, and press Action to blow bubbles.'),
   jet:line('朝右轻推摇杆。按住交互键向后喷墨，让身后的刺球退开。','右を向き、技ボタンを長押し。後ろに墨を放ち、後方のトゲ玉を押そう。','Face right and hold Action to jet ink backward. Push the ball behind you.'),
   store:line('游到荷叶上，再按住交互键，把墨存入叶面。','ハスの葉へ泳ぎ、技ボタンを押して葉に墨をためよう。','Swim onto the lotus leaf and hold Action to deposit ink.'),
+  fullLeaf:line('荷叶已开满三朵花。先吃一朵，腾出位置再存墨。','葉には花が三輪。まず一輪食べてから、墨をためよう。','The leaf holds three blossoms. Eat one to make room for your ink.'),
   bloom:line('继续向叶面喷墨，直到花苞展开。','つぼみが開くまで葉に墨を注ごう。','Keep the jet on the leaf until its bud opens.'),
   flower:line('松开放墨，游近刚开的荷花，把墨量补回来。','技を放し、咲いた花へ泳いで墨を取り戻そう。','Release Action and touch the new blossom to regain ink.'),
   done:line('习成','修了','Lesson complete')
@@ -43,7 +44,7 @@ export function createTutorial(id){
   return {index,step:0,key:sequences[index][0],done:false,cursor:0,entered:null,seen:new Set(),pairStarted:false,contactAt:null,firstEat:false};
 }
 export function tutorialHint(t,lang='zh'){
-  const s=hints[t.done?'done':t.key];
+  const s=hints[t.done?'done':t.key==='store'&&t.fullLeaf?'fullLeaf':t.key];
   return s[lang]||s.zh;
 }
 
@@ -214,6 +215,7 @@ export function updateTutorial(t,w,newEvents){
   }else if(k==='jet'){
     if(eventIs(events,'push',e=>e.source==='spray'))proceed(t,w);
   }else if(t.index===3){
+    t.fullLeaf=Boolean(w.leaves[0]?.flowers.length===3);
     if(eventIs(events,'flower')&&(k!=='store'||eventIs(events,'store')))t.firstEat=true;
     if(k==='store'&&eventIs(events,'store'))proceed(t,w);
     if(t.key==='bloom'&&(eventIs(events,'bloom')||w.leaves.some(l=>l.flowers.length)||t.firstEat))proceed(t,w);
@@ -233,6 +235,7 @@ export function tutorialFocus(t,w){
   if(k==='shrimpTry')return e('shrimp-food');
   if(k==='turtleTry'||k==='dragonTry')return e('guard-target');
   if(k==='jet')return e('push-behind');
+  if(k==='store'&&t.fullLeaf)return w.leaves[0]?.flowers[0];
   if(k==='store'||k==='bloom')return w.leaves[0];
   if(k==='flower')return w.leaves[0]?.flowers[0]||w.leaves[0];
   return null;

@@ -10,6 +10,7 @@ const translations = {
   primer:['习墨','墨の手ほどき','Primer'],paintings:['画卷','画巻','Paintings'],
   settings:['设置','設定','Settings'],sound:['水声与墨声','水と墨の音','Pond sounds'],
   controls:['操作','操作','Controls'],language:['语言','言語','Language'],close:['关闭','閉じる','Close'],
+  goal:['淡蓝实圈可以吞食。让自己的墨量超过上方「最大敌人」的标记，即可揭画。','水色の実線は吸収できる相手の印。自分の墨量が上の「最大の敵」の印を超えると、絵が現れる。','Creatures with solid blue rings are edible. Pass the largest rival’s mark on the mass bar to reveal the painting.'],
   previous:['向前翻阅','前へ送る','Scroll back'],next:['向后翻阅','次へ送る','Scroll forward'],
   beginStudy:['进入习墨','手ほどきを始める','Begin lesson'],beginPond:['进入池塘','池に入る','Enter pond'],
   direct:['直接玩《浅汀》','「浅瀬」から遊ぶ','Skip to Shallow Shoal'],locked:['尚未开启','未開放','Locked'],
