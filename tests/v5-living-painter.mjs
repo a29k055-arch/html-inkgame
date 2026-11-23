@@ -33,12 +33,36 @@ console.log('PASS actual R4 pose animation, torso-centered world spine, physical
 
 // A visible NPC reuses pre-baked real-rig frames; it must never request a live
 // mesh raster during ordinary rendering. Body geometry follows that same frame.
-const asset=assets.fish,canvas={width:100,height:40};asset.calibration={...asset.calibration,bodySamples:[{s:.4,t:0,w:1,r:2}],bodySections:[{s:.4,t:0,r:2}],sourceArea:100};
+const asset=assets.fish,canvas={width:160,height:60};asset.calibration={...asset.calibration,bodySamples:[{s:.4,t:0,w:1,r:2}],bodySections:[{s:.4,t:0,r:2}],sourceArea:100};
 asset.npcAtlas={bounds:{x:-60,y:-10,w:80,h:20},frames:[{canvas,body:[{x:-20,y:0,w:1,r:2}],sections:[{x:-20,y:0,r:3}]}],seconds:3,bytes:16000};
 const npc={id:'cached-fish',species:'fish',appearance:'living',x:300,y:200,r:10,controller:{type:'ai'},vx:40,vy:0},cached=new LivingPainter({assets});await cached.prepare([npc]);cached.update(1/15,{entities:[npc],speed:()=>80},{x:0,y:0,scale:1},{width:1200,height:900});
 assert(cached.records.get(npc).creature.profile.amplitude<asset.template.profile.amplitude*.7,'NPC body sway is reduced, independently of player animation');
 assert(cached.records.get(npc).creature.profile.maxAngularVelocity<asset.template.profile.maxAngularVelocity,'NPC presentation turns are calmer');
 cached.raster=()=>{throw Error('ordinary NPC must not rasterize a live GPU rig');};let drawn=0;const context={save(){},restore(){},translate(){},rotate(){},scale(){},drawImage(image){assert.equal(image,canvas);drawn++;}};cached.draw(context,npc);cached.draw(context,npc);assert.equal(drawn,2);assert.equal(cached.metrics.liveRasters,0);assert.equal(cached.metrics.sharedFrames,2);
+// Probe the actual CPU compositor without a browser or GPU in the test process.
+{
+ const creature=cached.records.get(npc).creature,template=asset.template;
+ const meshContext={setTransform(){},clearRect(){}};
+ const surface={width:4,height:4,getContext(){return meshContext;}};
+ const target={canvas:{width:4,height:4},getTransform(){return {};},save(){},restore(){},setTransform(){},drawImage(){}};
+ for(const [instance,expected] of [[creature,'source-over'],[template,'copy']]){
+  const mesh=instance.mesh;
+  instance.mesh={triangles:[]};instance.meshSurface=surface;
+  instance.drawCanvasMesh(target,[]);
+  assert.equal(meshContext.globalCompositeOperation,expected);
+  instance.mesh=mesh;instance.meshSurface=null;
+ }
+}
+const oldDpr=Object.getOwnPropertyDescriptor(globalThis,'devicePixelRatio');
+Object.defineProperty(globalThis,'devicePixelRatio',{value:2,configurable:true});
+const detail=cached.records.get(npc);
+assert(cached.atlasFrame(detail,npc),'small entire sprite fits on the shared texture');
+cached.camera={scale:1.5};
+assert.equal(cached.atlasFrame(detail,npc),null,'a magnified opening fish uses its original rig at device resolution');
+cached.camera={scale:1};
+asset.npcAtlas.bounds.h=80;assert.equal(cached.atlasFrame(detail,npc),null,'height also limits the cached texture');
+asset.npcAtlas.bounds.h=20;
+if(oldDpr)Object.defineProperty(globalThis,'devicePixelRatio',oldDpr);else delete globalThis.devicePixelRatio;
 const body=npc.livingBody;assert.equal(body.species,'fish');assert.equal(body.coreRadius,10);assert.equal(body.samples.length,1);assert.equal(body.samples[0].w,1);assert(body.samples[0].r>0&&body.sections[0].r>0);assert(body.area>0&&body.bound>10);assert(Number.isFinite(body.samples[0].x)&&Number.isFinite(body.samples[0].y));
 const revision=body.revision;cached.update(1/60,{entities:[npc],speed:()=>80},{x:0,y:0,scale:1},{width:1200,height:900});assert.equal(npc.livingBody.revision,revision,'unchanged frame/angle/size reuses collision geometry');npc.r=20;cached.update(1/60,{entities:[npc],speed:()=>80},{x:0,y:0,scale:1},{width:1200,height:900});assert.equal(npc.livingBody.coreRadius,20);assert(Math.abs(npc.livingBody.area/body.area-4)<1e-10);assert(Math.abs(npc.livingBody.samples[0].x/body.samples[0].x-2)<1e-10);assert(npc.livingBody.revision>revision);cached.dispose();
 console.log('PASS shared NPC frames without live GPU raster, calmer NPC profiles, and cached weighted body/section geometry at current physical scale');

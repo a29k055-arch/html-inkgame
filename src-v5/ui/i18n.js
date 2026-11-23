@@ -2,12 +2,16 @@ import {getSave,updateSettings} from '../data/save.js';
 
 // Every current-game message lives here. Legacy routes keep their original UI.
 const rows={
-livingDragonPicked:["墨龍の姿・5秒追加","墨龙形态 · 增加5秒","Ink dragon form · +5s"],
+livingDragonPicked:["墨龍 · 20秒間 吸引・加速・巨大化","墨龙 · 磁吸、加速、变大 20 秒","Ink dragon · attraction, speed and size for 20s"],
 livingShrimp:["墨海老","墨虾","Ink shrimp"],livingFish:["墨鯉","墨鲤","Ink fish"],livingTurtle:["墨亀","墨龟","Ink turtle"],livingDragon:["墨龍","墨龙","Ink dragon"],
 livingFormChanged:["{name}に変化","化为{name}","Become {name}"],livingDragonArrives:["墨龍が水面へ — 大きさを見て近づこう","墨龙游入 · 看清体型再靠近","An ink dragon arrives · judge its size"],livingDragonLeaves:["墨龍は飲み込まれました・30秒後に再び現れます","墨龙已被吞噬 · 30秒后再现","The dragon was swallowed · returns in 30s"],
 
-livingPreyReady:["近くの生物：飲み込めます · {ink}墨","近处目标：可吞 · {ink}墨","Nearby: edible · {ink} ink"],
-livingPreyNeeds:["近くの生物：{ink}墨が必要","近处目标：需{ink}墨","Nearby: needs {ink} ink"],
+livingPreyReady:["{name} · 胴を覆えば飲み込める","{name} · 覆盖躯干可吞","{name} · Cover body to eat"],
+livingPreyAlign:["{name} · 墨は十分、胴を合わせよう","{name} · 墨够，试着对齐躯干","{name} · Enough ink, align bodies"],
+livingPreyGrow:["{name} · 先に成長を","{name} · 墨够，建议先长大","{name} · Grow larger first"],
+livingPreyOverlap:["{name} · 被覆 {coverage}% / {goal}%","{name} · 已覆盖 {coverage}% / {goal}%","{name} · Covered {coverage}% / {goal}%"],
+livingPreyGrowOverlap:["先に成長を · {coverage}% / {goal}%","建议先长大 · {coverage}% / {goal}%","Grow larger · {coverage}% / {goal}%"],
+livingPreyNeeds:["{name} · あと{ink}墨","{name} · 还需{ink}墨","{name} · Need {ink} more ink"],
 revealChargeHint:["加速中・墨を蓄えています","正在加速 · 蓄墨中","Accelerating · gathering ink"],
 revealChargeHintReady:["蓄墨完了・放して滲ませる","蓄墨就绪 · 松开释放","Ink ready · release to bloom"],
 revealChargeUsing:["疾走・蓄墨中","疾行·蓄墨中","Charging ink"],
@@ -72,7 +76,7 @@ revealTeachConsumeText:["自分より小さい生き物や墨粒を飲み込ん�
 revealTeachItems:["道具","道具","Items"],
 revealTeachItemsText:["海老・魚・亀を飲み込むと、その姿と能力を5秒獲得します。海老は泡の中で墨粒と小さい生物を吸引、魚は加速、亀は一時的に成長。最新の有効な姿を表示し、同種は最大{cap}秒まで延長。蓮も残ります。","吞下任意虾、鱼、乌龟，获得对应形态和能力，每次5秒：虾化为泡泡并吸引墨点和较小生物；鱼加速；乌龟临时变大。外形跟随最近仍有效的增益，同类最长{cap}秒。地图不再放置独立动物道具，荷叶与荷花保留。","Swallow any shrimp, fish or turtle for 5 seconds of its form and power: shrimp uses a bubble and attraction, fish adds speed, turtle temporarily grows. Your newest active form is shown; matching effects extend up to {cap}s. Lotus leaves and blossoms remain; separate animal pickups are removed."],
 revealTeachDanger:["敵と情景道具","敌人与场景道具","Enemies & Props"],
-revealTeachDangerText:["生物は画紙の外から泳ぎ入り、墨の段階が進むほど大きめの個体が増えます。自分の現在の墨が相手より多く、本体の約80%を覆えば飲み込めます。近くの目安は細い上部バーに表示。墨龍は一匹だけ、飲み込まれてから約30秒で再び現れます。蓮の下は安全です。","生物从画纸外游入，阶段越高，大个体越常见。当前墨量高于目标，且覆盖约80%本体即可吞噬；上方细条显示近处目标的墨量资格。墨龙最多一条，被吞后约30秒再现。荷叶下仍可庇护。","Creatures swim in from outside the painting, with larger births becoming more common at later stages. Have more current ink than the target and cover about 80% of its body to swallow it. The thin top strip shows nearby ink eligibility. One dragon at most returns around 30s after being swallowed. Lotus shelter remains."],
+revealTeachDangerText:["生物は画紙の外から泳ぎ入り、墨の段階が進むほど大きめの個体が増えます。自分の現在の墨が相手より多く、本体の約80%を覆えば飲み込めます。鍵は墨不足、上矢印は成長の目安です。チェックは覆える大きさ、丸は胴を合わせて確かめる印です。墨龍は一匹だけ、飲み込まれてから約30秒で再び現れます。蓮の下は安全です。","生物从画纸外游入，阶段越高，大个体越常见。当前墨量高于目标，且覆盖约80%本体即可吞噬；动物旁的锁表示墨量不足，上箭头提示先长大，勾表示当前体形可以覆盖，空心圆表示墨量够、需对齐躯干。墨龙最多一条，被吞后约30秒再现。荷叶下仍可庇护。","Creatures swim in from outside the painting, with larger births becoming more common at later stages. Have more current ink than the target and cover about 80% of its body to swallow it. A lock means you need more ink, an arrow suggests growing larger, a check means the body fits, and a circle means to align the bodies. One dragon at most returns around 30s after being swallowed. Lotus shelter remains."],
 revealTeachFinish:["画巻を完成する","完成画卷","Complete the Painting"],
 revealTeachFinishText:["絵の描き込み、または墨のある範囲が十分に現れると、その一巻は完成します。","画面的整体进度、或已显现的墨色区域达到要求，就能完成整幅画。","The scroll is finished once enough of the painting - or of its inked area - has come through."],
 backGallery:["作品一覧","作品列表","Painting List"],

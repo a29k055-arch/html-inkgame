@@ -10,7 +10,7 @@ const fixture=(event=()=>{},more={})=>new RevealRun(event,{foodTarget:0,foodSpaw
  const g=fixture(),npc=g.arena.entities.slice(1);assert.equal(g.config.version,'V5');assert.equal(npc.length,10);
  assert(npc.every(e=>['shrimp','fish','turtle'].includes(e.species)&&e.appearance==='living'));
  assert(npc.every(e=>!e.rewardGlow&&e.rewardKind));assert(npc.every(e=>!LIVING_SLOTS[e.birthSlot].big));
- for(const e of npc){const slot=LIVING_SLOTS[e.birthSlot];assert(e.r>=3&&e.r<=livingRadiusLimit(e,g.journey.stage));assert(e.r<=livingRadiusLimit(e));}
+ for(const e of npc){const slot=LIVING_SLOTS[e.birthSlot];if(e.birthSlot===0)assert.equal(e.r,2.2);else assert(e.r>=3);assert(e.r<=livingRadiusLimit(e,g.journey.stage));assert(e.r<=livingRadiusLimit(e));}
  assert.equal(npc.filter(e=>e.competitor).length,1);for(const kind of ['magnet','speed','shield'])assert.equal(g.spawnPickup(kind),false);
  g.habitat.update(200);assert(g.arena.items.every(e=>e.kind==='leaf'||e.kind==='flower'));
  const n=npc[0],slot=LIVING_SLOTS[n.birthSlot],tier=n.ecologyTier;n.r=320;n.mass=320**2;g.arena.respawn(n);assert.equal(n.species,slot.species);assert.equal(n.ecologyTier,tier);assert(n.r>=3&&n.r<=4.5);assert.equal(n.rewardGlow,false);
@@ -51,7 +51,7 @@ function victim(p,{reward=false,id='food-fish'}={}){return Object.assign(entity(
  g.elapsed=59;g.living.tick(0);assert(!g.living.dragon);g.elapsed=60;g.living.tick(0);const d=g.living.dragon;
  assert(d&&d.species==='dragon'&&!d.rewardGlow);assert.equal(d.expiresAt,undefined);assert.equal(g.arena.entities.filter(e=>e.eventDragon).length,1);assert(Math.hypot(d.x-g.player.x,d.y-g.player.y)>d.r+g.player.r+320);assert.equal(g.living.nextDragon,Infinity);assert.equal(g.metrics.living.dragonArrivals,1);assert.equal(g.living.spawnDragon(),d,'direct repeated spawn is idempotent');assert.equal(g.arena.entities.filter(e=>e.eventDragon).length,1);
  g.elapsed=180;g.living.tick(0);assert.equal(g.living.dragon,d,'living dragon never times out');assert.equal(g.arena.entities.filter(e=>e.eventDragon).length,1);assert(!g.player.form);
- const p=g.player;p.ink=20000;syncReserve(p,0,true);d.invincible=0;d.entering=false;p.invincible=0;d.x=p.x;d.y=p.y;g.arena.update(0,{x:0,y:0});g.living.afterArena();assert.equal(p.form.species,'dragon');assert.equal(p.effects.dragon,5);assert(!g.living.dragon);assert(!g.arena.entities.includes(d));assert.equal(g.living.nextDragon,210);
+ const p=g.player;p.ink=20000;syncReserve(p,0,true);d.invincible=0;d.entering=false;p.invincible=0;d.x=p.x;d.y=p.y;g.arena.update(0,{x:0,y:0});g.living.afterArena();assert.equal(p.form.species,'dragon');assert.equal(p.effects.dragon,20);for(const effect of ['magnet','rush','giant'])assert.equal(p.effects[effect],20);assert(p.turtleInk>0);syncReserve(p,0,true);assert(p.r>g.config.growthStages.maxRadius);assert(!g.living.dragon);assert(!g.arena.entities.includes(d));assert.equal(g.living.nextDragon,210);
  g.elapsed=209;g.living.tick(0);assert(!g.living.dragon);g.elapsed=210;g.living.tick(0);assert(g.living.dragon);assert.equal(g.arena.entities.filter(e=>e.eventDragon).length,1);assert.equal(g.metrics.living.dragonArrivals,2);
 }
 
@@ -71,5 +71,48 @@ function victim(p,{reward=false,id='food-fish'}={}){return Object.assign(entity(
  const g=new RevealRun(()=>{},{aiCount:0,foodTarget:0,foodSpawnRate:0,columns:32,living:{dragonEnabled:false}});
  assert(g.arena.items.some(e=>e.kind==='leaf'));assert(g.arena.items.some(e=>e.kind==='flower'));assert(g.arena.items.every(e=>e.kind==='leaf'||e.kind==='flower'));
  g.complete();assert.equal(g.applyLivingReward('magnet'),false,'completion freezes new pickup interactions');
+}
+// Resolve an animal's exact artwork even when the simulation consumes it before a paint.
+{
+ const g=fixture(()=>{},{aiCount:0}),a=g.arena,p=g.player;
+ p.ink=5000;syncReserve(p,0,true);p.invincible=0;
+ for(const [i,id] of ['shrimp_07','shrimp_04','shrimp_05'].entries()){
+  const n=Object.assign(entity('shrimp-'+i,p.x,p.y,3,aiController(i)),{species:'shrimp',skinIndex:i,appearance:'living',invincible:0});
+  a.entities=[p,n];a.update(0,{x:0,y:0});assert(n.dead>0);assert.equal(p.form.rigId,id);
+ }
+ const n=Object.assign(entity('explicit-skin',p.x,p.y,4,aiController(1)),{species:'fish',rigId:'fish_04_special',skinIndex:0,appearance:'living',invincible:0});
+ a.entities=[p,n];a.update(0,{x:0,y:0});assert.equal(p.form.rigId,'fish_04_special');
+}
+{
+ const g=fixture(()=>{},{aiCount:0}),p=g.player;
+ p.ink=6000;syncReserve(p,0,true);
+ const run=seconds=>{for(let i=0;i<Math.round(seconds*10);i++)g.update(.1)};
+ g.applyLivingReward('dragon',3,{rigId:'dragon_04'});
+ run(2);
+ g.applyLivingReward('magnet',1,{rigId:'shrimp_05'});
+ assert.equal(p.form.rigId,'shrimp_05');assert.equal(p.form.remaining,5);
+ assert(Math.abs(p.effects.magnet-p.effects.dragon)<1e-8,'ordinary pickup does not extend all dragon powers');
+ run(5.1);assert.equal(p.form.rigId,'dragon_04','a temporary intervening form yields back to the live dragon');
+ assert(p.effects.magnet>0&&p.effects.rush>0&&p.effects.giant>0);
+ run(11.8);
+ g.applyLivingReward('speed',1,{rigId:'fish_01'});
+ run(1.2);
+ assert(!p.effects.dragon&&!p.effects.giant&&!p.effects.magnet);
+ assert(p.effects.rush>3.7&&p.effects.rush<3.9&&p.form.rigId==='fish_01');
+ assert.equal(p.turtleInk,0);run(3.9);assert(!p.form&&!p.effects.rush);
+ g.applyLivingReward('dragon',3,{rigId:'dragon_04'});run(7);g.applyLivingReward('dragon',3,{rigId:'dragon_04'});
+ for(const effect of ['dragon','magnet','giant','rush'])assert.equal(p.effects[effect],20,'repeat dragon refreshes to 20 s');
+ run(20.1);assert(!p.form&&!p.effects.magnet&&!p.effects.rush&&!p.effects.giant&&!p.turtleInk);
+}
+{
+ const g=fixture(()=>{},{aiCount:0}),p=g.player;p.ink=6000;syncReserve(p,0,true);
+ g.applyLivingReward('dragon',3,{rigId:'dragon_04'});const temporary=p.turtleInk;
+ p.invincible=0;assert(g.arena.kill(p,null));assert(!p.dead);
+ const retained=6000*g.config.softDown.retain;
+ assert(Math.abs(p.ink-p.turtleInk-retained)<1e-7);
+ assert(Math.abs(p.turtleInk-temporary*g.config.softDown.retain)<1e-7);
+ assert.equal(p.effects.giant,20);assert.equal(p.form.rigId,'dragon_04');
+ for(let i=0;i<201;i++)g.update(.1);
+ assert(!p.turtleInk&&!p.form);assert(Math.abs(p.ink-retained)<1e-7);
 }
 console.log('PASS V5 bounded pond species, 10 opening NPCs, unique stage-two giants, all-creature powers, 5s forms, turtle accounting, persistent dragon and 30s respawn, isolated V4');

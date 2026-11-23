@@ -4,8 +4,8 @@ import {prefetchV5Resources,creatureResourceURL,resourceBytes} from '../src-v5/r
 import {V5_CREATURE_RESOURCES} from '../src-v5/reveal/resource-manifest.js';
 import {LoadingScroll,formatResourceProgress,titleRevealTarget} from '../src-v5/ui/loading-scroll.js';
 
-assert.equal(V5_CREATURE_RESOURCES.length,124);
-assert.equal(resourceBytes,25284917);
+assert.equal(V5_CREATURE_RESOURCES.length,128);
+assert.equal(resourceBytes,25332337);
 for(const file of V5_CREATURE_RESOURCES)assert.equal(fs.statSync(new URL('../'+file.path,import.meta.url)).size,file.bytes,file.path+' manifest matches runtime file');
 assert(V5_CREATURE_RESOURCES.every(file=>!file.path.includes('masters/')&&!file.path.includes('evidence/')));
 const url=new URL(creatureResourceURL(V5_CREATURE_RESOURCES[0],'https://example.test/game/src-v5/reveal/resource-loader.js'));
@@ -72,4 +72,4 @@ for(const timeout of [false,true]){
   await finished;assert(root.hidden);assert.equal(loader.scroll.dataset.state,'home');assert.equal(window.loadingMetrics.progress,1);
  }finally{for(const [key,value]of Object.entries(previous)){if(value===undefined)delete globalThis[key];else globalThis[key]=value;}}
 }
-console.log('PASS accurate 124-file/25.28MB manifest, byte/cache progress, strict preparation, fetch/body deadlines with bounded reload retries, and optional-title failure/timeout menu release');
+console.log('PASS accurate 128-file/25.33MB manifest, byte/cache progress, strict preparation, fetch/body deadlines with bounded reload retries, and optional-title failure/timeout menu release');

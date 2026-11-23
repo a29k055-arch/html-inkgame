@@ -24,6 +24,58 @@ export function livingCoverage(predator,prey){
 }
 export const coversLivingBody=(predator,prey)=>livingCoverage(predator,prey)+1e-8>=LIVING_SWALLOW_COVERAGE;
 
+// HUD query in prey-local coordinates. A true result means a translation of the
+// current circular body can cover the required sample weight in the current pose.
+// Articulated predators have no single circle, so report unknown until contact.
+export function circularSwallowFit(predator,prey){
+ const kind=speciesOf(predator),body=shape(predator),target=shape(prey);
+ if(kind&&(kind!=='shrimp'||body?.sections?.length!==1))return null;
+ if(speciesOf(prey)&&!target)return null;
+ let radius=coreRadius(predator);
+ if(body){
+  const bubble=body.sections[0];
+  if(bubble.x!==0||bubble.y!==0)return null;
+  radius=Math.min(livingBodyBound(predator),bubble.r*radius/body.coreRadius);
+ }
+ radius/=target?coreRadius(prey)/target.coreRadius:coreRadius(prey);
+ if(!(radius>0))return false;
+ const points=target?.samples||disk,r2=radius*radius;
+ let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,total=0;
+ for(const p of points){
+  minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);
+  minY=Math.min(minY,p.y);maxY=Math.max(maxY,p.y);total+=p.w??1;
+ }
+ if(total<=0)return false;
+ if((maxX-minX)**2+(maxY-minY)**2<=4*r2)return true;
+ const need=total*(LIVING_SWALLOW_COVERAGE-1e-8),cx=(minX+maxX)/2,cy=(minY+maxY)/2;
+ let centered=0;
+ for(const p of points)if((p.x-cx)**2+(p.y-cy)**2<=r2)centered+=p.w??1;
+ if(centered>=need)return true;
+ // A circle attaining the maximum can be translated until one covered point is
+ // on its rim. Sweep possible centre angles around each such point. Closed arcs
+ // include their endpoints, so starts sort before ends at the same angle.
+ const tau=2*Math.PI;
+ for(const anchor of points){
+  let possible=0;
+  for(const p of points)if((p.x-anchor.x)**2+(p.y-anchor.y)**2<=4*r2)possible+=p.w??1;
+  if(possible<need)continue;
+  const events=[];let weight=0;
+  for(const p of points){
+   const dx=p.x-anchor.x,dy=p.y-anchor.y,d2=dx*dx+dy*dy,w=p.w??1;
+   if(d2===0){weight+=w;continue;}
+   if(d2>4*r2)continue;
+   const angle=Math.atan2(dy,dx),half=Math.acos(Math.min(1,Math.sqrt(d2)/(2*radius)));
+   const start=(angle-half+tau)%tau,end=(angle+half+tau)%tau;
+   if(start>end)weight+=w;
+   events.push([start,w],[end,-w]);
+  }
+  if(weight>=need)return true;
+  events.sort((a,b)=>a[0]-b[0]||b[1]-a[1]);
+  for(const [,delta] of events){weight+=delta;if(weight>=need)return true;}
+ }
+ return false;
+}
+
 // A quiet warning follows the same coarse torso sections as contact, excluding
 // fins, feelers and empty space inside a curved dragon. This never changes ink.
 export function traceLivingBody(c,e){

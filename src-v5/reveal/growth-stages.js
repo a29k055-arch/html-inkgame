@@ -1,16 +1,16 @@
 import {reserveRadius} from '../game/ink-reserve.js';
 // One continuous world, four permanent-ink stages. Large rewards queue camera legs;
 // temporary turtle ink never advances the journey. Stage 1–3 stay inside the frame.
-const thresholds=Object.freeze([846,4200,9000]);
+const thresholds=Object.freeze([380,3200,7700]);
 export const GROWTH_STAGES_CONFIG=Object.freeze({
- startInk:17,initialRadius:12,sizeMassPerInk:1,expansionInk:thresholds[0],thresholds,
+ startInk:28,initialRadius:12,sizeMassPerInk:1,expansionInk:thresholds[0],thresholds,
  // Body radius as a fraction of the viewport short side at stage entry.
  stageScreenRadius:Object.freeze([.050,.058,.075,.098]),
  // How far the camera may slide past the world edge, as a fraction of the viewport.
  // Only stage four may look past the map. Earlier stages clamp hard so the border never shows.
  borderOverscanByStage:Object.freeze([0,0,0,.03]),
- // V4 only: the radius ceiling that lets stage four keep growing instead of freezing.
- maxRadius:280,sizeLinear:.0175,stageTransitionSeconds:2.8,finalViewExpansion:1.02,
+ // Stage four begins below the permanent size cap. Temporary giant effects still apply.
+ maxRadius:100,sizeLinear:.0094,stageTransitionSeconds:2.8,finalViewExpansion:1.02,
  framePadding:.08,transitionEase:1.65,normalEase:2.2
 });
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));

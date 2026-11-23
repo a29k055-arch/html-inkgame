@@ -4,5 +4,22 @@ export const ITEM_TIERS=Object.freeze({duration:5,maxDuration:30,sizes:Object.fr
 const effects={shield:'giant',speed:'rush',magnet:'magnet'};
 const tierIndex=value=>Math.max(0,Math.min(2,(Number(value)||1)-1));
 export function assignItemTier(item,stage){if(!effects[item.kind])return item;item.tier=Math.min(3,Math.max(1,stage));const factor=ITEM_TIERS.sizes[item.tier-1];item.r*=factor;if(item.renderSize)item.renderSize*=factor;return item;}
-export function collectTieredItem(player,item){const effect=effects[item.kind];if(!effect)return false;const active=!!player.effects[effect],index=tierIndex(item.tier);player.pondBuffs??={};const tier=Math.max(index+1,active?(player.pondBuffs[effect]?.tier||1):1);player.pondBuffs[effect]={tier,strength:ITEM_TIERS[effect][tier-1]};player.effects[effect]=Math.min(ITEM_TIERS.maxDuration,Math.max(0,player.effects[effect]||0)+ITEM_TIERS.duration);if(effect==='giant')player.temporarySizeScale=player.pondBuffs.giant.strength;return true;}
+// The world ticks all entries in player.effects once per simulation step.
+export const formClock=effect=>effect==='dragon'?effect:'pickup-'+effect;
+export function collectTieredItem(player,item,{duration=ITEM_TIERS.duration,refresh=false}={}){
+ const effect=effects[item.kind];if(!effect)return false;
+ const timers=player.effects,clock=formClock(effect),index=tierIndex(item.tier);
+ player.pondBuffs??={};
+ const tier=Math.max(index+1,timers[effect]?(player.pondBuffs[effect]?.tier||1):1);
+ player.pondBuffs[effect]={tier,strength:ITEM_TIERS[effect][tier-1]};
+ if(refresh){
+  timers[effect]=Math.max(timers[clock]||0,duration);
+ }else{
+  const ordinary=timers[clock]??(timers.dragon?0:timers[effect]||0);
+  timers[clock]=Math.min(ITEM_TIERS.maxDuration,ordinary+duration);
+  timers[effect]=Math.max(timers[clock],timers.dragon||0);
+ }
+ if(effect==='giant')player.temporarySizeScale=player.pondBuffs.giant.strength;
+ return true;
+}
 export function expireItemTiers(player){for(const effect of Object.keys(player.pondBuffs||{}))if(!player.effects[effect])delete player.pondBuffs[effect];}

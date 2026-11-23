@@ -1,3 +1,5 @@
+import {livingCoverage,livingBodyBound,LIVING_SWALLOW_COVERAGE,circularSwallowFit} from '../game/living-contact.js';
+import {livingInk,hasInkAdvantage} from '../game/living-resource.js';
 import {smoothRelativeSpeed,RELATIVE_INK_MOTION} from './hero-relative-motion.js';
 import {HeroWorldTrail} from './hero-trail.js';
 import {HERO_BODY_CONFIG} from './hero-visual-config.js';
@@ -46,6 +48,74 @@ export class GameRenderer {
  // The ink layer is a separate fixed canvas; clipping it keeps stray ink inside the map.
  beginWorldClip(){const c=this.ctx,cam=this.camera;c.save();c.beginPath();c.rect(-cam.x*cam.scale,-cam.y*cam.scale,this.world.width*cam.scale,this.world.height*cam.scale);c.clip();}
  endWorldClip(){this.ctx.restore();}
+ nearbyPreyLabels(arena){
+  const p=arena.player,cam=this.camera,labels=[];
+  if(p.dead||p.effects?.water)return labels;
+  const reach=Math.max(170,Math.min(this.viewW,this.viewH)*.56),playerBound=livingBodyBound(p);
+  const goal=Math.round(100*LIVING_SWALLOW_COVERAGE);
+  for(const e of arena.entities){
+   if(e===p||!e.species||e.dead||e.entering||e.invincible>0||e.effects?.water)continue;
+   const x=(e.x-cam.x)*cam.scale,y=(e.y-cam.y)*cam.scale;
+   const distance=Math.hypot(e.x-p.x,e.y-p.y)*cam.scale;
+   if(x<6||x>this.viewW-6||y<6||y>this.viewH-6||distance>reach)continue;
+   const inkReady=hasInkAdvantage(p,e),ink=Math.max(1,Math.floor(livingInk(e)-livingInk(p)+1e-7)+1);
+   const name=t('living'+e.species[0].toUpperCase()+e.species.slice(1));
+   const close=distance<=(playerBound+livingBodyBound(e))*cam.scale;
+   const ratio=inkReady&&close?livingCoverage(p,e):null;
+   const coverage=ratio===null?null:Math.floor(100*ratio+1e-7);
+   let state='locked',key='livingPreyNeeds';
+   if(inkReady){
+    const fit=ratio!==null&&ratio+1e-8>=LIVING_SWALLOW_COVERAGE?true:circularSwallowFit(p,e);
+    state=fit===true?'ready':fit===false?'grow':'align';
+    if(state==='grow')key=close?'livingPreyGrowOverlap':'livingPreyGrow';
+    else if(close)key='livingPreyOverlap';
+    else key=state==='ready'?'livingPreyReady':'livingPreyAlign';
+   }
+   labels.push({target:e,distance,eligible:state==='ready',state,coverage,text:t(key,{name,ink,coverage,goal})});
+  }
+  return labels.sort((a,b)=>a.distance-b.distance);
+ }
+ drawPreyLabels(player){
+  if(player.dead||!this.preyLabels?.length)return;
+  const c=this.ctx,cam=this.camera,shown=new Set(),boxes=[];
+  c.save();c.font='600 12px sans-serif';c.textBaseline='middle';c.lineJoin='round';c.lineCap='round';
+  for(const label of this.preyLabels){
+   const e=label.target;
+   if(e.dead||e.entering||e.invincible>0||e.effects?.water)continue;
+   const sourceX=(e.x-cam.x)*cam.scale,sourceY=(e.y-cam.y)*cam.scale;
+   if(sourceX<0||sourceX>this.viewW||sourceY<0||sourceY>this.viewH)continue;
+   const body=e.livingBody,core=coreRadius(e);
+   let top=-core,bottom=core;
+   if(body?.species===e.species&&body.coreRadius>0&&body.sections?.length){
+    const ratio=core/body.coreRadius;
+    for(const section of body.sections){
+     top=Math.min(top,(section.y-section.r)*ratio);
+     bottom=Math.max(bottom,(section.y+section.r)*ratio);
+    }
+   }
+   const safeTop=this.preyLabelSafeTop??(this.mobile?80:58);
+   const above=sourceY+top*cam.scale-14,below=sourceY+bottom*cam.scale+14;
+   const y=above-9>=safeTop?above:below;
+   if(y-9<safeTop||y+9>this.viewH)continue;
+   let full=!shown.has(label.state);
+   let width=full?26+c.measureText(label.text).width:18;
+   let left=clamp(sourceX-width/2,2,this.viewW-width-2);
+   if(full&&boxes.some(b=>left<b.right+3&&left+width>b.left-3&&Math.abs(y-b.y)<19)){
+    full=false;width=18;left=clamp(sourceX-width/2,2,this.viewW-width-2);
+   }
+   if(full){shown.add(label.state);boxes.push({left,right:left+width,y});}
+   c.fillStyle='rgba(250,247,236,.94)';c.strokeStyle=label.eligible?'#315d52':label.state==='align'?'#615e4e':'#844b37';c.lineWidth=1;
+   c.beginPath();c.roundRect(left,y-8.5,width,17,6);c.fill();c.stroke();
+   const x=left+9;c.lineWidth=1.65;c.beginPath();
+   if(label.eligible){c.moveTo(x-3.5,y);c.lineTo(x-1,y+2.5);c.lineTo(x+4,y-3);}
+   else if(label.state==='align'){c.arc(x,y,3.2,0,Math.PI*2);}
+   else if(label.state==='grow'){c.moveTo(x,y+3.5);c.lineTo(x,y-3.5);c.lineTo(x-3,y-.5);c.moveTo(x,y-3.5);c.lineTo(x+3,y-.5);}
+   else{c.arc(x,y-1.3,2.5,Math.PI,Math.PI*2);c.moveTo(x+3.4,y-.7);c.rect(x-3.4,y-.7,6.8,4.8);}
+   c.stroke();
+   if(full){c.fillStyle=c.strokeStyle;c.textAlign='left';c.fillText(label.text,left+18,y+.5);}
+  }
+  c.restore();
+ }
  drawWorldFrame(){const c=this.ctx,cam=this.camera;c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);c.strokeStyle='#887d64aa';c.lineWidth=2/cam.scale;c.strokeRect(0,0,this.world.width,this.world.height);c.restore();}
  drawCollisionOutline(player){if(!this.collisionOutline?.enabled||player.dead||player.form)return;const c=this.ctx,cam=this.camera;c.save();c.strokeStyle=this.collisionOutline.color||'rgba(65,61,48,.16)';c.lineWidth=(this.collisionOutline.width||.7)/cam.scale;c.setLineDash([3/cam.scale,4.5/cam.scale]);c.beginPath();c.arc(player.x,player.y,coreRadius(player),0,Math.PI*2);c.stroke();c.restore();}
  setInkClip(rect){const el=this.canvas;if(!el)return;const next=rect?`inset(${Math.round(rect.top)}px ${Math.round(rect.right)}px ${Math.round(rect.bottom)}px ${Math.round(rect.left)}px)`:'none';if(el.style.clipPath!==next)el.style.clipPath=next;}

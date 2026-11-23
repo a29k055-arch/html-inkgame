@@ -1,4 +1,5 @@
 import {livingInk,syncLivingInk,hasInkAdvantage,LIVING_INK_DENSITY} from './living-resource.js';
+import {resolveLivingRig} from './living-rigs.js';
 import {advancePondEntry,steerLivingVelocity} from './pond-entry.js';
 import {coversLivingBody,livingBodyContains,livingBodyBound} from './living-contact.js';
 import {markSpike,resolveSpikes} from './reveal-combat.js';
@@ -12,6 +13,8 @@ import {initReserve,gainReserve,syncReserve,resetReserveOnDeath,advanceRewards} 
 import {GAME_CONFIG as C,CONTACT_CONFIG as K,INK_RESERVE_CONFIG as R,TALENT_CONFIG as T,ACTIVE_CONFIG as A,SKILLS,clamp,dist,settlement} from './config.js';
 import {random,randomPoint,randomNpcPoint,createFood,moveSpeed} from './legacy-foundation.js';
 import {aiController,aiDirection,shouldUseSkill} from './ai.js';
+// The fastest competitive shrimp should still be easy to track in the opening close-up.
+const OPENING_SWIM={shrimp:{scale:.40,max:24},fish:{scale:.58,max:42},turtle:{scale:.70,max:36}};
 const names=['澄','雨音','竹影','白露','山月','凪','青嵐','葉舟','霧','雲間','春水','松風','雪','一滴','遠山','野菊','夕凪','石庭','朧','青竹','時雨','水面','木漏れ日','冬泉','夜舟','霞','新月','梢','秋声','墨雨','雲雀','朝露'];
 // Entity motion is gameplay-only. No renderer, velocity field or GPU data can apply forces here.
 export function entity(id,x,y,r,controller){
@@ -22,12 +25,16 @@ export class Inkstone {
   this.fixedFoodRewards=options.foodRewards;this.competitorEnabled=!!options.competitor;this.world={...(options.world||C.world)};this.movement=options.movement;this.behavior=options.behavior;this.growthBalance=options.growthBalance;this.magnetRules=options.magnetRules;this.combatRules=options.combatRules;this.boundarySliding=!!options.boundarySliding;this.npcRespawnSizes=options.npcRespawnSizes;this.npcSpawner=options.npcSpawner;this.aiCount=options.aiCount??C.aiCount;this.npcMaxRadius=options.npcMaxRadius??C.maxRadius;this.npcFoodGainScale=options.npcFoodGainScale??1;this.playerSpeedPenalty=options.playerSpeedPenalty;this.simplePickups=!!options.simplePickups;this.playerSheltered=options.playerSheltered;this.npcPredation=options.npcPredation;this.playerLethalRatio=options.playerLethalRatio;this.softDown=options.softDown;this.rewardChoices=options.rewardChoices!==false;this.shrink=options.shrink!==false;this.rushSpeed=options.rushSpeed??A.dash.speed;this.duration=options.duration||C.inkstoneDuration;this.autoFinish=options.autoFinish!==false;this.rewardMultiplier=options.rewardMultiplier||1;
   this.foodTarget=options.foodTarget??C.foodTarget;this.foodSpawnRate=options.foodSpawnRate??C.foodSpawnRate;this.reserveGrowth=!!options.reserveGrowth;this.onEvent=onEvent;this.elapsed=0;this.finished=false;this.itemClock=C.itemSpawnInterval;this.foodClock=0;this.waves=[];this.ecology={npcSwallows:0,npcRespawns:0,npcFood:0,maxRadius:0};
   this.center={x:this.world.width/2,y:this.world.height/2};
-  this.player=entity('human',this.center.x,this.center.y,C.initialRadius,{type:'human'});this.player.invincible=C.respawnProtection;if(options.reserveRules)this.player.reserveRules={...options.reserveRules};if(this.reserveGrowth)initReserve(this.player,options.startInk??R.startInk);
+  this.openingShore=options.openingShore?(this.world.width>=this.world.height?'top':'left'):null;
+  const start={...this.center};
+  if(this.openingShore==='top')start.y=Math.min(120,this.world.height*.35);
+  if(this.openingShore==='left')start.x=Math.min(120,this.world.width*.35);
+  this.player=entity('human',start.x,start.y,C.initialRadius,{type:'human'});this.player.invincible=C.respawnProtection;if(options.reserveRules)this.player.reserveRules={...options.reserveRules};if(this.reserveGrowth)initReserve(this.player,options.startInk??R.startInk);
   this.entities=[this.player];
   for(let i=0;i<(options.aiCount??C.aiCount);i++){
    const spawn=this.npcSpawner?.(this,i),point=spawn?.point||randomNpcPoint(this.player,this.world),roll=Math.random();
    const radius=spawn?.radius??(roll>.93?random(78,118):roll>.78?random(42,72):random(14,38));
-   const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i,spawn?.personality));if(spawn?.personality==='drift')npc.passive=true;npc.ecologyTier=spawn?.ecologyTier||1;npc.skinIndex=i;npc.nameIndex=i%names.length;npc.nameNumber=i>=names.length?i+1:'';npc.appearance='living';Object.assign(npc,{species:spawn?.species||'fish',rewardKind:spawn?.rewardKind||null,rewardGlow:!!spawn?.rewardGlow,rewardTier:spawn?.rewardTier||1,birthSlot:spawn?.birthSlot??i,entering:!!spawn?.entering,entry:spawn?.entry,ecologyStage:spawn?.ecologyStage||1});syncLivingInk(npc);this.entities.push(npc);
+   const npc=entity(names[i%names.length]+(i>=names.length?i+1:''),point.x,point.y,radius,aiController(i,spawn?.personality));if(spawn?.personality==='drift')npc.passive=true;npc.ecologyTier=spawn?.ecologyTier||1;npc.skinIndex=i;npc.nameIndex=i%names.length;npc.nameNumber=i>=names.length?i+1:'';npc.appearance='living';Object.assign(npc,{species:spawn?.species||'fish',rewardKind:spawn?.rewardKind||null,rewardGlow:!!spawn?.rewardGlow,rewardTier:spawn?.rewardTier||1,birthSlot:spawn?.birthSlot??i,entering:!!spawn?.entering,entry:spawn?.entry,ecologyStage:spawn?.ecologyStage||1});if(spawn?.openingShrimp)npc.openingShrimpRadius=radius;syncLivingInk(npc);this.entities.push(npc);
   }
   if(this.competitorEnabled)this.ensureCompetitor();
   this.foods=Array.from({length:this.foodTarget},()=>this.food());this.items=[];this.ranged=this.reserveGrowth?new RangedCombat(this):null;
@@ -59,8 +66,20 @@ export class Inkstone {
   if(replenish){food.baseAlpha=food.alpha;food.alpha=0;food.spawnAge=0;food.nearPlayer=!!point;}return food;
  }
  speed(e,includeActive=true){const m=this.movement;let base=m?Math.max(m.minimum,m.base*(1-m.penalty*clamp((e.r-m.reference)/(m.maximum-m.reference),0,1)**.85)):(e===this.player&&this.playerSpeedPenalty!==undefined?235*(1-clamp((e.r-18)/152,0,1)*this.playerSpeedPenalty):moveSpeed(e.r));
-  if(e===this.player&&m?.screenSpeedFloor&&this.playerScreenScale){const scale=Math.max(.05,this.playerScreenScale());base=Math.max(base,Math.min(m.maxWorldSpeed||400,m.screenSpeedFloor/scale));}
-  const ai=e.controller.type==='ai'?(e.controller.profile.playerSpeedRatio??(m?m.aiBase+e.controller.profile.skill*m.aiSkill:.70+e.controller.profile.skill*.18))*(e.controller.profile.speedScale??1):1,boost=includeActive?Math.max(e.effects.rush?(e.pondBuffs?.rush?.strength??this.rushSpeed):0,e.effects.manualRush?this.rushSpeed:0,e.effects.escape?(this.combatRules?.escapeBoost||0):0):0;const locomotion=e.controller.type==='ai'?(e.species==='turtle'?.72:e.species==='dragon'?.88:e.species==='shrimp'?.92:1):1;return base*(1+talentValue(e,'haste'))*ai*locomotion*(e.effects.dense?.65:1)*(1+boost);
+  if(e===this.player&&m?.screenSpeedFloor&&this.playerScreenScale){
+   const scale=Math.max(.05,this.playerScreenScale());
+   const shortSide=this.viewportShortSide?.();
+   // Match travel across the visible paper, with limits for narrow phones and wide monitors.
+   const screenSpeed=shortSide>0?clamp(shortSide*.22,96,210):m.screenSpeedFloor;
+   base=Math.max(base,Math.min(m.maxWorldSpeed||400,screenSpeed/scale));
+  }
+  const ai=e.controller.type==='ai'?(e.controller.profile.playerSpeedRatio??(m?m.aiBase+e.controller.profile.skill*m.aiSkill:.70+e.controller.profile.skill*.18))*(e.controller.profile.speedScale??1):1,boost=includeActive?Math.max(e.effects.rush?(e.pondBuffs?.rush?.strength??this.rushSpeed):0,e.effects.manualRush?this.rushSpeed:0,e.effects.escape?(this.combatRules?.escapeBoost||0):0):0;const locomotion=e.controller.type==='ai'?(e.species==='turtle'?.72:e.species==='dragon'?.88:e.species==='shrimp'?.92:1):1;
+  const speed=base*(1+talentValue(e,'haste'))*ai*locomotion*(e.effects.dense?.65:1)*(1+boost);
+  const journey=this.player.revealJourney,limits=OPENING_SWIM[e.species];
+  if(e.controller.type!=='ai'||!limits||!journey||journey.stage>2)return speed;
+  const openingSpeed=Math.min(speed*limits.scale,limits.max);
+  const release=journey.stage===1?0:clamp(journey.transitionAge/12,0,1);
+  return openingSpeed+(speed-openingSpeed)*release;
  }
  growthFactor(e){const c=this.growthBalance;return c?c.late+(c.early-c.late)/(1+e.ink/c.scale):1;}
  radius(e){return coreRadius(e);}
@@ -86,16 +105,24 @@ export class Inkstone {
   if(e===this.player&&this.playerSheltered?.())return false;
   if(blockHit(e)){e.invincible=this.combatRules?.lethalGrace||1.2;if(this.combatRules){e.effects.escape=this.combatRules.escapeDuration;e.shieldReason='swallow';}this.onEvent('shield',e);return false;}
   // First swallow in a while only costs ink: the body survives, so one bad roll is not the run.
-  if(e===this.player)this.clearTemporaryInk(e);
-  if(e===this.player&&this.softDown){const win=this.softDown.window||20;
-   if(this.elapsed-(e.lastDownAt??-1e9)>win){e.lastDownAt=this.elapsed;const before=e.ink;e.ink=Math.max(e.reserveRules?.minimumRespawnInk??0,before*(this.softDown.retain??.65));syncReserve(e,0,true);e.invincible=Math.max(e.invincible,this.softDown.grace??2.2);this.onEvent('soft-down',{entity:e,x:e.x,y:e.y,ink:before-e.ink});return true;}
+  if(e===this.player&&this.softDown){
+   const win=this.softDown.window||20;
+   if(this.elapsed-(e.lastDownAt??-1e9)>win){
+    e.lastDownAt=this.elapsed;
+    const before=e.ink,temporary=Math.min(before,e.turtleInk||0),retain=this.softDown.retain??.65;
+    e.turtleInk=temporary*retain;
+    e.ink=Math.max(e.reserveRules?.minimumRespawnInk??0,(before-temporary)*retain)+e.turtleInk;
+    syncReserve(e,0,true);e.invincible=Math.max(e.invincible,this.softDown.grace??2.2);
+    this.onEvent('soft-down',{entity:e,x:e.x,y:e.y,ink:before-e.ink});return true;
+   }
   }
-  if(killer){const killerCoreRadius=this.radius(killer),rawGain=(e.species||e.growth?livingInk(e):e.mass)*C.npcGain*this.rewardMultiplier;let gain=killer.growth?Math.min(this.growthBalance?.npcGainCap??R.playerNpcGainCap,rawGain*R.playerNpcGainScale):rawGain;if(killer.growth){const before=killer.ink;gain*=this.growthFactor(killer);gainReserve(killer,gain,true,this.rewardChoices&&this.theme!=='boss');gain=killer.ink-before;}else{const before=livingInk(killer),density=LIVING_INK_DENSITY[killer.species]||1;killer.mass=Math.min((this.npcRadiusLimit?.(killer)??this.npcMaxRadius)**2,killer.mass+gain/density);killer.r=Math.sqrt(killer.mass);syncLivingInk(killer);gain=livingInk(killer)-before;}if(killer.controller.type==='ai'&&e.controller.type==='ai'){this.ecology.npcSwallows++;this.ecology.maxRadius=Math.max(this.ecology.maxRadius,killer.r);}killer.swallowed++;if(this.staticConstraint&&killer!==this.player)this.constrain(killer);this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,killerCoreRadius,coreRadius:this.radius(e),kind:'enemy',species:e.species,rewardKind:e.rewardKind,rewardGlow:e.rewardGlow,rewardTier:e.rewardTier,eventDragon:!!e.eventDragon,consumedId:e.id,rigId:e.rigId,targetInk:livingInk(e)});}
+  if(e===this.player)this.clearTemporaryInk(e);
+  if(killer){const killerCoreRadius=this.radius(killer),rawGain=(e.species||e.growth?livingInk(e):e.mass)*C.npcGain*this.rewardMultiplier;let gain=killer.growth?Math.min(this.growthBalance?.npcGainCap??R.playerNpcGainCap,rawGain*R.playerNpcGainScale):rawGain;if(killer.growth){const before=killer.ink;gain*=this.growthFactor(killer);gainReserve(killer,gain,true,this.rewardChoices&&this.theme!=='boss');gain=killer.ink-before;}else{const before=livingInk(killer),density=LIVING_INK_DENSITY[killer.species]||1;killer.mass=Math.min((this.npcRadiusLimit?.(killer)??this.npcMaxRadius)**2,killer.mass+gain/density);killer.r=Math.sqrt(killer.mass);syncLivingInk(killer);gain=livingInk(killer)-before;}if(killer.controller.type==='ai'&&e.controller.type==='ai'){this.ecology.npcSwallows++;this.ecology.maxRadius=Math.max(this.ecology.maxRadius,killer.r);}killer.swallowed++;if(this.staticConstraint&&killer!==this.player)this.constrain(killer);this.onEvent('consume',{entity:killer,x:e.x,y:e.y,r:e.r,playerSize:killer.r,gain,killerCoreRadius,coreRadius:this.radius(e),kind:'enemy',species:e.species,rewardKind:e.rewardKind,rewardGlow:e.rewardGlow,rewardTier:e.rewardTier,eventDragon:!!e.eventDragon,consumedId:e.id,rigId:e.species?resolveLivingRig(e.species,e.rigId,e.skinIndex):e.rigId,targetInk:livingInk(e)});}
   stopActives(e);this.ranged?.reset(e);e.deaths++;if(!e.growth)e.ink*=C.deathInkRetention;e.dead=C.respawnDelay;e.skills=[];e.effects={};if(e.growth)resetReserveOnDeath(e);this.onEvent('death',e);if(e.competitor){e.competitor=false;e.controller=e.ordinaryController||aiController(e.skinIndex);delete e.ordinaryController;this.ensureCompetitor();}return true;
  }
  respawn(e){
   const spawn=!e.growth?this.npcSpawner?.(this,this.entities.indexOf(e)-1,{respawn:true,entity:e}):null,roll=!e.growth&&this.npcRespawnSizes?Math.random():0,band=!e.growth&&this.npcRespawnSizes?.find(b=>roll<b[0]),npcRadius=spawn?.radius??(band?random(band[1],band[2]):C.respawnRadius),retained=e.growth?e.r:npcRadius,p=spawn?.point||this.spawnPoint(retained+180);Object.assign(e,{x:p.x,y:p.y,vx:0,vy:0,r:retained,mass:retained**2,collisionScale:1,invincible:C.respawnProtection});
-  if(!e.growth&&this.npcSpawner){delete e.livingMaxStage;Object.assign(e,{species:spawn?.species||e.species,appearance:'living',rewardKind:spawn?.rewardKind||null,rewardGlow:!!spawn?.rewardGlow,rewardTier:spawn?.rewardTier||1,birthSlot:spawn?.birthSlot??e.birthSlot,entering:!!spawn?.entering,entry:spawn?.entry,ecologyStage:spawn?.ecologyStage||1});syncLivingInk(e);delete e.motionHeading;delete e.livingBody;e.ecologyTier=spawn?.ecologyTier||e.ecologyTier;e.digestUntil=0;e.passive=spawn?.personality==='drift';}if(e.growth)syncReserve(e,0,true);if(this.boundarySliding)this.constrain(e);if(spawn?.personality&&!e.growth)e.controller=aiController(Math.max(0,this.entities.indexOf(e)-1),spawn.personality);e.controller.goal=null;e.controller.think=0;if(e.controller.type==='ai')this.ecology.npcRespawns++;this.onEvent('respawn',e);
+  if(!e.growth&&this.npcSpawner){delete e.openingShrimpRadius;delete e.livingMaxStage;Object.assign(e,{species:spawn?.species||e.species,appearance:'living',rewardKind:spawn?.rewardKind||null,rewardGlow:!!spawn?.rewardGlow,rewardTier:spawn?.rewardTier||1,birthSlot:spawn?.birthSlot??e.birthSlot,entering:!!spawn?.entering,entry:spawn?.entry,ecologyStage:spawn?.ecologyStage||1});syncLivingInk(e);delete e.motionHeading;delete e.livingBody;e.ecologyTier=spawn?.ecologyTier||e.ecologyTier;e.digestUntil=0;e.passive=spawn?.personality==='drift';}if(e.growth)syncReserve(e,0,true);if(this.boundarySliding)this.constrain(e);if(spawn?.personality&&!e.growth)e.controller=aiController(Math.max(0,this.entities.indexOf(e)-1),spawn.personality);e.controller.goal=null;e.controller.think=0;if(e.controller.type==='ai')this.ecology.npcRespawns++;this.onEvent('respawn',e);
  }
  update(dt,input){
   if(this.finished)return;for(const f of this.foods)if(Number.isFinite(f.spawnAge)){f.spawnAge+=dt;f.alpha=f.baseAlpha*Math.min(1,f.spawnAge/.45);}this.elapsed=Math.min(this.duration,this.elapsed+dt);this.updateMagnet(dt);beginPondGravity(this);

@@ -1,10 +1,11 @@
 import {InkCreature,INK_CREATURE_REV,sampleCurve,makeCurve,projectPoint} from '../../previews/creature-rig/runtime/ink-creature.mjs';
 import {coreRadius} from '../game/alien-geometry.js';
+import {LIVING_VARIANTS,resolveLivingRig} from '../game/living-rigs.js';
+export {LIVING_VARIANTS};
 
 // A rig's head is not its collision center. The transverse section through these
 // torso anchors is measured from the alpha-bearing body, excluding fins/feelers.
 export const LIVING_RIGS=Object.freeze({fish:'fish_04',shrimp:'shrimp_07',turtle:'turtle_02',dragon:'dragon_04'});
-export const LIVING_VARIANTS=Object.freeze({fish:Object.freeze(['fish_04','fish_01','fish_02','fish_04_special']),shrimp:Object.freeze(['shrimp_07','shrimp_04','shrimp_05']),turtle:Object.freeze(['turtle_02','turtle_08']),dragon:Object.freeze(['dragon_04'])});
 export const LIVING_ANCHORS=Object.freeze({fish:.35,shrimp:.30,turtle:.555,dragon:.06});
 const TAU=Math.PI*2,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const sharedKeys=['bodyImage','bodyOrder','bodyBounds','layers','sourceImage','mesh'];
@@ -105,15 +106,28 @@ async function bakeNPCAnimation(asset,species){
   poses.push({phase,anchor:a,body:bodyPoints(c,asset.calibration,a),sections:mappedPoints(c,asset.calibration.bodySections,a)});
  }
  const pad=2,bounds={x:minX-pad,y:minY-pad,w:maxX-minX+pad*2,h:maxY-minY+pad*2},pixels=Math.min(460/Math.max(bounds.w,bounds.h),Math.sqrt(30000/(bounds.w*bounds.h))),width=Math.ceil(bounds.w*pixels),height=Math.ceil(bounds.h*pixels),frames=[];
+ // Prefilter fine ink strokes before storing each small animation frame.
+ const scratch=document.createElement('canvas');
+ scratch.width=width*2;scratch.height=height*2;
+ const raster=scratch.getContext('2d');
+ const sampleScale=pixels*2;
  for(const state of poses){
   c.time=state.phase/2.5;c.wavePhase=c.finPhase=c.gaitPhase=state.phase;c.pose=c.buildPose();c.targetCurve=makeCurve(c.pose,false);
-  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');ctx.setTransform(pixels,0,0,pixels,-(bounds.x+state.anchor.x)*pixels,-(bounds.y+state.anchor.y)*pixels);c.draw(ctx);frames.push({canvas,body:state.body,sections:state.sections});reportPreparation('animation',warmProgress.loaded+1);if(frames.length%3===0)await preparationYield();
+  raster.setTransform(1,0,0,1,0,0);raster.clearRect(0,0,scratch.width,scratch.height);
+  raster.setTransform(sampleScale,0,0,sampleScale,-(bounds.x+state.anchor.x)*sampleScale,-(bounds.y+state.anchor.y)*sampleScale);
+  c.draw(raster);
+  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+  const ctx=canvas.getContext('2d');ctx.imageSmoothingQuality='high';
+  ctx.drawImage(scratch,0,0,width,height);frames.push({canvas,body:state.body,sections:state.sections});reportPreparation('animation',warmProgress.loaded+1);if(frames.length%3===0)await preparationYield();
  }
+ scratch.width=scratch.height=1;
  const blendCanvas=document.createElement('canvas');blendCanvas.width=width;blendCanvas.height=height;asset.npcAtlas={bounds,frames,blendCanvas,seconds:config.seconds,bytes:width*height*4*(frames.length+1)};c.dispose();
 }
 
 function clone(asset,e){
  const c=new InkCreature(asset.template.rig,{length:100,speed:0});
+ // Some Canvas backends erase earlier translucent triangles in copy mode.
+ c.canvasMeshComposite='source-over';
  for(const key of sharedKeys)c[key]=asset.template[key];
  c.resourceEntry=asset.template.resourceEntry;c.resourceEntry.refs++;
  if(!isPlayer(e))calmProfile(c);
@@ -135,7 +149,7 @@ function poseBounds(record){if(record.boundsPose!==record.creature.pose){record.
 export class LivingPainter {
  constructor({assets=null}={}){this.assets=assets;this.ready=assets?Promise.resolve(assets):preloadLivingCreatures();this.records=new Map();this.playerSizes=new WeakMap();this.clock=0;this.bodyRevision=0;this.metrics={revision:INK_CREATURE_REV,loaded:0,drawn:0,animated:0,culled:0,tiles:0,liveRasters:0,sharedFrames:0,atlasBytes:0};this.disposed=false;}
  async prepare(entities=[]){this.assets=await this.ready;for(const e of entities)if(!e.dead&&LIVING_RIGS[livingSpecies(e)])this.ensure(e);return this;}
- ensure(e){const species=livingSpecies(e);if(!this.assets||!LIVING_RIGS[species])return null;const ids=LIVING_VARIANTS[species],requested=e.form?.rigId||e.rigId,id=requested&&ids.includes(requested)?requested:ids[(Math.max(0,e.skinIndex||0))%ids.length],asset=this.assets.byId?.[id]||this.assets[species];let q=this.records.get(e);if(q?.species!==species||q.asset!==asset){if(q)release(q);q={species,asset,rigId:asset.id||id,creature:clone(asset,e),calibration:asset.calibration,age:0,renderAge:Infinity,tile:null,world:null,visible:true};this.records.set(e,q);}e.rigId=q.rigId;return q;}
+ ensure(e){const species=livingSpecies(e);if(!this.assets||!LIVING_RIGS[species])return null;const requested=e.form?e.form.rigId:e.rigId,id=resolveLivingRig(species,requested,e.skinIndex),asset=this.assets.byId?.[id]||this.assets[species];let q=this.records.get(e);if(q?.species!==species||q.asset!==asset){if(q)release(q);q={species,asset,rigId:asset.id||id,creature:clone(asset,e),calibration:asset.calibration,age:0,renderAge:Infinity,tile:null,world:null,visible:true};this.records.set(e,q);}if(!e.form)e.rigId=q.rigId;return q;}
  configure(q,e){const r=coreRadius(e),c=q.creature,a=q.calibration,bubble=isPlayer(e)&&q.species==='shrimp',shown=isPlayer(e)?this.playerSizes.get(e)||r:r;
   const unitArea=(a.sourceArea||Math.PI*(c.sourceCurve.length/a.lengthPerRadius)**2)*(100/c.sourceCurve.length)**2;
   q.scale=bubble?shown*2.8/100:isPlayer(e)?shown*Math.sqrt(Math.PI/Math.max(.0001,unitArea)):r*a.lengthPerRadius/100;q.shownRadius=shown;q.renderRadius=bubble?shown:q.scale*100/a.lengthPerRadius;q.coreRadius=r;q.bubble=bubble;q.anchor=c.mapPoint(bubble?.30:a.anchorS,bubble?0:a.anchorT);q.x=e.x;q.y=e.y;}
@@ -155,7 +169,12 @@ export class LivingPainter {
   }
   this.metrics.loaded=this.records.size;this.metrics.tiles=[...this.records.values()].filter(q=>q.tile).length;this.metrics.atlasBytes=Object.values(this.assets?.byId||this.assets||{}).reduce((n,a)=>n+(a.npcAtlas?.bytes||0),0);
  }
- atlasFrame(q,e){const atlas=q.asset?.npcAtlas||this.assets?.[q.species]?.npcAtlas;if(isPlayer(e)||!atlas)return null;const index=Math.floor(((this.clock/atlas.seconds+seedOf(e))%1)*atlas.frames.length);const fraction=((this.clock/atlas.seconds+seedOf(e))%1)*atlas.frames.length-index;return{atlas,index,fraction,frame:atlas.frames[index],next:atlas.frames[(index+1)%atlas.frames.length]};}
+ atlasFrame(q,e){const atlas=q.asset?.npcAtlas||this.assets?.[q.species]?.npcAtlas;if(isPlayer(e)||!atlas)return null;
+  // Match the world canvas backing resolution before choosing a cached frame.
+  const displayScale=q.scale*(this.camera?.scale||1)*Math.min(globalThis.devicePixelRatio||1,2);
+  const frame=atlas.frames[0].canvas;
+  if(q.visible&&(atlas.bounds.w*displayScale>frame.width||atlas.bounds.h*displayScale>frame.height))return null;
+  const index=Math.floor(((this.clock/atlas.seconds+seedOf(e))%1)*atlas.frames.length);const fraction=((this.clock/atlas.seconds+seedOf(e))%1)*atlas.frames.length-index;return{atlas,index,fraction,frame:atlas.frames[index],next:atlas.frames[(index+1)%atlas.frames.length]};}
  syncBody(q,e){
   const sprite=this.atlasFrame(q,e),angle=sprite?(q.species==='shrimp'?q.creature.inclination*q.creature.facing:q.creature.heading):0,pose=sprite?sprite.index+Math.floor(sprite.fraction*16)/16+(q.species==='shrimp'?q.creature.shrimpTurnProgress*.001:0):q.creature.pose;
   if(q.bodyPose===pose&&q.bodyScale===q.scale&&Math.abs((q.bodyAngle??0)-angle)<.005)return;q.bodyPose=pose;q.bodyScale=q.scale;q.bodyAngle=angle;
@@ -174,16 +193,16 @@ export class LivingPainter {
   const b=poseBounds(q),k=q.scale,a=q.anchor,world={x:e.x+(b.minX-a.x)*k,y:e.y+(b.minY-a.y)*k,w:(b.maxX-b.minX)*k,h:(b.maxY-b.minY)*k},pad=14/camera.scale;
   const x=Math.max(world.x-pad,camera.x-pad),y=Math.max(world.y-pad,camera.y-pad),right=Math.min(world.x+world.w+pad,camera.x+viewport.width/camera.scale+pad),bottom=Math.min(world.y+world.h+pad,camera.y+viewport.height/camera.scale+pad);
   if(!(right>x&&bottom>y))return false;
-  const w=right-x,h=bottom-y,cap=viewport.mobile?768:1200,pixels=Math.min(camera.scale*Math.min(1.5,globalThis.devicePixelRatio||1),cap/Math.max(w,h),Math.sqrt(950000/(w*h)));
+  const w=right-x,h=bottom-y,cap=viewport.mobile?1024:1536,pixels=Math.min(camera.scale*Math.min(2,globalThis.devicePixelRatio||1),cap/Math.max(w,h),Math.sqrt(1250000/(w*h)));
   const width=Math.max(1,Math.ceil(w*pixels)),height=Math.max(1,Math.ceil(h*pixels));q.tile??=document.createElement('canvas');if(q.tile.width!==width||q.tile.height!==height){q.tile.width=width;q.tile.height=height;}
-  const c=q.tile.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,width,height);c.setTransform(pixels*k,0,0,pixels*k,(e.x-a.x*k-x)*pixels,(e.y-a.y*k-y)*pixels);c.save();q.creature.draw(c);c.restore();q.world={x,y,w,h};q.rasterX=e.x;q.rasterY=e.y;q.renderAge=0;this.metrics.liveRasters++;return true;
+  const c=q.tile.getContext('2d');c.imageSmoothingQuality='high';c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,width,height);c.setTransform(pixels*k,0,0,pixels*k,(e.x-a.x*k-x)*pixels,(e.y-a.y*k-y)*pixels);c.save();q.creature.draw(c);c.restore();q.world={x,y,w,h};q.rasterX=e.x;q.rasterY=e.y;q.renderAge=0;this.metrics.liveRasters++;return true;
  }
  draw(ctx,e,index=0,entities=[],forced=null,contact=false){
   if(this.disposed||e.dead)return;const q=this.ensure(e);if(!q)return;const cam=this.camera||{x:0,y:0,scale:1},view=this.viewport||{width:1200,height:900};this.configure(q,e);if(!q.visible)return;
   const sprite=this.atlasFrame(q,e);if(sprite){const b=sprite.atlas.bounds;ctx.save();ctx.translate(e.x,e.y);ctx.rotate(q.species==='shrimp'?q.creature.inclination*q.creature.facing:q.creature.heading);ctx.scale(q.scale*(q.species==='shrimp'?q.creature.facing*Math.max(.08,q.creature.presentationWidth):1),q.scale);let picture=sprite.frame.canvas;const blend=sprite.atlas.blendCanvas;if(blend){const mixed=blend.getContext('2d');mixed.clearRect(0,0,blend.width,blend.height);mixed.globalCompositeOperation='source-over';mixed.globalAlpha=1-sprite.fraction;mixed.drawImage(sprite.frame.canvas,0,0);mixed.globalCompositeOperation='lighter';mixed.globalAlpha=sprite.fraction;mixed.drawImage(sprite.next.canvas,0,0);mixed.globalAlpha=1;mixed.globalCompositeOperation='source-over';picture=blend;}ctx.drawImage(picture,b.x,b.y,b.w,b.h);ctx.restore();q.lastDraw=this.clock;this.metrics.sharedFrames++;this.metrics.drawn++;return;}
   // Raster only real visible world pixels. Huge offscreen tails never allocate a
   // multi-thousand-pixel canvas, and each live rig shares the runtime GPU context.
-  if(!q.tile||q.renderAge>=1/60||!q.world||Math.abs(cam.scale/(q.lastScale||cam.scale)-1)>.025||Math.abs(q.coreRadius/(q.lastRadius||q.coreRadius)-1)>.03||Math.hypot(e.x-q.rasterX,e.y-q.rasterY)*cam.scale>10){if(!this.raster(q,e,cam,view))return;q.lastScale=cam.scale;q.lastRadius=q.coreRadius;}
+  if(!q.tile||q.renderAge>=(isPlayer(e)?1/60:1/30)||!q.world||Math.abs(cam.scale/(q.lastScale||cam.scale)-1)>.025||Math.abs(q.coreRadius/(q.lastRadius||q.coreRadius)-1)>.03||Math.hypot(e.x-q.rasterX,e.y-q.rasterY)*cam.scale>10){if(!this.raster(q,e,cam,view))return;q.lastScale=cam.scale;q.lastRadius=q.coreRadius;}
   q.lastDraw=this.clock;ctx.save();
   const w=q.world;ctx.drawImage(q.tile,w.x+e.x-q.rasterX,w.y+e.y-q.rasterY,w.w,w.h);ctx.restore();if(!contact)this.metrics.drawn++;
  }

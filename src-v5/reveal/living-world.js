@@ -1,3 +1,4 @@
+import {formClock} from './item-tiers.js';
 import {pondEntry} from '../game/pond-entry.js';
 import {syncLivingInk} from '../game/living-resource.js';
 import {entity} from '../game/inkstone.js';
@@ -20,11 +21,12 @@ export const livingSlot=index=>LIVING_SLOTS[((index%LIVING_SLOTS.length)+LIVING_
 export const REWARD_SPECIES=Object.freeze({magnet:'shrimp',speed:'fish',shield:'turtle',dragon:'dragon'});
 export const SPECIES_REWARDS=Object.freeze({shrimp:'magnet',fish:'speed',turtle:'shield',dragon:'dragon'});
 export function livingRadiusLimit(e,stage=4){
+ if(stage===1&&e?.openingShrimpRadius)return e.openingShrimpRadius;
  if(e?.eventDragon||e?.species==='dragon')return 26;
  const big=Number.isInteger(e?.birthSlot)&&livingSlot(e.birthSlot).big;
  const at=Math.max(0,Math.min(3,stage-1));return e?.species==='shrimp'?[4.5,6.5,7.5,8][at]:e?.species==='fish'?(big?30:[9,14,18,18][at]):e?.species==='turtle'?(big?88:[34,42,48,50][at]):88;
 }
-export const LIVING_WORLD_CONFIG=Object.freeze({formDuration:5,dragonFirst:60,dragonRespawn:30,dragonEnabled:true});
+export const LIVING_WORLD_CONFIG=Object.freeze({formDuration:5,dragonDuration:20,dragonFirst:60,dragonRespawn:30,dragonEnabled:true});
 
 export class LivingWorld {
  constructor(run,config={},rng=Math.random){this.run=run;this.config={...LIVING_WORLD_CONFIG,...config};this.rng=rng;this.nextDragon=this.config.dragonFirst;this.serial=0;this.dragon=null;this.largeUnlocked=false;}
@@ -32,9 +34,9 @@ export class LivingWorld {
  clearForm(){const p=this.run.player,previous=p.form?.species;delete p.form;p.formOrder=[];if(previous)this.run.onEvent('creature-form-end',{entity:p,species:previous});}
  refreshForm(reason='elapsed'){
   const g=this.run,p=g.player;if(p.dead){this.clearForm();return;}
-  p.formOrder=(p.formOrder||[]).filter(q=>(p.effects[q.effect]||0)>0);const next=p.formOrder.at(-1),previous=p.form?.species;
+  p.formOrder=(p.formOrder||[]).filter(q=>p.effects[q.effect]>0&&p.effects[formClock(q.effect)]>0);const next=p.formOrder.at(-1),previous=p.form?.species;
   if(!next){if(previous)this.clearForm();return;}
-  p.form={species:next.species,effect:next.effect,remaining:p.effects[next.effect],rigId:next.rigId};
+  p.form={species:next.species,effect:next.effect,remaining:p.effects[formClock(next.effect)],rigId:next.rigId};
   if(reason==='reward'||previous!==next.species)g.onEvent('creature-form',{entity:p,species:next.species,remaining:p.form.remaining,reason});
  }
  tick(dt){

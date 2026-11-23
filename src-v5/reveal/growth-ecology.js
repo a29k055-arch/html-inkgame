@@ -10,7 +10,7 @@ export const GROWTH_ECOLOGY_CONFIG=Object.freeze({
  lethalRatio:1.28,
  // A slice of the prey band becomes passive plankton: tiny, slow, no hunt and no flee.
  drifterChance:.18,drifterLo:.08,drifterHi:.20,
- nurseryFoodCount:40,nurseryFoodMin:22,nurseryFoodRadius:380,
+ nurseryFoodCount:58,nurseryFoodMin:22,nurseryFoodRadius:265,
  mediumSpawnMin:440,largeSpawnMin:900,spawnAttempts:120,unitGap:20,leafGap:2,
  giantRadiusCap:88,minRadius:3
 });
@@ -25,9 +25,13 @@ export class GrowthEcology {
   const slot=livingSlot(entity?.birthSlot??index),ecologyTier=entity?.ecologyTier||slot.tier,metadata={species:slot.species,rewardKind:slot.rewardKind,rewardGlow:false,rewardTier:Math.min(3,ecologyTier),birthSlot:entity?.birthSlot??index,appearance:'living'};
   const stage=Math.max(1,Math.min(4,this.stage())),bands={shrimp:[[3,4.5],[3.5,6.5],[4,7.5],[5,8]],fish:[[6.5,9],[8,14],[10,18],[12,18]],turtle:[[28,34],[30,42],[34,48],[38,50]]};
   const selected=slot.big?[slot.min,slot.max]:bands[slot.species][stage-1],upper=respawn?Math.min(selected[1],slot.big?slot.low:selected[0]+(selected[1]-selected[0])*.65):selected[1];
-  const roll=this.rng()**(stage>=3?.6:1),radius=clamp(mix(selected[0],upper,roll),c.minRadius,c.giantRadiusCap),drifter=slot.species==='shrimp'&&this.rng()<c.drifterChance;
-  const entry=pondEntry(arena,slot.species,radius,index,this.rng);
-  return {...metadata,...entry,radius,ecologyTier,ecologyStage:stage,personality:drifter?'drift':undefined};
+  const openingShrimp=arena.openingShore&&!respawn&&index===0&&slot.species==='shrimp'&&stage===1;
+  const roll=this.rng()**(stage>=3?.6:1);
+  // A full sprite is much longer than its core. The first shrimp must fit under the initial ink ball.
+  const radius=openingShrimp?2.2:clamp(mix(selected[0],upper,roll),c.minRadius,c.giantRadiusCap);
+  const drifter=slot.species==='shrimp'&&this.rng()<c.drifterChance;
+  const entry=pondEntry(arena,slot.species,radius,index,this.rng,openingShrimp);
+  return {...metadata,...entry,radius,openingShrimp,ecologyTier,ecologyStage:stage,personality:drifter&&!openingShrimp?'drift':undefined};
  }
  seedFood(arena){
   if(this.seeded.has(arena))return 0;this.seeded.add(arena);

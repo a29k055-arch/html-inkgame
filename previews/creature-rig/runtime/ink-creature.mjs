@@ -455,7 +455,7 @@ export class InkCreature {
       const mc=this.meshSurface.getContext('2d');
       mc.setTransform(1,0,0,1,0,0);mc.clearRect(0,0,width,height);mc.setTransform(ctx.getTransform());
       // Shared translucent ink edges must replace, never accumulate on triangle overlap.
-      mc.globalCompositeOperation='copy';mc.imageSmoothingEnabled=true;
+      mc.globalCompositeOperation=this.canvasMeshComposite||'copy';mc.imageSmoothingEnabled=true;
       for(const [a,b,c] of this.mesh.triangles)textureTriangle(mc,this.bodyImage,this.mesh.vertices[a],this.mesh.vertices[b],this.mesh.vertices[c],mapped[a],mapped[b],mapped[c]);
       ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(this.meshSurface,0,0);ctx.restore();
   }

@@ -2,8 +2,15 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const extentScale={shrimp:12,fish:11,turtle:3.5,dragon:25};
 // Every new body starts wholly outside the artwork and swims across its edge.
 // No visible-world birth point is ever returned, even when the paper is crowded.
-export function pondEntry(arena,species,r,index=0,rng=Math.random){
+export function pondEntry(arena,species,r,index=0,rng=Math.random,openingShrimp=false){
  const w=arena.world,extent=r*(extentScale[species]||8)+18,core=r+12;
+ if(openingShrimp&&arena.openingShore){
+  const top=arena.openingShore==='top',offset=(rng()<.5?-1:1)*(45+rng()*20);
+  const across=top?clamp(arena.player.x+offset,core,w.width-core):clamp(arena.player.y+offset,core,w.height-core);
+  const point=top?{x:across,y:-extent}:{x:-extent,y:across};
+  const target=top?{x:across,y:w.height*.45}:{x:w.width*.45,y:across};
+  return {point,entry:{edge:top?2:0,target,age:0},entering:true};
+ }
  let best=null,score=-Infinity;
  for(let i=0;i<32;i++){
   const edge=(index+i)%4,t=.08+rng()*.84,point=edge===0?{x:-extent,y:t*w.height}:edge===1?{x:w.width+extent,y:t*w.height}:edge===2?{x:t*w.width,y:-extent}:{x:t*w.width,y:w.height+extent};
@@ -18,7 +25,7 @@ export function pondEntry(arena,species,r,index=0,rng=Math.random){
 }
 export function advancePondEntry(e,arena,dt){
  if(!e.entering||!e.entry)return false;
- const t=e.entry.target,dx=t.x-e.x,dy=t.y-e.y,d=Math.hypot(dx,dy)||1,speed=Math.max(72,arena.speed(e,false)),step=Math.min(d,speed*Math.max(0,dt));
+ const t=e.entry.target,dx=t.x-e.x,dy=t.y-e.y,d=Math.hypot(dx,dy)||1,speed=Math.max(12,arena.speed(e,false)),step=Math.min(d,speed*Math.max(0,dt));
  e.vx=dx/d*speed;e.vy=dy/d*speed;e.x+=dx/d*step;e.y+=dy/d*step;e.aim={x:dx/d,y:dy/d};e.entry.age+=dt;
  const r=arena.radius(e)+6,w=arena.world;
  if(e.x>=r&&e.y>=r&&e.x<=w.width-r&&e.y<=w.height-r){

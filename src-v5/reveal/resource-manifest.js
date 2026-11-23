@@ -2,7 +2,7 @@
 export const V5_CREATURE_RESOURCES=Object.freeze([
  {
   "path": "previews/creature-rig/dragon_04/rig.json",
-  "bytes": 16625
+  "bytes": 15745
  },
  {
   "path": "previews/creature-rig/dragon_04/source.png",
@@ -66,11 +66,19 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/fish_01/rig.json",
-  "bytes": 8937
+  "bytes": 12868
  },
  {
   "path": "previews/creature-rig/fish_01/source.png",
   "bytes": 2123306
+ },
+ {
+  "path": "previews/creature-rig/fish_01/textures/fish_01_barbel_l.png",
+  "bytes": 6921
+ },
+ {
+  "path": "previews/creature-rig/fish_01/textures/fish_01_barbel_r.png",
+  "bytes": 7228
  },
  {
   "path": "previews/creature-rig/fish_01/textures/fish_01_body_01.png",
@@ -94,7 +102,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/fish_01/textures/fish_01_head.png",
-  "bytes": 177609
+  "bytes": 165292
  },
  {
   "path": "previews/creature-rig/fish_01/textures/fish_01_tail.png",
@@ -102,11 +110,19 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/fish_02/rig.json",
-  "bytes": 8886
+  "bytes": 13041
  },
  {
   "path": "previews/creature-rig/fish_02/source.png",
   "bytes": 1435103
+ },
+ {
+  "path": "previews/creature-rig/fish_02/textures/fish_02_barbel_l.png",
+  "bytes": 10118
+ },
+ {
+  "path": "previews/creature-rig/fish_02/textures/fish_02_barbel_r.png",
+  "bytes": 9652
  },
  {
   "path": "previews/creature-rig/fish_02/textures/fish_02_body_01.png",
@@ -134,7 +150,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/fish_02/textures/fish_02_head.png",
-  "bytes": 280918
+  "bytes": 270395
  },
  {
   "path": "previews/creature-rig/fish_02/textures/fish_02_tail.png",
@@ -142,7 +158,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/fish_04/rig.json",
-  "bytes": 5802
+  "bytes": 5496
  },
  {
   "path": "previews/creature-rig/fish_04/source.png",
@@ -174,7 +190,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/fish_04_special/rig.json",
-  "bytes": 6237
+  "bytes": 5917
  },
  {
   "path": "previews/creature-rig/fish_04_special/source.png",
@@ -206,7 +222,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/shrimp_04/rig.json",
-  "bytes": 11473
+  "bytes": 25117
  },
  {
   "path": "previews/creature-rig/shrimp_04/source.png",
@@ -270,7 +286,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/shrimp_05/rig.json",
-  "bytes": 11856
+  "bytes": 24731
  },
  {
   "path": "previews/creature-rig/shrimp_05/source.png",
@@ -306,7 +322,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/shrimp_05/textures/shrimp_05_forearm_l.png",
-  "bytes": 50398
+  "bytes": 56145
  },
  {
   "path": "previews/creature-rig/shrimp_05/textures/shrimp_05_forearm_r.png",
@@ -314,7 +330,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/shrimp_05/textures/shrimp_05_head_chest.png",
-  "bytes": 130737
+  "bytes": 130255
  },
  {
   "path": "previews/creature-rig/shrimp_05/textures/shrimp_05_leg_walk_01.png",
@@ -338,7 +354,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/shrimp_07/rig.json",
-  "bytes": 35518
+  "bytes": 34452
  },
  {
   "path": "previews/creature-rig/shrimp_07/source.png",
@@ -426,7 +442,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/turtle_02/rig.json",
-  "bytes": 10557
+  "bytes": 10052
  },
  {
   "path": "previews/creature-rig/turtle_02/source.png",
@@ -462,7 +478,7 @@ export const V5_CREATURE_RESOURCES=Object.freeze([
  },
  {
   "path": "previews/creature-rig/turtle_08/rig.json",
-  "bytes": 8881
+  "bytes": 8429
  },
  {
   "path": "previews/creature-rig/turtle_08/source.png",
