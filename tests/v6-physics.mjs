@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {LIVING_VARIANTS} from '../src-v5/game/living-rigs.js';
 import {createWorld,stepWorld,useItem,spawnItem,spawnEnemy,spawnDrop,radius,canEat} from '../src-v6/sim.mjs';
 const tick=(w,input={},seconds=1)=>{for(let i=0;i<Math.round(seconds*60);i++)stepWorld(w,input,1/60);};
 const base=(extra={})=>createWorld({width:1600,height:900,player:{x:500,y:400,mass:100},tutorial:true,spawnItems:false,...extra});
@@ -6,6 +7,23 @@ const near=(a,b,tol=1e-7)=>assert.ok(Math.abs(a-b)<tol,`${a} differs from ${b}`)
 const activate=(w,type)=>{const item=spawnItem(w,{type,x:w.player.x,y:w.player.y});tick(w,{},1/60);assert.ok(useItem(w,0));assert.equal(w.player.activeItem,item);return item;};
 const counts={};
 function test(name,f){f();counts[name]='pass';}
+test('all ten V5 appearances persist from the swimming pickup into the active player',()=>{
+ const w=base({seed:42,tutorial:false,spawnItems:false,enemies:[{type:'hole',x:1200,y:800,mass:900}]});
+ const originalRng=w.rng,seen=new Set();
+ for(const [type,rigs] of Object.entries(LIVING_VARIANTS)){
+  for(let i=0;i<rigs.length;i++){
+   const item=spawnItem(w,{type,x:w.player.x,y:w.player.y});
+   assert.equal(item.rigId,rigs[(42+i)%rigs.length]);seen.add(item.rigId);
+   const rigAtArrival=item.rigId;
+   tick(w,{},1/60);assert.equal(w.player.inventory[0],item);
+   assert.ok(useItem(w,0));assert.equal(w.player.activeItem.rigId,rigAtArrival);
+  }
+  const tutorial=base({seed:93});
+  assert.equal(spawnItem(tutorial,{type}).rigId,rigs[0]);
+  assert.equal(spawnItem(w,{type,rigId:rigs.at(-1)}).rigId,rigs.at(-1));
+ }
+ assert.equal(seen.size,10);assert.equal(w.rng,originalRng);
+});
 test('red spike equal losses, black hole transfer, equality rules',()=>{
  for(const type of ['spike','hole']) {
   const w=base({enemies:[{type,x:550,y:400,mass:225}]});
@@ -15,6 +33,27 @@ test('red spike equal losses, black hole transfer, equality rules',()=>{
  }
  const w=base({enemies:[{type:'hole',x:538,y:400,mass:100}]});
  assert.equal(canEat(w.player,w.enemies[0]),false);tick(w,{x:1});near(w.player.mass,100);
+});
+test('a touching black hole gains each lost unit, remains on the receding rim and stops on separation',()=>{
+ for(const hz of [30,60,120]){
+  const w=base({enemies:[{id:'drain',type:'hole',x:550,y:400,mass:225}]});
+  const p=w.player, hole=w.enemies[0];
+  for(let i=0;i<2*hz;i++){
+   const oldPlayer=p.mass,oldHole=hole.mass;
+   stepWorld(w,{},1/hz);
+   near(oldPlayer-p.mass,hole.mass-oldHole);
+   near(p.mass+hole.mass,325);
+   near(p.r,radius(p.mass));near(hole.r,radius(hole.mass));
+  }
+  near(p.mass,62);near(hole.mass,263);near(hole.absorption.amount,38);
+  near(hole.absorption.lastAt,w.time);
+  tick(w,{x:-1},.2);
+  const afterRetreat=hole.mass,lastContact=hole.absorption.lastAt;
+  tick(w,{},.75);near(hole.mass,afterRetreat);near(lastContact,hole.absorption.lastAt);
+  assert.ok(w.time-lastContact>.7);
+ }
+ const outside=base({enemies:[{type:'hole',x:550.2,y:400,mass:225}]});
+ tick(outside,{},2);near(outside.player.mass,100);assert.equal(outside.enemies[0].absorption,undefined);
 });
 test('blue species eaten safely; final enemy ranking live',()=>{
  const w=base({tutorial:false,enemies:[{id:'food',type:'spike',x:480,y:400,mass:40},

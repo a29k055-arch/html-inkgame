@@ -16,6 +16,7 @@ function steer(p,target){
 for(let i=1;i<=4;i++){
   const id='tutorial-'+i, w=createWorld(makeLevel(id,784)),t=createTutorial(id);
   const history=[];
+  let firstDrain=null,lastDrain=null,transferred=0;
   for(let step=0;step<60*240&&!t.done;step++){
     const key=t.key;
     if(key!==history.at(-1))history.push(key);
@@ -27,11 +28,20 @@ for(let i=1;i<=4;i++){
     if(key==='dragonTry')command.action=true;
     if(key==='store'||key==='bloom'){command.action=true;}
     if(key.endsWith('Pair')&&f){Object.assign(command,steer(w.player,{x:f.x-84,y:f.y+15}));}
-    stepWorld(w,command,1/60);updateTutorial(t,w);
+    stepWorld(w,command,1/60);
+    if(key==='hole'){
+      const drain=w.enemies.find(e=>e.id==='touch-hole')?.absorption;
+      if(drain){firstDrain??=drain.startedAt;lastDrain=drain.lastAt;transferred=drain.amount;}
+    }
+    updateTutorial(t,w);
     if(w.status==='lost')break;
   }
   console.log(id,{status:t.done?'completed':t.key,seconds:+w.time.toFixed(2),stations:history.length});
   assert.ok(t.done, id+' stopped at '+t.key+' after '+history.join(', '));
+  if(i===2){
+    assert.ok(lastDrain-firstDrain>=1.4,'the learner must see the red whirl drawing ink before the next demonstration');
+    assert.ok(transferred>=7,'the two displayed masses must change perceptibly');
+  }
 }
 
 const w=createWorld({...makeLevel('level-6',163),tutorial:true});

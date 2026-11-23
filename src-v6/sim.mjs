@@ -1,4 +1,6 @@
 // Deterministic pond physics. All positions and radii use painting coordinates.
+import {resolveLivingRig} from '../src-v5/game/living-rigs.js';
+
 const TICK = 1 / 60;
 const EPSILON = 1e-8;
 const TAU = Math.PI * 2;
@@ -52,6 +54,9 @@ export function spawnItem(w, def) {
   const item = body(w, def, 'item');
   item.r = def.r ?? 13;
   item.angle = def.angle ?? Math.atan2(item.vy,item.vx);
+  const ordinal=w.rigCounts.get(item.type) ?? 0;
+  item.rigId=def.rigId ?? resolveLivingRig(item.type,undefined,w.tutorial?0:w.rigSeed+ordinal);
+  w.rigCounts.set(item.type,ordinal+1);
   w.items.push(item);
   return item;
 }
@@ -83,8 +88,13 @@ export function spawnLeaf(w, def) {
   return leaf;
 }
 export function createWorld(config = {}) {
+  const seed=config.seed ?? 1;
+  // Appearance has its own per-species sequence. Selecting a fish painting
+  // must never draw from the generator that controls currents and arrivals.
+  let rigSeed=typeof seed==='number'?seed>>>0:2166136261;
+  if(typeof seed!=='number')for(const c of String(seed))rigSeed=Math.imul(rigSeed^c.charCodeAt(0),16777619)>>>0;
   const w = {width:config.width ?? 1800,height:config.height ?? 1100,
-    speed:config.speed ?? 150, seed:config.seed ?? 1, rng:(config.seed ?? 1) >>> 0,
+    speed:config.speed ?? 150, seed, rng:seed>>>0, rigSeed, rigCounts:new Map(),
     time:0, remainder:0, status:'playing', tutorial:!!config.tutorial,
     spawnItems:config.spawnItems ?? !config.tutorial, nextItem:config.nextItem ?? 9,
     itemInterval:config.itemInterval ?? 13, flowerMass:config.flowerMass ?? 30,
@@ -329,25 +339,42 @@ function playerContacts(w,dt,next) {
   const p=w.player;
   const onLeaf=w.leaves.some(leaf=>distance(leaf,p)<=leaf.r);
   for(const e of w.enemies){
-    if(e.mass<=EPSILON || p.mass<=EPSILON || !touching(e,p,.35)) continue;
+    const redHole=e.type==='hole' && e.mass>p.mass;
+    if(e.mass<=EPSILON || p.mass<=EPSILON || !touching(e,p,redHole?EPSILON:.35)) continue;
     if(canEat(p,e)){
       const mass=e.mass;
       p.mass+=mass;e.mass=0;e.r=0;syncPlayer(p);
       event(w,'eat',{target:e.type,id:e.id,mass});continue;
     }
     const c=contact(w,p,e,next);
+    const oldReach=p.r+e.r;
+    let absorbing=false;
     if(shielded(p)) {
       cue(w,'shield',{id:e.id,target:e.type,form:p.form},'shield:'+e.id,.6);
     } else if(!onLeaf && (e.type==='spike' || e.mass>p.mass)) {
       const amount=Math.min(p.mass,e.mass,c.base*(e.type==='spike'?.10:.19)*dt);
       p.mass-=amount;e.mass+=amount*(e.type==='spike'?-1:1);
       syncPlayer(p);e.r=radius(e.mass);
+      if(e.type==='hole'){
+        absorbing=true;
+        if(!c.absorption || w.time-c.absorption.lastAt>dt*1.5){
+          c.absorption={amount:0,startedAt:w.time,lastAt:w.time};
+        }
+        c.absorption.amount+=amount;c.absorption.lastAt=w.time;
+        e.absorption=c.absorption;
+      }
       cue(w,'damage',{id:e.id,target:e.type,mass:amount},'damage:'+e.id,.5);
     }
     const dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy);
     const overlap=p.r+e.r-d-.3;
     if(overlap>0){
       p.x+=(d?dx/d:1)*overlap;p.y+=(d?dy/d:0)*overlap;
+    }else if(absorbing && d>0 && (p.vx-e.vx-e.kickX)*dx+(p.vy-e.vy-e.kickY)*dy<=0){
+      // A shrinking donor would slip off a stationary rim through its own
+      // change of radius. Follow only this tick's retreating contact surface.
+      // Swimming away, enemy motion and open-water gaps remain unrestricted.
+      const follow=Math.max(0,Math.min(oldReach-p.r-e.r,d+.3-p.r-e.r));
+      p.x-=dx/d*follow;p.y-=dy/d*follow;
     }
   }
   bounded(w,p);

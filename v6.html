@@ -1,79 +1,46 @@
 <!doctype html>
 <html lang="zh">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f4f1e7">
-  <meta name="color-scheme" content="light">
-  <title>墨 · 水墨池塘 | BOKU</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="src-v6/ui.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ede4d2"><title>墨 — BOKU — V6</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="src-v5/ui/game.css"><link rel="stylesheet" href="assets/ui/bamboo-scroll/bamboo-scroll.css"><link rel="stylesheet" href="src-v6/ui.css">
 </head>
-<body>
-  <main id="pond-app">
-    <section id="library" aria-labelledby="hero-title">
-      <header class="library-header">
-        <div class="wordmark"><span class="ink-mark" aria-hidden="true">墨</span><span>BOKU <i></i> <b data-text="pond"></b></span></div>
-        <div class="header-actions">
-          <span class="edition">V6</span>
-          <button id="settings-open" class="icon-btn" data-label="settings"><span class="sliders" aria-hidden="true"><i></i><i></i><i></i></span></button>
-        </div>
-      </header>
-      <div class="library-body">
-        <section class="hero">
-          <div class="hero-copy">
-            <div class="hero-kicker"><span class="rule"></span><span id="hero-place"></span></div>
-            <h1 id="hero-title"></h1>
-            <p id="hero-desc"></p>
-            <div class="hero-actions"><button id="start" class="brush-btn"><span></span><i aria-hidden="true">→</i></button><button id="skip-intro" class="text-btn"></button></div>
-            <span id="hero-lock" class="locked-detail" hidden></span>
-          </div>
-          <figure class="hanging-painting" aria-hidden="true">
-            <div class="painting-paper"><img id="preview-art" alt=""><div class="painting-mount"></div></div>
-          </figure>
-        </section>
-        <section class="catalogue" aria-labelledby="catalogue-title">
-          <div class="catalogue-heading"><h2 id="catalogue-title" data-text="contents"></h2>
-            <div class="catalogue-actions"><button class="group-tab" id="tutorial-tab" data-text="primer"></button><button class="group-tab" id="level-tab" data-text="paintings"></button>
-              <div class="arrows"><button id="prev" class="icon-btn" data-label="previous">←</button><button id="next" class="icon-btn" data-label="next">→</button></div></div>
-          </div>
-          <div class="slips" id="slips"></div>
-          <div class="catalogue-foot"><span id="progress-caption"></span><span id="page-position"></span></div>
-        </section>
+<body data-experience="reveal" data-version="v6">
+  <iframe id="v6-opening" title="墨 · BOKU" src="src-v6/opening.html" style="position:fixed;inset:0;width:100%;height:100%;border:0;z-index:200;background:#eee4cf"></iframe>
+  <main id="pond-app" inert>
+    <section id="library" aria-labelledby="catalogue-title" hidden>
+      <div id="catalogue-ground" aria-hidden="true"></div>
+      <div class="catalogue-content">
+        <nav class="codex-bar"><button id="back-cover" class="ink-button secondary" data-text="backCover"></button><button id="settings-open" class="ink-button secondary" data-text="settings"></button></nav>
+        <header class="codex-heading"><h1 id="catalogue-title" data-text="contents"></h1><div class="bookmarks"><button id="tutorial-tab" data-text="primer"></button><button id="level-tab" data-text="paintings"></button></div></header>
+        <div class="codex-book"><button id="prev" class="turn" data-label="previous">‹</button><div id="slips"></div><button id="next" class="turn" data-label="next">›</button></div>
+        <footer class="codex-selection"><h2 id="hero-title"></h2><p id="hero-desc"></p><span id="hero-lock" hidden></span>
+          <div class="codex-actions"><button id="start" class="brush selected"><span></span></button><button id="skip-intro" class="ink-button secondary"></button></div>
+        </footer>
       </div>
     </section>
     <section id="field" hidden aria-label="Pond">
       <canvas id="world" tabindex="-1"></canvas>
       <div id="hud">
-        <div class="hud-topleft"><button class="icon-btn pause-btn" id="pause" data-label="pause"><span aria-hidden="true">Ⅱ</span></button><div id="pond-name"></div></div>
-        <div class="mass-panel" role="group" data-label="mass">
-          <div class="mass-labels"><span><i class="mass-swatch"></i><span data-text="own"></span> <b id="mass-value">0</b></span><span><i class="rival-swatch"></i><span data-text="largest"></span> <b id="rival-value">0</b></span></div>
-          <div class="mass-track"><div id="mass-fill"></div><i id="mass-marker"></i></div>
-        </div>
-        <aside class="pond-tools"><canvas id="minimap" width="180" height="130" data-label="map"></canvas><div id="inventory"></div></aside>
-        <div class="lesson" hidden id="lesson"><span id="lesson-title"></span><p id="lesson-line" role="status" aria-live="polite"></p><button id="skip-step" class="text-btn" data-text="skipStep"></button></div>
+        <header class="hud-top"><button class="ink-button secondary" id="pause" data-label="pause">Ⅱ</button><strong id="timer">0:00</strong><span id="pond-name"></span></header>
+        <section id="revealMeter" role="group" data-label="mass"><header><span><span data-text="own"></span> <b id="mass-value">0</b></span><span><span data-text="largest"></span> <b id="rival-value">0</b></span></header>
+          <div class="meter-strip"><progress id="revealProgress" max="1" value="0"></progress><i id="mass-marker"></i></div></section>
+        <aside class="pond-tools"><div id="mapWrap"><canvas id="minimap" width="128" height="128" data-label="map"></canvas></div><div id="inventory"></div></aside>
+        <div class="lesson" hidden id="lesson"><span id="lesson-title"></span><p id="lesson-line" role="status" aria-live="polite"></p><button id="skip-step" data-text="skipStep"></button></div>
         <div id="active-form" hidden><span id="form-name"></span> <span id="form-time"></span></div>
-        <div class="action-stack"><button id="action" data-label="release"><span id="action-icon" aria-hidden="true"></span><span id="action-name"></span></button><kbd>Shift</kbd></div>
+        <div class="action-stack"><button class="ink-button" id="action" data-label="release"><span id="action-icon" aria-hidden="true"></span><span id="action-name"></span><kbd>Shift</kbd></button></div>
         <div id="joystick" hidden><i id="stick"></i></div>
       </div>
     </section>
-    <dialog id="options"><div class="dialog-inner">
-      <button type="button" id="close-options" class="icon-btn close-btn" data-label="close">×</button>
-      <h2 id="options-title"></h2>
-      <fieldset><legend data-text="language"></legend><div class="languages"><button type="button" data-lang="zh" lang="zh">中文</button><button type="button" data-lang="ja" lang="ja">日本語</button><button type="button" data-lang="en" lang="en">English</button></div></fieldset>
-      <label class="sound-setting"><span data-text="sound"></span><input id="sound-toggle" type="checkbox" checked></label>
+    <dialog id="options"><div class="panel"><h2 id="options-title"></h2><fieldset><legend data-text="language"></legend><div class="languages"><button type="button" data-lang="zh" lang="zh">中文</button><button type="button" data-lang="ja" lang="ja">日本語</button><button type="button" data-lang="en" lang="en">English</button></div></fieldset>
+      <label><span data-text="sound"></span><input id="sound-toggle" type="checkbox" checked></label>
       <div class="controls-note"><h3 data-text="controls"></h3><p data-text="goal"></p><p id="controls-copy"></p></div>
-      <div id="pause-actions" hidden><button id="resume" class="brush-btn" data-text="resume"></button><button id="exit-run" class="text-btn" data-text="return"></button></div>
+      <div id="pause-actions" hidden><button id="resume" class="ink-button" data-text="resume"></button><button id="exit-run" class="ink-button secondary" data-text="return"></button></div><button type="button" id="close-options" class="ink-button secondary" data-text="close"></button>
     </div></dialog>
-    <dialog id="ending"><div class="ending-inner">
-      <div class="end-art"><img id="ending-art" alt=""></div><div class="end-copy">
-        <div class="hero-kicker"><span class="rule"></span><span id="end-kicker"></span></div>
-        <h2 id="end-title"></h2><p id="end-note"></p>
-        <button id="end-main" class="brush-btn"></button><button id="end-home" class="text-btn" data-text="return"></button>
-      </div></div></dialog>
+    <section id="paintingView" hidden role="dialog" aria-modal="true" tabindex="-1"><canvas id="paintingCanvas" aria-hidden="true"></canvas><div id="paintingBar"><span id="paintingHint"></span><div class="painting-actions"><button id="paintingReset" class="ink-button secondary"></button><button id="paintingContinue" class="ink-button"></button></div></div></section>
+    <dialog id="ending"><div class="panel"><p id="end-kicker"></p><h2 id="end-title"></h2><p id="end-note"></p><button id="end-main" class="ink-button"></button><button id="end-home" class="ink-button secondary" data-text="return"></button></div></dialog>
     <canvas id="ink-wipe" hidden aria-hidden="true"></canvas>
     <noscript>请开启 JavaScript，进入水墨池塘。 Enable JavaScript to play BOKU.</noscript>
   </main>
   <script type="module" src="src-v6/app.mjs"></script>
-</body>
-</html>
+</body></html>

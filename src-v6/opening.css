@@ -1,0 +1,9 @@
+/* The full V5 painting, brush menu and opening panels are styled by its shipped stylesheet. */
+#loading .loading-panel {width:min(370px,87vw);gap:4px}
+#loading #loadProgress {position:absolute;width:1px!important;height:1px;margin:0;clip-path:inset(100%);overflow:hidden}
+#bamboo-load {display:block;width:100%;height:58px}
+#loadingCurrent {max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap!important}
+#loading .loading-panel #loadingResources {font-variant-numeric:tabular-nums}
+#loading.load-failed #bamboo-load {opacity:.5}
+@media(max-height:520px) {#bamboo-load {height:32px}#loading .loading-panel {gap:0px}#loadingCurrent,#loadingPreparation {font-size:9px!important}}
+@media(prefers-reduced-motion:reduce){#loading{transition-duration:0s}}

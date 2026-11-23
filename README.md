@@ -1,4 +1,4 @@
-> 当前维护版本：**V5 形体水墨与游入生态**（2026-11-23）。十套生物素材/R8龙动画、统一墨量资格与平滑变身、全身形体散墨、边缘游入、快速大体型与扁平顶栏。V4继续冻结；开发目录src-v5。详见 [交接](PROJECT_HANDOFF.md) 与 [本轮报告及玩法企划](docs/V5-SHAPE-FLOW-20261123.md)。
+> 当前制作版本为 **V6 水墨池塘**。从《墨》封面的 Play 展开竹简，选一片入池。[直接游玩 V6](https://a29k055-arch.github.io/html-inkgame/v6/) · [V6 玩法企划](docs/v6/pond-gameplay-v1.0.md)
 
 # 墨—BOKU—
 
@@ -6,16 +6,17 @@
 
 | 版本 | 直接游玩 | 冻结引用与来源 |
 |---|---|---|
-| **V5｜生灵游墨・当前版本** | **[打开 V5](https://a29k055-arch.github.io/html-inkgame/v5/)** | main；独立src-v5与boku.save.v5 |
+| **V6｜水墨池塘** | **[打开 V6](https://a29k055-arch.github.io/html-inkgame/v6/)** | 沿用 V5 的封面与形体水墨，四段习墨、六幅画卷，独立存档 |
+| V5｜生灵游墨 | [打开 V5](https://a29k055-arch.github.io/html-inkgame/v5/) | 独立 src-v5 与 boku.save.v5；[V5 开发报告](docs/V5-SHAPE-FLOW-20261123.md) |
 | V4｜水墨吞噬显画留档 | [打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/) | v4-ink-reveal → 10ef89b，完整源码和资源冻结 |
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |
 | V2｜更早期原版游戏 | [打开 V2](https://a29k055-arch.github.io/html-inkgame/v2/) | v2-original → 1bb0250（原版入口重定向至 outputs/ink_demo_v2.html） |
 
-当前公开版本为V2/V3/V4冻结版及V5维护版。根首页与/v5/发布V5；/v4/从v4-ink-reveal固定提取，绝不跟随HEAD。各版独立归档全部资源，versions.json记录各SHA。V5存档boku.save.v5、画作数据库boku.paintings.v5；只复制V4设置偏好，不迁移或改写V4游玩进度。旧涂色及复杂玩法预览继续保留。
+当前公开版本含 V2 至 V6。根首页与/v5/发布V5；/v4/从v4-ink-reveal固定提取，绝不跟随HEAD。各版独立归档全部资源，versions.json记录各SHA。V5存档boku.save.v5、画作数据库boku.paintings.v5；只复制V4设置偏好，不迁移或改写V4游玩进度。旧涂色及复杂玩法预览继续保留。
 
 本地：`node tools/serve-preview.cjs 4191`，打开`http://127.0.0.1:4191/v5.html`；本地index.html仍是V4入口，用于隔离回归。公开根首页转入/v5；正式V5取最近修改src-v5或v5.html的提交，素材演示按部署HEAD保留，避免并行素材更新直接改动正式游戏资源。
 
-- [New Version](https://a29k055-arch.github.io/html-inkgame/)（根首页，V5）
+- [V6 水墨池塘](https://a29k055-arch.github.io/html-inkgame/v6/) · [原根首页（V5）](https://a29k055-arch.github.io/html-inkgame/)
 - [旧版游戏](https://a29k055-arch.github.io/html-inkgame/outputs/ink_demo_v2.html)
 - [水墨视觉效果 README](prototypes/ink/README.md)
 - [水墨视觉测试 · 冻结历史候选](https://a29k055-arch.github.io/html-inkgame/visual-effects/)

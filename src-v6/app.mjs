@@ -6,6 +6,7 @@ import {createUI,paintings} from './ui.mjs';
 import {createInput} from './input.mjs';
 import {createCamera,createMinimap} from './view.mjs';
 import {createInkSound} from './sound.mjs';
+import {connectOpening} from './opening.mjs';
 
 const canvas=document.querySelector('#world');
 const draw=createRenderer(canvas),camera=createCamera(canvas);
@@ -15,6 +16,7 @@ const STEP=1/60;
 let world=null,tutorial=null,kind='level',index=0,seed=0,inSeries=false;
 let switching=false,ending=false,resultOpen=false,endedTime=0,accumulator=0,previous=0,hudAt=0;
 let eventOffset=0,scaleMax=1,lastHint='';
+let opening;
 const ui=createUI({
   onStart:(k,i)=>start(k,i,{series:k==='tutorial'&&i===0}),
   onRetry:()=>start(kind,index,{keepSeed:true,series:inSeries}),
@@ -24,12 +26,31 @@ const ui=createUI({
     if(useItem(world,slot)){input.blockAction();hudAt=0;}
   },
   onPause:()=>{input.reset();accumulator=0;previous=0;},
-  onLanguage:()=>{lastHint='';hudAt=0;},
+  onLanguage:lang=>{opening?.setLanguage(lang);lastHint='';hudAt=0;},
+  onSound:enabled=>{sound.setEnabled(enabled);if(enabled)sound.unlock();},
+  onCover:()=>{input.reset();opening.show();},
   onLeave:()=>changeScene(()=>{world=null;tutorial=null;ending=false;ui.home();})
 });
 const input=createInput({
   canvas,actionButton:document.querySelector('#action'),joystick:document.querySelector('#joystick'),stick:document.querySelector('#stick'),
   active:running,zoom:(n,x,y)=>{if(running())camera.zoom(world,n,x,y);}
+});
+function showCatalogue(group,selection){
+  opening.hide();
+  ui.openCatalogue(group,selection);
+  sound.unlock();
+}
+sound.setEnabled(ui.soundEnabled!==false);
+opening=connectOpening({
+  getLanguage:()=>ui.lang,
+  onLanguage:lang=>{if(ui.lang!==lang)ui.setLanguage(lang);},
+  onSoundUnlock:()=>sound.unlock(),
+  onPreferences:prefs=>{sound.configure(prefs);if(prefs.quality)draw.setQuality(prefs.quality);},
+  prepare:()=>draw.prepare(),
+  onPlay:()=>showCatalogue(),
+  onHelp:()=>{showCatalogue('tutorial',0);},
+  onGallery:index=>showCatalogue('level',index),
+  onSettings:()=>{showCatalogue();ui.openSettings();}
 });
 function running(){return Boolean(world&&!ui.paused&&!switching&&!ending&&!document.hidden&&world.status==='playing');}
 function newSeed(){
@@ -45,7 +66,8 @@ function start(nextKind,nextIndex,{keepSeed=false,series=false}={}){
   const list=nextKind==='tutorial'?TUTORIALS:LEVELS;
   if(!list[nextIndex])return;
   const nextSeed=keepSeed?seed:newSeed();
-  return changeScene(()=>{
+  return changeScene(async()=>{
+    await draw.prepare();
     kind=nextKind;index=nextIndex;seed=nextSeed;inSeries=series;
     const id=list[index].id;
     world=createWorld(makeLevel(id,seed));
@@ -72,7 +94,7 @@ function refresh(force=false){
   if(!world)return;
   const p=world.player;
   if(Math.max(p.mass,world.largest)>scaleMax*.97)scaleMax=Math.ceil(Math.max(p.mass,world.largest)*1.22);
-  ui.update({mass:p.mass,maxMass:world.largest,scaleMax,items:p.inventory,form:p.form,formRemaining:p.formTime,actionHeld:p.emitting});
+  ui.update({mass:p.mass,maxMass:world.largest,scaleMax,elapsed:world.time,items:p.inventory,form:p.form,formRemaining:p.formTime,actionHeld:p.emitting});
   const hint=tutorial?tutorialHint(tutorial,ui.lang):'';
   if(hint!==lastHint||force){lastHint=hint;ui.hint(hint);}
 }
@@ -87,7 +109,7 @@ function update(){
   stepWorld(world,control,STEP);
   if(world.player.form!==lastForm)input.blockAction();
   const events=world.events.slice(eventOffset);eventOffset=world.events.length;
-  if(ui.soundEnabled!==false)sound.events(events);
+  if(ui.soundEnabled!==false)sound.events(events,world.player);
   if(tutorial){
     if(updateTutorial(tutorial,world,events)){advanceTutorial(true);return;}
   }else if(world.status!=='playing'){
@@ -110,7 +132,14 @@ function frame(now){
   if(ending&&!switching&&kind==='level'){
     const before=endedTime;endedTime+=dt;
     const wait=world.status==='won'?1.17:.40;
-    if(before<wait&&endedTime>=wait){resultOpen=true;ui.result(world.status==='won',world.time);}
+    if(before<wait&&endedTime>=wait){
+      resultOpen=true;
+      const view=camera.update(world,0),width=canvas.clientWidth,height=canvas.clientHeight;
+      ui.result(world.status==='won',world.time,{
+        viewport:{width,height},world:{width:world.width,height:world.height},
+        camera:{x:view.x-width/(2*view.scale),y:view.y-height/(2*view.scale),scale:view.scale}
+      });
+    }
   }
   if(!switching&&now>=hudAt){refresh();hudAt=now+80;}
   paint(dt);

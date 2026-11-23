@@ -20,18 +20,37 @@ unpack('v2-scroll',path.join(out,'archive','scroll-v2'));
 
 // V6 has its own entry and save data. Its source, artwork and rigs already
 // exist in the root archive, so both URLs can load the same release files.
-const pondHtml = fs.readFileSync(path.join(out, 'v6.html'), 'utf8');
+const pondSource = fs.readFileSync(path.join(out, 'v6.html'), 'utf8');
+// A returning V6 player can still have the former title screen, JS and CSS
+// cached. Version every V6 module together, including its relative imports.
+const revision = manifest.deployment.slice(0, 12);
+const v6Modules = fs.readdirSync(path.join(out, 'src-v6')).filter(name => name.endsWith('.mjs'));
+const v6Imports = Object.fromEntries(v6Modules.map(name => {
+  const url = './src-v6/' + name;
+  return [url, url + '?v=' + revision];
+}));
+const pondHtml = pondSource.replace('</head>', '<script type="importmap">' + JSON.stringify({imports:v6Imports}) + '</script></head>')
+  .replace(/((?:src|href)="src-v6\/(?:app\.mjs|ui\.css|opening\.html))"/g, '$1?v=' + revision + '"');
 if (!/<head>/i.test(pondHtml) || /<base\b/i.test(pondHtml)) {
   throw new Error('v6.html must have a head and use project-relative URLs');
 }
 const pondDir = path.join(out, 'v6');
 fs.mkdirSync(pondDir, { recursive: true });
+fs.writeFileSync(path.join(out, 'v6.html'), pondHtml);
+const coverFile = path.join(out, 'src-v6', 'opening.html');
+const versionedCover = fs.readFileSync(coverFile, 'utf8')
+  .replace(/((?:\.\/)?opening(?:-scene\.mjs|-save\.mjs|\.css))"/g,'$1?v='+revision+'"');
+fs.writeFileSync(coverFile, versionedCover);
 fs.writeFileSync(
   path.join(pondDir, 'index.html'),
   pondHtml.replace(/<head>/i, '<head><base href="../">')
 );
 const pondAssets = [
   'src-v6/app.mjs',
+  'src-v6/opening.html','src-v6/opening-scene.mjs','src-v6/pond-ink.mjs','src-v6/enemy-art.mjs',
+  ...['urchin-ink','vortex-ink','urchin-breath'].map(n => `src-v6/art/${n}.webp`),
+  ...['bamboo-slip.png','bamboo-roll-cross-section.png','bamboo-scroll-open-24.png','bamboo-scroll.js','bamboo-scroll.css'].map(n => `assets/ui/bamboo-scroll/${n}`),
+  'assets/home/menu-reference.png','src-v5/reveal/renderer.js','src-v5/ink/living-painter.js',
   'src-v5/ink/start-transitions.js',
   ...[1, 2].map(n => `assets/effects/start/start-0${n}.webp`),
   ...[1, 2, 3, 4, 6, 7].map(n => `assets/artworks/v4-cropped/${n}.png`)

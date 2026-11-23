@@ -6,8 +6,8 @@ const hints={
   move:line('按住水面拖动，轻推摇杆向淡蓝圈游去。','水面を押したまま少し動かし、水色の輪へ泳ごう。','Hold the water and drag a little to swim toward the pale blue ring.'),
   eat:line('碰到淡蓝圈，就能吞下它；远处的红圈先绕开。','水色の輪に触れて吸収しよう。赤い輪はよけよう。','Touch the blue ring to absorb it. Give the red ring space.'),
   grew:line('第一口墨入体，身形与上方的墨量一起增长。','最初の墨を吸収。体と上の墨量が一緒に増えた。','Your first catch grew your body and the ink bar above.'),
-  spike:line('轻触红圈刺球，再松手。看看双方怎样一起变小。','赤いトゲ玉に軽く触れ、離れよう。両方が縮む。','Brush the red spiked ball, then move away. Both lose equal ink.'),
-  hole:line('再轻碰红圈黑洞：它会把你的墨吸进自己体内。','赤い渦に少し触れよう。君の墨が渦へ移る。','Briefly touch the red whirl. Watch your ink flow into it.'),
+  spike:line('贴住红圈刺球片刻，观察双方各自损失相同的墨量。','赤いトゲ玉に少しの間触れよう。どちらも同じ量の墨を失う。','Stay against the red spiked ball briefly. Both bodies lose the same amount of ink.'),
+  hole:line('贴住红圈黑洞片刻。沿着墨流看，你失去的墨正让它长大。','赤い渦に少しの間触れよう。君の墨が流れ込み、渦が育つ。','Stay against the red whirl briefly. Follow the ink from your shrinking body into the growing whirl.'),
   spikePair:line('游近两颗刺球，观察它们接触：双方损失相同的墨量。','二つのトゲ玉に近づこう。触れると同じ量の墨を失う。','Approach the two spiked balls. Watch both lose equal ink on contact.'),
   holePair:line('游近两颗黑洞。黑洞碰到同类也会同时变小。','二つの渦に近づこう。渦どうしも一緒に縮む。','Approach the twin whirls. Two whirls also lose ink together.'),
   mixedPair:line('游到两者身旁。黑洞比刺球大，正在吸走它的墨。','二つに近づこう。大きな渦は小さなトゲ玉から墨を吸う。','Approach the pair. The larger whirl draws ink from the smaller spiked ball.'),
@@ -74,7 +74,7 @@ function pair(w,key){
 }
 function enter(t,w){
   const k=t.key;
-  t.entered=w.time;t.seen.clear();t.contactAt=null;t.pairStarted=false;
+  t.entered=w.time;t.seen.clear();t.contactAt=null;t.rivalStartMass=null;t.pairStarted=false;
   if(k==='hole'||k.endsWith('Pair')){
     clearExercise(w);resetBody(w);
     if(k==='hole')putEnemy(w,'touch-hole','hole',522,330,177);
@@ -181,7 +181,7 @@ function recoverExercise(t,w){
     t.key=sequences[t.index][t.step];
     enter(t,w);
   }
-  t.entered=w.time;t.firstEat=false;
+  t.entered=w.time;t.firstEat=false;t.contactAt=null;t.rivalStartMass=null;
 }
 export function updateTutorial(t,w,newEvents){
   if(!t||t.done)return Boolean(t?.done);
@@ -195,7 +195,14 @@ export function updateTutorial(t,w,newEvents){
     if(t.key==='eat'&&t.firstEat)proceed(t,w);
     if(t.key==='grew'&&w.time-t.entered>1.5)proceed(t,w);
   }else if(k==='spike'||k==='hole'){
-    if(eventIs(events,'damage',e=>e.target===k))proceed(t,w);
+    const rival=live(t,w,'touch-'+k);
+    if(rival){
+      t.rivalStartMass??=rival.mass;
+      if(t.contactAt===null&&eventIs(events,'damage',e=>e.id===rival.id))t.contactAt=w.time;
+      // Leave both bodies in the water long enough to see the mass exchange.
+      // Only the real collision's change to this rival can pass this station.
+      if(t.contactAt!==null && Math.abs(rival.mass-t.rivalStartMass)>=7 && w.time-t.contactAt>=1.45)proceed(t,w);
+    }
   }else if(k.endsWith('Pair')){
     runPair(t,w,events);
   }else if(k==='intercept'){

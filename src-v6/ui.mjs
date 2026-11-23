@@ -1,3 +1,7 @@
+import {getRigIcon} from './rig-icons.mjs';
+import {createLevelScroll} from '../assets/ui/bamboo-scroll/bamboo-scroll.js?v=be7646f';
+import {inkIcon} from '../src-v5/ui/ink-icons.js';
+import {PaintingView} from '../src-v5/reveal/painting-view.js';
 import {LEVELS, TUTORIALS} from './levels.mjs';
 import {StartTransition, START_TRANSITIONS} from '../src-v5/ink/start-transitions.js';
 
@@ -6,6 +10,10 @@ export const paintings = [2,1,3,4,6,7].map(artwork);
 const studies = [7,3,4,1].map(artwork);
 const icons = Object.fromEntries(['fish','shrimp','turtle','dragon'].map(n=>[n,new URL('./art/'+n+'-icon.webp',import.meta.url).href]));
 const translations = {
+  backCover:['返回封面','表紙に戻る','Title screen'],
+  paintingHint:['滚轮或双指缩放 · 拖动平移','ホイール／ピンチで拡大・ドラッグで移動','Scroll or pinch to zoom · drag to pan'],
+  paintingDone:['继续','進む','Continue'],paintingReset:['适合屏幕','全体を表示','Fit to screen'],
+  paintingViewLabel:['完整水墨画欣赏','完成した水墨画','Completed ink painting'],
   pond:['水墨池塘','墨の池','Ink Pond'],contents:['竹简目录','竹簡の目録','Scroll index'],
   primer:['习墨','墨の手ほどき','Primer'],paintings:['画卷','画巻','Paintings'],
   settings:['设置','設定','Settings'],sound:['水声与墨声','水と墨の音','Pond sounds'],
@@ -84,7 +92,13 @@ export function createUI(actions={}) {
   let selection=progress.levels.length?TUTORIALS.length+Math.min(5,Math.max(...progress.levels)+1):0;
   let activeKind='tutorial',activeIndex=0,playing=false,paused=false,lastData=null,lastHint='';
   let ended=null;
-  const slots=[],cards=[];
+  const slots=[];
+  let bamboo,artGeneration=0;
+  const artPlate=$('catalogue-ground');
+  const viewing=new PaintingView($('paintingView'),{
+    translate:text,frameDuration:reduced?0:1100,flashDuration:reduced?0:450,
+    onDone(){if(ended&&!ending.open)ending.showModal();}
+  });
   const unlocked=meta=>meta.kind==='tutorial'||meta.index===0||progress.levels.includes(meta.index-1);
   const finished=meta=>(meta.kind==='tutorial'?progress.lessons:progress.levels).includes(meta.index);
   const stageArt=meta=>(meta.kind==='tutorial'?studies:paintings)[meta.index];
@@ -97,7 +111,7 @@ export function createUI(actions={}) {
     actions.onStart?.(kind,index);
   }
   function followSelection(smooth=true) {
-    const card=cards[selection].el;
+    const card=bamboo.buttons[selection];
     const a=slips.getBoundingClientRect(),b=card.getBoundingClientRect();
     let amount=0;
     if(b.left<a.left)amount=b.left-a.left-1;
@@ -111,24 +125,26 @@ export function createUI(actions={}) {
     if(follow)followSelection();
   }
   function makeCards(){
-    for (const [i,meta] of order.entries()){
-      const el=document.createElement('button'),photo=document.createElement('img');
-      el.type='button';el.className='slip';el.dataset.kind=meta.kind;el.dataset.index=String(meta.index);
-      photo.className='slip-img';photo.alt=''; photo.decoding='async';photo.loading=i>5?'lazy':'eager';
-      photo.src=stageArt(meta);photo.draggable=false;
-      const body=document.createElement('span'),top=document.createElement('span'),category=document.createElement('span'),status=document.createElement('span'),name=document.createElement('strong');
-      body.className='slip-body';top.className='slip-top';status.className='slip-state';name.className='slip-title';
-      top.append(category,status);body.append(top,name);el.append(photo,body);slips.append(el);
-      el.addEventListener('click',()=>select(i,true));cards.push({el,category,status,name});
-    }
+    // The source artist's component owns the physical slats, cord, swiping and hit areas.
+    bamboo=createLevelScroll(slips,order.map(m=>({name:m.title[progress.lang]})),(_,i)=>{
+      select(i,true);
+      const m=order[i];
+      go(m.kind,m.index);
+    });
+    bamboo.buttons.forEach((el,i)=>{
+      const m=order[i];
+      el.dataset.kind=m.kind;el.dataset.index=String(m.index);
+    });
   }
   function updateMenu(){
     const chosen=order[selection],lang=progress.lang;
-    $('hero-place').textContent=place(chosen);$('hero-title').textContent=chosen.title[lang];
+    $('hero-title').textContent=chosen.title[lang];
     $('hero-desc').textContent=chosen.subtitle[lang];
-    const art=$('preview-art'),url=stageArt(chosen);if(art.src!==url)art.src=url;
-    // The paintings have distinct aspect ratios; retain the subject at crop.
-    art.style.objectPosition=chosen.kind==='level'&&chosen.index===0?'50% 74%':'50% 51%';
+    const src=stageArt(chosen);
+    if(artPlate.dataset.src!==src){
+      artPlate.dataset.src=src;
+      artPlate.style.backgroundImage='url("'+src+'")';
+    }
     const isOpen=unlocked(chosen),start=$('start'),lock=$('hero-lock');
     start.disabled=!isOpen;start.firstElementChild.textContent=isOpen?text(chosen.kind==='tutorial'?'beginStudy':'beginPond'):text('locked');
     lock.hidden=isOpen;
@@ -136,15 +152,17 @@ export function createUI(actions={}) {
     $('skip-intro').hidden=chosen.kind!=='tutorial';$('skip-intro').textContent=text('direct');
     $('tutorial-tab').setAttribute('aria-pressed',String(chosen.kind==='tutorial'));
     $('level-tab').setAttribute('aria-pressed',String(chosen.kind==='level'));
-    for(const [i,m] of order.entries()){
-      const c=cards[i],done=finished(m),locked=!unlocked(m);
-      c.el.setAttribute('aria-current',String(i===selection));c.el.dataset.locked=String(locked);
-      c.category.textContent=place(m);c.name.textContent=m.title[lang];
-      c.status.className='slip-state'+(locked?' lock':done?' done':'');c.status.textContent=done?text('done'):'';
-      c.el.setAttribute('aria-label',place(m)+' · '+m.title[lang]+(locked?' · '+text('locked'):done?' · '+text('done'):''));
-    }
-    $('progress-caption').textContent=text('studyProgress',{a:progress.lessons.length})+'　·　'+text('levelProgress',{a:progress.levels.length});
-    $('page-position').textContent=String(selection+1).padStart(2,'0')+' / 10';
+    slips.setAttribute('aria-label',text('contents'));
+    bamboo.buttons.forEach((el,i)=>{
+      const m=order[i],done=finished(m),locked=!unlocked(m);
+      el.setAttribute('aria-current',String(i===selection));
+      el.setAttribute('aria-pressed',String(i===selection));
+      el.dataset.locked=String(locked);
+      el.querySelector('.bamboo-level-name').textContent=m.title[lang];
+      el.querySelector('.bamboo-level-no').textContent=done?text('done'):String(m.index+1).padStart(2,'0');
+      const label=place(m)+' · '+m.title[lang]+(locked?' · '+text('locked'):done?' · '+text('done'):'');
+      el.setAttribute('aria-label',label);el.title=label;
+    });
   }
   function makeSlots(){
     for(let i=0;i<3;i++){
@@ -170,7 +188,7 @@ export function createUI(actions={}) {
       $('pond-name').textContent=meta.title[lang];$('lesson-title').textContent=place(meta)+'　'+meta.title[lang];
       if(lastData)hud(lastData);
     }
-    if(ended)putResult();
+    if(ended){putResult();if(viewing.phase!=='hidden')viewing.labels();}
   }
   function pausedState(value){
     if(!playing||ended)return;
@@ -192,11 +210,17 @@ export function createUI(actions={}) {
     const {mass=0,maxMass=0,scaleMax=1,items=[],form,formRemaining=0,actionHeld=false}=data;
     const pct=n=>Math.max(0,Math.min(100,100*n/Math.max(1,scaleMax)))+'%';
     $('mass-value').textContent=String(Math.round(mass));$('rival-value').textContent=String(Math.round(maxMass));
-    $('mass-fill').style.width=pct(mass);$('mass-marker').style.left=pct(maxMass);$('mass-marker').hidden=!maxMass;
+    $('revealProgress').value=Math.min(1,mass/Math.max(1,scaleMax));$('mass-marker').style.left=pct(maxMass);$('mass-marker').hidden=!maxMass;
     const bubbles=form==='fish'||form==='dragon';
     const actionName=text(bubbles?'bubble':'release');
     $('action').setAttribute('aria-label',actionName);$('action').title=actionName;
-    $('action-name').textContent=actionName;$('action-icon').className=bubbles?'bubble':'';
+    $('action-name').textContent=actionName;
+    const actionIcon=$('action-icon'),mode=bubbles?'bubble':'surge';
+    if(actionIcon.dataset.mode!==mode){
+      actionIcon.dataset.mode=mode;
+      actionIcon.innerHTML=bubbles?'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="20" r="8"/><circle cx="23" cy="9" r="4.5"/><circle cx="24" cy="24" r="2.2"/></svg>':inkIcon('surge');
+    }
+    $('timer').textContent=formatTime(data.elapsed);
     $('action').dataset.held=String(Boolean(actionHeld));
     $('active-form').hidden=!icons[form]||formRemaining<=0;
     if(!$('active-form').hidden){$('form-name').textContent=text(form);$('form-time').textContent=Math.ceil(formRemaining)+' s';}
@@ -204,21 +228,22 @@ export function createUI(actions={}) {
       const item=items[i],type=typeof item==='string'?item:item?.type;
       const label=text('slot',{n:i+1})+' · '+(icons[type]?text('use',{name:text(type)}):text('empty'));
       if(el.title!==label){el.title=label;el.setAttribute('aria-label',label);}
-      if(el.dataset.type!==(type||'')){
-        el.dataset.type=type||'';el.replaceChildren();el.disabled=!icons[type];
-        if(icons[type]){const img=new Image();img.alt='';img.src=icons[type];el.append(img);}
+      const rig=item?.rigId||'';
+      if(el.dataset.type!==(type||'')||el.dataset.rig!==rig){
+        el.dataset.type=type||'';el.dataset.rig=rig;el.replaceChildren();el.disabled=!icons[type];
+        if(icons[type]){const img=new Image();img.alt='';img.src=getRigIcon(rig)||icons[type];el.append(img);}
       }
     });
   }
   function begin(kind,index){
-    activeKind=kind;activeIndex=index;playing=true;paused=false;ended=null;lastData=null;lastHint='';
+    artGeneration++;viewing.hide();activeKind=kind;activeIndex=index;playing=true;paused=false;ended=null;lastData=null;lastHint='';
     closeDialog(settings);closeDialog(ending);library.hidden=true;field.hidden=false;
     $('lesson').hidden=kind!=='tutorial';$('lesson-line').textContent='';
     $('active-form').hidden=true;document.body.style.overflow='hidden';localize();
     $('world').focus({preventScroll:true});
   }
   function home(){
-    closeDialog(ending);closeDialog(settings);ended=null;paused=false;playing=false;
+    artGeneration++;viewing.hide();closeDialog(ending);closeDialog(settings);ended=null;paused=false;playing=false;
     lastData=null;lastHint='';field.hidden=true;library.hidden=false;document.body.style.overflow='';
     localize();requestAnimationFrame(()=>followSelection(false));
   }
@@ -231,7 +256,7 @@ export function createUI(actions={}) {
   function putResult(){
     const meta=stageList(activeKind)[activeIndex],{won,seconds}=ended,lesson=activeKind==='tutorial';
     $('end-kicker').textContent=text(lesson?'studied':won?'won':'lost');$('end-title').textContent=meta.title[progress.lang];
-    $('ending-art').src=stageArt(meta);$('end-note').textContent=lesson?text('studyNote'):won?text('elapsed',{time:formatTime(seconds)}):text('tryNote');
+    $('end-note').textContent=lesson?text('studyNote'):won?text('elapsed',{time:formatTime(seconds)}):text('tryNote');
     const btn=$('end-main');
     if(lesson){btn.textContent=text('firstPond');btn.onclick=()=>go('level',0);}
     else if(!won){btn.textContent=text('retry');btn.onclick=()=>actions.onRetry?.();}
@@ -239,7 +264,24 @@ export function createUI(actions={}) {
     else{btn.textContent=text('return');btn.onclick=()=>actions.onLeave?.();}
     $('end-home').hidden=!lesson&&won&&activeIndex===5;
   }
-  function result(won,seconds){ended={won,seconds};putResult();if(!ending.open)ending.showModal();}
+  async function result(won,seconds,viewInfo){
+    ended={won,seconds};putResult();
+    if(won&&activeKind==='level'){
+      const token=++artGeneration,image=new Image();
+      image.src=paintings[activeIndex];
+      try{
+        await image.decode();
+        if(token!==artGeneration||!ended)return;
+        viewing.prepare(image,viewInfo);
+        await viewing.reveal();
+        return;
+      }catch{
+        if(token!==artGeneration||!ended)return;
+        viewing.hide();
+      }
+    }
+    if(!ending.open)ending.showModal();
+  }
   async function transition(callback){
     // Native dialogs occupy the browser's top layer. Close them before the
     // canvas wipe so selection always leads into the same full-screen wash.
@@ -253,18 +295,31 @@ export function createUI(actions={}) {
     }
   }
   makeCards();makeSlots();
-  $('settings-open').onclick=()=>{localize();$('pause-actions').hidden=true;settings.showModal();};
+  function openSettings(){if(playing){pausedState(true);return;}localize();$('pause-actions').hidden=true;if(!settings.open)settings.showModal();}
+  $('settings-open').onclick=openSettings;
+  $('back-cover').onclick=()=>actions.onCover?.();
   $('close-options').onclick=dismissSettings;$('resume').onclick=dismissSettings;
-  $('sound-toggle').onchange=event=>{progress.sound=event.currentTarget.checked;write();};
+  $('sound-toggle').onchange=event=>{progress.sound=event.currentTarget.checked;write();actions.onSound?.(progress.sound);};
   document.querySelectorAll('[data-lang]').forEach(el=>el.onclick=()=>chooseLang(el.dataset.lang));
   $('start').onclick=()=>{const m=order[selection];go(m.kind,m.index);};$('skip-intro').onclick=()=>go('level',0);
   $('tutorial-tab').onclick=()=>select(0,true);$('level-tab').onclick=()=>select(4,true);
   $('prev').onclick=()=>select(Math.max(0,selection-1),true);$('next').onclick=()=>select(Math.min(order.length-1,selection+1),true);
-  slips.addEventListener('keydown',e=>{if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')return;e.preventDefault();select(Math.max(0,Math.min(order.length-1,selection+(e.key==='ArrowLeft'?-1:1))),true);cards[selection].el.focus({preventScroll:true});});
+  slips.addEventListener('keydown',event=>{
+    if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
+    event.preventDefault();event.stopImmediatePropagation();
+    const direction=event.key==='ArrowLeft'?-1:1;
+    select(Math.max(0,Math.min(order.length-1,selection+direction)),true);
+    bamboo.buttons[selection].focus({preventScroll:true});
+  },{capture:true});
   $('pause').onclick=()=>pausedState(true);$('exit-run').onclick=()=>actions.onLeave?.();$('end-home').onclick=()=>actions.onLeave?.();
   $('skip-step').onclick=()=>actions.onNextTutorial?.();
-  home();
-  return {home,begin,transition,complete,result,update:hud,setPaused:pausedState,
+  localize();
+  return {home,begin,transition,complete,result,update:hud,setPaused:pausedState,openSettings,setLanguage:chooseLang,
+    openCatalogue(group,index=0){
+      if(group==='tutorial'&&TUTORIALS[index])selection=index;
+      if(group==='level'&&LEVELS[index])selection=TUTORIALS.length+index;
+      home();
+    },
     hint(value){if(value===lastHint)return;lastHint=value;$('lesson-line').textContent=value||'';},
     get lang(){return progress.lang;},get paused(){return paused;},get soundEnabled(){return progress.sound;}};
 }
