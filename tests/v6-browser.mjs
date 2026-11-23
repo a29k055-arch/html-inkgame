@@ -59,14 +59,6 @@ const srv=http.createServer(async (req,res)=>{
 });
 await new Promise(resolve=>srv.listen(0,'127.0.0.1',resolve));
 const base='http://127.0.0.1:'+srv.address().port+prefix;
-const profile=await mkdtemp(path.join(tmpdir(),'boku-v6-qa-'));
-const proc=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-background-networking',
-  '--disable-sync','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'],
-  {stdio:['ignore','ignore','pipe'],windowsHide:true});
-let startupLog='';
-proc.stderr.setEncoding('utf8').on('data',chunk=>{startupLog=(startupLog+chunk).slice(-2400);});
-let chromeError=null;
-proc.on('error',error=>{chromeError=error;});
 async function until(fn,description,timeout=12000) {
   const end=Date.now()+timeout;
   let last;
@@ -79,17 +71,59 @@ async function until(fn,description,timeout=12000) {
   }
   throw new Error('Timed out: '+description+(last?' ('+last.message+')':''));
 }
+let chromeVersion;
+async function withBrowser(task) {
+  const profile=await mkdtemp(path.join(tmpdir(),'boku-v6-qa-'));
+  const proc=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-background-networking',
+    '--disable-sync','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'],
+    {stdio:['ignore','ignore','pipe'],windowsHide:true});
+  let startupLog='';
+  proc.stderr.setEncoding('utf8').on('data',chunk=>{startupLog=(startupLog+chunk).slice(-2400);});
+  let chromeError=null;
+  proc.on('error',error=>{chromeError=error;});
+  try {
+    const port=await until(async()=>{
+      if(chromeError || proc.exitCode!==null || proc.signalCode) throw Object.assign(new Error('Chrome exited: '+(chromeError?.message??proc.exitCode??proc.signalCode)+' '+startupLog),{fatal:true});
+      const active=await readFile(path.join(profile,'DevToolsActivePort'),'utf8');
+      return Number(active.split('\n')[0]);
+    },'Chrome startup',60000).catch(error=>{throw new Error(error.message+' '+startupLog);});
+    const endpoint='http://127.0.0.1:'+port;
+    if(!chromeVersion) {
+      const result=await fetch(endpoint+'/json/version',{signal:AbortSignal.timeout(15000)});
+      chromeVersion=(await result.json()).Browser;
+    }
+    return await task(endpoint);
+  } finally {
+    proc.kill();
+    await until(()=>proc.exitCode!==null || proc.signalCode!==null || chromeError,'Chrome exit',3500).catch(()=>{});
+    await rm(profile,{recursive:true,force:true,maxRetries:3}).catch(()=>{});
+  }
+}
 async function session(endpoint) {
-  const target=await (await fetch(endpoint+'/json/new?about:blank',{method:'PUT'})).json();
+  const target=await (await fetch(endpoint+'/json/new?about:blank',{method:'PUT',signal:AbortSignal.timeout(15000)})).json();
   const socket=new WebSocket(target.webSocketDebuggerUrl);
-  await new Promise((resolve,reject)=>{socket.addEventListener('open',resolve,{once:true});socket.addEventListener('error',reject,{once:true});});
+  await new Promise((resolve,reject)=>{
+    const timer=setTimeout(()=>reject(new Error('Timed out opening Chrome debugger socket')),15000);
+    socket.addEventListener('open',()=>{clearTimeout(timer);resolve();},{once:true});
+    socket.addEventListener('error',()=>{clearTimeout(timer);reject(new Error('Chrome debugger socket failed to open'));},{once:true});
+    socket.addEventListener('close',()=>{clearTimeout(timer);reject(new Error('Chrome debugger socket closed'));},{once:true});
+  });
   const pending=new Map(), problems=[], loaded=new Set();
   let seq=0;
+  function disconnected(){
+    for(const {timer,reject,method} of pending.values()){
+      clearTimeout(timer);
+      reject(Object.assign(new Error('Chrome disconnected during '+method),{fatal:true}));
+    }
+    pending.clear();
+  }
+  socket.addEventListener('close',disconnected);
+  socket.addEventListener('error',disconnected);
   socket.addEventListener('message',msg=>{
     const r=JSON.parse(msg.data);
     if(r.id){
       const cb=pending.get(r.id);
-      if(cb){ pending.delete(r.id); if(r.error) cb.reject(new Error(r.error.message)); else cb.resolve(r.result); }
+      if(cb){ clearTimeout(cb.timer); pending.delete(r.id); if(r.error) cb.reject(new Error(r.error.message)); else cb.resolve(r.result); }
     }else if(r.method==='Runtime.exceptionThrown'){
       problems.push(r.params.exceptionDetails.exception?.description||r.params.exceptionDetails.text);
     }else if(r.method==='Network.responseReceived'){
@@ -101,7 +135,16 @@ async function session(endpoint) {
   function rpc(method,params={}){
     const id=++seq;
     return new Promise((resolve,reject)=>{
-      pending.set(id,{resolve,reject});socket.send(JSON.stringify({id,method,params}));
+      if(socket.readyState!==WebSocket.OPEN){
+        reject(Object.assign(new Error('Chrome disconnected before '+method),{fatal:true}));return;
+      }
+      const timer=setTimeout(()=>{
+        pending.delete(id);
+        reject(Object.assign(new Error('Chrome did not answer '+method+' within 30 seconds'),{fatal:true}));
+      },30000);
+      pending.set(id,{resolve,reject,timer,method});
+      try{socket.send(JSON.stringify({id,method,params}));}
+      catch(error){clearTimeout(timer);pending.delete(id);reject(Object.assign(error,{fatal:true}));}
     });
   }
   async function js(expression){
@@ -137,7 +180,7 @@ async function session(endpoint) {
   await rpc('Page.bringToFront');
   await rpc('Storage.clearDataForOrigin',{origin:new URL(base).origin,storageTypes:'all'});
   return {rpc,js,q,click,problems,loaded,setTouch(value){touchScreen=value;},async close(){
-    socket.close();await fetch(endpoint+'/json/close/'+target.id);
+    socket.close();
   }};
 }
 // Record the visible loading interface while the real V5 artwork and pond resources stream.
@@ -389,46 +432,38 @@ async function endToNextPainting(endpoint) {
   }finally {await close();}
 }
 try{
-  const port=await until(async()=>{
-    if(chromeError || proc.exitCode!==null || proc.signalCode) throw Object.assign(new Error('Chrome exited: '+(chromeError?.message??proc.exitCode??proc.signalCode)+' '+startupLog),{fatal:true});
-    const active=await readFile(path.join(profile,'DevToolsActivePort'),'utf8');
-    return Number(active.split('\n')[0]);
-  },'Chrome startup',60000).catch(error=>{throw new Error(error.message+' '+startupLog);});
-  const endpoint='http://127.0.0.1:'+port;
   const cases=[];
   for(const mobile of [false,true]){
     console.log('Exercising '+(mobile?'touch':'mouse')+' from the shipped cover.');
-    const report=await exercise(endpoint,mobile);
+    const report=await withBrowser(endpoint=>exercise(endpoint,mobile));
     cases.push(report);console.log(JSON.stringify(report));
   }
   console.log('Exercising victory, full painting and saved unlock.');
-  const finish=await endToNextPainting(endpoint);
+  const finish=await withBrowser(endToNextPainting);
   let oldCover=null;
   if(!sourceMode){
     const old=await fetch(base+'v5/');
     assert.equal(old.status,200);
     assert.equal(createHash('sha256').update(Buffer.from(await old.arrayBuffer())).digest('hex'),
       '8804e0812c403d6503b4548668246d79f7c7e7c4521ebd0df5e982712af718f4','V5 entry differs from its frozen release.');
-    const v5=await session(endpoint);
-    try{
-      await v5.rpc('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
-      await v5.rpc('Page.navigate',{url:base+'v5/'});
-      await until(()=>v5.js('window.loadingMetrics?.resourcesReady && document.querySelector("#loading")?.hidden'),'frozen V5 cover ready',120000);
-      oldCover=await v5.js(`({title:document.querySelector('.title-mark img')?.getAttribute('src'),play:document.querySelector('#grindBtn')?.textContent?.trim(),version:document.body.dataset.version})`);
-      assert.ok(cases[0].opening.title.endsWith(oldCover.title));
-      assert.ok(oldCover.play && oldCover.version==='v5');
-      if(process.env.V6_QA_SCREENSHOTS){
-        const {data}=await v5.rpc('Page.captureScreenshot',{format:'png',fromSurface:true});
-        await writeFile(path.join(process.env.V6_QA_SCREENSHOTS,'original-v5-cover.png'),Buffer.from(data,'base64'));
-      }
-    }finally{await v5.close();}
+    await withBrowser(async endpoint=>{
+      const v5=await session(endpoint);
+      try{
+        await v5.rpc('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
+        await v5.rpc('Page.navigate',{url:base+'v5/'});
+        await until(()=>v5.js('window.loadingMetrics?.resourcesReady && document.querySelector("#loading")?.hidden'),'frozen V5 cover ready',120000);
+        oldCover=await v5.js(`({title:document.querySelector('.title-mark img')?.getAttribute('src'),play:document.querySelector('#grindBtn')?.textContent?.trim(),version:document.body.dataset.version})`);
+        assert.ok(cases[0].opening.title.endsWith(oldCover.title));
+        assert.ok(oldCover.play && oldCover.version==='v5');
+        if(process.env.V6_QA_SCREENSHOTS){
+          const {data}=await v5.rpc('Page.captureScreenshot',{format:'png',fromSurface:true});
+          await writeFile(path.join(process.env.V6_QA_SCREENSHOTS,'original-v5-cover.png'),Buffer.from(data,'base64'));
+        }
+      }finally{await v5.close();}
+    });
   }
-  console.log(JSON.stringify({chrome:(await (await fetch(endpoint+'/json/version')).json()).Browser,cases,finish,
+  console.log(JSON.stringify({chrome:chromeVersion,cases,finish,
     v5:oldCover||'skipped (source checkout)'},null,2));
 }finally{
-  proc.kill();
   srv.closeAllConnections();srv.close();
-  // Wait for Chrome to release its private profile before discarding this test run.
-  await until(()=>proc.exitCode!==null || proc.signalCode!==null || chromeError,'Chrome exit',3500).catch(()=>{});
-  await rm(profile,{recursive:true,force:true,maxRetries:3}).catch(()=>{});
 }
