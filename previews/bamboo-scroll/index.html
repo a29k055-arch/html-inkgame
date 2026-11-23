@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>墨 — BOKU — · 竹简 UI 素材</title>
+<link rel="stylesheet" href="../../assets/ui/bamboo-scroll/bamboo-scroll.css">
+<style>
+:root{color-scheme:light;--paper:#f4f0e5;--ink:#343a31;--red:#923d31}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 22% 10%,#fcf9ed,#e9e4d7);color:var(--ink);font-family:"Noto Serif CJK SC","Yu Mincho","Songti SC",SimSun,serif}
+main{max-width:1120px;margin:auto;padding:clamp(22px,5vw,58px) clamp(16px,4vw,40px) 64px}
+header{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:24px}
+.kicker{font:12px/1.3 Georgia,serif;letter-spacing:.24em;color:#887351;margin:0 0 10px}
+h1{margin:0;font-weight:500;font-size:clamp(31px,5vw,52px);letter-spacing:.12em}
+.seal{font-size:24px;color:var(--red);border:2px solid;padding:8px;transform:rotate(4deg)}
+.panel{background:#f9f6edb5;border:1px solid #b7ad944d;padding:clamp(14px,3vw,26px);margin:0 0 18px;box-shadow:0 12px 35px #5f503411}
+.sectionhead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:14px}
+h2{font-size:21px;letter-spacing:.13em;font-weight:500;margin:0}
+.number{color:#927e5e;font:12px Georgia,serif;letter-spacing:.14em}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.controls button{font:inherit;color:#554631;background:#faf7ef;border:1px solid #b8a689;border-radius:3px;padding:8px 15px;cursor:pointer}
+.controls button:hover{background:#eee5d2}
+.selection{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-top:15px}
+.note{font-size:13px;color:#80745e;line-height:1.55;margin:7px 0 0}
+.stage{padding:2px 2px 7px;position:relative}
+.loader-wrap{background:#ece6d6a6;border:1px solid #b7ad943f;padding:4px 18px 0;}
+.percent{font:35px Georgia,serif;color:#683e2d;font-variant-numeric:tabular-nums}
+.controls input{accent-color:#9c6d3f;flex:1;min-width:90px}
+.assets{display:flex;flex-wrap:wrap;gap:12px;font-size:13px}
+.assets a{color:#665037;text-underline-offset:3px}
+@media(max-width:600px){.sectionhead{align-items:flex-start;flex-wrap:wrap}.selection{align-items:flex-start;flex-direction:column}.loader-wrap{padding-inline:7px}}
+</style>
+</head>
+<body>
+<main>
+<header><div><p class="kicker">BOKU / MATERIAL STUDY</p><h1>竹简 · 展卷</h1><p class="note">《墨》选关与读取动画独立素材演示</p></div><div class="seal" aria-hidden="true">墨</div></header>
+<section class="panel" aria-label="选关竹简演示">
+  <div class="sectionhead"><div><span class="number">01 / LEVEL SELECT</span><h2>摊开的竹简</h2></div>
+    <div class="controls"><button id="previous" aria-label="向左滚动">←</button><button id="next" aria-label="向右滚动">→</button></div>
+  </div>
+  <div class="stage"><div id="level-scroll"></div></div>
+  <div class="selection"><div id="selected" aria-live="polite">已选择：第 01 关</div><p class="note">拖动、触摸横滑、滚轮或方向键 · 24 个示例竹片</p></div>
+</section>
+<section class="panel" aria-label="加载动画演示">
+  <div class="sectionhead"><div><span class="number">02 / LOADING</span><h2>卷起至展开</h2></div><output id="percent" class="percent">0%</output></div>
+  <div class="loader-wrap"><canvas id="loading" class="bamboo-loading-canvas"></canvas></div>
+  <div class="controls" style="margin-top:14px"><button id="play" disabled>播放展开</button><button id="reset" disabled>归零</button><input id="progress" disabled type="range" min="0" max="1000" value="0" step="1" aria-label="加载进度"></div>
+  <p id="status" class="note" role="status">正在准备竹简纹理……</p>
+</section>
+<section class="panel"><span class="number">SOURCE / 透明素材</span><h2 style="margin:5px 0 14px">原始素材下载</h2>
+<div class="assets"><a href="../../assets/ui/bamboo-scroll/bamboo-slip.png">单片竹简 PNG · 183 × 1436</a><a href="../../assets/ui/bamboo-scroll/bamboo-scroll-open-24.png">展开竹简 PNG · 4438 × 1436</a><a href="../../assets/ui/bamboo-scroll/bamboo-roll-cross-section.png">卷竹简端面 PNG · 1122 × 1153</a></div></section>
+</main>
+<script type="module">
+import {createLevelScroll,createBambooLoader} from '../../assets/ui/bamboo-scroll/bamboo-scroll.js';
+const $ = id => document.getElementById(id);
+const chinese = n => n<11?'一二三四五六七八九十'[n-1]:n<20?'十'+'一二三四五六七八九'[n-11]:n===20?'二十':'二十'+'一二三四'[n-21];
+const levels = Array.from({length:24},(_,i)=>({name:'第'+chinese(i+1)+'关',id:i+1}));
+const selector = createLevelScroll($('level-scroll'),levels,(level,i)=>{
+  $('selected').textContent='已选择：第 '+String(i+1).padStart(2,'0')+' 关';
+});
+selector.select(0);
+$('previous').onclick=()=>selector.scrollBy(-1);
+$('next').onclick=()=>selector.scrollBy(1);
+try {
+  const loader=await createBambooLoader($('loading'));
+  let raf=0;
+  function stop(){cancelAnimationFrame(raf);raf=0;}
+  function set(p){
+    loader.setProgress(p);
+    $('progress').value=Math.round(p*1000);
+    $('percent').value=Math.round(p*100)+'%';
+    $('status').textContent=p===1?'加载完成 · 竹简完全展开':p===0?'等待加载 · 竹简卷起':'加载中 · 竹简正在展开';
+  }
+  function play(){
+    stop();
+    const begin=performance.now();set(0);
+    function frame(time){
+      const p=Math.min((time-begin)/5500,1);
+      set(p);
+      if(p<1)raf=requestAnimationFrame(frame);
+    }
+    raf=requestAnimationFrame(frame);
+  }
+  for(const id of ['play','reset','progress']) $(id).disabled=false;
+  $('play').onclick=play;
+  $('reset').onclick=()=>{stop();set(0)};
+  $('progress').oninput=e=>{stop();set(Number(e.target.value)/1000)};
+  set(.48);
+} catch(e) { $('status').textContent='竹简纹理加载失败，请确认素材目录完整。';console.error(e); }
+</script>
+</body>
+</html>

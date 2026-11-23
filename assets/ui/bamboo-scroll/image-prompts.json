@@ -1,0 +1,18 @@
+[
+  {
+    "id": "bamboo-slip",
+    "mode": "built-in image generation",
+    "reference": [
+      "codex-clipboard-1bdfea5d-b024-4d71-a5e4-baab3d539984.png"
+    ],
+    "prompt": "Use case: stylized-concept. Asset type: isolated game UI sprite for traditional Chinese bamboo-slip scroll (竹简), level selection in an elegant ink-wash game 《墨》. Reference is structure and texture ONLY, ignore written characters. Generate one SINGLE long narrow flat bamboo slat, vertically oriented, front-on orthographic, straight parallel sides, slightly rounded hand-cut ends, entire object visible. Actual slender width to length about 1:8, fill the image height, centered. Warm aged honey/tan bamboo, desaturated light ochre, extremely fine vertical natural bamboo fibers, subtly darker edges, antique book material with restrained handpainted Chinese ink-wash realism. Exactly two tiny dark binding holes near vertical endpoints, centered horizontally at 12% and 88% height; no protruding cord, other slats, background, external shadows, no text or drawing on the face. The empty face must be readable for vertical menu text. Transparent RGBA background, isolated cutout."
+  },
+  {
+    "id": "bamboo-roll",
+    "mode": "built-in image generation",
+    "reference": [
+      "codex-clipboard-4d7c8ba4-e0a9-4930-8777-40935dfbbeca.png"
+    ],
+    "prompt": "Use case: stylized-concept. Asset type: isolated 2D loading animation sprite for historical Chinese bamboo manuscript. Reference shows linked flat bamboo slats, use only structure, color toned down, no text or marks. Show ONE rolled-up bamboo-slip scroll from DIRECTLY above its axial end, like a detailed round cross section of a tightly wound spiral of individual flattened narrow bamboo slat ends, viewed parallel to the cylinder's axis. The outline is almost circular and slight polygonal, clear visible concentric spiraling rows of little rectangular amber bamboo end grain separated by hairline dark seams; center smaller hollow spiral. Unfurl direction tangentially from bottom of circular roll toward LEFT, but NO extended sheet or tail outside the round compact cross-section. Restrained tactile warm pale honey bamboo and dark brown fine outlines, realistic handpainted ink-wash texture, coherent with the Chinese ink game, not a photorealistic photo. Perfectly front-on end view, NO perspective cylinder body, no text, no props, no background, transparency RGBA. Center single circle in square frame; all edges visible, no drop shadow."
+  }
+]
