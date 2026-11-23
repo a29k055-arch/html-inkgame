@@ -43,7 +43,7 @@ h2{font-size:21px;letter-spacing:.13em;font-weight:500;margin:0}
   <div class="selection"><div id="selected" aria-live="polite">已选择：第 01 关</div><p class="note">拖动、触摸横滑、滚轮或方向键 · 24 个示例竹片</p></div>
 </section>
 <section class="panel" aria-label="加载动画演示">
-  <div class="sectionhead"><div><span class="number">02 / LOADING</span><h2>卷起至展开</h2></div><output id="percent" class="percent">0%</output></div>
+  <div class="sectionhead"><div><span class="number">02 / LOADING · R2</span><h2>竹简连续卷开</h2></div><output id="percent" class="percent">0%</output></div>
   <div class="loader-wrap"><canvas id="loading" class="bamboo-loading-canvas"></canvas></div>
   <div class="controls" style="margin-top:14px"><button id="play" disabled>播放展开</button><button id="reset" disabled>归零</button><input id="progress" disabled type="range" min="0" max="1000" value="0" step="1" aria-label="加载进度"></div>
   <p id="status" class="note" role="status">正在准备竹简纹理……</p>
@@ -70,7 +70,7 @@ try {
     loader.setProgress(p);
     $('progress').value=Math.round(p*1000);
     $('percent').value=Math.round(p*100)+'%';
-    $('status').textContent=p===1?'加载完成 · 竹简完全展开':p===0?'等待加载 · 竹简卷起':'加载中 · 竹简正在展开';
+    $('status').textContent=p===1?'加载完成 · 竹简完全展开':p===0?'等待加载 · 竹简卷起':'加载中 · 同一卷竹片逐片转动、落平';
   }
   function play(){
     stop();

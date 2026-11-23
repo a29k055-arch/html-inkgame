@@ -85,7 +85,69 @@ export function createLevelScroll(viewport, levels, onSelect = () => {}) {
   return {select,scrollBy,buttons};
 }
 
-/** Draw a cross-sectional bamboo manuscript unrolling from left to right.
+/**
+ * The laid and wound sections are a single, inextensible centerline.
+ * Every vertex is attached to the same material-coordinate index throughout
+ * unrolling. A slat that crosses the tangent is still one slat.
+ */
+export function buildBambooGeometry(width, height, value) {
+  const progress = clamp(value);
+  const w = Math.max(1,width), h = Math.max(1,height);
+  // One radial turn is one bamboo thickness. Keep the entire roll in view.
+  const thickness = Math.min(clamp(w/85,5.2,11.4), Math.max(1,Math.PI*(h*.39)**2/Math.max(1,w-20)/1.14));
+  const k = thickness*1.075/(2*Math.PI);
+  const core = thickness*1.32;
+  const radiusLimit = Math.sqrt(core*core + 2*k*Math.max(0,w-16)) + thickness;
+  const left = Math.min(radiusLimit+8,w*.42);
+  const right = Math.max(left,w-10);
+  const length = right-left;
+  const baseline = h-19-thickness/2;
+  const count = Math.max(2,Math.round(length/(thickness*1.75)));
+  const slatLength = length/count;
+  const laid = progress*length;
+  const remaining = length-laid;
+  const joinX = left+laid;
+
+  // Exact arc length for r = core + k*theta, inverted with Newton iteration.
+  const primitive = r => (r*Math.hypot(r,k)+k*k*Math.asinh(r/k))/(2*k);
+  const offset = primitive(core);
+  function radiusAt(s) {
+    let r = Math.sqrt(core*core+2*k*Math.max(0,s));
+    for (let i=0;i<4;i++) r = Math.max(core,r-(primitive(r)-offset-s)*k/Math.hypot(r,k));
+    return r;
+  }
+  function polarAt(s) {
+    const r=radiusAt(s), theta=(r-core)/k;
+    const c=Math.cos(theta), sn=Math.sin(theta);
+    return {x:r*c,y:r*sn,dx:k*c-r*sn,dy:k*sn+r*c};
+  }
+  const outer=polarAt(remaining);
+  // Orient the inward tangent to +x; positive canvas y points down.
+  // The tail is tangent to the flat sheet, so no detached sprite or cap.
+  const magnitude=Math.hypot(outer.dx,outer.dy);
+  const cos=-outer.dx/magnitude, sin=outer.dy/magnitude;
+  function pointAt(s) {
+    if (s<=laid || remaining<=1e-8) return {x:left+s,y:baseline,tx:1,ty:0};
+    const p=polarAt(length-s);
+    const dx=p.x-outer.x,dy=p.y-outer.y;
+    const v=Math.hypot(p.dx,p.dy);
+    const tx=-p.dx/v,ty=-p.dy/v;
+    return {
+      x:joinX+cos*dx-sin*dy, y:baseline+sin*dx+cos*dy,
+      tx:cos*tx-sin*ty,ty:sin*tx+cos*ty
+    };
+  }
+  // Neighbors share exactly the same joint corners (not two overlapping or
+  // disjoint rectangles). This keeps the tied slats connected at the bend.
+  const joints=Array.from({length:count+1},(_,i)=>{
+    const p=pointAt(i===count?length:i*slatLength);
+    const nx=-p.ty*thickness/2,ny=p.tx*thickness/2;
+    return {...p,top:{x:p.x-nx,y:p.y-ny},bottom:{x:p.x+nx,y:p.y+ny}};
+  });
+  return {joints,thickness,count,length,slatLength,laid,joinX,left,right,baseline};
+}
+
+/** Draw one continuous bamboo manuscript unrolling from left to right.
  * External loader calls setProgress(0..1). No simulated completion is inherent.
  */
 export async function createBambooLoader(canvas) {
@@ -95,9 +157,9 @@ export async function createBambooLoader(canvas) {
     img.onerror = reject;
     img.src = imageURL(src);
   });
-  const [roll,slip] = await Promise.all([
-    load('bamboo-roll-cross-section.png'),load('bamboo-slip.png')
-  ]);
+  // The isolated roll PNG remains available as a static art asset, but the
+  // animation uses the same bamboo texture on every slat of the physical chain.
+  const slip = await load('bamboo-slip.png');
   const ctx = canvas.getContext('2d');
   canvas.classList.add('bamboo-loading-canvas');
   canvas.setAttribute('role','img');
@@ -113,43 +175,52 @@ export async function createBambooLoader(canvas) {
     }
     ctx.setTransform(dpr,0,0,dpr,0,0);
     ctx.clearRect(0,0,w,h);
-    const thick = clamp(w / 58,7,14);
-    const radius = Math.min(Math.sqrt((w-30)*thick/Math.PI),h*.39,w*.23);
-    const left = radius + 6, right = w - 8;
-    const length = Math.max(0,right-left), baseline = h-22;
-    const end = left + progress*length;
+    const {joints,thickness:thick,count,left,right,baseline} = buildBambooGeometry(w,h,progress);
+    const ground=baseline+thick/2;
     ctx.lineWidth = 1;
     ctx.strokeStyle = '#b8a88c80';
     ctx.setLineDash([2,5]);
-    ctx.beginPath(); ctx.moveTo(left,baseline+.5); ctx.lineTo(right,baseline+.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(left,ground+.5); ctx.lineTo(right,ground+.5); ctx.stroke();
     ctx.setLineDash([]);
-    // The laid slats keep a constant physical size as the remaining bundle shrinks.
-    const tile = thick * 2.1;
-    ctx.save();
-    ctx.beginPath(); ctx.rect(left,baseline-thick-2,Math.max(0,end-left),thick+3); ctx.clip();
-    for (let x = left; x < end; x+=tile) {
-      ctx.drawImage(slip,8,610,167,85,x,baseline-thick,tile-1,thick);
-      ctx.strokeStyle = '#694723b0'; ctx.lineWidth = .7;
-      ctx.strokeRect(x+.4,baseline-thick+.4,tile-1.8,thick-.8);
-      ctx.fillStyle = '#f3ce8a6b';
-      ctx.fillRect(x+1,baseline-thick+1,tile-3,1.2);
-    }
-    ctx.restore();
-    // Radius follows remaining wound area rather than resizing the whole texture.
-    // The inner annuli keep their size. Outer layers disappear as the roll moves.
-    if (progress < 1) {
-      const remainingRoot = Math.sqrt(1-progress);
-      const r = radius * remainingRoot;
-      if (r > .75) {
-        ctx.save();
-        ctx.translate(end,baseline-thick-r);
-        ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.clip();
-        ctx.rotate((2*length/Math.max(radius,1))*(1-remainingRoot));
-        ctx.drawImage(roll,-radius,-radius,radius*2,radius*2);
-        ctx.restore();
-        ctx.strokeStyle = '#795331a8'; ctx.lineWidth = Math.min(1.4,r*.25);
-        ctx.beginPath(); ctx.arc(end,baseline-thick-r,r-.4,0,Math.PI*2); ctx.stroke();
-      }
+    // A solid connected backing follows both sides of the complete chain.
+    // It prevents transparent subpixel cracks where rasterized slats meet.
+    ctx.beginPath();
+    ctx.moveTo(joints[0].top.x,joints[0].top.y);
+    for(const p of joints.slice(1)) ctx.lineTo(p.top.x,p.top.y);
+    for(let i=count;i>=0;i--) ctx.lineTo(joints[i].bottom.x,joints[i].bottom.y);
+    ctx.closePath();
+    ctx.fillStyle='#94613a';
+    ctx.fill();
+    // Paint inner slats first, then the outer winding and the flat tail.
+    for(let i=count-1;i>=0;i--) {
+      const a=joints[i],b=joints[i+1];
+      const chord=Math.hypot(b.x-a.x,b.y-a.y);
+      const angle=Math.atan2(b.y-a.y,b.x-a.x);
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(a.top.x,a.top.y);
+      ctx.lineTo(b.top.x,b.top.y);
+      ctx.lineTo(b.bottom.x,b.bottom.y);
+      ctx.lineTo(a.bottom.x,a.bottom.y);
+      ctx.closePath();
+      ctx.fillStyle='#c39156';ctx.fill();
+      ctx.save();
+      ctx.clip();
+      ctx.translate((a.x+b.x)/2,(a.y+b.y)/2);
+      ctx.rotate(angle);
+      // Keep a consistent texture patch assigned to the slat for every frame.
+      const span=chord+thick*2;
+      ctx.drawImage(slip,8,410+(i*71)%530,167,85,-span/2,-thick*1.1,span,thick*2.2);
+      const light=ctx.createLinearGradient(0,-thick*.65,0,thick*.65);
+      light.addColorStop(0,'#fff0c36e');light.addColorStop(.28,'#fff0c30b');
+      light.addColorStop(.68,'#4d2e1605');light.addColorStop(1,'#5939158f');
+      ctx.fillStyle=light;ctx.fillRect(-span/2,-thick*1.1,span,thick*2.2);
+      ctx.restore();
+      // The dark seam is the binding between neighboring slats, never a
+      // transparent slot. Its location moves with that exact same joint.
+      ctx.strokeStyle='#694423d6';ctx.lineWidth=clamp(thick*.075,.45,.9);
+      ctx.stroke();
+      ctx.restore();
     }
     canvas.setAttribute('aria-label',`竹简加载进度 ${Math.round(progress*100)}%`);
   }
