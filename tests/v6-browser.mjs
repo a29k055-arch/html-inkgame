@@ -317,13 +317,20 @@ async function exercise(endpoint,mobile) {
     const coverDoc='document.querySelector("#v6-opening").contentDocument';
     await until(()=>js(coverDoc+'.querySelector("#settings").open'),'original V5 settings opened');
     for(const lang of ['en','ja','zh']){
-      await js(coverDoc+'.querySelector("#language").focus()');
-      const index=await js(coverDoc+'.querySelector("#language option[value='+lang+']").index');
-      for(const [key,code] of [['Home',36],...Array.from({length:index},()=>['ArrowDown',40])]){
-        await rpc('Input.dispatchKeyEvent',{type:'keyDown',key,code:key,windowsVirtualKeyCode:code});
-        await rpc('Input.dispatchKeyEvent',{type:'keyUp',key,code:key,windowsVirtualKeyCode:code});
-      }
-      await until(()=>js('document.documentElement.lang.startsWith("'+lang+'")'),lang+' selected');
+      // The native select commits on different keys on Linux and Windows.
+      // Select the real option, then exercise the same public DOM events on both.
+      await js(`(()=>{
+        const field=${coverDoc}.querySelector('#language');
+        const option=Array.from(field.options).find(item=>item.value===${JSON.stringify(lang)});
+        if(!option)throw new Error('Missing language option');
+        field.focus();
+        field.selectedIndex=option.index;
+        field.dispatchEvent(new Event('input',{bubbles:true}));
+        field.dispatchEvent(new Event('change',{bubbles:true}));
+      })()`);
+      await until(()=>js(`document.documentElement.lang.startsWith("${lang}") &&
+        ${coverDoc}.documentElement.lang.startsWith("${lang}") &&
+        ${coverDoc}.querySelector('#language').value==="${lang}"`),lang+' selected');
     }
     await click('#closeSettings',true);
     await click('#slips [data-kind=level][data-index="1"]');

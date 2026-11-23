@@ -110,5 +110,11 @@ export function connectOpening({getLanguage,onPlay,onHelp,onGallery,onLanguage,o
    ready=true;state={...state,phase:'ready'};status();
  }).catch(error=>{failure=error?.message||String(error);console.error('V6 startup:',error);send({type:'error',message:failure});});
  init();
- return {hide,show,showSettings,setLanguage(lang){send({type:'language',lang});},get ready(){return ready;},get loading(){return loading;}};
+ function setLanguage(lang){
+   // Selecting a language inside the same-origin frame already applied it there.
+   // Echoing that choice asynchronously can roll back a later keyboard selection.
+   const current=frame.contentDocument?.documentElement.lang.split('-')[0];
+   if(current!==lang)send({type:'language',lang});
+ }
+ return {hide,show,showSettings,setLanguage,get ready(){return ready;},get loading(){return loading;}};
 }
