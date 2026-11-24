@@ -7,7 +7,7 @@ const line=(zh,ja,en)=>({zh,ja,en});
 const forms=['fish','shrimp','turtle','dragon'];
 const hints={
   move:line('按住水面向右拖动，带着墨球游向淡蓝色的光。','水面を押したまま右に動かして、水色に光る相手に近づきましょう。','Hold the water and drag right. Swim toward the pale blue glow.'),
-  eat:line('再近一点，碰到淡蓝圈就能把它吃下去。','もう少し近づいて、水色の輪の相手に触れたままでいましょう。墨を少しずつ吸収できます。','Move a little closer. Touch the pale blue rim to absorb it.'),
+  eat:line('靠近淡蓝圈，松开方向键或摇杆，贴住它，慢慢把墨吸尽。','水色の相手に近づいたら、キーやスティックを離しましょう。触れている間、墨を吸収できます。','Glide up to the blue rival, then release the controls. Stay in contact to absorb its ink.'),
   grew:line('你吃下了第一颗墨球。','最初の相手を吸収できました。','You absorbed your first rival.'),
   spike:line('游到右边，轻轻贴住红圈刺球，看看两边的墨量。','右に泳いで、赤い輪のトゲ玉に触れてみましょう。','Swim right and stay against the red spiked ball for a moment.'),
   hole:line('这次贴住红圈黑洞。观察墨从哪里流向哪里。','今度は赤い輪の黒い渦に触れて、墨がどちらに流れるか見てみましょう。','This time, touch the red whirl. Watch which way the ink flows.'),
@@ -210,7 +210,7 @@ function recoverExercise(t,w){
   const k=t.key;
   if(t.index===0){
     w.recordedMove=false;
-    putEnemy(w,'first-blue','spike',520,337,39,{vy:1.5});
+    putEnemy(w,'first-blue','spike',520,330,39);
     putEnemy(w,'red-compare','hole',695,228,175);
   }else if(k==='spike'){
     putEnemy(w,'touch-spike','spike',521,330,175);

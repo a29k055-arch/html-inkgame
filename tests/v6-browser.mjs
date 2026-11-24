@@ -284,7 +284,7 @@ async function exercise(endpoint,mobile) {
   const text=s=>js(q(s)+'?.textContent?.trim()');
   const waitText=s=>until(()=>text(s),s+' text');
   const touch=(type,touchPoints)=>rpc('Input.dispatchTouchEvent',{type,touchPoints});
-  async function steerRight(){
+  async function steerRight(stroke=70){
     const x=Math.round(width*.22),y=Math.round(height*.42);
     await until(()=>js('!document.querySelector("#field").inert && document.querySelector("#ink-wipe").hidden'),'pond accepts input after the ink transition');
     await js('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
@@ -292,10 +292,10 @@ async function exercise(endpoint,mobile) {
     const engaged=await until(async()=>{
       if(!mobile)await rpc('Input.dispatchMouseEvent',{type:'mouseMoved',x,y,buttons:0});
       if(mobile){
-        await touch('touchStart',[{x,y,id:1}]);await touch('touchMove',[{x:x+70,y,id:1}]);
+        await touch('touchStart',[{x,y,id:1}]);await touch('touchMove',[{x:x+stroke,y,id:1}]);
       }else{
         await rpc('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',buttons:1,clickCount:1});
-        await rpc('Input.dispatchMouseEvent',{type:'mouseMoved',x:x+70,y,buttons:1});
+        await rpc('Input.dispatchMouseEvent',{type:'mouseMoved',x:x+stroke,y,buttons:1});
       }
       if(await js('!document.querySelector("#joystick").hidden'))return true;
       await stopSteering();
@@ -406,7 +406,7 @@ async function exercise(endpoint,mobile) {
     assert.ok(amountBefore>0);
     // Reach the first edible creature through the actual input path.
     await until(()=>js('document.querySelector("#lesson").dataset.phase==="active"'),'player introduction ends',30000);
-    await steerRight();
+    await steerRight(46);
     await until(async()=>Number(await text('#mass-value'))>amountBefore || await text('#pond-name')!==lessonOne,'first uptake',22000);
     await stopSteering();
     await until(()=>js('document.querySelector("#lesson").dataset.lesson==="2" && document.querySelector("#lesson").dataset.phase==="active"'),'second tutorial after its introduction',45000);

@@ -48,7 +48,7 @@ function lessonWorld(meta,seed) {
     player:{x:405,y:330,mass:START_MASS,angle:0}, enemies:[],leaves:[],drops:[],items:[],tutorial:true,spawnItems:false};
   if (meta.index===0) {
     cfg.enemies=[
-      {id:'first-blue',type:'spike',x:520,y:337,mass:rivalMass(39),vx:0,vy:1.5},
+      {id:'first-blue',type:'spike',x:520,y:330,mass:rivalMass(39),vx:0,vy:0},
       {id:'red-compare',type:'hole',x:695,y:228,mass:rivalMass(175)}
     ];
   }
