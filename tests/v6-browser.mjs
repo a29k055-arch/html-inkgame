@@ -332,9 +332,28 @@ async function exercise(endpoint,mobile) {
         field.dispatchEvent(new Event('input',{bubbles:true}));
         field.dispatchEvent(new Event('change',{bubbles:true}));
       })()`);
-      await until(()=>js(`document.documentElement.lang.startsWith("${lang}") &&
-        ${coverDoc}.documentElement.lang.startsWith("${lang}") &&
-        ${coverDoc}.querySelector('#language').value==="${lang}"`),lang+' selected');
+      await until(async()=>{
+        const observed=await js(`[document.documentElement.lang,${coverDoc}.documentElement.lang,
+          ${coverDoc}.querySelector('#language').value]`);
+        if(observed.every(value=>value.split('-')[0]===lang))return true;
+        throw new Error('Pond, cover and settings show '+JSON.stringify(observed));
+      },lang+' selected');
+      if(lang==='ja'){
+        // A queued cover initialization may arrive after the player changes
+        // language. Wait for that exact message to be processed by the cover.
+        const languageAfterInit=await js(`new Promise(resolve=>{
+          const cover=document.querySelector('#v6-opening').contentWindow;
+          const observed=event=>{
+            if(event.data?.probe!=='language-order')return;
+            cover.removeEventListener('message',observed);
+            resolve([document.documentElement.lang,cover.document.documentElement.lang,
+              cover.document.querySelector('#language').value]);
+          };
+          cover.addEventListener('message',observed);
+          cover.postMessage({scope:'boku-v6-cover',type:'init',lang:'en',probe:'language-order'},location.origin);
+        })`);
+        assert.deepEqual(languageAfterInit,['ja','ja','ja']);
+      }
     }
     await click('#closeSettings',true);
     await click('#grindBtn',true);

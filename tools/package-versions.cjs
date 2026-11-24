@@ -39,7 +39,7 @@ fs.mkdirSync(pondDir, { recursive: true });
 fs.writeFileSync(path.join(out, 'v6.html'), pondHtml);
 const coverFile = path.join(out, 'src-v6', 'opening.html');
 const versionedCover = fs.readFileSync(coverFile, 'utf8')
-  .replace(/((?:\.\/)?opening(?:-scene\.mjs|-save\.mjs|\.css))"/g,'$1?v='+revision+'"');
+  .replace(/((?:\.\/)?opening(?:-scene\.mjs|-save\.mjs|\.css))(["'])/g,'$1?v='+revision+'$2');
 fs.writeFileSync(coverFile, versionedCover);
 fs.writeFileSync(
   path.join(pondDir, 'index.html'),

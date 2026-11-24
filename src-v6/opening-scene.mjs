@@ -187,10 +187,10 @@ window.addEventListener('message',e=>{
  if(q.type==='init'){if(!host){host=true;const tracks=[{id:'shuffle',label:'bgmShuffle'},...(q.tracks||[])];
    for(const tr of tracks){const o=document.createElement('option');o.value=tr.id;o.dataset.i18n=tr.label;$('bgmTrack').append(o);}
    action('preferences',{...cfg});
- }localize(q.lang);}
+ }localize(action('current-language'));}
  else if(q.type==='state'){state=q.value;updateBoot();}
  else if(q.type==='error')fail(q.message);
- else if(q.type==='language')localize(q.lang);
+ else if(q.type==='language')localize(action('current-language'));
  else if(q.type==='settings'){
    settingsOnly=true;document.documentElement.dataset.settingsOnly='true';$('stage').inert=true;
    displayPrefs();if(!$('settings').open)$('settings').showModal();

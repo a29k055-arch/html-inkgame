@@ -73,7 +73,7 @@ export function connectOpening({getLanguage,onPlay,onHelp,onGallery,onLanguage,o
  let active=true,ready=false,loading=null,state={phase:'start'},failure=null,returnFromSettings=null;
  const send=(message)=>frame.contentWindow?.postMessage({scope:'boku-v6-cover',...message},location.origin);
  function status(){send({type:'state',value:state});}
- function init(){send({type:'init',lang:getLanguage?.()||'zh',tracks:BGM_TRACKS.map(({id,label})=>({id,label}))});status();if(failure)send({type:'error',message:failure});}
+ function init(){send({type:'init',tracks:BGM_TRACKS.map(({id,label})=>({id,label}))});status();if(failure)send({type:'error',message:failure});}
  function hide(){
    active=false;scene.inert=false;frame.hidden=true;delete frame.dataset.settingsOnly;
    send({type:'visibility',open:false});
@@ -89,6 +89,7 @@ export function connectOpening({getLanguage,onPlay,onHelp,onGallery,onLanguage,o
  }
  frame.openingAction=(action,value)=>{
    if(action==='hello'){init();return;}
+   if(action==='current-language')return getLanguage?.()||'zh';
    if(action==='unmute'){onSoundUnlock?.();return;}
    if(action==='language'){onLanguage?.(value);return;}
    if(action==='preferences'){onPreferences?.(value);return;}
@@ -114,7 +115,7 @@ export function connectOpening({getLanguage,onPlay,onHelp,onGallery,onLanguage,o
    // Selecting a language inside the same-origin frame already applied it there.
    // Echoing that choice asynchronously can roll back a later keyboard selection.
    const current=frame.contentDocument?.documentElement.lang.split('-')[0];
-   if(current!==lang)send({type:'language',lang});
+   if(current!==lang)send({type:'language'});
  }
  return {hide,show,showSettings,setLanguage,get ready(){return ready;},get loading(){return loading;}};
 }
