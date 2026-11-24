@@ -28,7 +28,7 @@ const hints={
   jet:line('面向右边，按住放墨键，用喷出的墨推开身后的刺球。','右を向いて墨を吐くボタンを長押しし、後ろのトゲ玉を押してみましょう。','Face right and hold the ink button. Use the jet to push the ball behind you.'),
   store:line('游进荷叶，在叶面上按住放墨键。','ハスの葉に乗って、墨を吐くボタンを長押ししましょう。','Swim onto the lotus leaf and hold the ink button.'),
   fullLeaf:line('这片叶子已经开了三朵花。先吃一朵，腾出位置。','この葉にはもう3輪咲いています。1輪食べて場所を空けましょう。','This leaf already has three flowers. Eat one to make room.'),
-  bloom:line('再喷一点，看看叶面上的花苞。','もう少し墨を注いで、つぼみを見てみましょう。','Give it a little more ink. Watch the bud on the leaf.'),
+  bloom:line('再喷一点，看看荷叶外缘，花就快开了。','もう少し墨を注ぎましょう。葉のすぐ外に花が咲きます。','Give it a little more ink. Watch just beyond the edge of the leaf.'),
   flower:line('松开放墨键，游到荷花上，把墨补回来。','ボタンを離して、咲いた花に触れましょう。墨が戻ります。','Release the button. Swim into the blossom to regain ink.'),
   done:line('教学完成。','練習できました。','Lesson complete.')
 };
@@ -39,10 +39,10 @@ const sequences=[
   ['jet','store','bloom','flower']
 ];
 
-export function createTutorial(id){
+export function createTutorial(id,continuation=false){
   const index=Number(String(typeof id==='object'?id.id:id).split('-').pop())-1;
   if(!sequences[index]) throw new RangeError('Unknown lesson: '+id);
-  return {index,step:0,key:sequences[index][0],phase:'intro',elapsed:0,done:false,cursor:0,entered:null,seen:new Set(),pairStarted:false,contactAt:null,firstEat:false};
+  return {index,step:0,key:sequences[index][0],phase:continuation?'active':'intro',pending:[],elapsed:0,done:false,cursor:0,entered:null,seen:new Set(),pairStarted:false,contactAt:null,firstEat:false};
 }
 const touchMove=line('手指按住水面，往右轻轻一拖，游向淡蓝色的光。','水面に指を置き、右に軽くスライドして水色の相手に近づきましょう。','Touch the water and slide your finger right, toward the pale blue glow.');
 const keyboardMove=line('按住水面向右拖动，也可以按 D 或 →，游向淡蓝色的光。','水面を右にドラッグするか、D か → を押して水色の相手に近づきましょう。','Drag right on the water, or hold D or →, to swim toward the pale blue glow.');
@@ -53,7 +53,7 @@ const actionClue={
 };
 export function tutorialHint(t,lang='zh',touch=false){
   if(t.phase==='intro')return introductions[t.index][lang];
-  if((t.phase==='hold'||t.phase==='fade-out')&&results[t.key])return results[t.key][lang];
+  if((t.phase==='hold'||t.phase==='fade-out'||t.done)&&results[t.key])return results[t.key][lang];
   if(t.key==='move')return (touch?touchMove:keyboardMove)[lang];
   if(t.key==='jet'&&!touch)return keyboardJet[lang];
   const s=hints[t.done?'done':t.key==='store'&&t.fullLeaf?'fullLeaf':t.key];
@@ -87,7 +87,7 @@ function pair(w,key){
 }
 function enter(t,w){
   const k=t.key;
-  t.entered=w.time;t.seen.clear();t.contactAt=null;t.rivalStartMass=null;t.pairStarted=false;
+  t.entered=w.time;t.pending.length=0;t.seen.clear();t.contactAt=null;t.rivalStartMass=null;t.pairStarted=false;
   if(k==='hole'||k.endsWith('Pair')){
     clearExercise(w);resetBody(w);
     if(k==='hole')putEnemy(w,'touch-hole','hole',522,330,177);
@@ -131,8 +131,7 @@ function enterNext(t,w){
 function proceed(t,w){
   if(t.phase!=='active')return;
   if(results[t.key]){t.phase='hold';t.elapsed=0;return;}
-  // A freshly activated form stays in the inventory position until its short
-  // dissolve covers the new practice arrangement. Its timer is frozen here.
+  // Set up the next practice arrangement when the paper fade covers it.
   if(t.key.endsWith('Use')){t.phase='fade-out';t.elapsed=0;return;}
   enterNext(t,w);
 }
@@ -144,7 +143,7 @@ export function advanceTutorialBeat(t,w,dt){
     if(t.entered===null)t.entered=w.time;
   }else if(t.phase==='hold'&&t.elapsed>=LESSON_HOLD){
     if(t.step===sequences[t.index].length-1){
-      t.done=true;t.phase='finished';t.key='done';
+      t.done=true;t.phase='finished';
     }else{
       t.phase='fade-out';t.elapsed=0;
     }
@@ -225,9 +224,15 @@ function recoverExercise(t,w){
 }
 export function updateTutorial(t,w,newEvents){
   if(!t||t.done)return Boolean(t?.done);
-  if(t.phase!=='active')return false;
+  const fresh=readEvents(t,w,newEvents);
+  if(t.phase!=='active'){
+    // An eager player may reach a target before the opening words or fade
+    // finish. Count that real interaction as soon as its prompt is active.
+    if(t.phase==='intro'||t.phase==='fade-in')t.pending.push(...fresh);
+    return false;
+  }
   if(t.entered===null)t.entered=w.time;
-  const events=readEvents(t,w,newEvents);
+  const events=t.pending.length?t.pending.splice(0).concat(fresh):fresh;
   if(w.status==='lost'||w.player.mass<12){recoverExercise(t,w);return false;}
   const k=t.key;
   if(t.index===0){
@@ -274,7 +279,7 @@ export function updateTutorial(t,w,newEvents){
 
 export function tutorialFocus(t,w){
   if(!t||t.done)return null;
-  if(t.phase==='intro')return t.index===0?w.player:null;
+  if(t.phase==='intro')return null;
   if(t.phase==='hold'||t.phase==='fade-out')return null;
   const k=t.key, e=id=>live(t,w,id);
   if(k==='move'||k==='eat')return e('first-blue');

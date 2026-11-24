@@ -5,8 +5,10 @@
 #world {position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
 #field:not([hidden]) #world {display:block;pointer-events:auto;}
 #hud .hud-top {left:max(12px,env(safe-area-inset-left));top:max(12px,env(safe-area-inset-top));right:auto;gap:6px;width:auto;pointer-events:none;}
-#pause {position:static;pointer-events:auto;display:grid;place-items:center;font-size:18px;line-height:1;padding:0;min-height:38px;width:38px;height:38px;}
-#pond-name,#active-form,.lesson {background:#f8f5e8d9;border:1px solid #fff8;border-radius:12px;box-shadow:0 4px 22px #342e1c0e;}
+.pause-mark {width:15px;height:16px;display:flex;justify-content:space-between;pointer-events:none;}
+.pause-mark::before,.pause-mark::after {content:"";width:5px;height:100%;border-radius:1.5px;background:currentColor;}
+#pause {border-radius:10px;position:static;pointer-events:auto;display:grid;place-items:center;font-size:18px;line-height:1;padding:0;min-height:38px;width:38px;height:38px;}
+#pond-name,#active-form {background:#f8f5e8d9;border:1px solid #fff8;border-radius:12px;box-shadow:0 4px 22px #342e1c0e;}
 #pond-name {position:absolute;top:44px;left:0;padding:3px 8px;font-size:11px;}
 body[data-version=v6] #timer {position:static;transform:none;display:grid;place-items:center;padding:4px 9px;min-height:36px;font-size:15px;line-height:1.15;}
 body[data-version=v6] #revealMeter {position:absolute;top:max(12px,env(safe-area-inset-top));left:140px;right:132px;width:auto;max-width:none;transform:none;padding:5px 12px 6px;border-radius:10px;height:41px;display:flex;flex-direction:column;justify-content:center;gap:2px;box-sizing:border-box;}
@@ -17,34 +19,36 @@ body[data-version=v6] #revealProgress {width:100%;display:block;margin:5px 0 0;}
 .pond-tools {position:absolute;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
 body[data-version=v6] #mapWrap {position:static;width:108px;padding:5px;pointer-events:auto;touch-action:none;}
 #minimap {display:block;width:100%;height:auto;aspect-ratio:1;cursor:crosshair;touch-action:none;}
-#inventory {display:grid;gap:5px;justify-items:end;pointer-events:auto;}
-.slot {width:46px;height:46px;appearance:none;border-radius:50%;border:1px solid #99977d9e;background:#f4efdecb;display:grid;place-items:center;padding:2px;pointer-events:auto;touch-action:none;}
+#inventory {display:flex;flex-direction:column-reverse;align-items:center;gap:7px;pointer-events:none;}
+#inventory .slot[hidden]{display:none;}
+.slot {width:59px;height:59px;appearance:none;border-radius:50%;border:1px solid #99977d9e;background:#f4efdecb;display:grid;place-items:center;padding:2px;pointer-events:auto;touch-action:none;}
 .slot:disabled {opacity:.64;pointer-events:none;border-style:dashed;}
 .slot img {display:block;width:100%;height:100%;object-fit:contain;}
-.action-stack {position:absolute;right:max(22px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));}
+.action-stack {display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;position:absolute;right:max(22px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));}
 #action {pointer-events:auto;touch-action:none;width:78px;height:78px;min-height:78px;border-radius:22px;display:grid;place-content:center;justify-items:center;gap:2px;padding:4px;overflow:hidden;font-size:12px;line-height:1.1;box-shadow:0 7px 24px #51452a26;}
 #action[data-held=true] {transform:scale(.96);filter:brightness(1.15);}
 #action-icon {display:grid;place-items:center;width:27px;height:27px;color:#f3efdc;}
 #action-icon svg {display:block;width:100%;height:100%;}
 #action kbd {font:9px/1.1 system-ui;opacity:.75;}
-#active-form {position:absolute;right:16px;bottom:110px;padding:3px 8px;font-size:11px;}
-.lesson {position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:min(510px,60vw);padding:9px 14px;text-align:center;}
-#lesson-title {font-size:11px;color:#797862;}
-.lesson p {margin:3px 0;font-size:14px;line-height:1.45;}
-.lesson button {pointer-events:auto;color:#756551;text-decoration:underline;text-underline-offset:3px;font-size:11px;}
-#lesson {box-sizing:border-box;width:max-content;max-width:min(38rem,calc(100% - 12rem));padding:11px 20px;}
-#lesson-line {font-size:clamp(15px,1.1vw,18px);line-height:1.55;text-wrap:pretty;color:#303b36;}
-#lesson #skip-step {padding:3px 9px;min-height:26px;}
-@media(max-width:620px){
-  #lesson {max-width:calc(100% - 88px);padding:7px 11px;}
-  #lesson-line {font-size:14px;line-height:1.5;}
+#active-form {position:absolute;right:108px;bottom:30px;pointer-events:none;padding:3px 8px;font-size:11px;}
+/* The words sit directly on the paper; only Skip catches pointer input. */
+#lesson {
+  position:absolute;top:max(69px,calc(env(safe-area-inset-top) + 58px));left:50%;
+  width:min(680px,calc(100% - 250px));transform:translateX(-50%);text-align:center;
+  color:#293831;pointer-events:none;text-shadow:0 0 4px #fff9e9,0 1px 8px #faf6e5,0 1px 14px #f7f3df;
 }
+#lesson-title {display:block;font-size:clamp(16px,1.35vw,22px);line-height:1.35;letter-spacing:.05em;font-weight:650;}
+.lesson-copy {position:relative;margin-top:5px;}
+.lesson-copy p {margin:0;font-size:clamp(16px,1.26vw,20px);line-height:1.45;text-wrap:balance;}
+.lesson-echo {position:absolute;inset:0;}
+#skip-step {
+  position:absolute;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);
+  pointer-events:auto;min-height:40px;padding:6px 16px;color:#454b40;text-shadow:0 1px 5px #fff9e9;
+  background:transparent;border:0;text-decoration:underline;text-underline-offset:4px;font:inherit;font-size:14px;cursor:pointer;
+}
+#lesson[hidden],#skip-step[hidden]{display:none;}
 #lesson-veil {position:fixed;inset:0;z-index:66;background:#eee6d4;pointer-events:none;opacity:0;}
 #lesson-veil[hidden]{display:none;}
-#lesson[data-phase="intro"] #lesson-line,#lesson[data-phase="hold"] #lesson-line {color:#384c47;}
-#lesson[data-phase="hold"]::after {content:'';position:absolute;bottom:0;left:calc(50% - 20px);width:40px;height:1px;background:#758f86;transform-origin:left;animation:lesson-settle 3s linear both;}
-@keyframes lesson-settle {from{transform:scaleX(0)}to{transform:scaleX(1)}}
-@media(prefers-reduced-motion:reduce){#lesson[data-phase="hold"]::after{animation:none}}
 #field #joystick {display:block;position:fixed;bottom:auto;right:auto;width:88px;height:88px;transform:translate(-50%,-50%);opacity:1;pointer-events:none;}
 #field #joystick[hidden]{display:none;}
 #ending p {font-size:13px;}
@@ -53,11 +57,15 @@ body[data-version=v6] #mapWrap {position:static;width:108px;padding:5px;pointer-
   body[data-version=v6] #revealMeter {top:max(8px,env(safe-area-inset-top));left:52px;right:93px;width:auto;height:35px;transform:none;padding:4px 7px 5px;}
   body[data-version=v6] #revealMeter header {font-size:10px;}
   #hud .hud-top {top:8px;left:8px;}.pond-tools {right:7px;top:7px;gap:5px;}
-  body[data-version=v6] #mapWrap {width:76px;}#pond-name{display:none;}body[data-version=v6] #timer{display:none;}.slot{width:38px;height:38px;}#pause{min-height:34px;height:34px;width:34px;}
-  .lesson {left:8px;transform:none;max-width:calc(100% - 94px);padding:6px 9px;font-size:12px;}.lesson p{font-size:12px;}
-  #action {width:64px;height:64px;min-height:64px;}.action-stack{right:13px;bottom:max(16px,env(safe-area-inset-bottom));}#active-form{bottom:91px;}
+  body[data-version=v6] #mapWrap {width:76px;}#pond-name{display:none;}body[data-version=v6] #timer{display:none;}.slot{width:50px;height:50px;}#pause{min-height:34px;height:34px;width:34px;}
+  #lesson {top:max(53px,calc(env(safe-area-inset-top) + 46px));width:calc(100% - 32px);}
+  #lesson-title {max-width:calc(100% - 120px);margin:auto;font-size:17px;}
+  .lesson-copy {margin-top:10px;}
+  .lesson-copy p {font-size:15px;}
+  #skip-step {bottom:max(8px,env(safe-area-inset-bottom));}
+  #action {width:64px;height:64px;min-height:64px;}.action-stack{right:13px;bottom:max(16px,env(safe-area-inset-bottom));}#active-form{bottom:20px;right:88px;}
 }
 @media(pointer:coarse){#action kbd{display:none;}}
 @media(max-height:500px) and (orientation:landscape){
-  body[data-version=v6] #mapWrap{width:64px;}.slot{width:32px;height:32px;}#inventory{gap:2px;}#action{height:54px;width:54px;min-height:54px;}
+  body[data-version=v6] #mapWrap{width:64px;}.slot{width:44px;height:44px;}#inventory{gap:3px;}#action{height:54px;width:54px;min-height:54px;}
 }

@@ -1,4 +1,4 @@
-import {HeadFirstPainter} from './creature-painter.mjs';
+import {HeadFirstPainter,captureForm} from './creature-painter.mjs';
 import {LIVING_RIGS,preloadLivingCreatures} from '../src-v5/ink/living-painter.js';
 import {PondEffects} from '../src-v5/reveal/pond-effects.js';
 import {preloadPondPickups} from '../src-v5/reveal/pickups.js';
@@ -22,9 +22,31 @@ function pigmentRim(c,x,y,r,scale,rgb,opacity,width){
   }
   c.fillStyle=wash;c.fillRect(x-outer,y-outer,outer*2,outer*2);
 }
-function drawRim(c,e,p,scale) {
-  const edible=canEat(p,e);
-  pigmentRim(c,e.x,e.y,e.r,scale,edible?'76,170,190':'196,91,86',.78,.112);
+function drawPlayerRim(c,p,scale){
+  c.save();if(p.form!=='ink')c.globalAlpha*=.52;
+  // Layer wet graphite and a narrower, feathered rim on the exact same centre.
+  pigmentRim(c,p.x,p.y,p.r,scale,'53,62,56',.24,.20);
+  pigmentRim(c,p.x,p.y,p.r,scale,'112,120,110',.48,.084);c.restore();
+}
+
+function drawPaperEdge(c,cam,w,h,world){
+  const left=-cam.x*cam.scale,top=-cam.y*cam.scale;
+  const right=left+world.width*cam.scale,bottom=top+world.height*cam.scale;
+  const depth=7;
+  c.save();
+  // Only shade the slim band where the cut paper meets the underlying table.
+  for(const [x1,y1,x2,y2,x,y,rw,rh] of [
+    [left,0,left-depth,0,left-depth,Math.max(0,top),depth,Math.min(h,bottom)-Math.max(0,top)],
+    [right,0,right+depth,0,right,Math.max(0,top),depth,Math.min(h,bottom)-Math.max(0,top)],
+    [0,top,0,top-depth,Math.max(0,left),top-depth,Math.min(w,right)-Math.max(0,left),depth],
+    [0,bottom,0,bottom+depth,Math.max(0,left),bottom,Math.min(w,right)-Math.max(0,left),depth]
+  ]){
+    if(rw<=0||rh<=0||x+rw<0||y+rh<0||x>w||y>h)continue;
+    const wash=c.createLinearGradient(x1,y1,x2,y2);
+    wash.addColorStop(0,'rgba(48,47,37,.23)');wash.addColorStop(.35,'rgba(55,51,41,.10)');
+    wash.addColorStop(1,'rgba(65,61,53,0)');c.fillStyle=wash;c.fillRect(x,y,rw,rh);
+  }
+  c.lineWidth=1;c.strokeStyle='rgba(86,79,62,.47)';c.strokeRect(left,top,right-left,bottom-top);c.restore();
 }
 
 // Let the native V5 renderer sort animal rigs, the ink body and painted rivals
@@ -37,27 +59,16 @@ class PondPainter extends HeadFirstPainter {
     // V5 bakes the same rig into a multi-frame atlas for distant swimmers.
     // At full-map scale the player's entire animated body fits in that atlas,
     // so avoid copying a high-definition live mesh across GPU contexts.
-    if(e.id==='human'&&q.coreRadius*this.camera.scale<8){
+    if(e.id==='human'&&(q.coreRadius*this.camera.scale<8||q.species==='dragon')){
       this.miniature.species=q.species;
       return super.atlasFrame(q,this.miniature);
     }
     return super.atlasFrame(q,e);
   }
-  raster(q,e,camera,viewport){
-    // V5 translates the previous pose with the actor on every display frame.
-    // Keep that smooth translation while sampling the expensive living mesh at
-    // 30 Hz on balanced settings. Zoom and growth immediately invalidate it.
-    const sameSize=Math.abs(camera.scale/(q.lastScale||camera.scale)-1)<.015&&
-      Math.abs(q.coreRadius/(q.lastRadius||q.coreRadius)-1)<.02;
-    if(e.id==='human'&&this.quality!=='high'&&q.tile&&q.world&&q.renderAge<1/30&&sameSize&&
-      q.world.w*camera.scale<viewport.width*.65&&q.world.h*camera.scale<viewport.height*.65)return true;
-    return super.raster(q,e,camera,viewport);
-  }
-  visualPadding(e){return e.type==='spike'||e.type==='hole'?e.r*1.18+6:super.visualPadding(e);}
+  visualPadding(e){return e.type==='spike'||e.type==='hole'?e.r*1.36+6:super.visualPadding(e);}
   draw(c,e,...args){
     if(e.type!=='spike'&&e.type!=='hole')return super.draw(c,e,...args);
-    this.enemyArt.draw(c,e,this.pond.time,this.camera.scale*Math.min(window.devicePixelRatio||1,2));
-    drawRim(c,e,this.pond.player,this.camera.scale);
+    this.enemyArt.draw(c,e,this.pond.time,this.camera.scale*Math.min(window.devicePixelRatio||1,2),canEat(this.pond.player,e));
   }
 }
 
@@ -148,9 +159,18 @@ export function createRenderer(canvas) {
   }
   function syncHero(p) {
     const species=p.form==='ink'?null:p.form;
+    const rig=species?(p.activeItem?.rigId||LIVING_RIGS[species]):null;
+    if((hero.form?.rigId??null)!==rig){
+      const painted=captureForm(npcs,hero,ink.renderer);
+      hero.outgoingPaint=painted?{id:'morph',morphGhost:painted,x:hero.x,y:hero.y,r:hero.r,opacity:1}:null;
+      hero.morphStarted=world.time;
+    }
+    const t=clamp((world.time-(hero.morphStarted??-1))/.52,0,1);
+    hero.formOpacity=t*t*(3-2*t);
+    if(t>=1)hero.outgoingPaint=null;
+    if(hero.outgoingPaint)Object.assign(hero.outgoingPaint,{x:p.x,y:p.y,r:p.r,opacity:1-hero.formOpacity});
     hero.aim.x=Math.cos(p.angle);hero.aim.y=Math.sin(p.angle);
     if(species){
-      const rig=p.activeItem?.rigId||LIVING_RIGS[species];
       if(hero.form?.rigId!==rig)hero.form={species,rigId:rig,remaining:p.formTime};
       hero.form.remaining=p.formTime;
     }else hero.form=null;
@@ -169,9 +189,10 @@ export function createRenderer(canvas) {
         proxies.set(item,animal);
       }
       animal.aim.x=Math.cos(item.angle);animal.aim.y=Math.sin(item.angle);
-      Object.assign(animal,{x:item.x,y:item.y,vx:item.vx,vy:item.vy,r:item.r*.74,opacity:item.opacity??1});
+      Object.assign(animal,{x:item.x,y:item.y,vx:item.vx,vy:item.vy,r:item.r,dragonHeadRadius:item.type==='dragon'?Math.max(15,w.player.r*1.10):undefined,opacity:item.opacity??1});
       return animal;
     });
+    if(hero.outgoingPaint)animals.unshift(hero.outgoingPaint);
     const plants=[];
     for(const l of w.leaves) {
       plants.push({x:l.x,y:l.y,r:l.r,renderSize:l.r*2.1,kind:'leaf',variant:0});
@@ -201,21 +222,21 @@ export function createRenderer(canvas) {
     const dt=previousTime<0?1/60:clamp(w.time-previousTime,0,.1);
     previousTime=w.time;
     const arena=scene(w,view);
-    ink.updateView(view);
+    const cameraMoved=ink.updateView(view);
     const cam=renderer.camera,width=renderer.viewW,height=renderer.viewH,viewport={width,height,mobile:renderer.mobile,camera:cam};
     npcs.update(dt,arena,cam,viewport);
+    if(dt>0||cameraMoved)ink.step(dt,hero);
     if(dt>0){
-      ink.step(dt,hero);
-      ground.update(dt);
+      ground.update(dt,renderer,hero);
       effects.update(dt,arena,viewport);
     }
     renderer.drawStone(arena);
     const c=renderer.ctx;
     renderer.beginWorldClip();c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);
     effects.drawWorld(c,arena,cam.scale);drawProjectiles(c,w,cam.scale);
-    if(!hero.form&&!hero.dead) pigmentRim(c,hero.x,hero.y,w.player.r,cam.scale,'79,87,81',.46,.075);
+    if(!hero.dead)drawPlayerRim(c,w.player,cam.scale);
     for(const e of w.enemies)if(e.type==='hole')flowToVortex(c,w,e,cam.scale);
-    c.restore();renderer.endWorldClip();renderer.drawTopItems(arena);renderer.drawWorldFrame();
+    c.restore();renderer.endWorldClip();renderer.drawTopItems(arena);drawPaperEdge(c,cam,width,height,w);
     effects.drawScreen(c,hero,viewport,cam);
     drawFocus(c,options.focus,cam,width,height,w.time);
     const reveal=clamp(options.reveal||0,0,1),im=ground.image;

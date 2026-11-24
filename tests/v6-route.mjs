@@ -2,11 +2,11 @@
 // node tests/v6-route.mjs [seeds=3] [seconds=750] [levels=1,2,3,4,5,6]
 import assert from 'node:assert/strict';
 import {makeLevel} from '../src-v6/levels.mjs';
-import {createWorld, stepWorld} from '../src-v6/sim.mjs';
+import {createWorld, stepWorld, useItem} from '../src-v6/sim.mjs';
 
 const totalSeeds = Number(process.argv[2] || 3);
 const timeLimit = Number(process.argv[3] || 750);
-const levels = (process.argv[4] || '1,2,3,4,5,6').split(',').map(Number);
+const levels = (process.argv[4] || '1,2,3,4,5,6').split(',').map(id=>id==='trial'?id:Number(id));
 const dt = 1 / 30;
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
@@ -66,16 +66,17 @@ function steer(world, target, hazards, speed, hand) {
 }
 
 function run(level, seed, policy) {
-  const config = makeLevel('level-' + level, seed);
+  const config = makeLevel(level==='trial'?'trial':'level-' + level, seed);
   const world = createWorld(config);
   assert.ok(world.enemies.length && world.player.mass > 0);
   const p = world.player;
-  const radius = (policy === 'local' ? 0.27 : 2) * Math.min(world.width, world.height);
+  const radius = level==='trial' && policy==='local' ? 440 : (policy === 'local' ? 0.27 : 2) * Math.min(world.width, world.height);
   const throttle = policy === 'local' ? 0.7 : 1;
   const corners = [[.78,.22],[.78,.78],[.22,.78],[.22,.22],[.5,.5]];
   let corner = seed % corners.length, first = null, eaten = 0, nextScan = 0, nextEvent = 0;
   let input = {x:0,y:0,action:false}, target = null;
   let maxMass = p.mass;
+  const formsUsed=[];
   while (world.status === 'playing' && world.time < timeLimit) {
     if (policy !== 'idle' && world.time >= nextScan) {
       const hazards = world.enemies.filter(e => e.mass >= p.mass);
@@ -83,6 +84,13 @@ function run(level, seed, policy) {
       const alternative = nearestCandidate(world, radius, hazards);
       if (!target || (alternative && dist(p, alternative) < dist(p, target) * .65)) target = alternative;
       let destination = target;
+      if(level==='trial' && p.form==='ink'){
+        if(p.inventory.length){const form=p.inventory[0].type;if(useItem(world,0))formsUsed.push(form);}
+        else{
+          const near=world.items.filter(i=>dist(p,i)<(world.time<15?185:105)).sort((a,b)=>dist(p,a)-dist(p,b))[0];
+          if(near)destination=near;
+        }
+      }
       if (!destination) {
         const [x,y] = corners[corner % corners.length];
         destination = {x:x * world.width, y:y * world.height};
@@ -107,7 +115,7 @@ function run(level, seed, policy) {
   }
   return {level,seed,policy,status:world.status,elapsed:+world.time.toFixed(1),
     firstEnemy:first === null ? null : +first.toFixed(1),eaten,peak:Math.round(maxMass),
-    remaining:world.enemies.length,largest:Math.round(world.largest || 0)};
+    ...(level==='trial'?{formsUsed,lastThreat:world.events.findLast(e=>e.type==='damage')?.id}:{}),remaining:world.enemies.length,largest:Math.round(world.largest || 0)};
 }
 
 for (const level of levels) {

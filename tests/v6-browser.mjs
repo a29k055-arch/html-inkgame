@@ -37,8 +37,8 @@ const srv=http.createServer(async (req,res)=>{
         import {makeLevel as make} from '../src-v6/levels.mjs?original';
         export function makeLevel(id,seed) {
           const cfg=make(id,seed);
-          if(id==='level-1') {
-            cfg.enemies=[{type:'hole',mass:cfg.player.mass-1,x:cfg.player.x+12,y:cfg.player.y}];
+          if(id==='level-1' || id==='trial') {
+            cfg.enemies=[{type:'hole',mass:Math.round(cfg.player.mass*.5),x:cfg.player.x+12,y:cfg.player.y}];
           }
           return cfg;
         }`);return;
@@ -178,7 +178,7 @@ async function session(endpoint) {
   }
   await Promise.all(['Runtime.enable','Network.enable','Page.enable'].map(method=>rpc(method)));
   await rpc('Page.bringToFront');
-  await rpc('Storage.clearDataForOrigin',{origin:new URL(base).origin,storageTypes:'all'});
+  // withBrowser gives each device its own fresh profile and empty origin storage.
   return {rpc,js,q,click,problems,loaded,setTouch(value){touchScreen=value;},async close(){
     socket.close();
   }};
@@ -307,13 +307,17 @@ async function exercise(endpoint,mobile) {
     await watchLoading(rpc);
     await rpc('Page.navigate',{url:base+(mobile?'v6/':'v6.html')});
     const opening=await enterCatalogue(s,{capture,checkLoad:true});
-    assert.equal(await js('document.querySelectorAll("#slips [data-kind]").length'),10);
+    assert.equal(await js('document.querySelectorAll("#slips [data-kind=tutorial]").length'),1);
+    assert.equal(await js('document.querySelectorAll("#slips [data-kind=trial]").length'),1);
+    assert.equal(await js('document.querySelectorAll("#slips [data-kind=level]").length'),6);
     assert.equal(await js('document.documentElement.scrollWidth<=innerWidth+2'),true);
     assert.equal(await js('getComputedStyle(document.querySelector("#slips .bamboo-level-name")).writingMode'),'vertical-rl');
     const slipImage=await js('document.querySelector("#slips .bamboo-level")?.getBoundingClientRect().height');
     assert.ok(slipImage>40,'Actual playable slip must have a touch-sized target.');
     await capture('catalogue');
-    await click('#settings-open');
+    assert.equal(await visible('#settings-open'),false);
+    await click('#back-cover');
+    await click('#settingsBtn',true);
     const coverDoc='document.querySelector("#v6-opening").contentDocument';
     await until(()=>js(coverDoc+'.querySelector("#settings").open'),'original V5 settings opened');
     for(const lang of ['en','ja','zh']){
@@ -333,6 +337,8 @@ async function exercise(endpoint,mobile) {
         ${coverDoc}.querySelector('#language').value==="${lang}"`),lang+' selected');
     }
     await click('#closeSettings',true);
+    await click('#grindBtn',true);
+    await waitVisible('#library');
     await click('#slips [data-kind=level][data-index="1"]');
     await waitVisible('#catalog-preview');
     assert.ok(await js('document.querySelector("#start").disabled || document.querySelector("#start").hidden'));
@@ -347,6 +353,10 @@ async function exercise(endpoint,mobile) {
     await waitText('#lesson-line');
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'input enabled');
     const lessonOne=await text('#pond-name');
+    assert.match(await text('#lesson-title'),/1\s*\/\s*4/);
+    assert.match(await text('#lesson-line'),/你/);
+    await until(()=>js('document.querySelector("#lesson-veil").hidden'),'lesson entrance fade finished');
+    await capture('lesson-opening');
     const amountBefore=Number(await text('#mass-value'));
     assert.ok(amountBefore>0);
     // Reach the first edible creature through the actual input path.
@@ -368,12 +378,13 @@ async function exercise(endpoint,mobile) {
     await stopSteering();
     await click('#pause');await waitVisible('#options');await click('#exit-run');await waitVisible('#library');
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'catalogue ready');
-    // Explicitly select the first main painting. This also works after completing a lesson.
-    await click('#slips [data-kind=level][data-index="0"]');await click('#start');
+    // The standalone experience is available before finishing the tutorial or a painting.
+    await click('#slips [data-kind=trial][data-index="0"]');await click('#start');
     await waitVisible('#field');await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'pond ready');
     assert.equal(await visible('#lesson'),false);
     await until(async()=>Number(await text('#rival-value'))>Number(await text('#mass-value')),'competing masses');
     await until(()=>js('window.__pondPainted?.spike && window.__pondPainted?.hole'),'both enemy illustrations really drawn');
+    await until(()=>js('Number(document.querySelector("#timer").textContent.split(":")[1])>=4'),'trial camera has pulled back',30000);
     await capture('pond');
     const inkRenderer=await until(()=>js(`(()=>{
       const m=window.bokuMetrics;
@@ -413,9 +424,9 @@ async function exercise(endpoint,mobile) {
     await until(()=>js('Math.abs(window.__cameraBox.x-'+beforeMap+')>1'),'map press moves the actual camera frame');
     if(mobile)await touch('touchEnd',[]);
     else await rpc('Input.dispatchMouseEvent',{type:'mouseReleased',...mapPoint,button:'left',buttons:0,clickCount:1});
-    const view=await js('({w:document.querySelector("#world").width,h:document.querySelector("#world").height,map:document.querySelector("#minimap").width,slots:document.querySelectorAll("#inventory .slot").length})');
+    const view=await js('({w:document.querySelector("#world").width,h:document.querySelector("#world").height,map:document.querySelector("#minimap").width,slots:document.querySelectorAll("#inventory .slot:not([hidden])").length})');
     assert.ok(view.w>100 && view.h>100 && view.map>25);
-    assert.equal(view.slots,3);
+    assert.equal(await js('document.querySelectorAll("#inventory .slot:not([hidden]):disabled").length'),0);
     await click('#pause');await waitVisible('#options');await click('#exit-run');await waitVisible('#library');
     await click('#back-cover');
     await enterCatalogue(s);
@@ -447,6 +458,12 @@ async function endToNextPainting(endpoint) {
     await rpc('Page.navigate',{url:base+'__qa__/finish.html'});
     await enterCatalogue(s);
     await until(()=>js(q(card(1))+'?.dataset.locked==="true"'),'second painting initially locked');
+    await click('#slips [data-kind=trial]');await click('#start');
+    await until(()=>js(q('#paintingView')+'?.dataset.phase==="interactive"'),'experience completed-painting view',25000);
+    await click('#paintingContinue');
+    await until(()=>showing('#ending'),'experience result');
+    await click('#end-home');await until(()=>showing('#library'),'experience returns to shelf');await waitClear();
+    assert.equal(await js(q(card(1))+'.dataset.locked'),'true','Completing experience must not unlock the second painting.');
     await click(card(0));await click('#start');
     await until(()=>js(q('#paintingView')+'?.dataset.phase==="interactive"'),'full painting inspection',25000);
     assert.ok(await js(q('#paintingCanvas')+'.width>100 && '+q('#paintingCanvas')+'.height>100'));
@@ -466,7 +483,7 @@ async function endToNextPainting(endpoint) {
     const next=await js(q('#pond-name')+'.textContent');
     assert.notEqual(name,next);
     assert.deepEqual(problems,[]);
-    return {fixture:'one edible enemy in first pond',revealed:name,advanced:next,persisted:true,subsequentPaintingLocked:true};
+    return {fixture:'one edible enemy in the trial and first painting',revealed:name,advanced:next,persisted:true,subsequentPaintingLocked:true};
   }finally {await close();}
 }
 try{

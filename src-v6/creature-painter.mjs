@@ -58,6 +58,29 @@ export function steerCreature(c,actor) {
   const nativeStep=c.step.bind(c),segments=c.v5PlayerDetail?96:48;
   const direction=()=>actor.aim&&Math.hypot(actor.aim.x,actor.aim.y)>.01?
     Math.atan2(actor.aim.y,actor.aim.x):Math.atan2(actor.vy||0,actor.vx||0);
+  if(c.species==='shrimp'){
+    // Use V5's articulated, side-on paper turn. Its native puppet switches
+    // handedness at the edge of the turn, so legs remain below the body.
+    const pitch=()=>clamp(Math.atan2(Math.sin(direction()),Math.abs(Math.cos(direction()))),-.55,.55);
+    const facing=Math.cos(direction())<0?-1:1;
+    c.reset(0,0,facing>0?pitch():Math.PI-pitch());
+    c.update=function(dt){
+      const count=Math.max(1,Math.ceil(dt*120)),h=dt/count;
+      for(let i=0;h>0&&i<count;i++){
+        const mag=Math.hypot(this.input.x,this.input.y);
+        const target=direction(),desired=Math.cos(target);
+        const side=Math.abs(desired)>.17?Math.sign(desired):this.desiredFacing;
+        const incline=pitch();
+        this.desiredFacing=side;this.targetInclination=incline;
+        // Keep a side profile even when the player steers straight upwards.
+        this.setInput(side*Math.cos(incline)*mag,Math.sin(incline)*mag);
+        nativeStep(h);
+        this.setInput(Math.cos(target)*mag,Math.sin(target)*mag);
+      }
+      this.pose=this.buildPose();this.targetCurve=makeCurve(this.pose,false);
+    };
+    return;
+  }
   c.buildPose=function(){
     const p=this.profile,points=[[this.x,this.y]],step=this.length/segments;
     const amplitude=p.idle+(p.amplitude-p.idle)*this.drive;
@@ -74,11 +97,6 @@ export function steerCreature(c,actor) {
   };
   if(c.species==='turtle')articulateTurtle(c);
   c.reset(0,0,direction());
-  if(c.species==='shrimp'){
-    c.facing=c.desiredFacing=1;
-    c.shrimpTurnProgress=c.shrimpTurnVelocity=0;
-    c.inclination=c.targetInclination=c.heading;
-  }
   c.update=function(dt){
     const count=Math.max(1,Math.ceil(dt*120)),step=dt/count;
     for(let i=0;step>0&&i<count;i++){
@@ -91,13 +109,6 @@ export function steerCreature(c,actor) {
       this.targetHeading=target;
       const entry=this.history.at(-1);
       entry.a=this.heading;entry.v=this.angularVelocity;
-      // The pond is top-down. Side-facing shrimp turn through an arc, including
-      // straight up and down, without swapping a flat sprite across its centre.
-      if(this.species==='shrimp'){
-        this.facing=this.desiredFacing=1;
-        this.shrimpTurnProgress=this.shrimpTurnVelocity=0;
-        this.inclination=this.targetInclination=this.heading;
-      }
       if(Math.abs(angle)>.045)this.bentUntil=this.time+followTime[this.species]+.08;
     }
     this.pose=this.buildPose();
@@ -123,27 +134,139 @@ export class HeadFirstPainter extends LivingPainter {
     }
     return q;
   }
+  configure(q,e){
+    super.configure(q,e);
+    const {creature:c,calibration:a}=q;
+    if(q.species==='dragon'){
+      // V5 measured the connected, opaque head cross-section of this rig.
+      // Size that same head to the body's radius; its long tail follows freely.
+      const headRadius=e.dragonHeadRadius??e.r*1.10;
+      q.scale=headRadius*a.lengthPerRadius/c.length;
+      q.renderRadius=headRadius;
+      q.anchor=c.mapPoint(a.anchorS,a.anchorT);
+    }else if(e.pickupArt){
+      const extent=q.asset.npcAtlas?.bounds;
+      if(extent){
+        const length={shrimp:4.35,fish:6.35,turtle:7.75}[q.species]*e.r;
+        q.scale=length/Math.max(extent.w,extent.h);
+        q.renderRadius=q.scale*c.length/a.lengthPerRadius;
+      }
+    }
+  }
+  update(dt,arena,camera,viewport){
+    super.update(dt,arena,camera,viewport);
+    // The archive renderer schedules off-screen puppets at 6 Hz and NPCs at
+    // 30 Hz. Update the visible joints on the frames between those archive samples.
+    for(const [e,q] of this.records){
+      if(e.dragonHeadRadius&&!q.visible){
+        const margin=this.visualPadding(e)*camera.scale;
+        const x=(e.x-camera.x)*camera.scale,y=(e.y-camera.y)*camera.scale;
+        q.visible=x+margin>=0&&y+margin>=0&&x-margin<viewport.width&&y-margin<viewport.height;
+      }
+      if(!q.visible||q.age<1/120-.0001||e.dead)continue;
+      const c=q.creature,speed=Math.hypot(e.vx||0,e.vy||0);
+      const limit=Math.max(1,arena.speed?.(e,false)||100,speed);
+      c.setInput((e.vx||0)/limit,(e.vy||0)/limit);
+      c.vx=c.vy=0;c.update(Math.min(.1,q.age));q.age=0;
+      if(e.id==='human'&&q.species==='dragon'){c.vx=e.vx/q.scale;c.vy=e.vy/q.scale;}
+      this.configure(q,e);this.syncBody(q,e);
+      this.metrics.animated++;
+    }
+  }
+  visualPadding(e){
+    if(e.morphGhost){
+      const f=e.morphGhost;
+      return e.r*Math.max(-f.left,-f.top,f.left+f.width,f.top+f.height);
+    }
+    if(e.dragonHeadRadius){
+      const q=this.records.get(e);
+      return e.dragonHeadRadius*(q?.calibration.lengthPerRadius??28)*1.3;
+    }
+    return super.visualPadding(e);
+  }
+  raster(q,e,camera,viewport){
+    if(q.species!=='dragon')return super.raster(q,e,camera,viewport);
+    // A long articulated tail changes its tight bounds on every stroke.
+    // Reuse a slightly larger backing bitmap; resizing it also forces V5's
+    // shared WebGL mesh surface to reallocate its render target.
+    const c=q.creature,b=c.visualBounds(),k=q.scale;
+    const left=e.x+(b.minX-q.anchor.x)*k,top=e.y+(b.minY-q.anchor.y)*k;
+    const pad=12/camera.scale;
+    const x=Math.max(left-pad,camera.x-pad),y=Math.max(top-pad,camera.y-pad);
+    const right=Math.min(e.x+(b.maxX-q.anchor.x)*k+pad,camera.x+viewport.width/camera.scale+pad);
+    const bottom=Math.min(e.y+(b.maxY-q.anchor.y)*k+pad,camera.y+viewport.height/camera.scale+pad);
+    if(right<=x||bottom<=y)return false;
+    const cap=viewport.mobile?1024:1536,w=right-x,h=bottom-y;
+    const pixels=Math.min(camera.scale*Math.min(globalThis.devicePixelRatio||1,2),cap/Math.max(w,h));
+    const bucket=n=>Math.ceil(n*pixels/96)*96;
+    const bw=bucket(w),bh=bucket(h);
+    q.tile??=document.createElement('canvas');
+    if(bw>q.tile.width||bw*2<q.tile.width)q.tile.width=bw;
+    if(bh>q.tile.height||bh*2<q.tile.height)q.tile.height=bh;
+    const ctx=q.tile.getContext('2d');ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,q.tile.width,q.tile.height);
+    ctx.setTransform(pixels*k,0,0,pixels*k,(e.x-q.anchor.x*k-x)*pixels,(e.y-q.anchor.y*k-y)*pixels);
+    ctx.save();c.draw(ctx);ctx.restore();
+    q.world={x,y,w:q.tile.width/pixels,h:q.tile.height/pixels};
+    q.rasterX=e.x;q.rasterY=e.y;q.renderAge=0;this.metrics.liveRasters++;
+    return true;
+  }
   atlasFrame(q,e){
-    if(q.creature.time<q.creature.bentUntil)return null;
-    return super.atlasFrame(q,e);
+    const atlas=q.asset.npcAtlas;
+    if(!atlas)return null;
+    const viewScale=this.camera?.scale||1,pixelScale=viewScale*q.scale;
+    const span=Math.max(atlas.bounds.w,atlas.bounds.h)*pixelScale;
+    // In the overview a swimming animal may be shorter than a button.
+    // Keep the original rig's interpolated painted frames while it turns;
+    // reserving live skinning for a close-up avoids frequent GPU readbacks.
+    const small=span<=80||(q.species==='dragon'&&viewScale<.65&&span<365);
+    if(!small&&q.creature.time<q.creature.bentUntil)return null;
+    const frame=super.atlasFrame(q,e);
+    if(frame||!small||e.id==='human'||e.controller?.type==='human')return frame;
+    // A high-DPI overview can slightly exceed the baked texture density.
+    // Accept at most 1.6x enlargement of the original antialiased painting.
+    const size=atlas.frames[0].canvas;
+    const density=Math.min(globalThis.devicePixelRatio||1,2);
+    if(atlas.bounds.w*pixelScale*density>size.width*1.6||
+       atlas.bounds.h*pixelScale*density>size.height*1.6)return null;
+    if(q.atlasPhase===undefined){
+      let seed=17;for(const ch of String(e.id||'living'))seed=(seed*31+ch.charCodeAt(0))>>>0;
+      q.atlasPhase=seed/4294967296;
+    }
+    const phase=(this.clock/atlas.seconds+q.atlasPhase)%1;
+    const position=phase*atlas.frames.length,index=Math.floor(position);
+    return {atlas,index,fraction:position-index,frame:atlas.frames[index],next:atlas.frames[(index+1)%atlas.frames.length]};
   }
   headOffset(q,e){
     const sprite=this.atlasFrame(q,e),{idx,section}=q.headStation;
     if(sprite&&q.species!=='turtle'){
       const a=sprite.frame.sections[idx],b=sprite.next.sections[idx],f=sprite.fraction;
       const x=a.x+(b.x-a.x)*f,y=a.y+(b.y-a.y)*f;
-      const theta=q.creature.heading,cs=Math.cos(theta),sn=Math.sin(theta);
-      return {x:q.scale*(x*cs-y*sn),y:q.scale*(x*sn+y*cs)};
+      const c=q.creature,shrimp=q.species==='shrimp';
+      const mirror=shrimp?c.facing*Math.max(.08,c.presentationWidth):1;
+      const theta=shrimp?c.inclination*c.facing:c.heading,cs=Math.cos(theta),sn=Math.sin(theta);
+      return {x:q.scale*(x*mirror*cs-y*sn),y:q.scale*(x*mirror*sn+y*cs)};
     }
     const point=q.creature.mapPoint(section.s,section.t);
     return {x:(point.x-q.anchor.x)*q.scale,y:(point.y-q.anchor.y)*q.scale};
   }
   drawPlayer(ctx,player){
-    // Keep the shrimp painting itself visible, without V5's glass hit-radius overlay.
-    if(player.form?.species==='shrimp')return this.draw(ctx,player);
-    return super.drawPlayer(ctx,player);
+    ctx.save();
+    ctx.globalAlpha*=player.formOpacity??1;
+    try{this.draw(ctx,player);}finally{ctx.restore();}
   }
   draw(ctx,e,...args){
+    if(e.morphGhost){
+      const f=e.morphGhost;
+      ctx.save();ctx.globalAlpha*=e.opacity;
+      ctx.drawImage(f.canvas,e.x+f.left*e.r,e.y+f.top*e.r,f.width*e.r,f.height*e.r);
+      ctx.restore();return;
+    }
+    const record=this.records.get(e);
+    if(record?.tile&&record.visible&&record.lastDraw!==this.clock&&record.renderAge>=1/60-.001){
+      // A live close-up uses a new fully articulated pose each display frame.
+      record.renderAge=Math.max(record.renderAge,1/30);
+    }
     if(!e.pickupArt)return super.draw(ctx,e,...args);
     const q=this.ensure(e);
     if(!q||!q.visible)return;
@@ -159,4 +282,46 @@ export class HeadFirstPainter extends LivingPainter {
     try{super.draw(ctx,e,...args);}
     finally{this.camera=camera;ctx.restore();}
   }
+}
+
+// Capture only the outgoing material, including its actual pose, on a
+// transparent tile. It moves/scales with the physical centre while the new
+// animal becomes opaque. Nothing on the pond floor is captured.
+export function captureForm(painter,hero,renderer){
+  const {camera}=renderer,formed=!!hero.form;
+  let left=-hero.r*2.15,top=left,width=-2*left,height=width;
+  if(formed){
+    const q=painter.ensure(hero);
+    if(!q)return null;
+    painter.configure(q,hero);
+    const b=q.creature.visualBounds(),k=q.scale;
+    left=(b.minX-q.anchor.x)*k-2;top=(b.minY-q.anchor.y)*k-2;
+    width=(b.maxX-b.minX)*k+4;height=(b.maxY-b.minY)*k+4;
+  }
+  const clip=hero.outgoingPaint;
+  if(clip){
+    const f=clip.morphGhost,r=hero.r;
+    const right=Math.max(left+width,(f.left+f.width)*r),bottom=Math.max(top+height,(f.top+f.height)*r);
+    left=Math.min(left,f.left*r);top=Math.min(top,f.top*r);width=right-left;height=bottom-top;
+  }
+  const canvas=document.createElement('canvas');
+  const scale=Math.min(camera.scale*Math.min(2,globalThis.devicePixelRatio||1),1024/Math.max(width,height));
+  canvas.width=Math.max(1,Math.ceil(width*scale));canvas.height=Math.max(1,Math.ceil(height*scale));
+  const c=canvas.getContext('2d');
+  c.setTransform(scale,0,0,scale,-(hero.x+left)*scale,-(hero.y+top)*scale);
+  if(clip)painter.draw(c,clip);
+  if(formed)painter.drawPlayer(c,hero);
+  else{
+    // The native ink material is a transparent viewport layer (one backing
+    // pixel per CSS pixel here, independent of the output canvas density).
+    const cw=renderer.viewW/camera.scale,ch=renderer.viewH/camera.scale;
+    c.drawImage(renderer.canvas,camera.x,camera.y,cw,ch);
+    // Retain the V5 wet edge without cutting a square out of the soft wake.
+    const wash=c.createRadialGradient(hero.x,hero.y,hero.r*1.04,hero.x,hero.y,hero.r*2.05);
+    wash.addColorStop(0,'#000');wash.addColorStop(1,'transparent');
+    c.globalCompositeOperation='destination-in';c.fillStyle=wash;
+    c.fillRect(hero.x+left,hero.y+top,width,height);
+
+  }
+  return {canvas,left:left/hero.r,top:top/hero.r,width:width/hero.r,height:height/hero.r};
 }

@@ -53,7 +53,7 @@ const pondAssets = [
   'assets/home/menu-reference.png','src-v5/reveal/renderer.js','src-v5/ink/living-painter.js',
   'src-v5/ink/start-transitions.js',
   ...[1, 2].map(n => `assets/effects/start/start-0${n}.webp`),
-  ...[1, 2, 3, 4, 6, 7].map(n => `assets/artworks/v4-cropped/${n}.png`)
+  ...[1, 2, 3, 4, 5, 6, 7].map(n => `assets/artworks/v4-cropped/${n}.png`)
 ];
 for (const file of pondAssets) {
   if (!fs.statSync(path.join(out, file)).isFile()) throw new Error('Missing V6 asset: ' + file);

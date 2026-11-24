@@ -9,7 +9,9 @@
   <iframe id="v6-opening" title="墨 · BOKU" src="src-v6/opening.html" style="position:fixed;inset:0;width:100%;height:100%;border:0;z-index:200;background:#eee4cf"></iframe>
   <main id="pond-app" inert>
     <section id="library" hidden>
-      <nav class="catalog-nav"><button type="button" id="back-cover" class="ink-button secondary" data-text="backCover"></button><button type="button" id="settings-open" class="ink-button secondary" data-text="settings"></button></nav>
+      <nav class="catalog-nav"><button type="button" id="back-cover" data-text="backCover"></button></nav>
+      <div class="catalog-roller roller-left" aria-hidden="true"></div>
+      <div class="catalog-roller roller-right" aria-hidden="true"></div>
       <div id="slips"></div>
       <button type="button" id="prev" class="catalog-turn" data-label="previous" hidden>‹</button>
       <button type="button" id="next" class="catalog-turn" data-label="next" hidden>›</button>
@@ -25,13 +27,14 @@
     <section id="field" hidden aria-label="Pond">
       <canvas id="world" tabindex="-1"></canvas>
       <div id="hud">
-        <header class="hud-top"><button class="ink-button secondary" id="pause" data-label="pause">Ⅱ</button><strong id="timer">0:00</strong><span id="pond-name" hidden></span></header>
+        <header class="hud-top"><button class="ink-button secondary" id="pause" data-label="pause"><span class="pause-mark" aria-hidden="true"></span></button><strong id="timer">0:00</strong><span id="pond-name" hidden></span></header>
         <section id="revealMeter" role="group" data-label="mass"><header><span><span data-text="own"></span> <b id="mass-value">0</b></span><span><span data-text="largest"></span> <b id="rival-value">0</b></span></header>
           <div class="meter-strip"><progress id="revealProgress" max="1" value="0"></progress><i id="mass-marker"></i></div></section>
-        <aside class="pond-tools"><div id="mapWrap"><canvas id="minimap" width="128" height="128" data-label="map"></canvas></div><div id="inventory"></div></aside>
-        <div class="lesson" hidden id="lesson"><span id="lesson-title"></span><p id="lesson-line" role="status" aria-live="polite"></p><button id="skip-step" data-text="skipStep"></button></div>
+        <aside class="pond-tools"><div id="mapWrap"><canvas id="minimap" width="128" height="128" data-label="map"></canvas></div></aside>
+        <div class="lesson" hidden id="lesson"><span id="lesson-title"></span><div class="lesson-copy"><p id="lesson-line" role="status" aria-live="polite"></p></div></div>
+        <button id="skip-step" data-text="skipStep" hidden></button>
         <div id="active-form" hidden><span id="form-name"></span> <span id="form-time"></span></div>
-        <div class="action-stack"><button class="ink-button" id="action" data-label="release"><span id="action-icon" aria-hidden="true"></span><span id="action-name"></span><kbd>Shift</kbd></button></div>
+        <div class="action-stack"><div id="inventory"></div><button class="ink-button" id="action" data-label="release"><span id="action-icon" aria-hidden="true"></span><span id="action-name"></span><kbd>Shift</kbd></button></div>
         <div id="joystick" hidden><i id="stick"></i></div>
       </div>
     </section>

@@ -2,15 +2,15 @@ import {getRigIcon} from './rig-icons.mjs';
 import {createCatalogue} from './catalog.mjs';
 import {inkIcon} from '../src-v5/ui/ink-icons.js';
 import {PaintingView} from '../src-v5/reveal/painting-view.js';
-import {LEVELS, TUTORIALS} from './levels.mjs';
+import {LEVELS, TUTORIALS, TRIAL} from './levels.mjs';
 import {StartTransition, START_TRANSITIONS} from '../src-v5/ink/start-transitions.js';
 import {fadeLessonScene} from './lesson-scenes.mjs';
 
 const artwork = n => new URL('../assets/artworks/v4-cropped/' + n + '.png',import.meta.url).href;
-export const paintings = [2,1,3,4,6,7].map(artwork);
+export const paintings = [2,1,3,4,6,7,5].map(artwork);
 const icons = Object.fromEntries(['fish','shrimp','turtle','dragon'].map(n=>[n,new URL('./art/'+n+'-icon.webp',import.meta.url).href]));
 const translations = {
-  backCover:['返回封面','表紙に戻る','Title screen'],
+  backCover:['返回主页','タイトルに戻る','Back to title'],
   paintingHint:['滚轮或双指缩放 · 拖动平移','ホイール／ピンチで拡大・ドラッグで移動','Scroll or pinch to zoom · drag to pan'],
   paintingDone:['继续','進む','Continue'],paintingReset:['适合屏幕','全体を表示','Fit to screen'],
   paintingViewLabel:['完整水墨画欣赏','完成した水墨画','Completed ink painting'],
@@ -26,7 +26,7 @@ const translations = {
   release:['放墨','墨を吐く','Jet ink'],bubble:['吐泡','泡を吐く','Bubbles'],
   fish:['鲤鱼','鯉','Carp'],shrimp:['虾','海老','Shrimp'],turtle:['乌龟','亀','Turtle'],dragon:['墨龙','墨の龍','Ink dragon'],
   slot:['道具格 {n}','道具枠 {n}','Item slot {n}'],empty:['空','空','Empty'],
-  use:['使用{name}','{name}を使う','Use {name}'],skipStep:['跳过本课 →','この練習をスキップ →','Skip this lesson →'],
+  use:['使用{name}','{name}を使う','Use {name}'],skipStep:['跳过本关','チュートリアルをスキップ','Skip tutorial'],
   mouse:['按住水面拖动来游动；滚轮缩放。按住 Shift 或空格使用交互键，数字键 1–3 使用已收集的道具。','水面をドラッグして移動。ホイールで拡大・縮小。Shift またはスペースで墨や泡を吐き、数字キー 1–3 で道具を使います。','Hold and drag on the water to swim. Scroll to zoom. Hold Shift or Space to jet ink or blow bubbles. Use items with 1–3.'],
   touch:['在水面拖动来游动，双指捏合缩放。按住右下按钮放墨或吐泡，轻点右侧圆格使用道具。','水面をドラッグして移動。2本指で拡大・縮小。右下を長押しして墨や泡を吐き、右の丸い枠をタップして道具を使います。','Drag on the water to swim and pinch to zoom. Hold the lower-right button to jet ink or blow bubbles. Tap a circle on the right to use an item.'],
   won:['画卷已揭','画巻が開きました','Painting revealed'],lost:['墨量已尽','墨が尽きました','Ink depleted'],studied:['习墨完成','手ほどき完了','Lesson complete'],
@@ -51,9 +51,9 @@ export function loadProgress(storage) {
   try { data=JSON.parse(storage?.getItem(saveKey) || '{}') || {}; } catch {}
   const indices=(value,n)=>Array.isArray(value)?[...new Set(value.filter(i=>Number.isInteger(i)&&i>=0&&i<n))]:[];
   return {lang:languages.includes(data.lang)?data.lang:chooseLanguage(globalThis.navigator?.languages||[]),
-    sound:data.sound!==false, lessons:indices(data.lessons,4), levels:indices(data.levels,6)};
+    sound:data.sound!==false, lessons:indices(data.lessons,4), trial:data.trial===true, levels:indices(data.levels,6)};
 }
-function stageList(kind) { return kind==='tutorial'?TUTORIALS:LEVELS; }
+function stageList(kind) { return kind==='tutorial'?TUTORIALS:kind==='trial'?[TRIAL]:LEVELS; }
 function readBrowserStore(){try{return window.localStorage;}catch{return null;}}
 function formatTime(seconds) {
   const n=Math.max(0,Math.floor(seconds)||0);
@@ -92,9 +92,8 @@ export function createUI(actions={}) {
     onDone(){if(ended&&!ending.open)ending.showModal();}
   });
   const unlocked=meta=>meta.kind==='tutorial'||meta.index===0||progress.levels.includes(meta.index-1);
-  const finished=meta=>(meta.kind==='tutorial'?progress.lessons:progress.levels).includes(meta.index);
-  const stageKind=kind=>text(kind==='tutorial'?'primer':'paintings');
-  const place=meta=>stageKind(meta.kind)+'  /  '+String(meta.index+1).padStart(2,'0');
+  const finished=meta=>meta.kind==='trial'?progress.trial:(meta.kind==='tutorial'?progress.lessons:progress.levels).includes(meta.index);
+
   function closeDialog(dialog){if(dialog.open)dialog.close();}
   function go(kind,index){
     const meta=stageList(kind)[index];
@@ -104,7 +103,7 @@ export function createUI(actions={}) {
   const catalogue=createCatalogue({progress,paintings,unlocked,finished,onEnter:go});
   function makeSlots(){
     for(let i=0;i<3;i++){
-      const el=document.createElement('button');el.type='button';el.className='slot';el.disabled=true;
+      const el=document.createElement('button');el.type='button';el.className='slot';el.disabled=true;el.hidden=true;
       el.addEventListener('click',()=>actions.onUseItem?.(i));$('inventory').append(el);slots.push(el);
     }
   }
@@ -120,7 +119,8 @@ export function createUI(actions={}) {
     catalogue.update();
     if(playing){
       const meta=stageList(activeKind)[activeIndex];
-      $('pond-name').textContent=meta.title[lang];$('lesson-title').textContent=place(meta)+'　'+meta.title[lang];
+      $('pond-name').textContent=meta.title[lang];
+      if(activeKind==='tutorial')$('lesson-title').textContent=text('primer')+' '+(activeIndex+1)+'/'+TUTORIALS.length+' · '+meta.title[lang];
       if(lastData)hud(lastData);
     }
     if(ended){putResult();if(viewing.phase!=='hidden')viewing.labels();}
@@ -161,6 +161,7 @@ export function createUI(actions={}) {
     if(!$('active-form').hidden){$('form-name').textContent=text(form);$('form-time').textContent=Math.ceil(formRemaining)+' s';}
     slots.forEach((el,i)=>{
       const item=items[i],type=typeof item==='string'?item:item?.type;
+      el.hidden=!icons[type];
       const label=text('slot',{n:i+1})+' · '+(icons[type]?text('use',{name:text(type)}):text('empty'));
       if(el.title!==label){el.title=label;el.setAttribute('aria-label',label);}
       const rig=item?.rigId||'';
@@ -173,7 +174,8 @@ export function createUI(actions={}) {
   function begin(kind,index){
     artGeneration++;viewing.hide();activeKind=kind;activeIndex=index;playing=true;paused=false;ended=null;lastData=null;lastHint='';
     closeDialog(settings);closeDialog(ending);library.hidden=true;field.hidden=false;
-    $('lesson').hidden=kind!=='tutorial';$('lesson-line').textContent='';
+    $('lesson').hidden=kind!=='tutorial';$('skip-step').hidden=kind!=='tutorial';$('lesson-line').textContent='';
+    $('lesson').querySelector('.lesson-echo')?.remove();
     $('active-form').hidden=true;document.body.style.overflow='hidden';localize();
     $('world').focus({preventScroll:true});
   }
@@ -184,6 +186,7 @@ export function createUI(actions={}) {
   }
   function complete(kind,index){
     const meta=stageList(kind)[index];if(!meta)return;
+    if(kind==='trial'){progress.trial=true;write();catalogue.update();return;}
     const list=kind==='tutorial'?progress.lessons:progress.levels;
     if(!list.includes(index)){list.push(index);write();}
     catalogue.update();
@@ -195,15 +198,16 @@ export function createUI(actions={}) {
     const btn=$('end-main');
     if(lesson){btn.textContent=text('firstPond');btn.onclick=()=>go('level',0);}
     else if(!won){btn.textContent=text('retry');btn.onclick=()=>actions.onRetry?.();}
+    else if(activeKind==='trial'){btn.textContent=text('firstPond');btn.onclick=()=>go('level',0);}
     else if(activeIndex<5){btn.textContent=text('nextPond');btn.onclick=()=>go('level',activeIndex+1);}
     else{btn.textContent=text('return');btn.onclick=()=>actions.onLeave?.();}
     $('end-home').hidden=!lesson&&won&&activeIndex===5;
   }
   async function result(won,seconds,viewInfo){
     ended={won,seconds};putResult();
-    if(won&&activeKind==='level'){
+    if(won&&activeKind!=='tutorial'){
       const token=++artGeneration,image=new Image();
-      image.src=paintings[activeIndex];
+      image.src=paintings[activeKind==='trial'?TRIAL.artworkIndex:activeIndex];
       try{
         await image.decode();
         if(token!==artGeneration||!ended)return;
@@ -217,12 +221,12 @@ export function createUI(actions={}) {
     }
     if(!ending.open)ending.showModal();
   }
-  async function transition(callback,lessonFade=false){
+  async function transition(callback,lessonFade=false,continuous=false){
     // Native dialogs occupy the browser's top layer. Close them before the
     // canvas wipe so selection always leads into the same full-screen wash.
     if(wipe.busy)return false;
     closeDialog(ending);closeDialog(settings);
-    library.inert=true;field.inert=true;
+    library.inert=true;field.inert=!continuous;
     try{return lessonFade?await fadeLessonScene(callback):await wipe.run(callback);}
     finally{
       library.inert=false;field.inert=false;
@@ -235,10 +239,9 @@ export function createUI(actions={}) {
     closeDialog(settings);
     actions.onSettings?.(()=>{
       if(resumePause && playing && paused && !ending.open){settings.showModal();$('pause-settings').focus();}
-      else if(!playing)$('settings-open')?.focus({preventScroll:true});
+      else if(!playing)$('back-cover').focus({preventScroll:true});
     });
   }
-  $('settings-open').onclick=openSettings;
   $('back-cover').onclick=()=>actions.onCover?.();
   $('resume').onclick=dismissSettings;$('pause-settings').onclick=openSettings;
   $('pause').onclick=()=>pausedState(true);$('exit-run').onclick=()=>actions.onLeave?.();$('end-home').onclick=()=>actions.onLeave?.();
@@ -250,9 +253,20 @@ export function createUI(actions={}) {
       if(value===lastHint)return;
       lastHint=value;
       const line=$('lesson-line');
+      const previous=line.textContent;
+      line.parentElement.querySelector('.lesson-echo')?.remove();
+      line.getAnimations().forEach(animation=>animation.cancel());
       line.textContent=value||'';
-      if(value&&!reduced)line.animate([{opacity:.3,transform:'translateY(3px)'},{opacity:1,transform:'none'}],
-        {duration:260,easing:'ease-out'});
+      if(!reduced&&value){
+        if(previous){
+          const echo=document.createElement('p');
+          echo.className='lesson-echo';echo.setAttribute('aria-hidden','true');echo.textContent=previous;
+          line.parentElement.append(echo);
+          const outgoing=echo.animate([{opacity:1},{opacity:0}],{duration:170,easing:'ease-out',fill:'forwards'});
+          outgoing.onfinish=()=>echo.remove();
+        }
+        line.animate([{opacity:0},{opacity:1}],{delay:previous?125:0,duration:320,easing:'ease-out',fill:'backwards'});
+      }
     },
     get lang(){return progress.lang;},get paused(){return paused;},get soundEnabled(){return true;}};
 }

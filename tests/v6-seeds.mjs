@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {LEVELS, TUTORIALS, makeLevel} from '../src-v6/levels.mjs';
+import {LEVELS, TUTORIALS, TRIAL, makeLevel} from '../src-v6/levels.mjs';
 
 const radius = mass => 2*Math.sqrt(mass);
 const dist = (a,b) => Math.hypot(a.x-b.x,a.y-b.y);
@@ -37,3 +37,26 @@ for(const level of LEVELS){
   }
   console.log(level.id, count+' reproducible and clear starts', 'minimum starting surplus '+leastSurplus);
 }
+
+let trialSurplus=Infinity;
+for(let seed=0;seed<count;seed++){
+  const pond=makeLevel(TRIAL,seed),p=pond.player,es=pond.enemies;
+  assert.deepEqual(pond,makeLevel('trial',seed));
+  assert.equal(pond.kind,'trial');
+  assert.ok(es.length>=100);
+  assert.ok(Math.floor(pond.width/pond.foodSpacing)*Math.floor(pond.height/pond.foodSpacing)>=5500);
+  assert.ok(es.filter(e=>e.mass<p.mass&&dist(e,p)<220).length>=3);
+  for(const type of ['fish','shrimp','turtle'])assert.ok(pond.items.some(i=>i.type===type&&dist(i,p)<600));
+  for(const [i,e] of es.entries()){
+    const r=radius(e.mass);
+    assert.ok(e.x>=r&&e.x<=pond.width-r&&e.y>=r&&e.y<=pond.height-r);
+    assert.ok(dist(e,p)>r+radius(p.mass));
+    for(const leaf of pond.leaves)assert.ok(dist(leaf,e)>leaf.r+r);
+    for(let j=0;j<i;j++)assert.ok(dist(es[j],e)>radius(es[j].mass)+r,'overlapping '+e.id+' / '+es[j].id);
+  }
+  const masses=es.map(e=>e.mass).sort((a,b)=>b-a);
+  assert.ok(masses[1]>=masses[0]/2);
+  trialSurplus=Math.min(trialSurplus,p.mass+es.reduce((n,e)=>n+e.mass,0)-2*masses[0]);
+}
+assert.ok(trialSurplus>0);
+console.log('Open pond:',count,'clear starts, opening catches and three accessible forms, minimum surplus',trialSurplus);

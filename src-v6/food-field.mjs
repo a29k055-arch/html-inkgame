@@ -3,10 +3,10 @@
 const shapes=['circle','triangle','square','pentagon'];
 const clamp=(x,lo,hi)=>Math.max(lo,Math.min(hi,x));
 
-export function createFoodField(width,height,spacing,seed){
+export function createFoodField(width,height,spacing,seed,massScale=1){
   if(!spacing)return null;
   const columns=Math.max(1,Math.floor(width/spacing)),rows=Math.max(1,Math.floor(height/spacing));
-  const field={columns,rows,cw:width/columns,ch:height/rows,slots:new Array(columns*rows),
+  const field={columns,rows,massScale,cw:width/columns,ch:height/rows,slots:new Array(columns*rows),
     vacant:[],regrowAt:0,rng:(seed^0x63a77521)>>>0,count:columns*rows,
     time:0,phase:(seed>>>0)%301,tileColumns:Math.ceil(columns/12),flows:[]};
   for(let i=0;i<field.slots.length;i++)plant(field,i);
@@ -23,7 +23,7 @@ function plant(f,i){
   const y=(Math.floor(i/f.columns)+.10+.8*random(f))*f.ch;
   const size=random(f);
   const shape=shapes[Math.floor(random(f)*shapes.length)],rot=random(f)*Math.PI*2;
-  const flake={id:'flake-'+i,slot:i,x,y,homeX:x,homeY:y,r:2.2+2.15*size,mass:.50+1.20*size,
+  const flake={id:'flake-'+i,slot:i,x,y,homeX:x,homeY:y,r:2.2+2.15*size,mass:(.50+1.20*size)*f.massScale,
     shape,rot,rot0:rot,alpha:.42+.30*random(f),ready:true,
     tileX:Math.floor((i%f.columns)/12),tileY:Math.floor(i/f.columns/12),lane:i%3};
   f.slots[i]=sampleFood(f,flake);

@@ -1,15 +1,22 @@
 import {createLevelScroll} from '../assets/ui/bamboo-scroll/bamboo-scroll.js?v=4296ecc';
-import {LEVELS,TUTORIALS} from './levels.mjs';
+import {LEVELS,TUTORIALS,TRIAL} from './levels.mjs';
 
 const copy = {
-  zh:{index:'选画',tutorial:'教学',enter:'进入画作',back:'返回目录',locked:'完成前置关卡后开启',painting:'画作',done:'已完成',preview:'画作预览'},
-  ja:{index:'絵を選ぶ',tutorial:'遊び方',enter:'絵に入る',back:'一覧に戻る',locked:'前のステージをクリアすると遊べます',painting:'ステージ',done:'クリア済み',preview:'絵のプレビュー'},
-  en:{index:'Choose a painting',tutorial:'Tutorial',enter:'Enter painting',back:'Back to the scroll',locked:'Complete the previous painting to unlock.',painting:'Painting',done:'Completed',preview:'Painting preview'}
+  zh:{index:'选画',tutorial:'教学关卡',tutorialInfo:'从认出自己的墨滴开始，依次练习移动与吞噬、敌人碰撞、使用道具和喷墨。',enter:'进入画作',back:'返回目录',locked:'完成前置关卡后开启',upcoming:'制作中',painting:'画作',done:'已完成',preview:'画作预览'},
+  ja:{index:'絵を選ぶ',tutorial:'遊び方',tutorialInfo:'自分の墨のしずくを見つけたら、泳ぎ方、敵との接触、アイテム、墨の吐き方を順に試してみよう。',enter:'絵に入る',back:'一覧に戻る',locked:'前のステージをクリアすると遊べます',upcoming:'準備中',painting:'ステージ',done:'クリア済み',preview:'絵のプレビュー'},
+  en:{index:'Choose a painting',tutorial:'Tutorial',tutorialInfo:'Find your ink drop, then try swimming, absorbing, meeting rivals, using items and jetting ink.',enter:'Enter painting',back:'Back to the scroll',locked:'Complete the previous painting to unlock.',upcoming:'Coming soon',painting:'Painting',done:'Completed',preview:'Painting preview'}
 };
-// Reserve the real artwork rectangle before decoding. A late image must not move a button under a finger.
-const artworkSize=[[800,1234],[600,900],[694,1286],[735,1530],[848,428],[1045,499]];
-const number = entry => String(entry.index+1).padStart(2,'0');
-const entries = [{divider:'tutorial'},...TUTORIALS,{divider:'space'},...LEVELS];
+const artworkSize=[[800,1234],[600,900],[694,1286],[735,1530],[848,428],[1045,499],[439,1100]];
+const numbered=(entry)=>String(entry.index+1).padStart(2,'0');
+const tutorial={kind:'tutorial',index:0,artworkIndex:0};
+const futureNames=[['柒','VII'],['捌','VIII'],['玖','IX'],['拾','X']];
+const future=futureNames.map(([han,en],i)=>({kind:'future',index:6+i,title:{zh:han,ja:han,en}}))
+  .filter(entry=>entry.index>=LEVELS.length);
+const entries=[tutorial,TRIAL,...LEVELS,...future];
+function name(entry,lang) {
+  if(entry.kind==='tutorial')return copy[lang].tutorial;
+  return entry.title[lang];
+}
 
 export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) {
   const $=id=>document.getElementById(id);
@@ -17,47 +24,66 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
   const start=$('start'),back=$('preview-back'),image=$('preview-art');
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   let current=null, flight=null;
-  const bamboo=createLevelScroll(slips,entries.map(entry=>({name:'',locked:Boolean(entry.divider)})),show);
+  const bamboo=createLevelScroll(slips,entries.map(entry=>({name:'',locked:entry.kind==='future'})),show);
   bamboo.buttons.forEach((button,i)=>{
     const entry=entries[i];
-    if(entry.divider){
-      button.dataset.divider=entry.divider;
-      button.setAttribute('aria-hidden','true');
-      button.tabIndex=-1;
-    }else{
-      button.dataset.kind=entry.kind;
-      button.dataset.index=entry.index;
-    }
+    if(entry.kind==='future')button.dataset.upcoming='true';
+    else button.dataset.kind=entry.kind;
+    button.dataset.index=entry.index;
   });
+  // Touch browsers occasionally swallow a compatibility click just after a
+  // scrolling gesture. Recover only a motionless single-finger tap on the
+  // same playable slat. Native clicks, drags and pinches keep their own path.
+  let tap=null,tapTimer=0;
+  slips.addEventListener('pointerdown',e=>{
+    clearTimeout(tapTimer);
+    const button=e.target.closest?.('button[data-kind]');
+    tap=e.pointerType==='touch'&&e.isPrimary&&button?{id:e.pointerId,button,x:e.clientX,y:e.clientY}:null;
+  });
+  slips.addEventListener('pointermove',e=>{
+    if(tap?.id===e.pointerId && Math.hypot(e.clientX-tap.x,e.clientY-tap.y)>7)tap=null;
+  });
+  slips.addEventListener('pointercancel',()=>{tap=null;});
+  slips.addEventListener('pointerup',e=>{
+    const candidate=tap;tap=null;
+    if(!candidate || candidate.id!==e.pointerId || !candidate.button.contains(e.target))return;
+    tapTimer=setTimeout(()=>{
+      if(current===null && !library.hidden && !slips.inert)candidate.button.click();
+    },80);
+  });
+  slips.addEventListener('click',()=>clearTimeout(tapTimer),true);
   function update(){
     const lang=progress.lang,c=copy[lang];
     library.setAttribute('aria-label',c.index);slips.setAttribute('aria-label',c.index);
     bamboo.buttons.forEach((button,i)=>{
       const entry=entries[i],title=button.querySelector('.bamboo-level-name'),no=button.querySelector('.bamboo-level-no');
-      if(entry.divider){
-        title.textContent=entry.divider==='tutorial'?c.tutorial:'';
-        no.textContent='';return;
-      }
-      const locked=!unlocked(entry);
+      const label=name(entry,lang),upcoming=entry.kind==='future',numberedEntry=entry.kind==='level'||upcoming;
+      const locked=upcoming||!unlocked(entry);
+      const complete=entry.kind==='tutorial'?TUTORIALS.every(finished):!upcoming&&finished(entry);
       button.dataset.locked=String(locked);
-      button.dataset.complete=String(finished(entry));
-      title.textContent=entry.title[lang];
-      no.textContent=number(entry);
-      button.setAttribute('aria-label',[(entry.kind==='tutorial'?c.tutorial:c.painting)+' '+number(entry),entry.title[lang],locked?c.locked:finished(entry)?c.done:''].filter(Boolean).join(' · '));
+      button.dataset.complete=String(complete);
+      title.textContent=label;
+      no.textContent=numberedEntry?numbered(entry):complete?c.done:'';
+      if(upcoming){
+        let pending=button.querySelector('.bamboo-future');
+        if(!pending){pending=document.createElement('span');pending.className='bamboo-future';button.append(pending);}
+        pending.textContent=c.upcoming;
+      }
+      button.setAttribute('aria-label',[numberedEntry?c.painting+' '+numbered(entry):'',label,upcoming?c.upcoming:locked?c.locked:complete?c.done:''].filter(Boolean).join(' · '));
     });
     if(current==null)return;
     const entry=entries[current],locked=!unlocked(entry);
-    slat.dataset.kind=entry.kind;
-    $('hero-title').textContent=entry.title[lang];
-    $('preview-number').textContent=number(entry);
-    $('hero-desc').textContent=entry.subtitle[lang];
-    const artIndex=entry.kind==='tutorial'?0:entry.index;
+    slat.dataset.kind=entry.kind;slat.dataset.mirror=String(current%2===1);
+    $('hero-title').textContent=name(entry,lang);
+    $('preview-number').textContent=entry.kind==='level'?numbered(entry):'';
+    $('hero-desc').textContent=entry.kind==='tutorial'?c.tutorialInfo:entry.subtitle[lang];
+    const artIndex=entry.artworkIndex??entry.index;
     const [width,height]=artworkSize[artIndex];
     preview.style.setProperty('--art-ratio',String(width/height));
     image.width=width;image.height=height;
     const src=paintings[artIndex];
     if(image.src!==src)image.src=src;
-    image.alt=c.preview+' · '+entry.title[lang];
+    image.alt=c.preview+' · '+name(entry,lang);
     preview.setAttribute('aria-label',c.preview);
     start.disabled=locked;start.textContent=c.enter;back.textContent=c.back;
     $('hero-lock').textContent=locked?c.locked:'';
@@ -65,7 +91,7 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
   }
   function show(_,index){
     const button=bamboo.buttons[index];
-    if(!button||entries[index].divider)return;
+    if(!button||button.disabled)return;
     bamboo.stopMotion();
     const origin=button.getBoundingClientRect();
     current=index;
@@ -74,7 +100,7 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
     if(!reduce.matches){
       const end=slat.getBoundingClientRect();
       flight=slat.animate([
-        {transform:'translate('+ (origin.left-end.left)+'px,'+(origin.top-end.top)+'px) scale('+(origin.width/end.width)+','+(origin.height/end.height)+')'},
+        {transform:'translate('+ (origin.left-end.left)+'px,'+(origin.top-end.top)+'px) scale('+(origin.width/end.width)+')'},
         {transform:'none'}
       ],{duration:470,easing:'cubic-bezier(.22,.72,.19,1)'});
     }
@@ -112,8 +138,9 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
     e.preventDefault();e.stopImmediatePropagation();
     const buttons=bamboo.buttons.filter(b=>b.dataset.kind);
     const i=buttons.indexOf(document.activeElement);
-    const next=buttons[Math.max(0,Math.min(buttons.length-1,i+(e.key==='ArrowLeft'?-1:1)))];
-    next?.focus();
+    const direction=e.key==='ArrowLeft'?-1:1;
+    const next=buttons[i+direction];
+    if(next)next.focus();else bamboo.scrollBy(direction);
   },{capture:true});
   library.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&!preview.hidden){event.preventDefault();close({focus:true});}

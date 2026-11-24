@@ -1,12 +1,12 @@
-// The tissue-paper dissolve is used only for lessons. Simulated bodies stay
-// still while a result is on screen; the next arrangement changes under cover.
+// Keep the result legible while the player swims. Change practice layouts
+// at peak opacity, with a paper-colour dissolve in both directions.
 export const LESSON_HOLD = 3;
-export const LESSON_DISSOLVE = .38;
-export const LESSON_INTRO = 2.8;
+export const LESSON_DISSOLVE = .62;
+export const LESSON_INTRO = 3.8;
 
 const copy=(zh,ja,en)=>({zh,ja,en});
 export const introductions=[
-  copy('看池子中央，那颗墨球就是你。','池の真ん中にある墨の玉が、あなたです。','Find the ink ball near the middle of the pond. That’s you.'),
+  copy('这就是你。你是池中的一滴墨。','これがあなたです。一滴の墨になって、池を泳ぎます。','This is you. You’re a drop of ink in the pond.'),
   copy('池里有两种对手。先看看带短刺的这一个。','池には2種類の相手がいます。まずはトゲのある方を見てみましょう。','There are two kinds of rivals. Start with the one with short spines.'),
   copy('游来的生物可以让你变身。先收下它，再决定什么时候用。','泳いでくる生き物を拾うと、その姿に変われます。使うタイミングは自分で決めましょう。','Collect a swimming creature to borrow its form. You choose when to use it.'),
   copy('你身上的墨也能喷出去。看看身后的刺球。','自分の墨を後ろに吹き出せます。後ろのトゲ玉に注目しましょう。','You can send some of your own ink backward. Look at the spiked ball behind you.')

@@ -11,6 +11,7 @@ const words={zh:{assets:'游戏资源',file:'正在加载',ready:'素材就绪',
  ja:{assets:'ゲーム素材',file:'読み込み中',ready:'素材の準備完了',prepare:'動きを準備しています',elapsed:'経過',retry:'再試行'},
  en:{assets:'Game assets',file:'Loading',ready:'Assets ready',prepare:'Preparing animation',elapsed:'Elapsed',retry:'Retry'}};
 const art=galleryIDs.map(id=>V4_ARTWORKS.find(a=>a.id===id));
+const defaultPainting=art.find(entry=>entry.id==='ink-13');
 const cfg={bgmVolume:.28,volume:.3,bgmMuted:false,sfxMuted:false,bgmTrack:'shuffle',sfxStyle:'water',quality:'balanced',controls:'auto',homeVisual:'paper',backgroundPolicy:'fixed',...coverSettings()};
 let state={phase:'start',loadedBytes:0,totalBytes:0,completed:0,total:0,preparation:0},visible=true;
 let bamboo=null,album=null,ink=null,picture=null,pointerTime=0,lastFrame=0,ending=false,done=false,host=false,settingsOnly=false;
@@ -132,7 +133,7 @@ let revision=0;
 async function background(id){
  const current=++revision;
  if(cfg.homeVisual!=='painting'){ink?.dispose();ink=null;document.body.dataset.homeVisual='paper';displayPrefs();return;}
- const entry=art.find(a=>a.id===id)||art.at(-1);
+ const entry=art.find(a=>a.id===id)||defaultPainting;
  const image=new Image();image.src=entry.src;
  try{await image.decode();if(revision!==current)return;document.body.dataset.homeVisual='painting';
    ink??=new HomeArtwork($('homeFluid'),cfg.quality);ink.resize();ink.setBackground(image);picture=entry;
@@ -143,15 +144,15 @@ async function background(id){
 let rotationAge=0;
 function chooseBackground(next=false){
  const cleared=unlockedArtworks();
- let pool=art.filter(entry=>cleared.has(entry.id)||(cfg.backgroundPolicy!=='unlocked'&&(entry===art[0]||entry===art.at(-1))));
- if(!pool.length)pool=[art.at(-1)];
+ let pool=art.filter(entry=>cleared.has(entry.id)||(cfg.backgroundPolicy!=='unlocked'&&(entry===art[0]||entry===defaultPainting)));
+ if(!pool.length)pool=[defaultPainting];
  let chosen;
  if(cfg.backgroundPolicy==='random'||cfg.backgroundPolicy==='unlocked'){
    const alternatives=pool.filter(entry=>entry!==picture);
    const choices=alternatives.length?alternatives:pool;chosen=choices[Math.floor(Math.random()*choices.length)];
  }else if(next||cfg.backgroundPolicy==='rotate'){
    chosen=pool[(pool.indexOf(picture)+1)%pool.length];
- }else chosen=pool.find(entry=>entry.id===cfg.backgroundId)||art.at(-1);
+ }else chosen=pool.find(entry=>entry.id===cfg.backgroundId)||defaultPainting;
  rotationAge=0;return background(chosen.id);
 }
 $('backgroundPolicy').onchange=e=>{cfg.backgroundPolicy=e.target.value;chooseBackground().then(persist);};

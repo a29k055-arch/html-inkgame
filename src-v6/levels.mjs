@@ -1,21 +1,23 @@
+import {TRIAL,makeTrial} from './trial-level.mjs';
+export {TRIAL};
 // World units are independent of screen size. Each painting fixes its shores and
 // teaching encounter; a seed moves secondary creatures within their home bays.
 const words = (zh, ja, en) => ({ zh, ja, en });
 
 export const LEVELS = [
-  [words('壹','一','I'), words('先吃水中的浮墨，再去吞淡蓝光圈里的对手。成为池中最大的墨团，就能揭开这幅画。','まずは水に浮かぶ墨を集めよう。水色に光る相手を吸収して、池でいちばん大きくなると絵が現れる。','Gather floating ink, then absorb rivals with a pale blue glow. Grow bigger than every rival to reveal the painting.')],
-  [words('貳','二','II'), words('喷墨缩身，穿过荷叶之间的窄隙，也可以沿岸绕行。','墨を吐いて小さくなれば、ハスの葉の間を通れる。岸沿いに回ってもいい。','Shed ink to slip through, or follow the lotus bank.')],
-  [words('參','三','III'), words('让两颗刺球相撞，给自己挤出一条水路。','トゲ玉どうしをぶつけて、水路を開こう。','Nudge two spiked balls together to open the crossing.')],
-  [words('肆','四','IV'), words('赶在黑洞之前，选定觅食的岸。','黒い渦より先に、墨を集める岸を選ぼう。','Choose a feeding bank before the whirl reaches it.')],
-  [words('伍','五','V'), words('沿外岸蓄墨，在窄口换路。','岸辺で墨を蓄え、狭い水路を渡ろう。','Gather ink on the outer bank, then change course at a narrow gate.')],
-  [words('陸','六','VI'), words('两岸合流，选择养花、截食或推开刺门。','二つの流れが合う池で、花と押す力を使おう。','Two basins meet. Grow a flower, intercept a mote, or open the thorn gate.')]
+  [words('壹','壹','I'), words('先吃水中的浮墨，再去吞淡蓝光圈里的对手。成为池中最大的墨团，就能揭开这幅画。','まずは水に浮かぶ墨を集めよう。水色に光る相手を吸収して、池でいちばん大きくなると絵が現れる。','Gather floating ink, then absorb rivals with a pale blue glow. Grow bigger than every rival to reveal the painting.')],
+  [words('貳','貳','II'), words('喷墨缩身，穿过荷叶之间的窄隙，也可以沿岸绕行。','墨を吐いて小さくなれば、ハスの葉の間を通れる。岸沿いに回ってもいい。','Shed ink to slip through, or follow the lotus bank.')],
+  [words('參','參','III'), words('让两颗刺球相撞，给自己挤出一条水路。','トゲ玉どうしをぶつけて、水路を開こう。','Nudge two spiked balls together to open the crossing.')],
+  [words('肆','肆','IV'), words('赶在黑洞之前，选定觅食的岸。','黒い渦より先に、墨を集める岸を選ぼう。','Choose a feeding bank before the whirl reaches it.')],
+  [words('伍','伍','V'), words('沿外岸蓄墨，在窄口换路。','岸辺で墨を蓄え、狭い水路を渡ろう。','Gather ink on the outer bank, then change course at a narrow gate.')],
+  [words('陸','陸','VI'), words('两岸合流，选择养花、截食或推开刺门。','二つの流れが合う池で、花と押す力を使おう。','Two basins meet. Grow a flower, intercept a mote, or open the thorn gate.')]
 ].map(([title,subtitle],index)=>({id:'level-'+(index+1),kind:'level',index,title,subtitle}));
 
 export const TUTORIALS = [
-  [words('移动与吞食','移動と吸収','Move and eat'), words('移动、停住、辨认淡蓝圈。','泳ぐ、止まる、水色の輪を見分ける。','Steer, slow down and recognize an edible ring.')],
+  [words('移动与吞噬','移動と吸収','Move and absorb'), words('移动、停住、辨认淡蓝圈。','泳ぐ、止まる、水色の輪を見分ける。','Steer, slow down and recognize an edible ring.')],
   [words('敌人碰撞','敵との接触','Enemy contact'), words('观察两种敌人怎样交换或失去墨。','トゲ玉に触れたときと、黒い渦に触れたときの違いを見てみよう。','See which encounters transfer ink and which wear both bodies down.')],
   [words('使用道具','アイテムの使い方','Use items'), words('先把游来的生物收入道具栏，再选择使用时机。','生き物を集めて、好きなタイミングで変身しよう。','Collect a creature, store it, then choose when to change.')],
-  [words('喷墨与养花','墨とハスの花','Jet ink and grow flowers'), words('向后喷墨可以推开对手。把墨留在荷叶上，等花开了再吃。','後ろに墨を吐いて相手を押そう。ハスの葉に墨をためると花が咲く。','Push a mote with your jet and regain ink from a blossom.')]
+  [words('喷墨','墨の吐き方','Jet ink'), words('向后喷墨可以推开对手。把墨留在荷叶上，等花开了再吃。','後ろに墨を吐いて相手を押そう。ハスの葉に墨をためると花が咲く。','Push a mote with your jet and regain ink from a blossom.')]
 ].map(([title,subtitle],index)=>({id:'tutorial-'+(index+1),kind:'tutorial',index,title,subtitle}));
 
 const plans = [
@@ -40,7 +42,7 @@ function randomFor(seed) {
 }
 
 function lessonWorld(meta,seed) {
-  const cfg = {id:meta.id,kind:meta.kind,index:meta.index,seed,width:1000,height:660,speed:115,flowerMass:30,
+  const cfg = {id:meta.id,kind:meta.kind,index:meta.index,seed,width:1000,height:660,speed:129,flowerMass:30,
     player:{x:405,y:330,mass:100,angle:0}, enemies:[],leaves:[],drops:[],items:[],tutorial:true,spawnItems:false};
   if (meta.index===0) {
     cfg.enemies=[
@@ -64,14 +66,15 @@ const bankRoutes = [
 ];
 
 export function makeLevel(id, seed=1) {
-  const meta=typeof id==='object' ? id : [...LEVELS,...TUTORIALS].find(entry=>entry.id===id);
+  const meta=typeof id==='object' ? id : [TRIAL,...LEVELS,...TUTORIALS].find(entry=>entry.id===id);
   if (!meta) throw new RangeError('Unknown pond: '+id);
+  if (meta.kind==='trial') return makeTrial(seed,randomFor(seed));
   if (meta.kind==='tutorial') return lessonWorld(meta,seed);
   const {index}=meta, rng=randomFor(seed);
   const [width,height,count,driftFraction,speed]=plans[index];
   const flip = rng() < .5;
   const point = (u,v) => ({x:u*width, y:(flip?1-v:v)*height});
-  const cfg = {id:meta.id,kind:'level',index,seed,width,height,speed,tutorial:false,spawnItems:true,flowerMass:30,foodSpacing:79,
+  const cfg = {id:meta.id,kind:'level',index,seed,width,height,speed:Math.round(speed*1.12),tutorial:false,spawnItems:true,flowerMass:30,foodSpacing:79,
     player:{...point(.18,.50),mass:100,angle:0},enemies:[],leaves:[],drops:[],items:[]};
   const enemies=cfg.enemies;
   const add = (key,type,mass,p,extra={}) => {

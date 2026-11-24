@@ -1,12 +1,18 @@
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 
-export function createCamera(canvas) {
+export function createCamera(canvas,meter=null) {
   const camera={x:0,y:0,scale:1};
   let magnification=1, offsetX=0, offsetY=0;
   let inspected=null, intro=null;
+  let cachedWidth=0,cachedHeight=0,top=0;
   function ranges(w) {
     const width=canvas.clientWidth||innerWidth,height=canvas.clientHeight||innerHeight;
-    const overview=Math.min(width/w.width,height/w.height);
+    if(width!==cachedWidth||height!==cachedHeight){
+      const meterBottom=meter?.getBoundingClientRect().bottom||0;
+      top=Math.min(height*.24,meterBottom+12);
+      cachedWidth=width;cachedHeight=height;
+    }
+    const overview=Math.min((width-12)/w.width,(height-top-9)/w.height);
     const initial=Math.max(overview,Math.min(width,height)/510);
     return {width,height,overview,initial};
   }
@@ -14,16 +20,22 @@ export function createCamera(canvas) {
     const {width,height,initial,overview}=ranges(w);
     if(intro) {
       intro.elapsed=Math.min(intro.duration,intro.elapsed+dt);
-      const t=intro.elapsed/intro.duration;
-      magnification=intro.start+(1-intro.start)*t*t*(3-2*t);
+      // Give the player time to recognise their ink drop before the pond opens up.
+      const t=clamp((intro.elapsed/intro.duration-.14)/.86,0,1);
+      const ease=t*t*(3-2*t);
+      magnification=Math.exp(Math.log(intro.start)*(1-ease));
       if(t>=1)intro=null;
     }
-    camera.scale=clamp(initial*magnification,overview,Math.max(overview,initial*3.5));
+    camera.scale=clamp(initial*magnification,overview,initial*9);
     const halfW=width/camera.scale/2,halfH=height/camera.scale/2;
     const p=w.player;
-    const position=(player,offset,half,size)=>size<=2*half?size/2:clamp(player+offset,half,size-half);
-    camera.x=position(inspected?.x??p.x,offsetX,halfW,w.width);
-    camera.y=position(inspected?.y??p.y,offsetY,halfH,w.height);
+    const position=(target,half,size)=>size<=2*half?size/2:clamp(target,half,size-half);
+    camera.x=position((inspected?.x??p.x)+offsetX,halfW,w.width);
+    // Reserve space above the paper progressively as the whole pond comes into view.
+    const blend=clamp(1-(camera.scale/overview-1)/.45,0,1);
+    const inset=top*blend/camera.scale,bottom=9*blend/camera.scale;
+    const usableHalf=halfH-(inset+bottom)/2;
+    camera.y=position((inspected?.y??p.y)+offsetY,usableHalf,w.height)-(inset-bottom)/2;
     const decay=inspected?1:Math.exp(-dt*Math.min(1.6,Math.hypot(p.vx||0,p.vy||0)*.014));
     offsetX*=decay;offsetY*=decay;
     return camera;
@@ -33,7 +45,7 @@ export function createCamera(canvas) {
     intro=null;
     const box=canvas.getBoundingClientRect();
     const u=x-box.left-width/2,v=y-box.top-height/2,previous=camera.scale;
-    const scale=clamp(previous*factor,overview,initial*3.5);
+    const scale=clamp(previous*factor,overview,initial*Math.max(3.5,magnification));
     magnification=scale/initial;
     offsetX=camera.x-(inspected?.x??w.player.x)+u*(1/previous-1/scale);
     offsetY=camera.y-(inspected?.y??w.player.y)+v*(1/previous-1/scale);
@@ -45,11 +57,12 @@ export function createCamera(canvas) {
   }
   function follow(){if(inspected){inspected=null;offsetX=offsetY=0;}}
   function introduce(w,duration=3){
-    const {initial,overview}=ranges(w);
-    intro={start:Math.max(.48,overview/initial),duration:Math.max(.01,duration),elapsed:0};
+    const {initial,width,height}=ranges(w);
+    const start=clamp(Math.min(width,height)*.145/(Math.max(1,w.player.r)*initial),3.3,9);
+    intro={start,duration:Math.max(.01,duration),elapsed:0};
     return update(w);
   }
-  return {update,zoom,inspect,follow,introduce,reset(w){inspected=intro=null;magnification=1;offsetX=offsetY=0;return update(w);}};
+  return {update,zoom,inspect,follow,introduce,reset(w){cachedWidth=cachedHeight=0;inspected=intro=null;magnification=1;offsetX=offsetY=0;return update(w);}};
 }
 
 export function createMinimap(canvas,onInspect) {
@@ -87,7 +100,7 @@ export function createMinimap(canvas,onInspect) {
     function dot(x,y,r,color){c.beginPath();c.arc(ox+x*scale,oy+y*scale,r,0,Math.PI*2);c.fillStyle=color;c.fill();}
     for(const leaf of world.leaves){
       dot(leaf.x,leaf.y,Math.max(1.45,leaf.r*scale),'#799477');
-      if(leaf.flowers.length)dot(leaf.x,leaf.y,.8,'#fff0c5');
+      for(const flower of leaf.flowers)dot(flower.x,flower.y,.8,'#fff0c5');
     }
     for(const e of world.enemies){
       const r=Math.max(1.05,Math.min(3.2,e.r*scale));

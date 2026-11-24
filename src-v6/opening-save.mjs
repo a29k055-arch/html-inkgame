@@ -1,6 +1,6 @@
 // The V5 album presents the paintings completed in the V6 campaign.
 const progressKey='boku.v6.pond.progress.1',settingsKey='boku.v6.cover.settings.1';
-export const galleryIDs=['ink-06','ink-01','ink-07','ink-08','ink-12','ink-13'];
+export const galleryIDs=['ink-06','ink-01','ink-07','ink-08','ink-12','ink-13','ink-11'];
 function read(key){try{return JSON.parse(localStorage.getItem(key)||'{}')||{};}catch{return {};}}
 export function coverSettings(){
  const prefs=read(settingsKey);
@@ -12,7 +12,10 @@ export function coverSettings(){
 export function updateSettings(settings){try{localStorage.setItem(settingsKey,JSON.stringify(settings));}catch{}}
 export function getSave(){
  const progress=read(progressKey),completed=Array.isArray(progress.levels)?progress.levels:[];
- const revealArtworks=Object.fromEntries(galleryIDs.map((id,i)=>[id,{completed:completed.includes(i),bestProgress:completed.includes(i)?1:0}]));
+ const revealArtworks=Object.fromEntries(galleryIDs.map((id,i)=>{
+   const earned=id==='ink-11'?progress.trial===true:completed.includes(i);
+   return [id,{completed:earned,bestProgress:earned?1:0}];
+ }));
  return {settings:{...coverSettings(),language:progress.lang||coverSettings().language||'zh'},progress:{revealArtworks}};
 }
 export function unlockedArtworks(){return new Set(galleryIDs.filter(id=>getSave().progress.revealArtworks[id].completed));}

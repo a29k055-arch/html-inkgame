@@ -8,7 +8,7 @@ const root=new URL('../',import.meta.url);
 function bootImages(){
  const files=['assets/home/menu-reference.png','assets/home/brush.svg','assets/ui/cloud-lines.svg',
   'assets/ui/bamboo-scroll/bamboo-slip.png',
-  ...[2,1,3,4,6,7].map(n=>'assets/artworks/v4-cropped/'+n+'.png'),
+  ...[2,1,3,4,6,7,5].map(n=>'assets/artworks/v4-cropped/'+n+'.png'),
   ...['01','02'].map(n=>'assets/effects/start/start-'+n+'.webp'),
   ...Object.values(LIVING_VARIANTS).flat().map(id=>'src-v6/art/forms/'+id+'.webp'),
   ...['fish-icon','shrimp-icon','turtle-icon','dragon-icon','urchin-ink','vortex-ink','urchin-breath'].map(n=>'src-v6/art/'+n+'.webp'+(n.startsWith('urchin-')?'?paint=2':''))

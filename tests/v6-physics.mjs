@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {InkCreature,projectPoint} from '../previews/creature-rig/runtime/ink-creature.mjs';
-import {steerCreature} from '../src-v6/creature-painter.mjs';
+import {HeadFirstPainter,steerCreature} from '../src-v6/creature-painter.mjs';
 import {LIVING_VARIANTS} from '../src-v5/game/living-rigs.js';
 import {makeLevel} from '../src-v6/levels.mjs';
 import {visibleFood} from '../src-v6/food-field.mjs';
@@ -12,6 +12,18 @@ const near=(a,b,tol=1e-7)=>assert.ok(Math.abs(a-b)<tol,`${a} differs from ${b}`)
 const activate=(w,type)=>{const item=spawnItem(w,{type,x:w.player.x,y:w.player.y});tick(w,{},1/60);assert.ok(useItem(w,0));assert.equal(w.player.activeItem,item);return item;};
 const counts={};
 function test(name,f){f();counts[name]='pass';}
+test('stalled growth brings one nearby collectible dragon without forcing a transformation',()=>{
+  const w=base({tutorial:false,spawnItems:true,nextItem:999,enemies:[{id:'leader',type:'hole',mass:600,x:1300,y:680}]});
+  tick(w,{x:1,y:0},1);tick(w,{},40);
+  const rescues=w.items.filter(i=>i.rescue);
+  assert.equal(rescues.length,1);
+  assert.equal(rescues[0].type,'dragon');
+  assert.ok(Math.hypot(w.player.x-rescues[0].x,w.player.y-rescues[0].y)<250);
+  assert.equal(w.player.form,'ink');assert.equal(w.player.inventory.length,0);
+  w.player.x=rescues[0].x;w.player.y=rescues[0].y;tick(w,{},.1);
+  assert.equal(w.player.inventory[0],rescues[0]);assert.ok(useItem(w,0));
+  assert.equal(w.player.form,'dragon');assert.equal(w.events.filter(e=>e.type==='dragonArrived').length,1);
+});
 test('all ten rigs turn the head before the body while the turtle shell holds its joints',()=>{
   for(const ids of Object.values(LIVING_VARIANTS)){
     for(const id of ids){
@@ -29,6 +41,17 @@ test('all ten rigs turn the head before the body while the turtle shell holds it
       const turtle=c.species==='turtle',before=turtle?jointSpan():0;
       actor.aim.x=-1;
       for(let i=0;i<6;i++)c.update(1/60);
+      if(c.species==='shrimp'){
+        assert.ok(c.shrimpTurnProgress>0&&c.presentationWidth<1,id+' should begin its side-on flip');
+        for(let i=0;i<45;i++)c.update(1/60);
+        assert.equal(c.facing,-1,id+' must mirror when moving left');
+        const underside=c.mapPoint(.35,-.08),back=c.mapPoint(.35,.08);
+        assert.ok(underside.y>back.y,id+' underside must remain below its back');
+        actor.aim.x=0;actor.aim.y=-1;
+        for(let i=0;i<60;i++)c.update(1/60);
+        assert.ok(Math.abs(c.inclination)<=.56,id+' should retain its upright side profile');
+        continue;
+      }
       assert.ok(Math.abs(c.heading)>1.1,id+' head should already be turning');
       assert.ok(Math.abs(c.angleAt(c.time-.20))<.1,id+' rear should still follow the earlier course');
       if(turtle){
@@ -40,6 +63,19 @@ test('all ten rigs turn the head before the body while the turtle shell holds it
       assert.ok(Math.sin(c.heading)<-.99,id+' must face vertically');
     }
   }
+});
+test('distant turning creatures keep their original animated frames while close turns use joints',()=>{
+  const painter=Object.create(HeadFirstPainter.prototype);
+  painter.clock=.54;painter.camera={scale:.28};
+  const canvas={width:180,height:70},frames=Array.from({length:48},()=>({canvas}));
+  const q={species:'dragon',scale:1.6,visible:true,asset:{npcAtlas:{bounds:{w:320,h:90},seconds:2,frames}},
+    creature:{time:.4,bentUntil:.9}};
+  const e={id:'distant-dragon'};
+  const a=painter.atlasFrame(q,e);assert.ok(a&&a.fraction>0);
+  painter.clock+=1/60;
+  const b=painter.atlasFrame(q,e);assert.ok(b.index+b.fraction>a.index+a.fraction);
+  painter.camera.scale=2;
+  assert.equal(painter.atlasFrame(q,e),null);
 });
 test('covering a painted head collects once and the same rig fades in the water',()=>{
   const w=base(),p=w.player;
@@ -56,6 +92,21 @@ test('covering a painted head collects once and the same rig fades in the water'
   assert.equal(p.inventory.length,1);
   tick(w,{},.34);
   assert.equal(w.departingItems.length,0);
+});
+test('fish patrol their pool while shrimp pause and keep a shallow swimming angle',()=>{
+  const w=base({tutorial:false,enemies:[{type:'hole',x:1240,y:760,mass:950}]});
+  const fish=spawnItem(w,{type:'fish',x:260,y:620}),shrimp=spawnItem(w,{type:'shrimp',x:920,y:270});
+  let swimming=0,resting=0,fishDistance=0,shrimpDistance=0;
+  for(let i=0;i<1200;i++){
+    tick(w,{},1/60);
+    const speed=Math.hypot(fish.vx,fish.vy),slow=Math.hypot(shrimp.vx,shrimp.vy);
+    if(speed>4)swimming++;if(slow<1)resting++;
+    assert.ok(speed<30&&slow<27);
+    assert.ok(Math.abs(shrimp.vy)<=Math.abs(shrimp.vx)*.20+.001);
+    fishDistance+=speed/60;shrimpDistance+=slow/60;
+  }
+  assert.equal(swimming,1200);assert.ok(resting>600);
+  assert.ok(fishDistance>shrimpDistance*2);
 });
 test('all ten V5 appearances persist from the swimming pickup into the active player',()=>{
  const w=base({seed:42,tutorial:false,spawnItems:false,enemies:[{type:'hole',x:1200,y:800,mass:900}]});
@@ -161,6 +212,23 @@ test('one ink ledger on leaf, delayed droplets on water, natural bloom limit and
  const t=base({leaves:[{x:500,y:400,r:125,flowers:3}]});tick(t,{action:true},.5);tick(t,{},.6);
  assert.equal(t.leaves[0].flowers.length,3);assert.ok(t.drops.length>0);
 });
+test('all three blossoms grow outside the painted pad and can be reached even by a bank',()=>{
+ for(const [x,y] of [[500,400],[85,85],[1515,815]]){
+   const w=base({leaves:[{x,y,r:80,flowers:3}]}),leaf=w.leaves[0];
+   assert.equal(leaf.flowers.length,3);
+   for(const f of [...leaf.flowers]){
+     const paintedRadius=f.r*1.225;
+     assert.ok(Math.hypot(f.x-x,f.y-y)-paintedRadius>=leaf.r*1.05);
+     assert.ok(f.x>=paintedRadius && w.width-f.x>=paintedRadius);
+     assert.ok(f.y>=paintedRadius && w.height-f.y>=paintedRadius);
+     w.player.x=f.x;w.player.y=f.y;
+     const old=w.player.mass;
+     tick(w,{},1/60);
+     near(w.player.mass,old+f.mass);
+     assert.ok(!leaf.flowers.includes(f));
+   }
+ }
+});
 test('inventory bounded, edible ink cannot credit player and enemy twice',()=>{
  const w=base();for(const type of ['shrimp','fish','turtle','dragon'])spawnItem(w,{type,x:500,y:400});
  tick(w,{},1/60);assert.equal(w.player.inventory.length,3);assert.equal(w.items.length,1);
@@ -198,7 +266,9 @@ test('paid ink fans out as individual polygons and retains the same mass when it
  }
  const shots=[...seen.values()],angles=shots.map(s=>Math.atan2(s.dy,-s.dx)*180/Math.PI);
  assert.ok(Math.min(...angles)<-10 && Math.max(...angles)>10);
- assert.ok(angles.every(a=>Math.abs(a)<=24.01));
+ assert.ok(angles.every(a=>Math.abs(a)<=17.01));
+ const flight=shots.map(s=>Math.hypot(s.vx,s.vy)*s.lifetime);
+ assert.ok(Math.min(...flight)<60 && Math.max(...flight)>85 && Math.max(...flight)<114);
  assert.equal(new Set(shots.map(s=>s.shape)).size,4);
  assert.ok(Math.max(...shots.map(s=>Math.hypot(s.vx,s.vy)))-Math.min(...shots.map(s=>Math.hypot(s.vx,s.vy)))>70);
  assert.ok(new Set(times.slice(1).map((t,i)=>Math.round((t-times[i])*60))).size>=4);
@@ -244,5 +314,22 @@ test('keyboard taps make rounded turns with coasting while an analogue release r
  for(const t of [keyStop,stickStop])tick(t,{x:1},1);
  const x=keyStop.player.x;tick(keyStop,{keyboard:true},.24);tick(stickStop,{},.24);
  assert.ok(keyStop.player.x-x>2*(stickStop.player.x-x));
+});
+test('four successive cardinal key turns can draw a full circle at swimming speed',()=>{
+ const w=base(),points=[];
+ tick(w,{x:1,keyboard:true},1);
+ const start={x:w.player.x,y:w.player.y};
+ for(const key of [{y:1},{x:-1},{y:-1},{x:1}]){
+   for(let i=0;i<20;i++){
+     tick(w,{...key,keyboard:true},1/60);
+     points.push({x:w.player.x,y:w.player.y});
+     assert.ok(Math.hypot(w.player.vx,w.player.vy)>.98*w.speed);
+   }
+ }
+ const cx=points.reduce((s,p)=>s+p.x,0)/points.length;
+ const cy=points.reduce((s,p)=>s+p.y,0)/points.length;
+ const radii=points.map(p=>Math.hypot(p.x-cx,p.y-cy));
+ assert.ok(Math.max(...radii)/Math.min(...radii)<1.05);
+ assert.ok(Math.hypot(w.player.x-start.x,w.player.y-start.y)<1);
 });
 console.log(JSON.stringify(counts,null,2));

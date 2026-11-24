@@ -1,5 +1,5 @@
 import {createWorld,stepWorld,useItem} from './sim.mjs';
-import {makeLevel,LEVELS,TUTORIALS} from './levels.mjs';
+import {makeLevel,LEVELS,TUTORIALS,TRIAL} from './levels.mjs';
 import {advanceTutorialBeat,createTutorial,updateTutorial,tutorialHint,tutorialFocus} from './tutorial.mjs';
 import {showLessonBeat} from './lesson-scenes.mjs';
 import {createRenderer} from './render.mjs';
@@ -10,23 +10,25 @@ import {createInkSound} from './sound.mjs';
 import {connectOpening} from './opening.mjs';
 
 const canvas=document.querySelector('#world');
-const draw=createRenderer(canvas),camera=createCamera(canvas);
+const draw=createRenderer(canvas),camera=createCamera(canvas,document.querySelector('#revealMeter'));
 const minimap=createMinimap(document.querySelector('#minimap'),(x,y)=>{if(running())camera.inspect(world,x,y);});
 const sound=createInkSound();
 const STEP=1/60;
-let world=null,tutorial=null,kind='level',index=0,seed=0,inSeries=false;
+let world=null,tutorial=null,kind='level',index=0,seed=0;
+let liveLessonChange=false;
 let switching=false,ending=false,resultOpen=false,endedTime=0,accumulator=0,previous=0,hudAt=0;
+let readStamp=null;
 let eventOffset=0,scaleMax=1,lastHint='';
 let opening;
 const ui=createUI({
-  onStart:(k,i)=>start(k,i,{series:k==='tutorial'&&i===0}),
-  onRetry:()=>start(kind,index,{keepSeed:true,series:inSeries}),
+  onStart:(k,i)=>start(k,i),
+  onRetry:()=>start(kind,index,{keepSeed:true}),
   onNextTutorial:()=>advanceTutorial(false),
   onUseItem:slot=>{
     if(!running())return;
     if(useItem(world,slot)){input.blockAction();hudAt=0;}
   },
-  onPause:()=>{input.reset();accumulator=0;previous=0;},
+  onPause:()=>{input.reset();accumulator=0;previous=0;readStamp=null;},
   onLanguage:lang=>{opening?.setLanguage(lang);lastHint='';hudAt=0;},
   onSound:enabled=>{sound.setEnabled(enabled);if(enabled)sound.unlock();},
   onSettings:onReturn=>opening.showSettings(onReturn),
@@ -55,48 +57,49 @@ opening=connectOpening({
   prepare:()=>draw.prepare(),
   onPlay:()=>showCatalogue(),
   onHelp:()=>{showCatalogue('tutorial',0);},
-  onGallery:index=>showCatalogue('level',index),
+  onGallery:index=>index===TRIAL.artworkIndex?showCatalogue('trial',0):showCatalogue('level',index),
   onSettings:()=>{showCatalogue();ui.openSettings();}
 });
-function running(){return Boolean(world&&!ui.paused&&!switching&&!ending&&!document.hidden&&world.status==='playing');}
+function running(){return Boolean(world&&!ui.paused&&(!switching||liveLessonChange)&&!ending&&!document.hidden&&(tutorial||world.status==='playing'));}
 function newSeed(){
   const bits=new Uint32Array(1);crypto.getRandomValues(bits);return bits[0];
 }
-async function changeScene(change,lessonFade=false){
+async function changeScene(change,lessonFade=false,continuous=false){
   if(switching)return;
-  switching=true;input.reset();accumulator=0;previous=0;
-  try{await ui.transition(change,lessonFade);}
-  finally{switching=false;previous=0;}
+  switching=true;liveLessonChange=continuous;
+  if(!continuous){input.reset();accumulator=0;previous=0;}
+  try{await ui.transition(change,lessonFade,continuous);}
+  finally{switching=false;liveLessonChange=false;previous=0;}
 }
-function start(nextKind,nextIndex,{keepSeed=false,series=false}={}){
-  const list=nextKind==='tutorial'?TUTORIALS:LEVELS;
+function start(nextKind,nextIndex,{keepSeed=false,continuation=false}={}){
+  const list=nextKind==='tutorial'?TUTORIALS:nextKind==='trial'?[TRIAL]:LEVELS;
   if(!list[nextIndex])return;
   const nextSeed=keepSeed?seed:newSeed();
   return changeScene(async()=>{
     await draw.prepare();
-    kind=nextKind;index=nextIndex;seed=nextSeed;inSeries=series;
+    kind=nextKind;index=nextIndex;seed=nextSeed;
     const id=list[index].id;
     world=createWorld(makeLevel(id,seed));
-    tutorial=kind==='tutorial'?createTutorial(id):null;
+    tutorial=kind==='tutorial'?createTutorial(id,continuation):null;
     if(tutorial)updateTutorial(tutorial,world,[]);
     eventOffset=world.events.length;
     scaleMax=Math.max(1,Math.ceil(Math.max(world.largest,world.player.mass)*1.25));
     ending=false;resultOpen=false;endedTime=0;hudAt=0;lastHint='';
     ui.begin(kind,index);camera.reset(world);
-    if(tutorial)camera.introduce(world,3);
+    if(!(tutorial&&continuation))camera.introduce(world,3);
     refresh(true);paint(0);
-  },nextKind==='tutorial'||Boolean(tutorial));
+  },nextKind==='tutorial'||Boolean(tutorial),continuation);
 }
 function advanceTutorial(completed){
   if(switching||kind!=='tutorial'||!world)return;
-  if(completed)ui.complete('tutorial',index);
-  if(index<TUTORIALS.length-1){
-    start('tutorial',index+1,{series:inSeries});
-  }else if(inSeries||!completed){
-    start('level',0);
-  }else{
-    ending=true;endedTime=1.2;input.reset();resultOpen=true;ui.result(true,world.time);
+  if(completed){
+    ui.complete('tutorial',index);
+    if(index<TUTORIALS.length-1){
+      start('tutorial',index+1,{continuation:true});
+      return;
+    }
   }
+  start('trial',0,{continuation:true});
 }
 function refresh(force=false){
   if(!world)return;
@@ -109,8 +112,8 @@ function refresh(force=false){
 }
 function paint(dt){
   const view=camera.update(world,dt);
-  const artwork=paintings[kind==='tutorial'?0:index];
-  draw.render(world,view,{artwork,focus:tutorial?tutorialFocus(tutorial,world):null,reveal:ending&&kind==='level'&&world.status==='won'?Math.min(1,endedTime/1.1):0});
+  const artwork=paintings[kind==='trial'?TRIAL.artworkIndex:kind==='tutorial'?0:index];
+  draw.render(world,view,{artwork,focus:tutorial?tutorialFocus(tutorial,world):null,reveal:ending&&kind!=='tutorial'&&world.status==='won'?Math.min(1,endedTime/1.1):0});
   minimap(world,view,canvas,draw.mapLayer);
 }
 function update(){
@@ -124,7 +127,7 @@ function update(){
     if(updateTutorial(tutorial,world,events)){advanceTutorial(true);return;}
   }else if(world.status!=='playing'){
     ending=true;endedTime=0;input.reset();
-    if(world.status==='won')ui.complete('level',index);
+    if(world.status==='won')ui.complete(kind,index);
     refresh(true);
   }
 }
@@ -134,18 +137,30 @@ function frame(now){
   const elapsed=previous?(now-previous)/1000:0;
   const dt=Math.min(.1,elapsed);previous=now;
   if(ui.paused){accumulator=0;return;}
-  if(running()&&tutorial&&tutorial.phase!=='active'){
-    accumulator=0;
-    advanceTutorialBeat(tutorial,world,elapsed);
-    showLessonBeat(tutorial);
-    if(tutorial.done){advanceTutorial(true);return;}
-  }else if(running()){
+  if(running()){
+    const phase=tutorial?.phase;
     accumulator+=dt;
-    while(accumulator+1e-9>=STEP&&running()&&(!tutorial||tutorial.phase==='active')){
+    while(accumulator+1e-9>=STEP&&running()){
       accumulator-=STEP;update();
     }
+    if(tutorial&&phase!==tutorial.phase){
+      // Display a newly earned result on this frame so all three seconds are visible.
+      readStamp=null;refresh(true);hudAt=now+80;
+    }
+    // The reading timer uses foreground time; physics and input continue
+    // throughout the result and the outgoing and incoming paper fades.
+    if(tutorial&&!switching&&phase===tutorial.phase&&phase!=='active'){
+      // Start the reading clock after the result has been painted. A costly
+      // frame must not use its pre-render timestamp to shorten the message.
+      const stamp=performance.now();
+      const readTime=readStamp===null?0:(stamp-readStamp)/1000;
+      readStamp=stamp;
+      advanceTutorialBeat(tutorial,world,phase==='hold'?readTime:elapsed);
+      showLessonBeat(tutorial);
+      if(tutorial.done)advanceTutorial(true);
+    }
   }
-  if(ending&&!switching&&kind==='level'){
+  if(ending&&!switching&&kind!=='tutorial'){
     const before=endedTime;endedTime+=dt;
     const wait=world.status==='won'?1.17:.40;
     if(before<wait&&endedTime>=wait){
@@ -157,7 +172,7 @@ function frame(now){
       });
     }
   }
-  if(!switching&&now>=hudAt){refresh();hudAt=now+80;}
+  if((!switching||liveLessonChange)&&now>=hudAt){refresh();hudAt=now+80;}
   paint(dt);
 }
 window.addEventListener('keydown',e=>{
