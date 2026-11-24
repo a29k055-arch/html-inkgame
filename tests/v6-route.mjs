@@ -169,7 +169,7 @@ function run(level, seed, policy) {
     assert.ok(!world.enemies.some(e=>e.cornerBoss||e.major));
     // The released game keeps the last ink blossom spreading during its
     // 1.88-second victory shot. Keep that pigment separate from win timing.
-    while(world.painting.blooms.length)world.painting.update(1/15);
+    while(world.painting.blooms.length||world.painting.seeps.length)world.painting.update(1/15);
   }
   return {level,seed,policy,status:world.status,elapsed:+world.time.toFixed(1),
     majorWashes,coverage:coverageOnWin,settledCoverage:+world.painting.fraction.toFixed(4),coverageAtLastMajor,coverageAfterBloom,
