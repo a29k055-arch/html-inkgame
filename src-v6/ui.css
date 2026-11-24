@@ -21,8 +21,8 @@ body[data-version=v6] #revealProgress {width:100%;display:block;margin:5px 0 0;}
 #mass-marker {width:2px;height:10px;position:absolute;bottom:-3px;background:#8f4035;box-shadow:0 0 0 1px #eee5cf;transform:translateX(-1px);}
 .pond-tools {position:absolute;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
 body[data-version=v6] #mapWrap {position:static;width:108px;padding:5px;pointer-events:auto;touch-action:none;}
-#major-count {display:block;text-align:center;color:#525444;padding-top:2px;font-size:clamp(9px,1.3vh,12px);font-variant-numeric:tabular-nums;}
-#major-count[hidden]{display:none;}
+#mapWrap #major-count {display:block;text-align:center;color:#525444;padding-top:2px;font-size:clamp(9px,1.3vh,12px);font-variant-numeric:tabular-nums;}
+#mapWrap #major-count[hidden]{display:none;}
 #minimap {display:block;width:100%;height:auto;aspect-ratio:1;cursor:crosshair;touch-action:none;}
 #inventory {display:flex;flex-direction:column-reverse;align-items:center;gap:7px;pointer-events:none;}
 #inventory .slot[hidden]{display:none;}

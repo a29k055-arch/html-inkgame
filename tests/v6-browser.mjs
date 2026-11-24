@@ -421,6 +421,8 @@ async function exercise(endpoint,mobile) {
     await waitVisible('#field');await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'pond ready');
     assert.equal(await visible('#lesson'),false);
     await until(async()=>Number(await text('#rival-value'))>Number(await text('#mass-value')),'competing masses');
+    await waitVisible('#major-count');
+    assert.match(await text('#major-count'),/4/);
     await until(()=>js('window.__pondPainted?.spike && window.__pondPainted?.hole'),'both enemy illustrations really drawn');
     await until(()=>js('Number(document.querySelector("#timer").textContent.split(":")[1])>=4'),'trial camera has pulled back',30000);
     await capture('pond');
