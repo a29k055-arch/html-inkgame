@@ -147,3 +147,19 @@ for(const [width,height,barBottom] of [[1440,900,53],[390,844,43],[844,390,53]])
   for(let i=0;i<60;i++)camera.update(world,1/60);
   assert.ok(Math.abs(camera.update(world).scale/base-1.2)<1e-6,'Manual zoom is preserved on leaving dragon form');
 }
+
+{
+  const canvas={clientWidth:1100,clientHeight:800,getBoundingClientRect:()=>({left:0,top:0})};
+  const w={kind:'trial',width:3500,height:8900,player:{x:1600,y:4100,r:25,mass:156,form:'ink'}};
+  const lens=createCamera(canvas),base=lens.reset(w).scale;
+  w.player.mass=10000;
+  for(let i=0;i<180;i++)lens.update(w,1/60);
+  const grown=lens.update(w).scale;
+  assert.ok(grown<base*.4 && grown>base*.34);
+  lens.zoom(w,1.3,550,400);
+  for(let i=0;i<30;i++)lens.update(w,1/60);
+  const manual=lens.update(w).scale;
+  w.player.mass*=2;
+  for(let i=0;i<90;i++)lens.update(w,1/60);
+  assert.ok(Math.abs(lens.update(w).scale-manual)<1e-8);
+}

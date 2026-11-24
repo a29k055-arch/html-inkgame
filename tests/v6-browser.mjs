@@ -428,7 +428,9 @@ async function exercise(endpoint,mobile) {
     await click('#exit-run');await waitVisible('#library');
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'catalogue ready');
     // The standalone experience is available before finishing the tutorial or a painting.
-    await click('#slips [data-kind=trial][data-index="0"]');await click('#start');
+    await click('#slips [data-kind=trial][data-index="0"]');
+    await waitVisible('#art-note');assert.match(await text('#art-note'),/徐渭《黄甲图》/);
+    await click('#start');
     await waitVisible('#field');await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'pond ready');
     assert.equal(await visible('#lesson'),false);
     await until(async()=>Number(await text('#rival-value'))>Number(await text('#mass-value')),'competing masses');

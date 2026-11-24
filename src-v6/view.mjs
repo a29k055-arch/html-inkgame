@@ -7,6 +7,7 @@ export function createCamera(canvas,meter=null) {
   const camera={x:0,y:0,scale:1};
   let zoomRatio=1,offsetX=0,offsetY=0,inspected=null,dragon=false;
   let motion=null,cachedWidth=0,cachedHeight=0,top=0;
+  let growthScale=1,manualZoom=false;
   function ranges(w) {
     const width=canvas.clientWidth||innerWidth,height=canvas.clientHeight||innerHeight;
     if(width!==cachedWidth||height!==cachedHeight){
@@ -25,7 +26,14 @@ export function createCamera(canvas,meter=null) {
     if(transformed!==dragon){
       dragon=transformed;travel(dragon ? .85 : .7);
     }
-    const targetScale=clamp(initial*zoomRatio*(dragon ? .74 : 1),overview,initial*9);
+    // Give a growing mote room to see its next meal. Once the player sets a
+    // zoom, keep their framing until the next pond.
+    if(!manualZoom&&!inspected&&w.kind==='trial'){
+      const radius=2*Math.sqrt(Math.max(1,p.mass));
+      const desired=Math.min(1,70/radius);
+      growthScale=lerp(growthScale,desired,1-Math.exp(-dt*1.65));
+    }
+    const targetScale=clamp(initial*growthScale*zoomRatio*(dragon ? .74 : 1),overview,initial*9);
     let t=1;
     if(motion){
       motion.elapsed+=Math.max(0,dt);
@@ -50,7 +58,8 @@ export function createCamera(canvas,meter=null) {
   }
   function zoom(w,factor,x,y) {
     const {width,height,initial,overview}=ranges(w),box=canvas.getBoundingClientRect();
-    const formScale=dragon ? .74 : 1;
+    manualZoom=true;
+    const formScale=growthScale*(dragon ? .74 : 1);
     // Accumulate wheel/pinch events even if they arrive before the next paint.
     const old=motion?.interactive?initial*zoomRatio*formScale:camera.scale;
     const scale=clamp(old*factor,overview,initial*3.5);
@@ -77,7 +86,7 @@ export function createCamera(canvas,meter=null) {
   }
   function reset(w){
     cachedWidth=cachedHeight=0;inspected=motion=null;dragon=w.player.form==='dragon';
-    zoomRatio=1;offsetX=offsetY=0;return update(w);
+    growthScale=1;manualZoom=false;zoomRatio=1;offsetX=offsetY=0;return update(w);
   }
   return {update,zoom,inspect,follow,introduce,reset};
 }

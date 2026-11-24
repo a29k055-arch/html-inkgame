@@ -74,8 +74,22 @@ for(let seed=0;seed<count;seed++){
   // Normal zoom shows at least 510 world units across the shorter dimension on
   // both portrait and landscape. Count only centres inside their shared square.
   const firstScreen=es.filter(e=>Math.abs(e.x-p.x)<=255&&Math.abs(e.y-p.y)<=255);
-  assert.ok(firstScreen.length>=7 && firstScreen.length<=21,'the inlet must keep distinct swimming lanes');
-  assert.ok(firstScreen.filter(e=>e.mass<p.mass).length>=4);
+  assert.ok(firstScreen.length>=4 && firstScreen.length<=11,'the inlet must keep distinct swimming lanes');
+  assert.equal(firstScreen.filter(e=>e.mass<p.mass).length,1);
+  const tiers=[...new Set(es.map(e=>e.mass))].sort((a,b)=>a-b);
+  assert.equal(tiers[0],p.mass/2);assert.equal(tiers[1],p.mass);
+  for(let i=2;i<tiers.length;i++)assert.equal(tiers[i],tiers[i-1]+tiers[i-2]);
+  assert.equal(es.filter(e=>e.mass<p.mass).length,3);
+  assert.ok(es.filter(e=>e.mass>=tiers[7]).length>=70);
+  assert.ok(pond.leaves.every(l=>l.r>=140)&&pond.leaves.some(l=>l.r>=300));
+  let growth=p.mass;
+  for(let i=0;i<7;i++){
+    const lesson=i===0?'trial-first-blue':'inlet-0-'+(i-1);
+    const prey=es.find(e=>e.id===lesson);
+    assert.equal(prey.mass,tiers[i]);assert.ok(growth>prey.mass);
+    growth+=prey.mass;
+    assert.equal(growth,tiers[i+2]);
+  }
   assert.ok(firstScreen.some(e=>radius(e.mass)>=2.6*radius(p.mass)));
   assert.ok(es.filter(e=>e.mass>=900).length>=34);
   const first=es.find(e=>e.id==='trial-first-blue');
@@ -87,7 +101,7 @@ for(let seed=0;seed<count;seed++){
     assert.ok(dist(onRoute,danger)>radius(p.mass)+radius(danger.mass)+15,'blocked opening catch');
   }
   assert.ok(Math.floor(pond.width/pond.foodSpacing)*Math.floor(pond.height/pond.foodSpacing)>=5500);
-  assert.ok(es.filter(e=>e.mass<p.mass&&dist(e,p)<220).length>=3);
+  assert.equal(es.filter(e=>e.mass<p.mass&&dist(e,p)<220).length,1);
   for(const type of ['fish','shrimp','turtle'])assert.ok(pond.items.some(i=>i.type===type&&dist(i,p)<600));
   for(const [i,e] of es.entries()){
     const r=radius(e.mass);

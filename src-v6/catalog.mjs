@@ -1,4 +1,5 @@
 import {createLevelScroll} from '../assets/ui/bamboo-scroll/bamboo-scroll.js?v=4296ecc';
+import {POND_ARTWORKS} from './artworks.mjs';
 import {LEVELS,TUTORIALS,TRIAL} from './levels.mjs';
 
 const copy = {
@@ -6,7 +7,6 @@ const copy = {
   ja:{index:'絵を選ぶ',tutorial:'チュートリアル',tutorialInfo:'泳ぎながら、敵の吸収、アイテムでの変身、墨の吐き方を順に試してみよう。',enter:'絵に入る',back:'一覧に戻る',locked:'前のステージをクリアすると解放されます',upcoming:'準備中',painting:'ステージ',done:'クリア済み',preview:'絵のプレビュー'},
   en:{index:'Choose a painting',tutorial:'Tutorial',tutorialInfo:'Find your ink drop, then try swimming, absorbing, meeting rivals, using items and jetting ink.',enter:'Enter painting',back:'Back to the scroll',locked:'Complete the previous painting to unlock.',upcoming:'Coming soon',painting:'Painting',done:'Completed',preview:'Painting preview'}
 };
-const artworkSize=[[800,1234],[600,900],[694,1286],[735,1530],[848,428],[1045,499],[439,1100]];
 const numbered=(entry)=>String(entry.index+1).padStart(2,'0');
 const tutorial={kind:'tutorial',index:0,artworkIndex:0};
 const futureNames=[['柒','VII'],['捌','VIII'],['玖','IX'],['拾','X']];
@@ -90,7 +90,10 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
     $('preview-number').textContent=entry.kind==='level'?numbered(entry):'';
     $('hero-desc').textContent=entry.kind==='tutorial'?c.tutorialInfo:entry.subtitle[lang];
     const artIndex=entry.artworkIndex??entry.index;
-    const [width,height]=artworkSize[artIndex];
+    const {width,height,note}=POND_ARTWORKS[artIndex];
+    const artNote=$('art-note');
+    artNote.textContent=note?.[lang]??'';
+    artNote.hidden=!artNote.textContent;
     preview.style.setProperty('--art-ratio',String(width/height));
     image.width=width;image.height=height;
     const src=paintings[artIndex];

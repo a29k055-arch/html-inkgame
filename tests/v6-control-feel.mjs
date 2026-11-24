@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import {createWorld,stepWorld} from '../src-v6/sim.mjs';
+import {createWorld,stepWorld,useItem} from '../src-v6/sim.mjs';
 
-function stroke(mass,emitting){
+function stroke(mass,emitting,form){
   const w=createWorld({tutorial:true,spawnItems:false,speed:132,seed:73,width:8000,height:3000,
     player:{x:3000,y:1500,mass}});
+  if(form){w.player.inventory.push({type:form});useItem(w,0);}
   const shotMasses=new Set(),shotRadii=new Set();
   for(let frame=0;frame<240;frame++){
     stepWorld(w,{x:1,action:emitting},1/60);
@@ -14,17 +15,20 @@ function stroke(mass,emitting){
   const paid=mass-w.player.mass;
   const inWater=[...w.shots,...w.drops].reduce((sum,flake)=>sum+flake.mass,0);
   assert.ok(Math.abs(paid-inWater)<1e-8);
-  if(emitting){assert.deepEqual([...shotMasses],[.55]);assert.deepEqual([...shotRadii],[2.65]);}
+  if(emitting && !form){assert.deepEqual([...shotMasses],[.55]);assert.deepEqual([...shotRadii],[2.65]);}
   return {speed:w.player.vx,paid};
 }
 
-const small=stroke(100,false),large=stroke(25600,false);
-const smallJet=stroke(100,true),largeJet=stroke(25600,true);
+const small=stroke(156,false),large=stroke(25600,false);
+const smallJet=stroke(156,true),largeJet=stroke(25600,true);
+const fish=stroke(156,false,'fish'),fishBubble=stroke(156,true,'fish');
 assert.equal(small.paid,0);assert.equal(large.paid,0);
-assert.ok(small.speed>112&&small.speed<115);
-assert.ok(smallJet.speed>130&&smallJet.speed<134);
-assert.ok(large.speed>small.speed*1.22&&large.speed<small.speed*1.26);
-assert.ok(largeJet.speed-large.speed>(smallJet.speed-small.speed)*1.9);
+assert.ok(small.speed>99&&small.speed<101);
+assert.ok(smallJet.speed/small.speed>1.13&&smallJet.speed/small.speed<1.15);
+assert.ok(large.speed/small.speed>1.85&&large.speed/small.speed<1.9);
+assert.ok(largeJet.speed/large.speed>1.54&&largeJet.speed/large.speed<1.57);
+assert.ok(Math.abs(fish.speed/small.speed-1.6)<1e-6);
+assert.equal(fishBubble.paid,0);assert.equal(fishBubble.speed,fish.speed);
 assert.ok(smallJet.paid>=12&&smallJet.paid<=16);
 assert.ok(largeJet.paid>=16&&largeJet.paid<=20);
 assert.ok(largeJet.paid>smallJet.paid&&largeJet.paid<smallJet.paid*1.5);
@@ -45,4 +49,4 @@ for(const seed of [1,19,263,401])for(const r of [45,80,125])for(const [x,y] of [
     gap.push(nearest/petal);
   }
 }
-console.log({small,smallJet,large,largeJet,flowerLayouts:gap.length/3});
+console.log({small,smallJet,large,largeJet,fish,flowerLayouts:gap.length/3});

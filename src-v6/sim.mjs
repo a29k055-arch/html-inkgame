@@ -145,7 +145,7 @@ export function createWorld(config = {}) {
   // must never draw from the generator that controls currents and arrivals.
   let rigSeed=typeof seed==='number'?seed>>>0:2166136261;
   if(typeof seed!=='number')for(const c of String(seed))rigSeed=Math.imul(rigSeed^c.charCodeAt(0),16777619)>>>0;
-  const w = {width:config.width ?? 1800,height:config.height ?? 1100,
+  const w = {kind:config.kind,width:config.width ?? 1800,height:config.height ?? 1100,
     speed:(config.speed ?? 150)*.86, seed, rng:seed>>>0, rigSeed, rigCounts:new Map(),
     time:0, remainder:0, status:'playing', tutorial:!!config.tutorial,
     spawnItems:config.spawnItems ?? !config.tutorial, nextItem:config.nextItem ?? 9,
@@ -263,9 +263,10 @@ function playerStep(w,input,dt) {
     p.angle=bearing+clamp(turn,-4.8*dt,4.8*dt);
   }else p.angle=requested;
   p.emitting=w.held&&!w.waitRelease;
-  const growth=clamp(Math.log2(Math.max(1,p.mass/100))/8,0,1);
-  const formSpeed=p.form==='dragon'?1.18:p.form==='turtle'?.85:1;
-  let speed=w.speed*(1+.24*growth)*formSpeed*strength;
+  const growth=clamp(Math.log2(Math.max(1,p.mass/156))/7,0,1);
+  const formSpeed=p.form==='fish'?1.60:p.form==='dragon'?1.18:p.form==='turtle'?.85:1;
+  const cruise=w.speed*(.88+.78*growth)*formSpeed;
+  let speed=cruise*strength;
   if(p.emitting && !bubbles(p)) {
     // Each visible flake is paid for once at launch. A larger body emits
     // slightly more often; one stroke never sheds a percentage of its mass.
@@ -276,7 +277,7 @@ function playerStep(w,input,dt) {
         w.nextJet=w.time+(.72+.56*emissionRoll(w))/rate;
         cue(w,'spray',{},'spray',.3);
       }
-      speed+=w.speed*(.16+.18*growth);
+      speed+=cruise*(.14+.42*growth);
     }else p.emitting=false;
   } else {
     if(p.emitting) {
@@ -287,8 +288,14 @@ function playerStep(w,input,dt) {
     } else w.bubbleDelay=0;
   }
   const dx=Math.cos(p.angle),dy=Math.sin(p.angle);
-  if(input.keyboard){
-    const ease=1-Math.exp(-dt*(strength>0?9:4.8));
+  if(speed===0){
+    // With no thrust, water drag acts on the actual velocity vector. Releasing a
+    // stick mid-turn must keep that tangent, just like releasing the keyboard.
+    const drag=Math.exp(-1.8*dt);
+    p.vx*=drag;p.vy*=drag;
+    if(currentSpeed>.1)p.angle=Math.atan2(p.vy,p.vx);
+  }else if(input.keyboard){
+    const ease=1-Math.exp(-dt*9);
     const nextSpeed=currentSpeed+(speed-currentSpeed)*ease;
     p.vx=dx*nextSpeed;p.vy=dy*nextSpeed;
   }else{
@@ -496,11 +503,12 @@ function playerContacts(w,dt,next) {
         event(w,'eat',{target:e.type,id:e.id,mass,x:e.x,y:e.y,r:radius(mass),
           major:isMajorEnemy(e),cornerBoss:!!e.cornerBoss,cornerSlot:e.cornerSlot});
       }else{
-        // The prey flows inward while touching. Swimming away still breaks
-        // contact; we never bridge an open gap to start or resume a meal.
+        // Only close the gap created by the lost radius this tick. Pulling the
+        // centre toward the player during ordinary overlap makes prey shadow a
+        // swimmer even without an active magnet.
         const dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy);
         if(d>EPSILON){
-          const shift=Math.min(d,previousR-e.r+previousR*.30*dt);
+          const shift=clamp(d-p.r-e.r,0,previousR-e.r);
           e.x+=dx/d*shift;e.y+=dy/d*shift;
         }
       }

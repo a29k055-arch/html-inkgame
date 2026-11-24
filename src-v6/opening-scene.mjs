@@ -2,6 +2,7 @@ import {LoadingScroll} from '../src-v5/ui/loading-scroll.js';
 import {HomeArtwork} from '../src-v5/ink/home-artwork.js';
 import {setupGallery} from '../src-v5/ui/gallery-records.js';
 import {applyTranslations,setLanguage,getLanguage,t,artTitle} from '../src-v5/ui/i18n.js';
+import {POND_ARTWORKS} from './artworks.mjs';
 import {V4_ARTWORKS} from '../src-v5/data/v4-artworks.js';
 import {createBambooLoader} from '../assets/ui/bamboo-scroll/bamboo-scroll.js?v=4296ecc';
 import {coverSettings,updateSettings,galleryIDs,unlockedArtworks,resetPondSave} from './opening-save.mjs';
@@ -10,7 +11,11 @@ const $=id=>document.getElementById(id);
 const words={zh:{assets:'游戏资源',file:'正在加载',ready:'素材就绪',prepare:'准备动画',elapsed:'已用',retry:'重试'},
  ja:{assets:'ゲーム素材',file:'読み込み中',ready:'素材の準備完了',prepare:'動きを準備しています',elapsed:'経過',retry:'再試行'},
  en:{assets:'Game assets',file:'Loading',ready:'Assets ready',prepare:'Preparing animation',elapsed:'Elapsed',retry:'Retry'}};
-const art=galleryIDs.map(id=>V4_ARTWORKS.find(a=>a.id===id));
+const art=galleryIDs.map(id=>{
+  const original=V4_ARTWORKS.find(a=>a.id===id);
+  const titles=POND_ARTWORKS.find(a=>a.id===original.file)?.titles;
+  return titles?{...original,titles,title:titles.zh,label:titles.zh,titleKind:'catalogue'}:original;
+});
 const defaultPainting=art.find(entry=>entry.id==='ink-13');
 const cfg={bgmVolume:.28,volume:.3,bgmMuted:false,sfxMuted:false,bgmTrack:'shuffle',sfxStyle:'water',quality:'balanced',controls:'auto',homeVisual:'paper',backgroundPolicy:'fixed',...coverSettings()};
 let state={phase:'start',loadedBytes:0,totalBytes:0,completed:0,total:0,preparation:0},visible=true;

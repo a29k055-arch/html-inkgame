@@ -195,6 +195,16 @@ test('a shrinking player loses contact with a stationary black hole and can stee
  const outside=base({enemies:[{type:'hole',x:550.2,y:400,mass:225}]});
  tick(outside,{},2);near(outside.player.mass,100);assert.equal(outside.enemies[0].absorption,undefined);
 });
+test('unmagnetized rivals drift independently of player input and stay on their course during overlap',()=>{
+ const go=input=>{
+   const w=base({enemies:[{id:'prey',type:'spike',mass:40,x:507,y:400,vx:2,vy:1},{id:'threat',type:'hole',mass:240,x:690,y:400,vx:-1,vy:2}]});
+   tick(w,input,.2);return w;
+ };
+ const still=go({}),swim=go({y:1});
+ assert.ok(swim.player.y-still.player.y>5);
+ for(let i=0;i<2;i++){near(still.enemies[i].x,swim.enemies[i].x);near(still.enemies[i].y,swim.enemies[i].y);}
+ near(swim.enemies[0].x,507.4);near(swim.enemies[0].y,400.2);
+});
 test('a blue rival transfers gradually, keeps partial losses and blooms only upon completion',()=>{
  for(const type of ['spike','hole']){
    const w=base({enemies:[{id:'food',type,x:510,y:400,mass:40}]});
@@ -359,7 +369,8 @@ test('fish reverts in a narrow passage without clipping the blockers',()=>{
  const w=base();activate(w,'fish');
  spawnEnemy(w,{type:'spike',mass:225,x:600,y:352.5});
  spawnEnemy(w,{type:'hole',mass:225,x:600,y:447.5});
- for(let i=0;i<120 && w.player.x+w.player.vx/15<599.5;i++)tick(w,{x:1},1/60);
+ // Feather the stick to brake inside the opening before the fish form expires.
+ for(let i=0;i<180;i++)tick(w,{x:Math.max(-1,Math.min(1,(600-w.player.x)*.025-w.player.vx*.003))},1/60);
  tick(w,{},.6);
  assert.ok(Math.abs(w.player.x-600)<2.5);near(w.player.r,17);
  tick(w,{},11);
@@ -420,26 +431,32 @@ test('dense pond ink is edible, local, shared by both sides and safe to harvest 
  assert.equal(w.events.filter(e=>e.id===d.id && e.type==='eat').length,1);
  assert.equal(base().foodField,null);
 });
-test('keyboard taps make rounded turns with coasting while an analogue release remains precise',()=>{
+test('keyboard turns are rounded and both controls coast along their actual release tangent',()=>{
  const w=base();
  tick(w,{x:1,keyboard:true},1);tick(w,{y:1,keyboard:true},.1);
  assert.ok(w.player.vx>35 && w.player.vy>35);
  const bearing=Math.atan2(w.player.vy,w.player.vx);
  near(w.player.angle,bearing);
- const keyStop=base(),stickStop=base();
- for(const t of [keyStop,stickStop])tick(t,{x:1},1);
- const x=keyStop.player.x;tick(keyStop,{keyboard:true},.24);tick(stickStop,{},.24);
- assert.ok(keyStop.player.x-x>2*(stickStop.player.x-x));
+ for(const keyboard of [true,false]){
+   const t=base();
+   tick(t,{x:1,keyboard},1);tick(t,{y:1,keyboard},.05);
+   const {x,y,vx,vy}=t.player,entry=Math.hypot(vx,vy);
+   tick(t,{keyboard},1);
+   const dx=t.player.x-x,dy=t.player.y-y;
+   near(dx*vy-dy*vx,0,1e-6);
+   assert.ok(Math.hypot(dx,dy)>entry*.43 && Math.hypot(dx,dy)<entry*.49);
+   assert.ok(Math.hypot(t.player.vx,t.player.vy)<entry*.18);
+ }
 });
 test('four successive cardinal key turns can draw a full circle at swimming speed',()=>{
  const w=base(),points=[];
  tick(w,{x:1,keyboard:true},1);
- const start={x:w.player.x,y:w.player.y};
+ const start={x:w.player.x,y:w.player.y},cruise=Math.hypot(w.player.vx,w.player.vy);
  for(const key of [{y:1},{x:-1},{y:-1},{x:1}]){
    for(let i=0;i<20;i++){
      tick(w,{...key,keyboard:true},1/60);
      points.push({x:w.player.x,y:w.player.y});
-     assert.ok(Math.hypot(w.player.vx,w.player.vy)>.98*w.speed);
+     assert.ok(Math.hypot(w.player.vx,w.player.vy)>.98*cruise);
    }
  }
  const cx=points.reduce((s,p)=>s+p.x,0)/points.length;

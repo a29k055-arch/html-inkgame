@@ -86,6 +86,7 @@ html:not([lang=en]) .slip-glyphs {display:flex;flex-direction:row;align-items:ce
 #preview-slip[data-mirror=true]::before {transform:scaleX(-1);}
 #catalog-preview .catalog-copy {color:#f1e4c6;font-size:clamp(15px,1.35vw,24px);line-height:1.85;text-wrap:pretty;}
 #catalog-preview .catalog-copy p {margin:0 0 1em;}
+#catalog-preview #art-note {white-space:pre-line;margin:.85em 0 .55em;font-size:clamp(12px,.9vw,16px);line-height:1.55;color:#ddcfb2;}
 #preview-back {padding:.4em 0;border:0;border-bottom:1px solid #d7bd9390;color:#ead8b3;background:transparent;min-height:40px;font-size:clamp(13px,1.1vw,17px);}
 #catalog-preview .catalog-plate {
   justify-self:center;box-sizing:border-box;width:min(100%,calc(var(--art-height) * var(--art-ratio) + 2 * var(--mat) + 2px));min-width:0;padding:var(--mat);margin:0;
