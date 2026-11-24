@@ -1,20 +1,31 @@
 import {RevealMask} from '../src-v5/reveal/mask.js';
+import {DROP_SHAPE,DROP_VARIANTS,dropSilhouette} from '../src-v5/reveal/drop-shape.js';
 import {REVEAL_CONFIG} from '../src-v5/reveal/config.js';
 
 // This is the painting's alpha, integrated over its entire surface. The simulation
 // owns it so an unvisited corner cannot turn painted when a camera zooms or pans.
 const MIN_PAINTED_AREA=.80;
 const REGION_COLS=16,REGION_ROWS=12;
+// Each original ink-drop silhouette has its own transparent margins. Measure
+// its visible edge so different brush variants reach the same physical radius.
+const DROP_REACH=Array.from({length:DROP_VARIANTS},(_,variant)=>{
+  const pixels=dropSilhouette(variant),n=DROP_SHAPE.size;
+  let reach=0;
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){
+    if(pixels[y*n+x]>=8)reach=Math.max(reach,Math.hypot(x+.5-n/2,y+.5-n/2)*2/n);
+  }
+  return reach;
+});
 export function enemyBloomRadius(mass){
-  const inkRadius=2*Math.sqrt(Math.max(0,mass));
-  return 10.8*inkRadius+.036*inkRadius*inkRadius;
+  // Radius in world units, measured to the furthest ink in the drop artwork.
+  return 4*Math.sqrt(Math.max(0,mass));
 }
 
 class PondPainting extends RevealMask {
   constructor(width,height){
     super({...REVEAL_CONFIG,width,height,columns:Math.min(400,Math.max(96,Math.round(width/14)))});
     this.seen=0;this.clock=0;this.lastMark=null;this.dirty=null;
-    this.footprints=new Map();this.largeWashes=[];this.seeps=[];
+    this.footprints=new Map();this.largeWashes=[];this.seeps=[];this.traveled=0;
   }
   get fraction(){return Math.max(0,Math.min(1,this.completion));}
   // Once the total pigment is high enough, maintain the area of 192 regions
@@ -87,18 +98,17 @@ class PondPainting extends RevealMask {
     const x=Math.floor(p.x/this.width*28),y=Math.floor(p.y/this.height*18),key=x+y*28;
     const previous=this.footprints.get(key);
     if(!previous || p.r>previous.r*1.12)this.footprints.set(key,{x:p.x,y:p.y,r:p.r});
+    if(previous)return 0;
+    const last=this.lastFresh;
+    this.lastFresh={x:p.x,y:p.y};
+    return last?Math.min(Math.hypot(p.x-last.x,p.y-last.y),Math.hypot(this.width/28,this.height/18)):0;
   }
-  bloomRadius(e){
-    const nominal=this.bloomScale*enemyBloomRadius(e.mass??(e.r/2)**2);
-    // Ink on a miniature teaching scroll retains its physical size. Large pool
-    // washes wet one shore at a time, even when a very large rival is swallowed.
-    const sheet=Math.max(480,Math.min(this.width,this.height)),knee=sheet*.23;
-    const limit=sheet*(.58+.14*Math.min(1,Math.max(0,(this.bloomScale-1)/.5)));
-    return nominal<=knee?nominal:knee+(limit-knee)*Math.tanh((nominal-knee)/(limit-knee));
-  }
-  soakFootprints(e,bloomRadius){
+  soakFootprints(e,bloomRadius,fromTravel=false){
     if(this.nearlyComplete)return;
-    const cap=Math.min(.32*Math.min(this.width,this.height),bloomRadius*.55);
+    // This is capillary flow along previously explored paper, independent of
+    // the last rival's size. Its own drop always stops at one enemy diameter.
+    const shore=Math.min(this.width,this.height);
+    const cap=fromTravel?Math.min(shore*.32,Math.max(shore*.15,e.r*4)):shore*.42;
     const sources=[...this.footprints.values()];
     // Filled edges of earlier major washes also carry ink. Sample the actual
     // paper alpha to avoid inventing routes through an unpainted bay.
@@ -128,6 +138,8 @@ class PondPainting extends RevealMask {
       distance=Math.sqrt(distance);
       const spread=Math.min(cap,.75*cap+nearest.r*1.45);
       if(distance>spread*1.55)continue;
+      // Don't create a second, oversized impact mark around the final prey.
+      if(Math.hypot(nearest.x-e.x,nearest.y-e.y)<bloomRadius*1.6)continue;
       // A connected tongue of ink expands into the dry side of the stroke.
       // Its centre moves less than its radius and remains joined to that stroke.
       const shift=Math.min(1,spread*.57/Math.max(1,distance));
@@ -138,7 +150,8 @@ class PondPainting extends RevealMask {
     }
     // Choose fresh paper each time. A cluster of overlapping wet strokes
     // must not divert all the returning ink from a different open shore.
-    while(this.seeps.length<12&&candidates.length){
+    const limit=fromTravel?2:12;
+    for(let opened=0;opened<limit&&candidates.length;opened++){
       let best=-1,benefit=.12;
       for(let i=0;i<candidates.length;i++){
         const reach=candidates[i].reach;
@@ -151,18 +164,19 @@ class PondPainting extends RevealMask {
       for(let j=0;j<tiles.length;j++)tiles[j].dry*=1-mark.reach[j]*.94;
       const distance=Math.hypot(mark.x-e.x,mark.y-e.y)/Math.hypot(this.width,this.height);
       delete mark.reach;
-      this.seeps.push({...mark,age:-.26-distance*.48});
+      this.seeps.push({...mark,age:-.26-distance*.48,
+        duration:fromTravel?5:.9,opacity:fromTravel?.90:.94});
     }
   }
   update(dt){
     super.update(dt);
     for(const s of this.seeps){
       s.age+=dt;if(s.age<=0)continue;
-      const t=Math.min(1,s.age/.90),radius=s.r+(s.spread-s.r)*(1-(1-t)**2);
+      const t=Math.min(1,s.age/s.duration),radius=s.r+(s.spread-s.r)*(1-(1-t)**2);
       const slide=1-(1-t)**2;
-      this.brush(s.x+(s.toX-s.x)*slide,s.y+(s.toY-s.y)*slide,radius,.94);
+      this.brush(s.x+(s.toX-s.x)*slide,s.y+(s.toY-s.y)*slide,radius,s.opacity);
     }
-    if(this.seeps.length)this.seeps=this.seeps.filter(s=>s.age<.90);
+    if(this.seeps.length)this.seeps=this.seeps.filter(s=>s.age<s.duration);
   }
   markDirty(x,y,r){
     const sx=this.cols/this.width,sy=this.rows/this.height;
@@ -188,17 +202,12 @@ export function createPaintingProgress(width,height){return new PondPainting(wid
 
 export function updatePaintingProgress(world,dt){
   const mask=world.painting;
-  if(mask.bloomScale===undefined){
-    // Six sparse scrolls have far more paper per opponent than the open pond.
-    // Use the initial layout once, so a catch never gains an endgame multiplier.
-    const paperPerRival=mask.width*mask.height/Math.max(1,world.enemies?.length??1);
-    mask.bloomScale=Math.min(1.85,Math.max(1,Math.sqrt(paperPerRival/340000)));
-  }
   for(;mask.seen<world.events.length;mask.seen++){
     const e=world.events[mask.seen];
     if(e.type==='eat'&&(e.target==='spike'||e.target==='hole')){
-      const radius=mask.bloomRadius(e);
-      mask.reveal(e.x,e.y,radius);
+      const radius=enemyBloomRadius(e.mass??(e.r/2)**2);
+      const bloom=mask.reveal(e.x,e.y,radius);
+      bloom.r=radius/DROP_REACH[bloom.variant];
       if(e.major){
         if(world.majorRemaining===0)mask.soakFootprints(e,radius);
         else mask.largeWashes.push({x:e.x,y:e.y,r:radius});
@@ -210,7 +219,7 @@ export function updatePaintingProgress(world,dt){
   const elapsed=mask.clock;mask.clock=0;
   if(mask.blooms.length||mask.seeps.length)mask.update(elapsed);
   const p=world.player,r=p.r*(p.emitting?1.28:1.04);
-  mask.recordFootprint(p);
+  const newDistance=mask.recordFootprint(p);
   const last=mask.lastMark;
   if(!last){
     mask.lastMark={x:p.x,y:p.y,r};
@@ -219,6 +228,16 @@ export function updatePaintingProgress(world,dt){
   }
   const distance=Math.hypot(p.x-last.x,p.y-last.y);
   if(distance<Math.max(.9,r*.1)&&Math.abs(r-last.r)<1)return;
+  // Every stretch of real swimming sends a slow wash along a wet part of the
+  // route already left behind. This occurs even in a stretch with no catches.
+  const shore=Math.min(mask.width,mask.height);
+  if(distance<Math.max(145,r*4)){
+    mask.traveled+=newDistance;
+    if(mask.traveled>=shore*.18){
+      mask.traveled%=shore*.18;
+      mask.soakFootprints(p,r*1.4,true);
+    }
+  }
   // Separate dabs follow the actual path, with smoothly feathered wet edges.
   // Don't join positions across a tutorial reset/teleport.
   const spacing=Math.max(3,Math.min(r,last.r)*.48);

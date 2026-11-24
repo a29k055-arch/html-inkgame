@@ -5,7 +5,7 @@ import {HeadFirstPainter,steerCreature} from '../src-v6/creature-painter.mjs';
 import {LIVING_VARIANTS} from '../src-v5/game/living-rigs.js';
 import {makeLevel} from '../src-v6/levels.mjs';
 import {visibleFood} from '../src-v6/food-field.mjs';
-import {createWorld,stepWorld,useItem,spawnItem,spawnEnemy,spawnDrop,radius,canEat} from '../src-v6/sim.mjs';
+import {createWorld,stepWorld,useItem,spawnItem,spawnEnemy,spawnDrop,radius,playerRadius,DRAGON_RADIUS,canEat} from '../src-v6/sim.mjs';
 const tick=(w,input={},seconds=1)=>{for(let i=0;i<Math.round(seconds*60);i++)stepWorld(w,input,1/60);};
 const base=(extra={})=>createWorld({width:1600,height:900,player:{x:500,y:400,mass:100},tutorial:true,spawnItems:false,...extra});
 const near=(a,b,tol=1e-7)=>assert.ok(Math.abs(a-b)<tol,`${a} differs from ${b}`);
@@ -36,7 +36,8 @@ test('one stalemate dragon swims in from a bank, stays in the pond and is held o
   assert.equal(spawnItem(w,{type:'dragon',x:20,y:30}),null);
   assert.ok(useItem(w,w.player.inventory.indexOf(rescue)));
   assert.equal(spawnItem(w,{type:'dragon',x:20,y:30}),null);
-  assert.equal(w.player.form,'dragon');assert.equal(w.events.filter(e=>e.type==='dragonArrived').length,1);
+  assert.equal(w.player.form,'dragon');near(w.player.r,DRAGON_RADIUS);near(rescue.r,DRAGON_RADIUS);
+  near(playerRadius(25000,'dragon'),rescue.r);assert.equal(w.events.filter(e=>e.type==='dragonArrived').length,1);
 });
 test('all ten rigs turn the head before the body while the turtle shell holds its joints',()=>{
   for(const ids of Object.values(LIVING_VARIANTS)){
@@ -228,7 +229,7 @@ test('winning requires live mass leadership, the major rivals and a broadly reve
  assert.equal(gated.majorRemaining,1);assert.equal(gated.status,'playing');
  gated.player.x=650;tick(gated,{},.1);
  assert.equal(gated.status,'playing');assert.ok(gated.enemies[0].absorbedByPlayer>0);
- tick(gated,{},1);assert.equal(gated.majorRemaining,0);assert.equal(gated.status,'won');
+ tick(gated,{},2);assert.equal(gated.majorRemaining,0);assert.equal(gated.status,'won');
  assert.equal(gated.enemies[0].id,'small');
  const finalMeal=gated.events.find(e=>e.type==='eat' && e.major);
  assert.equal(finalMeal.cornerSlot,'ne');near(finalMeal.mass,40);
@@ -273,7 +274,7 @@ test('larger bodies launch the same edible flakes at a gently higher rate',()=>{
    const shots=new Map();
    for(let i=0;i<180;i++){
      tick(w,{x:1,action:true},1/60);
-     for(const shot of w.shots)shots.set(shot.id,{mass:shot.mass,r:shot.r});
+     for(const shot of w.shots)shots.set(shot.id,{mass:shot.mass,r:shot.r,speed:Math.hypot(shot.vx,shot.vy),range:Math.hypot(shot.vx,shot.vy)*shot.lifetime,thrust:shot.thrust});
    }
    const first=shots.values().next().value;
    assert.ok(first && first.mass>0 && first.r>0);
@@ -282,6 +283,8 @@ test('larger bodies launch the same edible flakes at a gently higher rate',()=>{
  }
  const small=sample(100),large=sample(9000);
  near(small.first.mass,large.first.mass);near(small.first.r,large.first.r);
+ assert.ok(large.first.speed>small.first.speed*1.4 && large.first.range>small.first.range*1.4);
+ assert.ok(large.first.thrust>small.first.thrust*2);
  assert.ok(large.count>small.count && large.count<1.55*small.count);
 });
 test('bubbles have zero mass and recoil; transformations release-gated',()=>{
@@ -293,15 +296,18 @@ test('bubbles have zero mass and recoil; transformations release-gated',()=>{
 });
 test('shrimp and dragon pull blue enemies slowly, edible motes faster, ignore reds',()=>{
  for(const form of ['shrimp','dragon']){
- const w=base();activate(w,form);const b=spawnEnemy(w,{type:'hole',mass:20,x:500,y:310});
- const red=spawnEnemy(w,{type:'hole',mass:110,x:500,y:493});const d=spawnDrop(w,{mass:2,x:590,y:400});
- tick(w,{},.3);assert.ok(b.y>310);near(red.y,493);assert.ok(590-d.x>b.y-310);
+ const w=base();activate(w,form);const reach=w.player.r+80;
+ const b=spawnEnemy(w,{type:'hole',mass:20,x:500,y:400-reach});
+ const red=spawnEnemy(w,{type:'hole',mass:110,x:500,y:400+reach});
+ const d=spawnDrop(w,{mass:2,x:500+reach,y:400});
+ tick(w,{},.3);assert.ok(b.y>400-reach);near(red.y,400+reach);
+ assert.ok(500+reach-d.x>b.y-(400-reach));
  if(form==='dragon'){tick(w,{},19.5);assert.equal(w.player.form,'dragon');tick(w,{},.4);assert.equal(w.player.form,'ink');}
  }
 });
 test('turtle and larger dragon protect both sides; turtle voluntary ink spends',()=>{
  for(const form of ['turtle','dragon'])for(const type of ['spike','hole']) {
- const w=base();activate(w,form);near(w.player.r,radius(100)*(form==='dragon'?1.16:1));const e=spawnEnemy(w,{type,x:545,y:400,mass:225});
+ const w=base();activate(w,form);near(w.player.r,playerRadius(100,form));const e=spawnEnemy(w,{type,x:545,y:400,mass:225});
  tick(w,{x:1});near(w.player.mass,100);near(e.mass,225);
  if(form==='turtle'){tick(w,{action:true},.3);assert.ok(w.player.mass<100);}
  }
@@ -342,7 +348,7 @@ test('inventory bounded, edible ink cannot credit player and enemy twice',()=>{
  tick(w,{},1/60);assert.equal(w.player.inventory.length,3);assert.equal(w.items.length,1);
  const q=base();spawnEnemy(q,{type:'spike',mass:25,x:511,y:400});spawnDrop(q,{x:506,y:400,mass:3});
  tick(q,{},1/60);assert.ok(q.player.mass>103 && q.player.mass<128);assert.equal(q.drops.length,0);
- near(q.player.mass+q.enemies[0].mass,128);tick(q,{},1);near(q.player.mass,128);
+ near(q.player.mass+q.enemies[0].mass,128);tick(q,{},2);near(q.player.mass,128);
 });
 test('30, 60 and 120 Hz replays agree',()=>{
  function run(hz){const w=base();for(let i=0;i<3*hz;i++)stepWorld(w,{x:.1,y:.8,action:i<hz},1/hz);

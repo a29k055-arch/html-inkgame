@@ -21,6 +21,7 @@ const resting=w.painting.fraction;
 advance(w,360);
 assert.equal(w.painting.fraction,resting);
 stroke(w);
+advance(w,360);
 const first=w.painting.fraction;
 assert.ok(first>resting);
 stroke(w);
@@ -28,20 +29,29 @@ assert.equal(w.painting.fraction,first);
 assert.ok(Math.abs(first-w.painting.cells.reduce((a,b)=>a+b,0)/w.painting.cells.length)<1e-8);
 
 function bloom(mass){
-  const w=pond(7000,3500);
-  w.events.push({type:'eat',target:'hole',x:3500,y:1750,mass});
+  const w=pond(1500,1100);
+  w.player.x=30;w.player.y=30;
+  w.events.push({type:'eat',target:'hole',x:750,y:550,mass});
   advance(w,120);
-  assert.ok(w.painting.at(3500,1750)>.95);
-  assert.ok(w.painting.at(1,1)<.001);
-  assert.equal(w.painting.blooms.length,0);
-  return w.painting.fraction;
+  const mask=w.painting,target=enemyBloomRadius(mass);
+  assert.ok(mask.at(750,550)>.90);
+  assert.equal(mask.blooms.length,0);
+  let reach=0;
+  for(let row=0;row<mask.rows;row++)for(let col=0;col<mask.cols;col++){
+    const x=(col+.5)*mask.width/mask.cols,y=(row+.5)*mask.height/mask.rows;
+    if(x<100&&y<100)continue;
+    if(mask.cells[row*mask.cols+col]>.03)reach=Math.max(reach,Math.hypot(x-750,y-550));
+  }
+  assert.ok(Math.abs(reach-target)<=Math.max(8,target*.04),`expected radius near ${target}, measured ${reach}`);
+  return reach;
 }
-assert.ok(enemyBloomRadius(625)>enemyBloomRadius(25)*5);
-assert.ok(bloom(625)>bloom(25)*20);
+assert.equal(enemyBloomRadius(625),100);
+assert.equal(enemyBloomRadius(10000),400);
+bloom(625);bloom(10000);
 
-// A real drop on a small painting can complete it without resizing a camera.
+// A proportionately large rival can reveal a small painting at its true scale.
 const small=pond(100,70);
-small.events.push({type:'eat',target:'spike',x:50,y:35,mass:50});
+small.events.push({type:'eat',target:'spike',x:50,y:35,mass:900});
 advance(small,6);
 const start=small.painting.fraction;
 advance(small,84);
@@ -72,21 +82,22 @@ assert.ok(fineCracks.nearlyComplete,'Thin continuous creases are smaller than an
 const visited=pond(6000,3200);
 visited.player.r=95;visited.player.y=1000;
 for(let x=700;x<=2100;x+=14){visited.player.x=x;advance(visited,5);}
+advance(visited,360);
 const wash=visited.painting;
 const probe=()=>Array.from({length:18},(_,i)=>wash.at(700+i*80,1175)).reduce((a,b)=>a+b,0);
 const before=probe();
-wash.soakFootprints({x:3000,y:1500},2000);
+wash.soakFootprints({x:3400,y:1500},130);
 assert.ok(wash.seeps.length>0 && wash.seeps.length<=12);
 for(let i=0;i<25;i++)wash.update(.08);
 assert.ok(probe()>before+.5);
 assert.equal(wash.at(5600,250),0);
-assert.ok(wash.bloomRadius({mass:42000})<Math.min(wash.width,wash.height));
+
 // A previously absorbed major's wet edge can feed an adjacent bay even when
 // the player is now on the other shore. A dry candidate has no such effect.
 const edge=createPaintingProgress(8000,4000);
 edge.brush(1550,1000,800,.99);
 edge.largeWashes.push({x:1550,y:1000,r:830},{x:7100,y:450,r:600});
-edge.soakFootprints({x:4400,y:2600},2500);
+edge.soakFootprints({x:4400,y:2600},160);
 const nearOld=()=>edge.at(2450,1100)+edge.at(1550,1950)+edge.at(660,1000);
 const initialEdge=nearOld();
 for(let i=0;i<25;i++)edge.update(.08);

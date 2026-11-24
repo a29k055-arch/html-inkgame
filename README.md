@@ -6,7 +6,7 @@
 
 | 版本 | 直接游玩 | 冻结引用与来源 |
 |---|---|---|
-| **V6｜水墨池塘** | **[打开 V6](https://a29k055-arch.github.io/html-inkgame/v6/)** | V5 封面与水墨拖尾，一关四段教学、密集体验池「荷荫蟹趣」、六幅主线画卷；吸尽对手显画，游至四角收墨，居首且全画基本显现后通关 |
+| **V6｜水墨池塘** | **[打开 V6](https://a29k055-arch.github.io/html-inkgame/v6/)** | V5 封面与水墨拖尾，一关四段教学、按原画比例展开的竖幅体验池「荷荫蟹趣」、六幅主线画卷；吸尽对手显画，游至四角与池心收墨，居首且全画基本显现后通关 |
 | V5｜生灵游墨 | [打开 V5](https://a29k055-arch.github.io/html-inkgame/v5/) | 独立 src-v5 与 boku.save.v5；[V5 开发报告](docs/V5-SHAPE-FLOW-20261123.md) |
 | V4｜水墨吞噬显画留档 | [打开 V4](https://a29k055-arch.github.io/html-inkgame/v4/) | v4-ink-reveal → 10ef89b，完整源码和资源冻结 |
 | V3｜Roguelike／Boss／抽卡版 | [打开 V3](https://a29k055-arch.github.io/html-inkgame/v3/) | v3-roguelike → d882581（复杂玩法冻结版） |

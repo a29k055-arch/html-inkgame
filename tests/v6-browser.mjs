@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {createReadStream, existsSync} from 'node:fs';
 import {mkdtemp,mkdir,readFile,stat,rm,writeFile} from 'node:fs/promises';
 import http from 'node:http';
+import {rivalMass} from '../src-v6/levels-scale.mjs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {setTimeout as delay} from 'node:timers/promises';
@@ -27,9 +28,19 @@ const srv=http.createServer(async (req,res)=>{
     // production entry, physics tick, reveal, UI, storage and next level run normally.
     if(url.pathname===prefix+'__qa__/finish.html') {
       const html=await readFile(path.join(root,'v6.html'),'utf8');
-      const map=JSON.stringify({imports:{'./src-v6/levels.mjs':'./__qa__/levels.mjs'}});
+      const map=JSON.stringify({imports:{'./src-v6/levels.mjs':'./__qa__/levels.mjs','./src-v6/sim.mjs':'./__qa__/sim.mjs'}});
       res.writeHead(200,{'content-type':'text/html'});
       res.end(html.replace('<head>','<head><base href="../"><script type="importmap">'+map+'</script>'));return;
+    }
+    if(url.pathname===prefix+'__qa__/sim.mjs') {
+      res.writeHead(200,{'content-type':'text/javascript'});
+      res.end(`export * from '../src-v6/sim.mjs?original';
+        import {createWorld as create} from '../src-v6/sim.mjs?original';
+        export function createWorld(cfg){
+          const world=create(cfg);
+          if(cfg.finalRivalFixture)world.painting.fill(.78);
+          return world;
+        }`);return;
     }
     if(url.pathname===prefix+'__qa__/levels.mjs') {
       res.writeHead(200,{'content-type':'text/javascript'});
@@ -38,9 +49,9 @@ const srv=http.createServer(async (req,res)=>{
         export function makeLevel(id,seed) {
           const cfg=make(id,seed);
           if(id==='level-1' || id==='trial') {
-            Object.assign(cfg,{width:100,height:70,foodSpacing:0,spawnItems:false,leaves:[],items:[],drops:[]});
-            Object.assign(cfg.player,{x:50,y:35,mass:100});
-            cfg.enemies=[{type:'hole',mass:50,x:58,y:35,major:true}];
+            Object.assign(cfg,{width:220,height:170,finalRivalFixture:true,foodSpacing:0,spawnItems:false,leaves:[],items:[],drops:[]});
+            Object.assign(cfg.player,{x:110,y:85,mass:900});
+            cfg.enemies=[{type:'hole',mass:625,x:120,y:85,major:true}];
           }
           return cfg;
         }`);return;
@@ -400,13 +411,13 @@ async function exercise(endpoint,mobile) {
     await stopSteering();
     await until(()=>js('document.querySelector("#lesson").dataset.lesson==="2" && document.querySelector("#lesson").dataset.phase==="active"'),'second tutorial after its introduction',45000);
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'transition cleared');
-    // The second lesson uses 100 against 175 for the spine, then resets to
-    // 100 against 177 for the ink well. The displayed loss must reach the well.
+    // The lesson resets both bodies before the well. Check that the player's loss reaches it.
+    const initialWell=rivalMass(177);
     await steerRight();
     const blackHole=await until(()=>js(`(()=>{
       const player=Number(document.querySelector('#mass-value').textContent);
       const rival=Number(document.querySelector('#rival-value').textContent);
-      return player<=96 && player>=78 && rival>=181 && Math.abs(player+rival-277)<=1 ? {player,rival}:null;
+      return player<=${amountBefore-4} && player>0 && rival>=${initialWell+4} && Math.abs(player+rival-${amountBefore+initialWell})<=1 ? {player,rival}:null;
     })()`),'red well gains the ink the real player loses',45000);
     await capture('black-hole-contact');
     await stopSteering();
@@ -422,9 +433,17 @@ async function exercise(endpoint,mobile) {
     assert.equal(await visible('#lesson'),false);
     await until(async()=>Number(await text('#rival-value'))>Number(await text('#mass-value')),'competing masses');
     await waitVisible('#major-count');
-    assert.match(await text('#major-count'),/4/);
+    assert.match(await text('#major-count'),/5/);
     await until(()=>js('window.__pondPainted?.spike && window.__pondPainted?.hole'),'both enemy illustrations really drawn');
     await until(()=>js('Number(document.querySelector("#timer").textContent.split(":")[1])>=4'),'trial camera has pulled back',30000);
+    if(!mobile){
+      await click('#pause');await waitVisible('#options');
+      assert.equal(await text('#restart'),'重新开始');
+      await click('#restart');
+      await until(()=>js('!document.querySelector("#options").open && !document.querySelector("#ink-wipe").getClientRects().length && document.querySelector("#timer").textContent==="0:00"'),'restart same pond');
+      assert.equal(Number(await text('#mass-value')),amountBefore);
+      await until(()=>js('Number(document.querySelector("#timer").textContent.split(":")[1])>=3'),'restart camera pulls back',30000);
+    }
     await capture('pond');
     const inkRenderer=await until(()=>js(`(()=>{
       const m=window.bokuMetrics;
@@ -523,7 +542,7 @@ async function endToNextPainting(endpoint) {
     const next=await js(q('#pond-name')+'.textContent');
     assert.notEqual(name,next);
     assert.deepEqual(problems,[]);
-    return {fixture:'compact painting covered by the ink from fully absorbing one rival',revealed:name,advanced:next,persisted:true,subsequentPaintingLocked:true};
+    return {fixture:'partially painted pond finished by fully absorbing the last rival',revealed:name,advanced:next,persisted:true,subsequentPaintingLocked:true};
   }finally {await close();}
 }
 try{

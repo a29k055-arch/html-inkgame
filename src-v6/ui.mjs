@@ -1,3 +1,4 @@
+import {POND_ARTWORKS} from './artworks.mjs';
 import {getRigIcon} from './rig-icons.mjs';
 import {createCatalogue} from './catalog.mjs';
 import {inkIcon} from '../src-v5/ui/ink-icons.js';
@@ -7,32 +8,33 @@ import {StartTransition, START_TRANSITIONS} from '../src-v5/ink/start-transition
 import {fadeLessonScene} from './lesson-scenes.mjs';
 
 const artwork = n => new URL('../assets/artworks/v4-cropped/' + n + '.png',import.meta.url).href;
-export const paintings = [2,1,3,4,6,7,5].map(artwork);
+export const paintings = POND_ARTWORKS.map(a=>artwork(a.id));
 const icons = Object.fromEntries(['fish','shrimp','turtle','dragon'].map(n=>[n,new URL('./art/'+n+'-icon.webp',import.meta.url).href]));
 const translations = {
   backCover:['返回主页','タイトルに戻る','Back to title'],
-  paintingHint:['滚轮或双指缩放 · 拖动平移','ホイール／ピンチで拡大・ドラッグで移動','Scroll or pinch to zoom · drag to pan'],
+  paintingHint:['滚轮或双指缩放 · 拖动平移','ホイールかピンチで拡大・縮小、ドラッグで移動','Scroll or pinch to zoom · drag to pan'],
   paintingDone:['继续','進む','Continue'],paintingReset:['适合屏幕','全体を表示','Fit to screen'],
   paintingViewLabel:['完整水墨画欣赏','完成した水墨画','Completed ink painting'],
-  pond:['水墨池塘','墨の池','Ink Pond'],contents:['竹简目录','竹簡の目録','Scroll index'],
+  pond:['水墨池塘','墨の池','Ink Pond'],contents:['竹简目录','ステージ選択','Scroll index'],
   primer:['教学','チュートリアル','Tutorial'],paintings:['画卷','画巻','Paintings'],
   settings:['设置','設定','Settings'],sound:['水声与墨声','水と墨の音','Pond sounds'],
   controls:['操作','操作','Controls'],language:['语言','言語','Language'],close:['关闭','閉じる','Close'],
-  goal:['持续接触蓝圈敌人可吸收墨量。成为池中最大，并吸尽靠近四角和池中的大敌，让画上只剩零星留白。','水色の敵に触れ続けて墨を吸収しよう。池でいちばん大きくなり、四隅と池の大きな敵を吸収して、絵全体に色を広げよう。','Stay in contact with blue rivals to absorb ink. Outgrow the pond and absorb the large rivals near its corners and across the water to uncover the painting.'],
-  painted:['显画','彩色','Painted'],majorCount:['剩余大敌 {n}','残りの大敵 {n}','Large rivals left: {n}'],previous:['向前翻阅','前へ送る','Scroll back'],next:['向后翻阅','次へ送る','Scroll forward'],
-  done:['成','済','✓'],mass:['墨量比较','墨量の比較','Mass comparison'],own:['自身','自分','You'],inLead:['已是最大','いま最大','In the lead'],largest:['最大敌人','最大の敵','Largest rival'],
+  goal:['持续接触蓝圈敌人可吸收墨量。成为池中最大，并吸尽靠近四角和池中的大敌，让画上只剩零星留白。','水色の輪が目印。触れ続けると、相手の墨を吸収できます。四隅や池の中の大きな敵を吸収し、池でいちばん大きくなりましょう。絵がほぼ浮かび上がればクリアです。','Stay in contact with blue rivals to absorb ink. Outgrow the pond and absorb the large rivals near its corners and across the water to uncover the painting.'],
+  painted:['显画','絵の完成度','Painted'],majorCount:['剩余大敌 {n}','大きな敵　残り{n}体','Large rivals left: {n}'],previous:['向前翻阅','前へ','Scroll back'],next:['向后翻阅','次へ','Scroll forward'],
+  done:['成','済','✓'],mass:['墨量比较','墨の量','Mass comparison'],own:['自身','自分','You'],inLead:['已是最大','自分が最大','In the lead'],largest:['最大敌人','最大の敵','Largest rival'],
   pause:['暂停','一時停止','Pause'],paused:['暂停','一時停止','Paused'],resume:['继续游动','続ける','Resume'],
   return:['返回目录','一覧に戻る','Back to level select'],map:['池塘小地图','池の地図','Pond map'],
   release:['放墨','墨を吐く','Jet ink'],bubble:['吐泡','泡を吐く','Bubbles'],
-  fish:['鲤鱼','鯉','Carp'],shrimp:['虾','海老','Shrimp'],turtle:['乌龟','亀','Turtle'],dragon:['墨龙','墨の龍','Ink dragon'],
-  slot:['道具格 {n}','道具枠 {n}','Item slot {n}'],empty:['空','空','Empty'],
+  fish:['鲤鱼','コイ','Carp'],shrimp:['虾','エビ','Shrimp'],turtle:['乌龟','カメ','Turtle'],dragon:['墨龙','墨の龍','Ink dragon'],
+  slot:['道具格 {n}','アイテム枠 {n}','Item slot {n}'],empty:['空','空','Empty'],
   use:['使用{name}','{name}を使う','Use {name}'],skipStep:['跳过本关','チュートリアルをスキップ','Skip tutorial'],
-  mouse:['按住水面拖动来游动；滚轮缩放。按住 Shift 或空格使用交互键，数字键 1–3 使用已收集的道具。','水面をドラッグして移動。ホイールで拡大・縮小。Shift またはスペースで墨や泡を吐き、数字キー 1–3 で道具を使います。','Hold and drag on the water to swim. Scroll to zoom. Hold Shift or Space to jet ink or blow bubbles. Use items with 1–3.'],
-  touch:['在水面拖动来游动，双指捏合缩放。按住右下按钮放墨或吐泡，轻点右侧圆格使用道具。','水面をドラッグして移動。2本指で拡大・縮小。右下を長押しして墨や泡を吐き、右の丸い枠をタップして道具を使います。','Drag on the water to swim and pinch to zoom. Hold the lower-right button to jet ink or blow bubbles. Tap a circle on the right to use an item.'],
-  won:['画卷已揭','画巻が開きました','Painting revealed'],lost:['墨量已尽','墨が尽きました','Ink depleted'],studied:['习墨完成','手ほどき完了','Lesson complete'],
-  nextPond:['进入下一幅','次の画巻へ','Next painting'],firstPond:['进入第一幅画','最初の絵に入る','Enter the first painting'],
+  mouse:['按住水面拖动来游动；滚轮缩放。按住 Shift 或空格使用交互键，数字键 1–3 使用已收集的道具。','水面をドラッグして移動、ホイールで拡大・縮小します。Shiftキーかスペースキーを押し続けると墨や泡が出ます。アイテムは数字キーの1～3で使えます。','Hold and drag on the water to swim. Scroll to zoom. Hold Shift or Space to jet ink or blow bubbles. Use items with 1–3.'],
+  touch:['在水面拖动来游动，双指捏合缩放。按住右下按钮放墨或吐泡，轻点右侧圆格使用道具。','水面をドラッグして移動、2本の指で拡大・縮小します。右下のボタンを長押しすると墨や泡が出ます。アイテムは右のアイコンをタップして使います。','Drag on the water to swim and pinch to zoom. Hold the lower-right button to jet ink or blow bubbles. Tap a circle on the right to use an item.'],
+  won:['画卷已揭','絵が完成しました','Painting revealed'],lost:['墨量已尽','墨が尽きました','Ink depleted'],studied:['习墨完成','チュートリアル完了','Lesson complete'],
+  nextPond:['进入下一幅','次のステージへ','Next painting'],firstPond:['进入第一幅画','最初の絵に入る','Enter the first painting'],
+  restart:['重新开始','最初からやり直す','Restart'],
   retry:['重试此局','同じ配置で再挑戦','Try this layout again'],
-  elapsed:['用时 {time}','所要時間 {time}','Time {time}'],
+  elapsed:['用时 {time}','プレイ時間 {time}','Time {time}'],
   tryNote:['再走一次这段水路，试试另一种选择。','同じ水路で、別の進み方を試しましょう。','Return to the same pond and try another route.'],
   studyNote:['可以进入第一幅画了。','最初の絵で遊んでみましょう。','You’re ready for the first painting.']
 };
@@ -250,6 +252,7 @@ export function createUI(actions={}) {
     });
   }
   $('back-cover').onclick=()=>actions.onCover?.();
+  $('restart').onclick=()=>actions.onRestart?.();
   $('resume').onclick=dismissSettings;$('pause-settings').onclick=openSettings;
   $('pause').onclick=()=>pausedState(true);$('exit-run').onclick=()=>actions.onLeave?.();$('end-home').onclick=()=>actions.onLeave?.();
   $('skip-step').onclick=()=>actions.onNextTutorial?.();

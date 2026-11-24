@@ -345,7 +345,7 @@ export class HeadFirstPainter extends LivingPainter {
 }
 
 // Capture only the outgoing material, including its actual pose, on a
-// transparent tile. It moves/scales with the physical centre while the new
+// transparent tile. It follows the centre at its captured size while the new
 // animal becomes opaque. Nothing on the pond floor is captured.
 export function captureForm(painter,hero,renderer){
   const {camera}=renderer,formed=!!hero.form;
@@ -360,7 +360,7 @@ export function captureForm(painter,hero,renderer){
   }
   const clip=hero.outgoingPaint;
   if(clip){
-    const f=clip.morphGhost,r=hero.r;
+    const f=clip.morphGhost,r=clip.r;
     const right=Math.max(left+width,(f.left+f.width)*r),bottom=Math.max(top+height,(f.top+f.height)*r);
     left=Math.min(left,f.left*r);top=Math.min(top,f.top*r);width=right-left;height=bottom-top;
   }

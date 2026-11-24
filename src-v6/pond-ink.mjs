@@ -142,7 +142,7 @@ export function createGround(world,url) {
     }else{
       ctx.fillStyle='#eee5d1';ctx.fillRect(0,0,world.width,world.height);
     }
-    drift.draw(ctx,world.time);
+    drift.draw(ctx,world.time,true);
     drawFood(ctx,this.bounds);
   },update(dt,renderer,player) {
     drift.update(world,dt);
@@ -182,8 +182,32 @@ export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=fal
     }
     renderer.inkCamera=solver=next;
   };
+  // Keep a raw water surface for permanent contact printing, and dilute only
+  // its visible wake. The small feathered patch restores density near the body.
+  const nearInk=document.createElement('canvas');
+  nearInk.width=nearInk.height=320;
+  const patch=nearInk.getContext('2d'),mid=nearInk.width/2;
+  const wetEdge=patch.createRadialGradient(mid,mid,0,mid,mid,mid);
+  wetEdge.addColorStop(0,'black');wetEdge.addColorStop(.38,'black');
+  wetEdge.addColorStop(.69,'rgba(0,0,0,.32)');wetEdge.addColorStop(1,'transparent');
   renderer.drawWorldInk=c=>{
-    if(solver)c.drawImage(renderer.canvas,solver.x,solver.y,renderer.viewW/solver.scale,renderer.viewH/solver.scale);
+    if(!solver)return;
+    const p=world.player,source=renderer.canvas;
+    const width=renderer.viewW/solver.scale,height=renderer.viewH/solver.scale;
+    c.save();
+    if(!renderer.fallback)c.globalAlpha*=.55;
+    c.drawImage(source,solver.x,solver.y,width,height);
+    c.restore();
+    if(renderer.fallback)return;
+    const reach=Math.max(12,p.r*2.5);
+    const sx=source.width/width,sy=source.height/height;
+    patch.clearRect(0,0,nearInk.width,nearInk.height);
+    patch.drawImage(source,(p.x-reach-solver.x)*sx,(p.y-reach-solver.y)*sy,
+      reach*2*sx,reach*2*sy,0,0,nearInk.width,nearInk.height);
+    patch.globalCompositeOperation='destination-in';
+    patch.fillStyle=wetEdge;patch.fillRect(0,0,nearInk.width,nearInk.height);
+    patch.globalCompositeOperation='source-over';
+    c.drawImage(nearInk,p.x-reach,p.y-reach,reach*2,reach*2);
   };
   renderer.motionSpeedLimit=()=>world.speed;
   // The original V5 shader controls opacity, vorticity, relative motion and
@@ -207,6 +231,15 @@ export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=fal
     };
   }
   const nativeTrail=renderer.trail.preset;
+  if(renderer.fallback){
+    const draw=renderer.trail.draw.bind(renderer.trail);
+    renderer.trail.draw=(c,mode,view,contact=false)=>{
+      if(contact)return draw(c,mode,view,true);
+      const material=renderer.trail.preset;
+      renderer.trail.preset={...material,opacity:material.opacity*.65};
+      try{return draw(c,mode,view);}finally{renderer.trail.preset=material;}
+    };
+  }
   function advanceInk(dt,p){
     const released=world.player.emitting && p.form?.species!=='fish' && p.form?.species!=='dragon';
     jetMix+=(Number(released)-jetMix)*(1-Math.exp(-dt*(released?10:2)));

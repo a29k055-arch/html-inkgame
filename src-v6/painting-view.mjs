@@ -3,31 +3,7 @@ import {PaintingView} from '../src-v5/reveal/painting-view.js';
 // Keep V5's pinch anchor, pan limits and framing. Interpolate the displayed
 // pose independently so a wheel tick and the Fit button also ease into place.
 export class PondPaintingView extends PaintingView {
-  prepare(image,options={}){
-    const world=options.world;
-    this.worldAspect=world&&options.camera ? world.height*image.naturalWidth/(world.width*image.naturalHeight):1;
-    this.firstYScale=null;
-    this.framingFraction=0;
-    return super.prepare(image,options);
-  }
-  animate(duration,draw){
-    if(this.phase!=='framing')return super.animate(duration,draw);
-    return super.animate(duration,t=>{
-      this.framingFraction=t*t*(3-2*t);
-      draw(t);
-    });
-  }
   paint(){
-    // The illustration covers the whole playable pond. At the end smoothly
-    // unfold that projection to the painting's authentic portrait/landscape ratio.
-    if(this.geometry && (this.phase==='prepared'||this.phase==='framing')){
-      const g=this.geometry,c=this.ctx;
-      this.firstYScale??=g.scale*this.worldAspect;
-      const scaleY=this.firstYScale+(g.fitScale-this.firstYScale)*this.framingFraction;
-      c.fillStyle='#e7dfcc';c.fillRect(0,0,g.width,g.height);
-      c.drawImage(this.image,g.x,g.y,g.imageWidth*g.scale,g.imageHeight*scaleY);
-      return;
-    }
     if(this.phase!=='interactive'||!this.options.frameDuration||!this.geometry){
       this.stopGlide();
       super.paint();

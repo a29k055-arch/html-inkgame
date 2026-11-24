@@ -1,36 +1,38 @@
-import {spawnEnemy, spawnItem, spawnDrop, spawnLeaf, radius, sendDragonFromBank} from './sim.mjs';
+import {spawnEnemy, spawnItem, spawnDrop, spawnLeaf, playerRadius, sendDragonFromBank} from './sim.mjs';
 import {introductions,results,LESSON_INTRO,LESSON_HOLD,LESSON_DISSOLVE} from './lesson-scenes.mjs';
+
+import {START_MASS,rivalMass} from './levels-scale.mjs';
 
 const line=(zh,ja,en)=>({zh,ja,en});
 const forms=['fish','shrimp','turtle','dragon'];
 const hints={
   move:line('按住水面向右拖动，带着墨球游向淡蓝色的光。','水面を押したまま右に動かして、水色に光る相手に近づきましょう。','Hold the water and drag right. Swim toward the pale blue glow.'),
-  eat:line('再近一点，碰到淡蓝圈就能把它吃下去。','もう少し近づいて、水色の輪に触れてみましょう。','Move a little closer. Touch the pale blue rim to absorb it.'),
+  eat:line('再近一点，碰到淡蓝圈就能把它吃下去。','もう少し近づいて、水色の輪の相手に触れたままでいましょう。墨を少しずつ吸収できます。','Move a little closer. Touch the pale blue rim to absorb it.'),
   grew:line('你吃下了第一颗墨球。','最初の相手を吸収できました。','You absorbed your first rival.'),
-  spike:line('游到右边，轻轻贴住红圈刺球，看看两边的墨量。','右に泳いで、赤いトゲ玉に少し触れてみましょう。','Swim right and stay against the red spiked ball for a moment.'),
-  hole:line('这次贴住红圈黑洞。观察墨从哪里流向哪里。','今度は赤い渦に触れて、墨の流れを見てみましょう。','This time, touch the red whirl. Watch which way the ink flows.'),
+  spike:line('游到右边，轻轻贴住红圈刺球，看看两边的墨量。','右に泳いで、赤い輪のトゲ玉に触れてみましょう。','Swim right and stay against the red spiked ball for a moment.'),
+  hole:line('这次贴住红圈黑洞。观察墨从哪里流向哪里。','今度は赤い輪の黒い渦に触れて、墨がどちらに流れるか見てみましょう。','This time, touch the red whirl. Watch which way the ink flows.'),
   spikePair:line('游近一点，看两颗刺球怎样碰到一起。','少し近づいて、2つのトゲ玉がぶつかる様子を見ましょう。','Approach the two spiked balls and watch them touch.'),
   holePair:line('游近这两个黑洞。猜一猜，哪一个会变小？','2つの渦に近づきましょう。小さくなるのはどちらでしょう？','Approach the two whirls. Which one will shrink?'),
   mixedPair:line('游近刺球和黑洞，留意较小的那一个。','トゲ玉と渦に近づいて、小さい方を見てみましょう。','Approach the spiked ball and the whirl. Keep an eye on the smaller one.'),
-  intercept:line('刺球已经泛起淡蓝光，现在游过去吃掉它。','トゲ玉が水色に変わりました。今なら吸収できます。','The spiked ball now glows blue. Swim into it to absorb it.'),
-  fishTake:line('游向鲤鱼，让墨球碰到它的头。','コイの頭にそっと触れて、拾いましょう。','Swim up to the carp and touch its head to collect it.'),
-  fishUse:line('鲤鱼已经在右侧道具格里。点它，变成鲤鱼。','右の道具欄にコイが入りました。選んでコイに変身しましょう。','The carp is in a slot on the right. Select it to take its form.'),
+  intercept:line('刺球已经泛起淡蓝光，现在游过去吃掉它。','トゲ玉の輪が水色になりました。触れ続けて吸収しましょう。','The spiked ball now glows blue. Swim into it to absorb it.'),
+  fishTake:line('游向鲤鱼，让墨球碰到它的头。','コイの頭に触れて、アイテムを手に入れましょう。','Swim up to the carp and touch its head to collect it.'),
+  fishUse:line('鲤鱼已经在右侧道具格里。点它，变成鲤鱼。','右のアイテム欄からコイを選んで、変身しましょう。','The carp is in a slot on the right. Select it to take its form.'),
   fishTry:line('朝刺球吐泡，把它推开，再游过空隙。','トゲ玉に泡を吐いて押しのけ、すき間を通りましょう。','Blow bubbles at the spiked ball, then swim through the gap.'),
   shrimpTake:line('游过去，碰到虾的头就能收下它。','エビの頭に触れて拾いましょう。','Touch the shrimp’s head to collect it.'),
   shrimpUse:line('点右侧的虾，变身后靠近散墨。','右のエビを選んで変身し、墨の粒に近づきましょう。','Select the shrimp on the right, then approach the loose ink.'),
   shrimpTry:line('靠近散墨和淡蓝圈，看看谁先被虾吸过来。','墨の粒と水色の相手に近づきましょう。先に寄ってくるのはどちらでしょう？','Move near the loose ink and the blue rival. Which one comes to you first?'),
-  turtleTake:line('接下来，游到龟的头边收下它。','次はカメです。頭に触れて拾いましょう。','Next, touch the turtle’s head to collect it.'),
+  turtleTake:line('接下来，游到龟的头边收下它。','次はカメの頭に触れてみましょう。','Next, touch the turtle’s head to collect it.'),
   turtleUse:line('点右侧的龟，准备靠近红圈。','右のカメを選んで変身しましょう。','Select the turtle on the right to take its form.'),
   turtleTry:line('用龟壳碰一下红圈，观察自己的墨量。','甲羅で赤い輪に触れて、自分の墨の量を見てみましょう。','Brush the red rim with your shell. Watch your ink bar.'),
-  dragonTake:line('最后一只游来的是龙。碰它的头，将它收进道具格。','最後は龍です。頭に触れて拾いましょう。','The last creature is a dragon. Touch its head to collect it.'),
+  dragonTake:line('最后一只游来的是龙。碰它的头，将它收进道具格。','最後は龍です。泳いでくる龍の頭に触れましょう。','The last creature is a dragon. Touch its head to collect it.'),
   dragonUse:line('点右侧的龙。龙形态持续二十秒。','右の龍を選びましょう。変身は20秒間続きます。','Select the dragon. Its form lasts twenty seconds.'),
   dragonTry:line('靠近红圈，让散墨被吸过来，同时试着向前吐泡。','赤い輪に触れてみましょう。墨の粒が寄ってきたら、前に泡を吐いてみてください。','Approach the red rim. As ink drifts toward you, blow bubbles ahead.'),
   jet:line('面向右边，按住放墨键，用喷出的墨推开身后的刺球。','右を向いて墨を吐くボタンを長押しし、後ろのトゲ玉を押してみましょう。','Face right and hold the ink button. Use the jet to push the ball behind you.'),
   store:line('游进荷叶，在叶面上按住放墨键。','ハスの葉に乗って、墨を吐くボタンを長押ししましょう。','Swim onto the lotus leaf and hold the ink button.'),
   fullLeaf:line('这片叶子已经开了三朵花。先吃一朵，腾出位置。','この葉にはもう3輪咲いています。1輪食べて場所を空けましょう。','This leaf already has three flowers. Eat one to make room.'),
   bloom:line('再喷一点，看看荷叶外缘，花就快开了。','もう少し墨を注ぎましょう。葉のすぐ外に花が咲きます。','Give it a little more ink. Watch just beyond the edge of the leaf.'),
-  flower:line('松开放墨键，游到荷花上，把墨补回来。','ボタンを離して、咲いた花に触れましょう。墨が戻ります。','Release the button. Swim into the blossom to regain ink.'),
-  done:line('教学完成。','練習できました。','Lesson complete.')
+  flower:line('松开放墨键，游到荷花上，把墨补回来。','ボタンを離して、咲いた花に触れましょう。墨を補充できます。','Release the button. Swim into the blossom to regain ink.'),
+  done:line('教学完成。','チュートリアル完了！','Lesson complete.')
 };
 const sequences=[
   ['move','eat','grew'],
@@ -45,7 +47,7 @@ export function createTutorial(id,continuation=false){
   return {index,step:0,key:sequences[index][0],phase:continuation?'active':'intro',pending:[],elapsed:0,done:false,cursor:0,entered:null,seen:new Set(),pairStarted:false,contactAt:null,firstEat:false};
 }
 const touchMove=line('手指按住水面，往右轻轻一拖，游向淡蓝色的光。','水面に指を置き、右に軽くスライドして水色の相手に近づきましょう。','Touch the water and slide your finger right, toward the pale blue glow.');
-const keyboardMove=line('按住水面向右拖动，也可以按 D 或 →，游向淡蓝色的光。','水面を右にドラッグするか、D か → を押して水色の相手に近づきましょう。','Drag right on the water, or hold D or →, to swim toward the pale blue glow.');
+const keyboardMove=line('按住水面向右拖动，也可以按 D 或 →，游向淡蓝色的光。','水面を右にドラッグするか、Dキーか右矢印キーを押して、水色の輪に近づきましょう。','Drag right on the water, or hold D or →, to swim toward the pale blue glow.');
 const keyboardJet=line('面向右边，按住 Shift 向后喷墨，试着推开身后的刺球。','右を向いて Shift キーを長押しし、後ろのトゲ玉を墨で押してみましょう。','Face right and hold Shift. Use your backward jet to push the spiked ball.');
 const actionClue={
   touch:line('按住右下按钮。','右下のボタンを長押しします。','Hold the button at the bottom right.'),
@@ -71,15 +73,15 @@ function clearExercise(w){
   w.player.emitting=false;
 }
 function resetBody(w){
-  Object.assign(w.player,{x:405,y:330,angle:0,vx:0,vy:0,mass:100,r:radius(100)*(w.player.form==='fish'?.85:w.player.form==='dragon'?1.16:1)});
+  Object.assign(w.player,{x:405,y:w.height/2,angle:0,vx:0,vy:0,mass:START_MASS,r:playerRadius(START_MASS,w.player.form)});
   w.safePath.push({x:w.player.x,y:w.player.y});
 }
 function putEnemy(w,id,type,x,y,mass,extra={}){
-  return spawnEnemy(w,{id,type,x,y,mass,vx:0,vy:0,...extra});
+  return spawnEnemy(w,{id,type,x,y:w.height/2+(y-330),mass:rivalMass(mass),vx:0,vy:0,...extra});
 }
 function stock(w,form){
-  if(form==='dragon')sendDragonFromBank(w,{x:506,y:330},{id:'lesson-dragon'});
-  else spawnItem(w,{id:'lesson-'+form,type:form,x:506,y:330,vx:-3,vy:0});
+  if(form==='dragon')sendDragonFromBank(w,{x:506,y:w.height/2},{id:'lesson-dragon'});
+  else spawnItem(w,{id:'lesson-'+form,type:form,x:506,y:w.height/2,vx:-3,vy:0});
 }
 function pair(w,key){
   const mixed=key==='mixedPair',a=key==='holePair'?'hole':'spike',b=mixed?'hole':a;
@@ -106,22 +108,22 @@ function enter(t,w){
     if(f==='fish'){
       putEnemy(w,'fish-gate','spike',507,312,153);
       putEnemy(w,'fish-gate-far','spike',512,392,155);
-      t.exit={x:554,y:342,r:27};
+      t.exit={x:554,y:w.height/2+12,r:27};
     } else if(f==='shrimp'){
-      spawnDrop(w,{id:'lesson-ink',x:501,y:327,mass:7,ready:true});
+      spawnDrop(w,{id:'lesson-ink',x:501,y:w.height/2-3,mass:7,ready:true});
       putEnemy(w,'shrimp-food','spike',529,355,25);
       putEnemy(w,'shrimp-danger','hole',645,239,178);
     } else {
       putEnemy(w,'guard-target','hole',507,330,195);
       if(f==='dragon'){
-        spawnDrop(w,{id:'dragon-ink',x:469,y:360,mass:8,ready:true});
+        spawnDrop(w,{id:'dragon-ink',x:469,y:w.height/2+30,mass:8,ready:true});
         putEnemy(w,'dragon-food','spike',510,395,21);
       }
     }
   }
   if(k==='store'){
     clearExercise(w);resetBody(w);
-    spawnLeaf(w,{id:'lesson-leaf',x:540,y:330,r:71,stored:19,flowers:0});
+    spawnLeaf(w,{id:'lesson-leaf',x:540,y:w.height/2,r:85,stored:19,flowers:0});
   }
 }
 function enterNext(t,w){

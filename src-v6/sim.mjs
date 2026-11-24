@@ -7,6 +7,9 @@ const TICK = 1 / 60;
 const EPSILON = 1e-8;
 const TAU = Math.PI * 2;
 export const radius = mass => 2 * Math.sqrt(Math.max(0, mass));
+// The dragon keeps the head and body size of the original 1,750-ink form.
+export const DRAGON_RADIUS = radius(1750) * 1.16;
+export const playerRadius = (mass,form) => form==='dragon'?DRAGON_RADIUS:radius(mass)*(form==='fish'?.85:1);
 const forms = { fish: 12, shrimp: 12, turtle: 12, dragon: 20 };
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -51,7 +54,7 @@ function bounded(w, entity, bounce = false) {
   entity.x = x; entity.y = y;
 }
 function syncPlayer(p) {
-  p.r = radius(p.mass) * (p.form === 'fish' ? .85 : p.form === 'dragon' ? 1.16 : 1);
+  p.r = playerRadius(p.mass,p.form);
 }
 export function spawnEnemy(w, def) {
   const e = body(w, def, 'enemy');
@@ -71,7 +74,7 @@ function dragonPresent(w){
 export function spawnItem(w, def) {
   if(def.type==='dragon'&&dragonPresent(w))return null;
   const item = body(w, def, 'item');
-  item.r = def.r ?? 13;
+  item.r = def.type==='dragon'?DRAGON_RADIUS:(def.r??17);
   item.angle = def.angle ?? Math.atan2(item.vy,item.vx);
   const ordinal=w.rigCounts.get(item.type) ?? 0;
   item.rigId=def.rigId ?? resolveLivingRig(item.type,undefined,w.tutorial?0:w.rigSeed+ordinal);
@@ -189,17 +192,17 @@ function deposit(w,leaf,shot) {
   if(stored>EPSILON) cue(w,'store',{id:leaf.id,mass:stored},'store:'+leaf.id,.18);
   paidInk(w,shot,shot.mass-stored);
 }
-function shoot(w,type,mass=0) {
+function shoot(w,type,mass=0,growth=0) {
   const p=w.player;
   const bubble=type==='bubble';
   const mid=p.angle+(bubble?0:Math.PI);
   const spread=(bubble?9:17)*Math.PI/180;
   const bearing=mid+(2*emissionRoll(w)-1)*spread;
   const dx=Math.cos(bearing),dy=Math.sin(bearing);
-  const v=bubble?215+emissionRoll(w)*78:151+emissionRoll(w)*100;
+  const v=bubble?215+emissionRoll(w)*78:(151+emissionRoll(w)*100)*(1+.68*growth);
   const r=bubble?3.9+emissionRoll(w)*2.6:jetRadius;
   const shot=body(w,{type,x:p.x+dx*(p.r+2),y:p.y+dy*(p.r+2),
-    vx:dx*v,vy:dy*v,dx,dy,mass,r,angle:emissionRoll(w)*TAU,
+    vx:dx*v,vy:dy*v,dx,dy,mass,r,thrust:bubble?1200:815*(1+1.8*growth),angle:emissionRoll(w)*TAU,
     shape:bubble?'circle':flakeShapes[Math.floor(emissionRoll(w)*flakeShapes.length)],
     lifetime:bubble?.79+.16*emissionRoll(w):.255+.195*emissionRoll(w),age:0},'shot');
   if(type==='spray'){
@@ -220,11 +223,11 @@ function restoreClearance(w) {
   }
 }
 function changeForm(w,item) {
-  const p=w.player,prev=p.form;
+  const p=w.player,oldRadius=p.r;
   p.activeItem=item;
   p.form=item?.type ?? 'ink'; p.formTime=forms[p.form] ?? 0;
   syncPlayer(p);
-  if(prev==='fish' && p.form!=='fish') restoreClearance(w);
+  if(!shielded(p) && p.r>oldRadius)restoreClearance(w);
   p.emitting=false;
   w.waitRelease=w.held;
   event(w,'form',{form:p.form,id:item?.id ?? null});
@@ -262,18 +265,18 @@ function playerStep(w,input,dt) {
   p.emitting=w.held&&!w.waitRelease;
   const growth=clamp(Math.log2(Math.max(1,p.mass/100))/8,0,1);
   const formSpeed=p.form==='dragon'?1.18:p.form==='turtle'?.85:1;
-  let speed=w.speed*(1+.065*growth)*formSpeed*strength;
+  let speed=w.speed*(1+.24*growth)*formSpeed*strength;
   if(p.emitting && !bubbles(p)) {
     // Each visible flake is paid for once at launch. A larger body emits
     // slightly more often; one stroke never sheds a percentage of its mass.
     if(p.mass>jetMass+EPSILON){
       if(w.time+EPSILON>=w.nextJet){
-        p.mass-=jetMass;syncPlayer(p);shoot(w,'spray',jetMass);
+        p.mass-=jetMass;syncPlayer(p);shoot(w,'spray',jetMass,growth);
         const rate=7+2.4*growth;
         w.nextJet=w.time+(.72+.56*emissionRoll(w))/rate;
         cue(w,'spray',{},'spray',.3);
       }
-      speed+=w.speed*.16;
+      speed+=w.speed*(.16+.18*growth);
     }else p.emitting=false;
   } else {
     if(p.emitting) {
@@ -320,8 +323,7 @@ function projectileStep(w,dt) {
     }
     const e=w.enemies.find(e=>e.mass>EPSILON&&touching(e,s));
     if(e) {
-      const strength=s.type==='bubble'?1200:815;
-      const impulse=Math.min(100,strength/Math.max(10,e.mass));
+      const impulse=Math.min(160,s.thrust/Math.max(10,e.mass));
       e.kickX+=s.dx*impulse;e.kickY+=s.dy*impulse;
       event(w,'push',{id:e.id,target:e.type,source:s.type,form:w.player.form});
     }
@@ -483,7 +485,7 @@ function playerContacts(w,dt,next) {
       // A little mote takes a few strokes to dissolve. A near-peer or large
       // rival takes longer. Each transfer is paid exactly once by the donor.
       if(!c.sipRate){
-        const seconds=.34+.24*Math.min(1,e.mass/p.mass)+.16*Math.log10(1+e.mass/40);
+        const seconds=.72+.36*Math.min(1,e.mass/p.mass)+.85*Math.log10(1+e.mass/40)+.61*Math.sqrt(e.mass/1600);
         c.sipRate=e.mass/seconds;
       }
       const amount=Math.min(e.mass,c.sipRate*dt),previousR=e.r;
@@ -554,7 +556,7 @@ export function sendDragonFromBank(w,target,options={}){
   const px=clamp(target.x,25,w.width-25),py=clamp(target.y,25,w.height-25);
   const margins=[px,w.width-px,py,w.height-py];
   const side=margins.indexOf(Math.min(...margins));
-  const outside=Math.max(60,w.player.r*3);
+  const outside=DRAGON_RADIUS*2.2;
   const x=side===0?-outside:side===1?w.width+outside:px;
   const y=side===2?-outside:side===3?w.height+outside:py;
   const angle=Math.atan2(py-y,px-x),speed=options.rescue?87:75;

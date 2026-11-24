@@ -3,7 +3,7 @@ import {LEVELS,TUTORIALS,TRIAL} from './levels.mjs';
 
 const copy = {
   zh:{index:'选画',tutorial:'教学关卡',tutorialInfo:'从认出自己的墨滴开始，依次练习移动与吞噬、敌人碰撞、使用道具和喷墨。',enter:'进入画作',back:'返回目录',locked:'完成前置关卡后开启',upcoming:'制作中',painting:'画作',done:'已完成',preview:'画作预览'},
-  ja:{index:'絵を選ぶ',tutorial:'遊び方',tutorialInfo:'自分の墨のしずくを見つけたら、泳ぎ方、敵との接触、アイテム、墨の吐き方を順に試してみよう。',enter:'絵に入る',back:'一覧に戻る',locked:'前のステージをクリアすると遊べます',upcoming:'準備中',painting:'ステージ',done:'クリア済み',preview:'絵のプレビュー'},
+  ja:{index:'絵を選ぶ',tutorial:'チュートリアル',tutorialInfo:'泳ぎながら、敵の吸収、アイテムでの変身、墨の吐き方を順に試してみよう。',enter:'絵に入る',back:'一覧に戻る',locked:'前のステージをクリアすると解放されます',upcoming:'準備中',painting:'ステージ',done:'クリア済み',preview:'絵のプレビュー'},
   en:{index:'Choose a painting',tutorial:'Tutorial',tutorialInfo:'Find your ink drop, then try swimming, absorbing, meeting rivals, using items and jetting ink.',enter:'Enter painting',back:'Back to the scroll',locked:'Complete the previous painting to unlock.',upcoming:'Coming soon',painting:'Painting',done:'Completed',preview:'Painting preview'}
 };
 const artworkSize=[[800,1234],[600,900],[694,1286],[735,1530],[848,428],[1045,499],[439,1100]];
@@ -22,7 +22,7 @@ function letterSlat(title,entry,lang){
   const label=name(entry,lang);
   if(title.dataset.language===lang && title.dataset.label===label)return;
   title.dataset.language=lang;title.dataset.label=label;
-  const cells=lang!=='en' && (entry.kind==='tutorial'||entry.kind==='trial');
+  const cells=lang==='zh' && (entry.kind==='tutorial'||entry.kind==='trial');
   title.classList.toggle('slip-glyphs',cells);
   if(!cells){title.textContent=label;return;}
   title.replaceChildren(...Array.from(label,glyph=>{

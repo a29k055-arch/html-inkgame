@@ -42,12 +42,12 @@ export function createInkDrift(){
       size:p.r*(paid?.87:.75)*(.58+.84*random()),born:w.time,life:(paid?2.65:1.95)*(.8+.50*random()),
       opacity:(paid?.64:.53)*(.76+.40*random()),stamp:stamps[Math.floor(random()*stamps.length)]});
   }
-  function draw(c,time){
+  function draw(c,time,visible=false){
     for(const m of marks){
       const age=time-m.born,q=age/m.life;
       if(q<0||q>=1)continue;
       const size=m.size*(1+.9*q),distance=(1-Math.exp(-2*age))*.5;
-      c.save();c.globalAlpha*=m.opacity*(1-q*q)**1.67;
+      c.save();c.globalAlpha*=m.opacity*(1-q*q)**1.67*(visible?.76-.26*q:1);
       c.translate(m.x+m.dx*distance,m.y+m.dy*distance);c.rotate(m.angle+m.twist*age);
       c.drawImage(m.stamp,-size,-size*.69,size*2,size*1.38);c.restore();
     }

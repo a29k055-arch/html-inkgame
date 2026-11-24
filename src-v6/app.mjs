@@ -15,7 +15,7 @@ const minimap=createMinimap(document.querySelector('#minimap'),(x,y)=>{if(runnin
 const sound=createInkSound();
 const STEP=1/60;
 let world=null,tutorial=null,kind='level',index=0,seed=0;
-let liveLessonChange=false;
+let tutorialEntrySeed=0,liveLessonChange=false;
 let switching=false,ending=false,resultOpen=false,endedTime=0,accumulator=0,previous=0,hudAt=0;
 let readStamp=null;
 let eventOffset=0,scaleMax=1,lastHint='';
@@ -23,6 +23,7 @@ let lastBloomPaintAt=0;
 let opening;
 const ui=createUI({
   onStart:(k,i)=>start(k,i),
+  onRestart:()=>kind==='tutorial' ? start('tutorial',0,{replaySeed:tutorialEntrySeed}) : start(kind,index,{keepSeed:true}),
   onRetry:()=>start(kind,index,{keepSeed:true}),
   onNextTutorial:()=>advanceTutorial(false),
   onUseItem:slot=>{
@@ -72,13 +73,14 @@ async function changeScene(change,lessonFade=false,continuous=false){
   try{await ui.transition(change,lessonFade,continuous);}
   finally{switching=false;liveLessonChange=false;previous=0;}
 }
-function start(nextKind,nextIndex,{keepSeed=false,continuation=false}={}){
+function start(nextKind,nextIndex,{keepSeed=false,continuation=false,replaySeed}={}){
   const list=nextKind==='tutorial'?TUTORIALS:nextKind==='trial'?[TRIAL]:LEVELS;
   if(!list[nextIndex])return;
-  const nextSeed=keepSeed?seed:newSeed();
+  const nextSeed=replaySeed??(keepSeed?seed:newSeed());
   return changeScene(async()=>{
     await draw.prepare();
     kind=nextKind;index=nextIndex;seed=nextSeed;
+    if(kind==='tutorial'&&index===0)tutorialEntrySeed=seed;
     const id=list[index].id;
     world=createWorld(makeLevel(id,seed));
     tutorial=kind==='tutorial'?createTutorial(id,continuation):null;

@@ -1,21 +1,23 @@
 import {TRIAL,makeTrial} from './trial-level.mjs';
+import {paintingSize} from './artworks.mjs';
+import {START_MASS,rivalMass} from './levels-scale.mjs';
 export {TRIAL};
 // World units are independent of screen size. Each painting fixes its shores and
 // teaching encounter; a seed moves secondary creatures within their home bays.
 const words = (zh, ja, en) => ({ zh, ja, en });
 
 export const LEVELS = [
-  [words('壹','壹','I'), words('先收集浮墨，贴住泛蓝光的对手，把它吸尽。游向四角，吸收大敌。成为池中最大、画上只余零星留白时即可收笔。','浮かんでいる墨を集め、水色に光る相手に触れ続けて吸収しよう。四隅の大きな相手も吸い込み、池でいちばん大きくなろう。絵の全体がほぼ見えたらクリア。','Gather ink and stay in contact with blue rivals to absorb them. Absorb the large rivals near the four corners. Finish as the largest in the pond with the painting nearly complete.')],
+  [words('壹','壹','I'), words('先收集浮墨，贴住泛蓝光的对手，把它吸尽。游向四角，吸收大敌。成为池中最大、画上只余零星留白时即可收笔。','浮かんだ墨を集め、水色に光る敵に触れ続けて吸収しよう。四隅の大きな敵も吸収して池でいちばん大きくなり、絵がほぼ見えたらクリア。','Gather ink and stay in contact with blue rivals to absorb them. Absorb the large rivals near the four corners. Finish as the largest in the pond with the painting nearly complete.')],
   [words('貳','貳','II'), words('喷墨缩身，穿过荷叶之间的窄隙，也可以沿岸绕行。','墨を吐いて小さくなれば、ハスの葉の間を通れる。岸沿いに回ってもいい。','Shed ink to slip through, or follow the lotus bank.')],
   [words('參','參','III'), words('让两颗刺球相撞，给自己挤出一条水路。','トゲ玉どうしをぶつけて、水路を開こう。','Nudge two spiked balls together to open the crossing.')],
-  [words('肆','肆','IV'), words('赶在黑洞之前，选定觅食的岸。','黒い渦より先に、墨を集める岸を選ぼう。','Choose a feeding bank before the whirl reaches it.')],
+  [words('肆','肆','IV'), words('赶在黑洞之前，选定觅食的岸。','黒い渦に先を越される前に、岸辺の墨を集めよう。','Choose a feeding bank before the whirl reaches it.')],
   [words('伍','伍','V'), words('沿外岸蓄墨，在窄口换路。','岸辺で墨を蓄え、狭い水路を渡ろう。','Gather ink on the outer bank, then change course at a narrow gate.')],
-  [words('陸','陸','VI'), words('两岸合流，选择养花、截食或推开刺门。','二つの流れが合う池で、花と押す力を使おう。','Two basins meet. Grow a flower, intercept a mote, or open the thorn gate.')]
+  [words('陸','陸','VI'), words('两岸合流，选择养花、截食或推开刺门。','流れが合わさる池。花を育てるか、先回りして墨を集めるか、トゲ玉を押しのけるか。進み方を選ぼう。','Two basins meet. Grow a flower, intercept a mote, or open the thorn gate.')]
 ].map(([title,subtitle],index)=>({id:'level-'+(index+1),kind:'level',index,title,subtitle}));
 
 export const TUTORIALS = [
-  [words('移动与吞噬','移動と吸収','Move and absorb'), words('移动、停住、辨认淡蓝圈。','泳ぐ、止まる、水色の輪を見分ける。','Steer, slow down and recognize an edible ring.')],
-  [words('敌人碰撞','敵との接触','Enemy contact'), words('观察两种敌人怎样交换或失去墨。','トゲ玉に触れたときと、黒い渦に触れたときの違いを見てみよう。','See which encounters transfer ink and which wear both bodies down.')],
+  [words('移动与吞噬','移動と吸収','Move and absorb'), words('移动、停住、辨认淡蓝圈。','泳いだり止まったりしながら、吸収できる相手の水色の輪を見つけよう。','Steer, slow down and recognize an edible ring.')],
+  [words('敌人碰撞','敵との接触','Enemy contact'), words('观察两种敌人怎样交换或失去墨。','トゲ玉や黒い渦がぶつかると、墨の量はどう変わる？　近くで見てみよう。','See which encounters transfer ink and which wear both bodies down.')],
   [words('使用道具','アイテムの使い方','Use items'), words('先把游来的生物收入道具栏，再选择使用时机。','生き物を集めて、好きなタイミングで変身しよう。','Collect a creature, store it, then choose when to change.')],
   [words('喷墨','墨の吐き方','Jet ink'), words('向后喷墨可以推开对手。把墨留在荷叶上，等花开了再吃。','後ろに墨を吐いて相手を押そう。ハスの葉に墨をためると花が咲く。','Push a mote with your jet and regain ink from a blossom.')]
 ].map(([title,subtitle],index)=>({id:'tutorial-'+(index+1),kind:'tutorial',index,title,subtitle}));
@@ -42,17 +44,18 @@ function randomFor(seed) {
 }
 
 function lessonWorld(meta,seed) {
-  const cfg = {id:meta.id,kind:meta.kind,index:meta.index,seed,width:1000,height:660,speed:129,flowerMass:30,
-    player:{x:405,y:330,mass:100,angle:0}, enemies:[],leaves:[],drops:[],items:[],tutorial:true,spawnItems:false};
+  const cfg = {id:meta.id,kind:meta.kind,index:meta.index,seed,...paintingSize(0,1000*1542.5),speed:129,flowerMass:30,
+    player:{x:405,y:330,mass:START_MASS,angle:0}, enemies:[],leaves:[],drops:[],items:[],tutorial:true,spawnItems:false};
   if (meta.index===0) {
     cfg.enemies=[
-      {id:'first-blue',type:'spike',x:520,y:337,mass:39,vx:0,vy:1.5},
-      {id:'red-compare',type:'hole',x:695,y:228,mass:175}
+      {id:'first-blue',type:'spike',x:520,y:337,mass:rivalMass(39),vx:0,vy:1.5},
+      {id:'red-compare',type:'hole',x:695,y:228,mass:rivalMass(175)}
     ];
   }
-  if (meta.index===1) cfg.enemies.push({id:'touch-spike',type:'spike',x:521,y:330,mass:175});
+  if (meta.index===1) cfg.enemies.push({id:'touch-spike',type:'spike',x:521,y:330,mass:rivalMass(175)});
   if (meta.index===2) cfg.items.push({id:'lesson-fish',type:'fish',x:498,y:330,vx:-3,vy:0});
-  if (meta.index===3) cfg.enemies.push({id:'push-behind',type:'spike',x:334,y:330,mass:151});
+  if (meta.index===3) cfg.enemies.push({id:'push-behind',type:'spike',x:334,y:330,mass:rivalMass(151)});
+  for(const body of [cfg.player,...cfg.enemies,...cfg.items])body.y+=cfg.height/2-330;
   return cfg;
 }
 
@@ -71,19 +74,20 @@ export function makeLevel(id, seed=1) {
   if (meta.kind==='trial') return makeTrial(seed,randomFor(seed));
   if (meta.kind==='tutorial') return lessonWorld(meta,seed);
   const {index}=meta, rng=randomFor(seed);
-  const [width,height,count,driftFraction,speed]=plans[index];
+  const [planWidth,planHeight,count,driftFraction,speed]=plans[index];
+  const {width,height}=paintingSize(index,planWidth*planHeight);
   const flip = rng() < .5;
   const point = (u,v) => ({x:u*width, y:(flip?1-v:v)*height});
   const cfg = {id:meta.id,kind:'level',index,seed,width,height,speed:Math.round(speed*1.12),tutorial:false,spawnItems:true,flowerMass:30,foodSpacing:79,
-    player:{...point(.18,.50),mass:100,angle:0},enemies:[],leaves:[],drops:[],items:[]};
+    player:{...point(.18,.50),mass:START_MASS,angle:0},enemies:[],leaves:[],drops:[],items:[]};
   const enemies=cfg.enemies;
   const add = (key,type,mass,p,extra={}) => {
-    const entity={id:key,type,mass:Math.round(mass),...p,vx:0,vy:0,...extra};
+    const entity={id:key,type,mass:rivalMass(mass),...p,vx:0,vy:0,...extra};
     enemies.push(entity);
     return entity;
   };
   const atOffset=(obj,x,y)=>({x:obj.x+x,y:obj.y+(flip?-y:y)});
-  const leaf=(key,u,v,r,stored=0) => cfg.leaves.push({id:key,...point(u,v),r,stored,flowers:0});
+  const leaf=(key,u,v,r,stored=0) => cfg.leaves.push({id:key,...point(u,v),r:r*1.2,stored,flowers:0});
   const first=add('first-blue','spike',26,atOffset(cfg.player,145,12),{vy:flip?-9:9});
   add('second-blue','hole',35,atOffset(cfg.player,255,-78),{vx:-3,vy:5});
   leaf('near-leaf',.18,.59,72,15);
@@ -95,8 +99,8 @@ export function makeLevel(id, seed=1) {
   // measured between the two physical radii, not between texture edges.
   function gate(key,u,v,a,b,gap,same=true,stagger=0) {
     const center=point(u,v);
-    add(key+'-north','spike',a,atOffset(center,-stagger,-(2*Math.sqrt(a)+gap/2)));
-    add(key+'-south',same?'spike':'hole',b,atOffset(center,stagger,2*Math.sqrt(b)+gap/2));
+    add(key+'-north','spike',a,atOffset(center,-stagger,-(2*Math.sqrt(rivalMass(a))+gap/2)));
+    add(key+'-south',same?'spike':'hole',b,atOffset(center,stagger,2*Math.sqrt(rivalMass(b))+gap/2));
   }
   if(index===0) add('red-compare','hole',202,atOffset(cfg.player,178,146));
   if(index===1) gate('lotus-gate',.43,.50,180,265,41,false);
@@ -129,7 +133,7 @@ export function makeLevel(id, seed=1) {
   const movers=[];
   const radius=m=>2*Math.sqrt(m);
   function clearSpot(pos,m) {
-    const r=radius(m);
+    const r=radius(rivalMass(m));
     return pos.x>r+12 && pos.x<width-r-12 && pos.y>r+12 && pos.y<height-r-12 &&
       enemies.every(e=>Math.hypot(e.x-pos.x,e.y-pos.y)>radius(e.mass)+r+28) &&
       cfg.leaves.every(l=>Math.hypot(l.x-pos.x,l.y-pos.y)>l.r+r+8) &&
@@ -137,7 +141,7 @@ export function makeLevel(id, seed=1) {
   }
   function spareWater(intended,mass){
     let spot=null, nearest=Infinity;
-    const margin=radius(mass)+15;
+    const margin=radius(rivalMass(mass))+15;
     for(let y=margin;y<height-margin;y+=60){
       for(let x=margin;x<width-margin;x+=60){
         const delta=(x-intended.x)**2+(y-intended.y)**2;

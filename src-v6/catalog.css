@@ -122,6 +122,12 @@ html[lang=en] #slips :is([data-kind=level],[data-upcoming]) .bamboo-level-name,h
   #catalog-preview .catalog-copy {font-size:14px;line-height:1.55;}
   #catalog-preview {--art-height:58dvh;}
 }
+/* Shape kana as one vertical run so the prolonged sound mark follows the column. */
+html[lang=ja] #slips :is([data-kind=tutorial],[data-kind=trial]) .bamboo-level-name,
+html[lang=ja] #preview-slip:is([data-kind=tutorial],[data-kind=trial]) .bamboo-level-name {
+  text-orientation:mixed;white-space:nowrap;letter-spacing:.06em;
+  font-size:min(4.4dvh,calc(var(--slip-height) * .075),calc(var(--slip-width) * .58),50px);
+}
 @media(prefers-reduced-motion:reduce){
   #library *,#library *::before {animation-duration:0s!important;transition-duration:0s!important;}
 }

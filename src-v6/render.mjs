@@ -247,7 +247,7 @@ export function createRenderer(canvas) {
     const t=clamp((world.time-(hero.morphStarted??-1))/.52,0,1);
     hero.formOpacity=t*t*(3-2*t);
     if(t>=1)hero.outgoingPaint=null;
-    if(hero.outgoingPaint)Object.assign(hero.outgoingPaint,{x:p.x,y:p.y,r:p.r,opacity:1-hero.formOpacity});
+    if(hero.outgoingPaint)Object.assign(hero.outgoingPaint,{x:p.x,y:p.y,opacity:1-hero.formOpacity});
     hero.aim.x=Math.cos(p.angle);hero.aim.y=Math.sin(p.angle);
     if(species){
       if(hero.form?.rigId!==rig)hero.form={species,rigId:rig,remaining:p.formTime};
@@ -268,7 +268,7 @@ export function createRenderer(canvas) {
         proxies.set(item,animal);
       }
       animal.aim.x=Math.cos(item.angle);animal.aim.y=Math.sin(item.angle);
-      Object.assign(animal,{x:item.x,y:item.y,vx:item.vx,vy:item.vy,r:item.r,dragonHeadRadius:item.type==='dragon'?Math.max(15,w.player.r*1.10):undefined,opacity:item.opacity??1});
+      Object.assign(animal,{x:item.x,y:item.y,vx:item.vx,vy:item.vy,r:item.r,dragonHeadRadius:item.type==='dragon'?item.r*1.10:undefined,opacity:item.opacity??1});
       return animal;
     });
     if(hero.outgoingPaint)animals.unshift(hero.outgoingPaint);
