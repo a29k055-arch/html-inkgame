@@ -19,6 +19,7 @@ let liveLessonChange=false;
 let switching=false,ending=false,resultOpen=false,endedTime=0,accumulator=0,previous=0,hudAt=0;
 let readStamp=null;
 let eventOffset=0,scaleMax=1,lastHint='';
+let lastBloomPaintAt=0;
 let opening;
 const ui=createUI({
   onStart:(k,i)=>start(k,i),
@@ -105,7 +106,7 @@ function refresh(force=false){
   if(!world)return;
   const p=world.player;
   if(Math.max(p.mass,world.largest)>scaleMax*.97)scaleMax=Math.ceil(Math.max(p.mass,world.largest)*1.22);
-  ui.update({mass:p.mass,maxMass:world.largest,scaleMax,elapsed:world.time,items:p.inventory,form:p.form,formRemaining:p.formTime,actionHeld:p.emitting});
+  ui.update({painted:world.painting?.fraction,paintedEnough:world.painting?.nearlyComplete,majors:world.majorRemaining,mass:p.mass,maxMass:world.largest,scaleMax,elapsed:world.time,items:p.inventory,form:p.form,formRemaining:p.formTime,actionHeld:p.emitting});
   showLessonBeat(tutorial);
   const hint=tutorial?tutorialHint(tutorial,ui.lang,matchMedia('(pointer:coarse)').matches):'';
   if(hint!==lastHint||force){lastHint=hint;ui.hint(hint);}
@@ -113,7 +114,7 @@ function refresh(force=false){
 function paint(dt){
   const view=camera.update(world,dt);
   const artwork=paintings[kind==='trial'?TRIAL.artworkIndex:kind==='tutorial'?0:index];
-  draw.render(world,view,{artwork,focus:tutorial?tutorialFocus(tutorial,world):null,reveal:ending&&kind!=='tutorial'&&world.status==='won'?Math.min(1,endedTime/1.1):0});
+  draw.render(world,view,{artwork,focus:tutorial?tutorialFocus(tutorial,world):null,reveal:ending&&kind!=='tutorial'&&world.status==='won'?Math.min(1,Math.max(0,(endedTime-1.30)/.55)):0});
   minimap(world,view,canvas,draw.mapLayer);
 }
 function update(){
@@ -126,7 +127,7 @@ function update(){
   if(tutorial){
     if(updateTutorial(tutorial,world,events)){advanceTutorial(true);return;}
   }else if(world.status!=='playing'){
-    ending=true;endedTime=0;input.reset();
+    ending=true;endedTime=0;lastBloomPaintAt=0;input.reset();
     if(world.status==='won')ui.complete(kind,index);
     refresh(true);
   }
@@ -162,7 +163,11 @@ function frame(now){
   }
   if(ending&&!switching&&kind!=='tutorial'){
     const before=endedTime;endedTime+=dt;
-    const wait=world.status==='won'?1.17:.40;
+    // Keep the last splash opening on the paper after the physics clock stops.
+    if(world.status==='won' && (world.painting.blooms.length||world.painting.seeps.length) && endedTime-lastBloomPaintAt>=1/15){
+      world.painting.update(endedTime-lastBloomPaintAt);lastBloomPaintAt=endedTime;
+    }
+    const wait=world.status==='won'?1.88:.40;
     if(before<wait&&endedTime>=wait){
       resultOpen=true;
       const view=camera.update(world,0),width=canvas.clientWidth,height=canvas.clientHeight;

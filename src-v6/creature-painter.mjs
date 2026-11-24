@@ -8,7 +8,7 @@ const turnDelta=(from,to)=>Math.atan2(Math.sin(to-from),Math.cos(to-from));
 
 // The V5 mesh and all joint weights are retained. The leading end steers
 // first, while the rest of that same spine samples the recent heading path.
-const followTime={fish:.34,shrimp:.27,turtle:.23,dragon:.55};
+const followTime={fish:.34,shrimp:.27,turtle:.23,dragon:.76};
 function bendDelay(species,s) {
   return followTime[species]*smooth((s-(species==='dragon'?.13:.09))/.85);
 }
@@ -81,9 +81,13 @@ export function steerCreature(c,actor) {
     };
     return;
   }
+  c.dragonBend=0;
   c.buildPose=function(){
     const p=this.profile,points=[[this.x,this.y]],step=this.length/segments;
-    const amplitude=p.idle+(p.amplitude-p.idle)*this.drive;
+    // A straight swim sends only a small travelling wave down the spine.
+    // A turn stores the recent yaw and propagates it towards the tail.
+    const amplitude=this.species==='dragon'?.095+.04*this.drive+.46*this.dragonBend:
+      p.idle+(p.amplitude-p.idle)*this.drive;
     for(let i=0;i<segments;i++){
       const s=(i+.5)/segments,delay=bendDelay(this.species,s);
       const flex=this.species==='dragon'?smooth((s-.12)/.18):smooth((s-.14)/.86);
@@ -106,6 +110,10 @@ export function steerCreature(c,actor) {
       const turn=clamp(angle*(1-Math.exp(-24*step)),-16*step,16*step);
       this.heading=previous+turn;
       this.angularVelocity=step>0?turn/step:0;
+      if(this.species==='dragon'){
+        const targetBend=Math.min(1,Math.abs(this.angularVelocity)/2.8);
+        this.dragonBend+=(targetBend-this.dragonBend)*(1-Math.exp(-step*(targetBend>this.dragonBend?8:3.8)));
+      }
       this.targetHeading=target;
       const entry=this.history.at(-1);
       entry.a=this.heading;entry.v=this.angularVelocity;
@@ -115,6 +123,37 @@ export function steerCreature(c,actor) {
     this.targetCurve=makeCurve(this.pose,false);
   };
   c.update(0);
+}
+
+// Cache the actual painted V6 straight swim during the loading screen.
+// Turning dragons still draw the articulated mesh at every displayed pose.
+const glideCaches=new WeakMap();
+export function prepareDragonGlide(assets){
+  const asset=assets.dragon;
+  if(!glideCaches.has(asset))glideCaches.set(asset,bake());
+  return glideCaches.get(asset);
+  async function bake(){
+    const painter=new HeadFirstPainter({assets}),actor={id:'dragon-glide',species:'dragon',aim:{x:1,y:0}};
+    const q=painter.ensure(actor),c=q.creature,frames=[];
+    try{
+      c.reset(0,0,0);c.drive=.75;c.locomotion=1;
+      for(let i=0;i<32;i++){
+        const phase=TAU*i/32;
+        c.time=i/32*3;c.wavePhase=c.finPhase=c.gaitPhase=phase;
+        c.pose=c.buildPose();c.targetCurve=makeCurve(c.pose,false);
+        const a=c.mapPoint(q.calibration.anchorS,q.calibration.anchorT),b=c.visualBounds(),pad=1.25;
+        const x=b.minX-pad,y=b.minY-pad,w=b.maxX-b.minX+pad*2,h=b.maxY-b.minY+pad*2;
+        const pixels=460/Math.max(w,h);
+        const canvas=document.createElement('canvas');
+        canvas.width=Math.ceil(w*pixels);canvas.height=Math.ceil(h*pixels);
+        const ctx=canvas.getContext('2d');ctx.setTransform(pixels,0,0,pixels,-x*pixels,-y*pixels);
+        c.draw(ctx);
+        frames.push({canvas,x:x-a.x,y:y-a.y,w:canvas.width/pixels,h:canvas.height/pixels});
+        if(i%4===3)await new Promise(resolve=>setTimeout(resolve,0));
+      }
+      asset.pondGlide=frames;
+    }finally{painter.dispose();}
+  }
 }
 
 export class HeadFirstPainter extends LivingPainter {
@@ -196,8 +235,16 @@ export class HeadFirstPainter extends LivingPainter {
     const right=Math.min(e.x+(b.maxX-q.anchor.x)*k+pad,camera.x+viewport.width/camera.scale+pad);
     const bottom=Math.min(e.y+(b.maxY-q.anchor.y)*k+pad,camera.y+viewport.height/camera.scale+pad);
     if(right<=x||bottom<=y)return false;
-    const cap=viewport.mobile?1024:1536,w=right-x,h=bottom-y;
-    const pixels=Math.min(camera.scale*Math.min(globalThis.devicePixelRatio||1,2),cap/Math.max(w,h));
+    const w=right-x,h=bottom-y,span=Math.max(b.maxX-b.minX,b.maxY-b.minY)*k*camera.scale;
+    const small=span<395||(camera.scale<.4&&q.renderRadius*camera.scale<32&&span<655);
+    // Large bodies can occupy the whole screen. Bound the GPU copy area as
+    // well as its larger dimension. At overview scale keep turning the real
+    // joints in a smaller surface; straight travel uses the original ink atlas.
+    const large=q.renderRadius*camera.scale>65;
+    const cap=small?512:large?(viewport.mobile?768:1024):(viewport.mobile?1024:1536);
+    const pixelArea=small?115000:large?(viewport.mobile?340000:690000):Infinity;
+    const pixels=Math.min(camera.scale*Math.min(globalThis.devicePixelRatio||1,2),
+      cap/Math.max(w,h),Math.sqrt(pixelArea/(w*h)));
     const bucket=n=>Math.ceil(n*pixels/96)*96;
     const bw=bucket(w),bh=bucket(h);
     q.tile??=document.createElement('canvas');
@@ -206,12 +253,22 @@ export class HeadFirstPainter extends LivingPainter {
     const ctx=q.tile.getContext('2d');ctx.setTransform(1,0,0,1,0,0);
     ctx.clearRect(0,0,q.tile.width,q.tile.height);
     ctx.setTransform(pixels*k,0,0,pixels*k,(e.x-q.anchor.x*k-x)*pixels,(e.y-q.anchor.y*k-y)*pixels);
-    ctx.save();c.draw(ctx);ctx.restore();
+    const glide=q.asset.pondGlide;
+    ctx.save();
+    if(small&&glide&&c.dragonBend<.045&&c.time>=(c.bentUntil||0)){
+      const phase=((c.wavePhase/TAU)%1+1)%1,frame=glide[Math.floor(phase*glide.length)];
+      ctx.translate(q.anchor.x,q.anchor.y);ctx.rotate(c.heading);
+      ctx.drawImage(frame.canvas,frame.x,frame.y,frame.w,frame.h);
+    }else c.draw(ctx);
+    ctx.restore();
     q.world={x,y,w:q.tile.width/pixels,h:q.tile.height/pixels};
     q.rasterX=e.x;q.rasterY=e.y;q.renderAge=0;this.metrics.liveRasters++;
     return true;
   }
   atlasFrame(q,e){
+    // Dragon body samples, head pickup and wake must all use the same moving
+    // spine at map overview; its straight-flight cache uses that same rig.
+    if(q.species==='dragon')return null;
     const atlas=q.asset.npcAtlas;
     if(!atlas)return null;
     const viewScale=this.camera?.scale||1,pixelScale=viewScale*q.scale;
@@ -219,7 +276,7 @@ export class HeadFirstPainter extends LivingPainter {
     // In the overview a swimming animal may be shorter than a button.
     // Keep the original rig's interpolated painted frames while it turns;
     // reserving live skinning for a close-up avoids frequent GPU readbacks.
-    const small=span<=80||(q.species==='dragon'&&viewScale<.65&&span<365);
+    const small=span<=80;
     if(!small&&q.creature.time<q.creature.bentUntil)return null;
     const frame=super.atlasFrame(q,e);
     if(frame||!small||e.id==='human'||e.controller?.type==='human')return frame;
@@ -275,6 +332,9 @@ export class HeadFirstPainter extends LivingPainter {
     // The simulation tracks the painted head as the swimming collectible's
     // world position. Neither a long dragon tail nor feelers can collect it.
     ctx.save();
+    if(e.species==='dragon'&&this.pond){
+      ctx.beginPath();ctx.rect(0,0,this.pond.width,this.pond.height);ctx.clip();
+    }
     ctx.translate(-head.x,-head.y);
     ctx.globalAlpha*=e.opacity;
     const camera=this.camera;
@@ -314,8 +374,7 @@ export function captureForm(painter,hero,renderer){
   else{
     // The native ink material is a transparent viewport layer (one backing
     // pixel per CSS pixel here, independent of the output canvas density).
-    const cw=renderer.viewW/camera.scale,ch=renderer.viewH/camera.scale;
-    c.drawImage(renderer.canvas,camera.x,camera.y,cw,ch);
+    renderer.drawWorldInk(c);
     // Retain the V5 wet edge without cutting a square out of the soft wake.
     const wash=c.createRadialGradient(hero.x,hero.y,hero.r*1.04,hero.x,hero.y,hero.r*2.05);
     wash.addColorStop(0,'#000');wash.addColorStop(1,'transparent');

@@ -4,7 +4,16 @@ import {LEVELS, TUTORIALS, TRIAL, makeLevel} from '../src-v6/levels.mjs';
 const radius = mass => 2*Math.sqrt(mass);
 const dist = (a,b) => Math.hypot(a.x-b.x,a.y-b.y);
 const count = Number(process.argv[2] || 300);
-const countRanges=[[12,16],[16,22],[20,26],[20,28],[24,32],[26,36]];
+const countRanges=[[16,20],[20,26],[24,30],[24,32],[28,36],[30,40]];
+function fourCorners(pond){
+  const bosses=pond.enemies.filter(e=>e.cornerBoss);
+  assert.deepEqual(bosses.map(e=>e.cornerSlot).sort(),['ne','nw','se','sw']);
+  for(const e of bosses){
+    const u=e.x/pond.width,v=e.y/pond.height;
+    assert.ok((e.cornerSlot.endsWith('w')?u<.2:u>.8)&&(e.cornerSlot.startsWith('n')?v<.2:v>.8));
+    assert.ok(e.mass>=pond.player.mass*25);
+  }
+}
 assert.equal(new Set([...LEVELS,...TUTORIALS].map(m=>m.id)).size,10);
 for(const t of TUTORIALS) {
   const initial=makeLevel(t.id,1);
@@ -18,6 +27,7 @@ for(const level of LEVELS){
     const world=makeLevel(level.id,seed);
     assert.deepEqual(world,makeLevel(level.id,seed));
     const enemies=world.enemies;
+    fourCorners(world);
     const [lo,hi]=countRanges[level.index];
     assert.ok(enemies.length>=lo && enemies.length<=hi);
     assert.equal(new Set(enemies.map(e=>e.id)).size,enemies.length);
@@ -43,7 +53,23 @@ for(let seed=0;seed<count;seed++){
   const pond=makeLevel(TRIAL,seed),p=pond.player,es=pond.enemies;
   assert.deepEqual(pond,makeLevel('trial',seed));
   assert.equal(pond.kind,'trial');
-  assert.ok(es.length>=100);
+  fourCorners(pond);
+  assert.ok(es.length>=285);
+  // Normal zoom shows at least 510 world units across the shorter dimension on
+  // both portrait and landscape. Count only centres inside their shared square.
+  const firstScreen=es.filter(e=>Math.abs(e.x-p.x)<=255&&Math.abs(e.y-p.y)<=255);
+  assert.ok(firstScreen.length>=24,'the inlet looks empty on a narrow screen');
+  assert.ok(firstScreen.filter(e=>e.mass<p.mass).length>=13);
+  assert.ok(firstScreen.some(e=>radius(e.mass)>=4*radius(p.mass)));
+  assert.ok(es.filter(e=>e.mass>=900).length>=27);
+  const first=es.find(e=>e.id==='trial-first-blue');
+  assert.ok(first.mass<p.mass&&dist(first,p)<100);
+  const ahead=first.x-p.x,across=first.y-p.y;
+  for(const danger of es.filter(e=>e.mass>=p.mass)){
+    const t=Math.max(0,Math.min(1,((danger.x-p.x)*ahead+(danger.y-p.y)*across)/(ahead**2+across**2)));
+    const onRoute={x:p.x+t*ahead,y:p.y+t*across};
+    assert.ok(dist(onRoute,danger)>radius(p.mass)+radius(danger.mass)+15,'blocked opening catch');
+  }
   assert.ok(Math.floor(pond.width/pond.foodSpacing)*Math.floor(pond.height/pond.foodSpacing)>=5500);
   assert.ok(es.filter(e=>e.mass<p.mass&&dist(e,p)<220).length>=3);
   for(const type of ['fish','shrimp','turtle'])assert.ok(pond.items.some(i=>i.type===type&&dist(i,p)<600));

@@ -65,6 +65,25 @@ function steer(world, target, hazards, speed, hand) {
   return {x:dx * speed, y:dy * speed, action:false};
 }
 
+function nextInkPatch(world) {
+  const p=world.player,mask=world.painting;
+  const step=Math.max(80,p.r*.95),nx=Math.ceil(world.width/step),ny=Math.ceil(world.height/step);
+  let best=null,cost=Infinity;
+  // Inspect the same painting visible on the minimap; then swim to the chosen
+  // mark. A near-complete painting should not strand the pilot at a lotus.
+  for(let iy=0;iy<ny;iy++)for(let ix=0;ix<nx;ix++){
+    const tile={x:(ix+.5)*world.width/nx,y:(iy+.5)*world.height/ny};
+    const alpha=mask.at(tile.x,tile.y);
+    if(alpha>.78)continue;
+    const x=Math.max(p.r,Math.min(world.width-p.r,tile.x)),y=Math.max(p.r,Math.min(world.height-p.r,tile.y));
+    const distance=Math.hypot(x-p.x,y-p.y);
+    if(distance<p.r*.35)continue;
+    const score=(distance+p.r)/(1-alpha);
+    if(score<cost){cost=score;best={x,y};}
+  }
+  return best;
+}
+
 function run(level, seed, policy) {
   const config = makeLevel(level==='trial'?'trial':'level-' + level, seed);
   const world = createWorld(config);
@@ -76,7 +95,8 @@ function run(level, seed, policy) {
   let corner = seed % corners.length, first = null, eaten = 0, nextScan = 0, nextEvent = 0;
   let input = {x:0,y:0,action:false}, target = null;
   let maxMass = p.mass;
-  const formsUsed=[];
+  const formsUsed=[],majorWashes=[];
+  let paintTarget=null,firstLargest=null,majorCleared=null,coverageAtLastMajor=null,coverageAfterBloom=null;
   while (world.status === 'playing' && world.time < timeLimit) {
     if (policy !== 'idle' && world.time >= nextScan) {
       const hazards = world.enemies.filter(e => e.mass >= p.mass);
@@ -91,6 +111,19 @@ function run(level, seed, policy) {
           if(near)destination=near;
         }
       }
+      if(p.mass>world.largest){
+        // Once dominant the four remaining large silhouettes can be read on
+        // the full map. Finish absorbing one before choosing the next bank.
+        const bosses=world.enemies.filter(e=>e.mass>0&&(e.cornerBoss||e.major));
+        if(bosses.length){
+          if(!bosses.includes(target))target=bosses.reduce((a,b)=>dist(p,a)<dist(p,b)?a:b);
+          destination=target;
+        }
+      }
+      if(p.mass>world.largest && !world.enemies.some(e=>e.cornerBoss||e.major||e.mass>p.mass*.035)){
+        if(!paintTarget||dist(p,paintTarget)<Math.max(18,p.r*.35))paintTarget=nextInkPatch(world);
+        if(paintTarget)destination=paintTarget;
+      }
       if (!destination) {
         const [x,y] = corners[corner % corners.length];
         destination = {x:x * world.width, y:y * world.height};
@@ -99,6 +132,7 @@ function run(level, seed, policy) {
       input = steer(world, destination, hazards, throttle, corner % 2 ? -1 : 1);
       nextScan = world.time + .2;
     }
+    const previousPaint=world.painting.fraction;
     stepWorld(world,input,dt);
     const events = world.events || [];
     // Some engines keep the whole event log, others emit per-tick. Accept either.
@@ -107,14 +141,39 @@ function run(level, seed, policy) {
       if (events[i].type === 'eat' && ['spike','hole'].includes(events[i].target)) {
         eaten++;
         first ??= world.time;
+        const e=events[i];
+        if(e.major)majorWashes.push({id:e.id,time:+world.time.toFixed(2),before:+previousPaint.toFixed(3)});
       }
     }
     nextEvent = events.length;
+    for(const wash of majorWashes){
+      if(wash.after===undefined&&(world.time-wash.time>=world.painting.config.bloomDuration||world.status==='won')){
+        wash.after=+world.painting.fraction.toFixed(3);
+      }
+    }
     maxMass = Math.max(maxMass,p.mass);
+    if(firstLargest===null&&p.mass>world.largest)firstLargest=+world.time.toFixed(1);
+    if(majorCleared===null&&world.majorRemaining===0){
+      majorCleared=world.time;coverageAtLastMajor=+world.painting.fraction.toFixed(4);
+    }
+    if(majorCleared!==null&&coverageAfterBloom===null&&
+      (world.time-majorCleared>=world.painting.config.bloomDuration||world.status==='won')){
+      coverageAfterBloom=+world.painting.fraction.toFixed(4);
+    }
     assert.ok(Number.isFinite(world.time) && Number.isFinite(p.mass) && p.mass >= 0);
   }
+  const coverageOnWin=+world.painting.fraction.toFixed(4);
+  if(world.status==='won'){
+    assert.ok(world.player.mass>world.largest);
+    assert.ok(world.painting.nearlyComplete);
+    assert.ok(!world.enemies.some(e=>e.cornerBoss||e.major));
+    // The released game keeps the last ink blossom spreading during its
+    // 1.88-second victory shot. Keep that pigment separate from win timing.
+    while(world.painting.blooms.length)world.painting.update(1/15);
+  }
   return {level,seed,policy,status:world.status,elapsed:+world.time.toFixed(1),
-    firstEnemy:first === null ? null : +first.toFixed(1),eaten,peak:Math.round(maxMass),
+    majorWashes,coverage:coverageOnWin,settledCoverage:+world.painting.fraction.toFixed(4),coverageAtLastMajor,coverageAfterBloom,
+    secondsAfterLastMajor:majorCleared===null?null:+(world.time-majorCleared).toFixed(1),remainingMajor:world.enemies.filter(e=>e.cornerBoss||e.major).length,firstLargest,firstEnemy:first === null ? null : +first.toFixed(1),eaten,peak:Math.round(maxMass),
     ...(level==='trial'?{formsUsed,lastThreat:world.events.findLast(e=>e.type==='damage')?.id}:{}),remaining:world.enemies.length,largest:Math.round(world.largest || 0)};
 }
 

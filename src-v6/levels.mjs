@@ -5,7 +5,7 @@ export {TRIAL};
 const words = (zh, ja, en) => ({ zh, ja, en });
 
 export const LEVELS = [
-  [words('壹','壹','I'), words('先吃水中的浮墨，再去吞淡蓝光圈里的对手。成为池中最大的墨团，就能揭开这幅画。','まずは水に浮かぶ墨を集めよう。水色に光る相手を吸収して、池でいちばん大きくなると絵が現れる。','Gather floating ink, then absorb rivals with a pale blue glow. Grow bigger than every rival to reveal the painting.')],
+  [words('壹','壹','I'), words('先收集浮墨，贴住泛蓝光的对手，把它吸尽。游向四角，吸收大敌。成为池中最大、画上只余零星留白时即可收笔。','浮かんでいる墨を集め、水色に光る相手に触れ続けて吸収しよう。四隅の大きな相手も吸い込み、池でいちばん大きくなろう。絵の全体がほぼ見えたらクリア。','Gather ink and stay in contact with blue rivals to absorb them. Absorb the large rivals near the four corners. Finish as the largest in the pond with the painting nearly complete.')],
   [words('貳','貳','II'), words('喷墨缩身，穿过荷叶之间的窄隙，也可以沿岸绕行。','墨を吐いて小さくなれば、ハスの葉の間を通れる。岸沿いに回ってもいい。','Shed ink to slip through, or follow the lotus bank.')],
   [words('參','參','III'), words('让两颗刺球相撞，给自己挤出一条水路。','トゲ玉どうしをぶつけて、水路を開こう。','Nudge two spiked balls together to open the crossing.')],
   [words('肆','肆','IV'), words('赶在黑洞之前，选定觅食的岸。','黒い渦より先に、墨を集める岸を選ぼう。','Choose a feeding bank before the whirl reaches it.')],
@@ -114,6 +114,17 @@ export function makeLevel(id, seed=1) {
 
   const fixed=enemies.length;
   let entrants=count-fixed-1, budget=161;
+  // Each corner casts a large ink wash onto a different piece of the artwork.
+  // Rotate the feeding order between paintings; the coordinates always refer
+  // to physical corners even when the smaller banks are mirrored.
+  const corners=[['nw',.115,.15],['ne',.885,.15],['se',.885,.85],['sw',.115,.85]];
+  const cornerMass=[2800,5200,8600,3900];
+  for(let i=0;i<corners.length;i++){
+    const [slot,u,v]=corners[i],tier=(i+index)%4;
+    const mass=Math.round(cornerMass[tier]*(1+index*.08));
+    add('corner-'+slot,tier%2?'hole':'spike',mass,{x:width*u,y:height*v},
+      {cornerBoss:true,cornerSlot:slot});
+  }
   const bays=bankRoutes[index];
   const movers=[];
   const radius=m=>2*Math.sqrt(m);
@@ -182,7 +193,7 @@ export function makeLevel(id, seed=1) {
     }
     if(!clearSpot(lead,leadMass))lead=spareWater(point(.59,.14),leadMass);
   }
-  add('leading-mote',index===5&&rng()<.5?'spike':'hole',leadMass,lead);
+  add('leading-mote',index===5&&rng()<.5?'spike':'hole',leadMass,lead,{major:true});
   // Shuffle eligible movers, preserving the deliberate first intercept and the gates.
   for(let i=movers.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[movers[i],movers[j]]=[movers[j],movers[i]];}
   const n=Math.min(movers.length,Math.round(count*driftFraction)-enemies.filter(e=>e.vx||e.vy).length);

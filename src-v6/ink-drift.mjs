@@ -27,27 +27,27 @@ export function createInkDrift(){
   function update(w,dt){
     const p=w.player,speed=Math.hypot(p.vx,p.vy);
     const paid=p.emitting&&p.form!=='fish'&&p.form!=='dragon';
-    while(marks.length&&w.time-marks[0].born>3)marks.shift();
+    while(marks.length&&w.time-marks[0].born>5)marks.shift();
     timer-=dt;
     if(speed<5&&!paid){timer=0;return;}
     if(timer>0)return;
-    timer=(paid?.045:.068)*(.74+.6*random());
+    timer=(paid?.044:.057)*(.74+.6*random());
     const heading=paid?p.angle:Math.atan2(p.vy,p.vx);
     const a=heading+Math.PI+(random()-.5)*(paid?.77:.45);
-    const offset=p.r*(.48+.29*random()),drift=(paid?13:3)*(1+random());
+    const offset=p.r*(.48+.29*random()),drift=(paid?17:4)*(1+random());
     const spread=p.r*(paid?.46:.30);
     const l=(random()-.5)*spread;
     marks.push({x:p.x+Math.cos(a)*offset-Math.sin(a)*l,y:p.y+Math.sin(a)*offset+Math.cos(a)*l,
       dx:Math.cos(a)*drift,dy:Math.sin(a)*drift,angle:a,twist:(random()-.5)*.8,
-      size:p.r*(paid?.81:.54)*(.5+random()),born:w.time,life:(paid?1.65:.72)*(.73+.67*random()),
-      opacity:(paid?.52:.28)*(.66+.48*random()),stamp:stamps[Math.floor(random()*stamps.length)]});
+      size:p.r*(paid?.87:.75)*(.58+.84*random()),born:w.time,life:(paid?2.65:1.95)*(.8+.50*random()),
+      opacity:(paid?.64:.53)*(.76+.40*random()),stamp:stamps[Math.floor(random()*stamps.length)]});
   }
   function draw(c,time){
     for(const m of marks){
       const age=time-m.born,q=age/m.life;
       if(q<0||q>=1)continue;
       const size=m.size*(1+.9*q),distance=(1-Math.exp(-2*age))*.5;
-      c.save();c.globalAlpha*=m.opacity*(1-q)**1.4;
+      c.save();c.globalAlpha*=m.opacity*(1-q*q)**1.67;
       c.translate(m.x+m.dx*distance,m.y+m.dy*distance);c.rotate(m.angle+m.twist*age);
       c.drawImage(m.stamp,-size,-size*.69,size*2,size*1.38);c.restore();
     }

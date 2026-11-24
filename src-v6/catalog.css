@@ -5,7 +5,6 @@
   --bottom-edge:max(12px,env(safe-area-inset-bottom));
   --slip-height:calc(100dvh - var(--top-edge) - var(--bottom-edge));
   --slip-width:calc(var(--slip-height) * 183 / 1436);
-  --roll-width:max(clamp(18px,5.6vw,100px),calc((100% - 9.55 * (var(--slip-width) + 1px)) / 2));
 }
 #library .catalog-nav {
   position:absolute;inset:0 0 auto;height:var(--top-edge);padding:0 max(12px,env(safe-area-inset-left));
@@ -21,32 +20,20 @@
 #back-cover:hover {background:#66482c;}
 #library #slips {
   --slip-height:inherit;--slip-width:inherit;--slip-gap:1px;--bamboo-selection-lift:6px;position:absolute;box-sizing:border-box;
-  inset:calc(var(--top-edge) - 8px) var(--roll-width) 0;width:auto;max-width:none;height:auto;
+  inset:calc(var(--top-edge) - 8px) 0 0;width:auto;max-width:none;height:auto;
   scrollbar-width:none;transition:opacity .24s ease-out;
 }
 #slips::-webkit-scrollbar {display:none;}
-#slips .bamboo-level-track {filter:none;padding:8px 0 var(--bottom-edge);}
+#slips .bamboo-level-track {filter:none;padding:8px 0 var(--bottom-edge);margin-inline:auto;}
 #slips .bamboo-level::before {background-size:contain;}
-/* The two fixed roll ends project the supplied end-grain drawing onto the
-   top surface; the side carries the very same bound-slip texture as the folio. */
-.catalog-roller {
-  position:absolute;z-index:3;top:var(--top-edge);bottom:var(--bottom-edge);
-  width:var(--roll-width);pointer-events:none;
-  background-image:linear-gradient(90deg,#301d10bd,transparent 26%,#fff0c123 42%,#3b2413b8 98%),url('../assets/ui/bamboo-scroll/bamboo-slip.png');
-  background-size:100% 100%,var(--slip-width) var(--slip-height);background-repeat:no-repeat,repeat-x;
-  border-radius:2px 2px 8% 8%;box-shadow:3px 3px 9px #25170d78;
+#slips .bamboo-level[aria-pressed=true]::after {content:none;}
+#slips .bamboo-level[aria-pressed=true]::before {filter:brightness(1.08);}
+#slips [data-kind=tutorial] .bamboo-level-name,#slips [data-kind=trial] .bamboo-level-name,
+#preview-slip:is([data-kind=tutorial],[data-kind=trial]) .bamboo-level-name {
+  inset-block-start:auto;top:20%;text-shadow:none;
 }
-.roller-left {left:0;background-position:center,right top;}
-.roller-right {right:0;transform:scaleX(-1);background-position:center,right top;}
-.catalog-roller::before {
-  content:"";position:absolute;left:0;top:0;width:100%;aspect-ratio:1122/1153;
-  background:url('../assets/ui/bamboo-scroll/bamboo-roll-cross-section.png') center / contain no-repeat;
-  transform-origin:50% 0;transform:translateY(-4px) scaleY(.17);
-}
-.catalog-roller::after {
-  content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 8.3%,#6a492ccc 8.35%,#bb996d 8.57%,transparent 8.85%,transparent 91%,#6a492ccc 91.08%,#bb996d 91.35%,transparent 91.66%);
-}
-#library[data-view=preview] .catalog-roller {visibility:hidden;}
+html:not([lang=en]) .slip-glyphs {display:flex;flex-direction:row;align-items:center;}
+.slip-glyphs > span {display:grid;place-items:center;inline-size:1.19em;block-size:1.12em;letter-spacing:0;}
 #slips .bamboo-level,#preview-slip {color:#332216;font-family:inherit;}
 #slips .bamboo-level-name,#preview-slip .bamboo-level-name {
   position:absolute;top:20%;left:50%;margin:0;transform:translateX(-50%);
@@ -93,7 +80,7 @@
 #catalog-preview button {touch-action:manipulation;}
 #preview-slip {
   position:relative;z-index:2;pointer-events:none;align-self:start;margin:0;width:var(--slip-width);height:var(--slip-height);
-  filter:drop-shadow(5px 1px 6px #21170d73);transform-origin:top left;
+  transform-origin:top left;
 }
 #preview-slip::before {content:"";position:absolute;inset:0;z-index:-1;background:url('../assets/ui/bamboo-scroll/bamboo-slip.png') center / contain no-repeat;}
 #preview-slip[data-mirror=true]::before {transform:scaleX(-1);}

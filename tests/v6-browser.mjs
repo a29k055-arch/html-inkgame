@@ -38,7 +38,9 @@ const srv=http.createServer(async (req,res)=>{
         export function makeLevel(id,seed) {
           const cfg=make(id,seed);
           if(id==='level-1' || id==='trial') {
-            cfg.enemies=[{type:'hole',mass:Math.round(cfg.player.mass*.5),x:cfg.player.x+12,y:cfg.player.y}];
+            Object.assign(cfg,{width:100,height:70,foodSpacing:0,spawnItems:false,leaves:[],items:[],drops:[]});
+            Object.assign(cfg.player,{x:50,y:35,mass:100});
+            cfg.enemies=[{type:'hole',mass:50,x:58,y:35,major:true}];
           }
           return cfg;
         }`);return;
@@ -193,7 +195,8 @@ async function watchLoading(rpc) {
     const proto=CanvasRenderingContext2D.prototype, original=proto.drawImage;
     proto.drawImage=function(source,...args){
       const result=original.call(this,source,...args);
-      const url=source?.currentSrc && new URL(source.currentSrc).pathname;
+      const imageSource=source?.currentSrc || source?.dataset?.inkPainting;
+      const url=imageSource && new URL(imageSource,document.baseURI).pathname;
       if(!url || !document.querySelector('#field')?.getClientRects().length)return result;
       if(url.endsWith('/urchin-breath.webp')||url.endsWith('/urchin-ink.webp'))window.__pondPainted.spike=true;
       if(url.endsWith('/vortex-ink.webp'))window.__pondPainted.hole=true;
@@ -358,9 +361,21 @@ async function exercise(endpoint,mobile) {
     await click('#closeSettings',true);
     await click('#grindBtn',true);
     await waitVisible('#library');
+    assert.equal(await js('document.querySelectorAll("#slips .bamboo-level").length'),12);
+    assert.equal(await js('document.querySelectorAll("#library .catalog-roller").length'),0);
+    const glyphRows=await js(`['tutorial','trial'].map(kind=>Array.from(document.querySelectorAll(
+      '#slips [data-kind='+kind+'] .slip-glyphs > span'),cell=>{
+        const rect=cell.getBoundingClientRect();return [rect.top,rect.height];
+      }))`);
+    assert.equal(glyphRows[0].length,4);assert.equal(glyphRows[1].length,4);
+    for(let i=0;i<4;i++)for(let d=0;d<2;d++){
+      assert.ok(Math.abs(glyphRows[0][i][d]-glyphRows[1][i][d])<.1,'Teaching and trial glyph cells must align.');
+    }
     await click('#slips [data-kind=level][data-index="1"]');
     await waitVisible('#catalog-preview');
     assert.ok(await js('document.querySelector("#start").disabled || document.querySelector("#start").hidden'));
+    assert.equal(await js('getComputedStyle(document.querySelector("#slips [aria-pressed=true]"),"::after").content'),'none');
+
     assert.equal(await visible('#field'),false);
     await click('#preview-back');
     await click('#slips [data-kind=tutorial][data-index="0"]');
@@ -395,7 +410,11 @@ async function exercise(endpoint,mobile) {
     })()`),'red well gains the ink the real player loses',45000);
     await capture('black-hole-contact');
     await stopSteering();
-    await click('#pause');await waitVisible('#options');await click('#exit-run');await waitVisible('#library');
+    const timerGap=await js('document.querySelector("#timer").getBoundingClientRect().left - document.querySelector("#pause").getBoundingClientRect().right');
+    if(!mobile)assert.ok(timerGap>=10,'The timer must be separated from Pause.');
+    await click('#pause');await waitVisible('#options');
+    assert.equal(await text('#options-title'),'暂停');assert.equal(await text('#exit-run'),'返回目录');
+    await click('#exit-run');await waitVisible('#library');
     await until(()=>js('!document.querySelector("#ink-wipe").getClientRects().length'),'catalogue ready');
     // The standalone experience is available before finishing the tutorial or a painting.
     await click('#slips [data-kind=trial][data-index="0"]');await click('#start');
@@ -453,9 +472,9 @@ async function exercise(endpoint,mobile) {
     for(const name of textures)assert.ok([...loaded].some(url=>url.endsWith('/'+name)),'Browser never loaded '+name);
     assert.deepEqual(problems,[]);
     return {device:mobile?'390×844, emulated touch':'1440×900, desktop',opening,inkRenderer,illustratedEnemies:textures,blackHole,lessonOne,firstCatch:true,
-      autoAdvance:true,threeLanguages:true,mainMenuRoundtrip:true,canvas:view,minimapWidths:[beforeZoom,afterZoom],frameIntervals:frames,errors:problems};
+      autoAdvance:true,threeLanguages:true,mainMenuRoundtrip:true,slatCount:12,glyphHeight:glyphRows[0][0][1],timerGap,canvas:view,minimapWidths:[beforeZoom,afterZoom],frameIntervals:frames,errors:problems};
   }catch(error){
-    await capture('failure');
+    await capture('failure').catch(captureError=>console.error('Could not save the diagnostic frame:',captureError.message));
     const state=await js(`({width:innerWidth,height:innerHeight,at:document.elementFromPoint(85,350)?.outerHTML?.slice(0,140),
       lesson:document.querySelector('#lesson-line')?.textContent,mass:document.querySelector('#mass-value')?.textContent,
       rival:document.querySelector('#rival-value')?.textContent,stickHidden:document.querySelector('#joystick')?.hidden,
@@ -502,7 +521,7 @@ async function endToNextPainting(endpoint) {
     const next=await js(q('#pond-name')+'.textContent');
     assert.notEqual(name,next);
     assert.deepEqual(problems,[]);
-    return {fixture:'one edible enemy in the trial and first painting',revealed:name,advanced:next,persisted:true,subsequentPaintingLocked:true};
+    return {fixture:'compact painting covered by the ink from fully absorbing one rival',revealed:name,advanced:next,persisted:true,subsequentPaintingLocked:true};
   }finally {await close();}
 }
 try{

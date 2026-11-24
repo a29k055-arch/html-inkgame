@@ -4,38 +4,17 @@ export const TRIAL={
   id:'trial',kind:'trial',index:0,artworkIndex:6,
   title:{zh:'体验关卡',ja:'体験ステージ',en:'Open pond'},
   subtitle:{
-    zh:'先吃身边的小墨团。向北跟着虾群觅食，或向南借龟壳穿过刺球。超过池里最大的对手，就能揭开《荷荫蟹趣》。',
-    ja:'まずは近くの小さな墨玉から。北ではエビの力で墨を集め、南ではカメになってトゲ玉の間を通ろう。池でいちばん大きくなると絵が現れる。',
-    en:'Start with the small motes nearby. Gather ink with the shrimp to the north, or use a turtle shell to cross the southern spines. Outgrow the largest rival to reveal the painting.'
+    zh:'先吃身边的小墨团。向北跟着虾群觅食，或向南借龟壳穿过刺球。游向画幅四角，吸尽大敌。当你成为池中最大的墨团，《荷荫蟹趣》也只剩零星留白，便可收笔。',
+    ja:'まずは近くの小さな墨玉から。北ではエビの力で墨を集め、南ではカメになってトゲ玉の間を通ろう。四隅の大きな相手も吸い込もう。池でいちばん大きくなり、絵の全体がほぼ見えたらクリア。',
+    en:'Start with the small motes nearby. Gather ink with the shrimp to the north, or use a turtle shell to cross the southern spines. Absorb the great rivals at the four corners. Finish as the largest in the pond, with only scattered patches of the painting left to uncover.'
   }
 };
-
-// Keep the first screen compact. Beyond it the feeding banks are separated by
-// longer crossings, leaving the player free to choose when to change shores.
-function openCrossings(cfg){
-  const originalWidth=cfg.width,originalHeight=cfg.height;
-  function axis(origin,scale,near){
-    function expand(v){
-      const distance=v-origin;
-      return v+Math.sign(distance)*Math.max(0,Math.abs(distance)-near)*(scale-1);
-    }
-    const start=expand(0);
-    return v=>expand(v)-start;
-  }
-  const x=axis(cfg.player.x,1.55,375),y=axis(cfg.player.y,1.35,250);
-  const areaRatio=x(originalWidth)*y(originalHeight)/(originalWidth*originalHeight);
-  for(const body of [cfg.player,...cfg.enemies,...cfg.leaves,...cfg.items,...cfg.drops]){
-    body.x=x(body.x);body.y=y(body.y);
-  }
-  cfg.width=Math.round(x(originalWidth));cfg.height=Math.round(y(originalHeight));
-  cfg.foodSpacing=Math.round(cfg.foodSpacing*Math.sqrt(areaRatio/1.14));
-}
 
 export function makeTrial(seed,rng){
   const width=4950,height=2850;
   const point=(u,v)=>({x:u*width,y:v*height});
   const start=point(.18,.52);
-  const cfg={id:TRIAL.id,kind:'trial',index:0,seed,width,height,speed:132,foodSpacing:48,foodMassScale:.65,flowerMass:36,
+  const cfg={id:TRIAL.id,kind:'trial',index:0,seed,width,height,speed:132,foodSpacing:46,foodMassScale:.65,flowerMass:36,
     player:{...start,mass:100,angle:0},tutorial:false,spawnItems:true,nextItem:7,itemInterval:11,
     enemies:[],leaves:[],items:[],drops:[]};
   const leaf=(id,u,v,r,stored,flowers)=>cfg.leaves.push({id,...point(u,v),r,stored,flowers});
@@ -57,28 +36,59 @@ export function makeTrial(seed,rng){
   fixed('inlet-escape','spike',22,{x:start.x-73,y:start.y-86},1,-2,24);
   fixed('inlet-north-blue','hole',57,{x:start.x+80,y:start.y-154},2,1,36);
   fixed('inlet-home-blue','spike',21,{x:start.x-92,y:start.y+170},1,-1,25);
-  fixed('inlet-red-thorn','spike',141,{x:start.x-145,y:start.y-127});
+  fixed('inlet-red-thorn','spike',2025,{x:start.x-175,y:start.y-131});
   fixed('inlet-dark-eddy','hole',190,{x:start.x-280,y:start.y+18});
-  fixed('inlet-reed-thorn','spike',195,{x:start.x+285,y:start.y-170});
-  fixed('trial-crown','hole',10625,point(.86,.23));
+  fixed('inlet-reed-thorn','spike',1450,{x:start.x+260,y:start.y-235});
+  fixed('inlet-sun-whirl','hole',1332,{x:start.x+287,y:start.y+172});
+  fixed('inlet-south-thorn','spike',980,{x:start.x-68,y:start.y+260});
+  function corner(id,type,mass,u,v,slot){
+    cfg.enemies.push({id,type,mass,...point(u,v),vx:0,vy:0,homeRadius:0,cornerBoss:true,cornerSlot:slot});
+  }
+  corner('trial-crown','hole',42000,.89,.165,'ne');
+  corner('trial-far-adult','hole',15600,.887,.85,'se');
+  corner('trial-south-adult','spike',21600,.112,.86,'sw');
+  corner('trial-west-adult','spike',7900,.10,.15,'nw');
   // The adults alternate shores. A player can piece together the next meal
   // from a school, or cross the pond for one adult that now fits.
   fixed('trial-reed-adult','spike',480,point(.265,.86));
   fixed('trial-east-adult','hole',925,point(.73,.15));
-  fixed('trial-west-adult','spike',1800,point(.11,.19));
-  fixed('trial-far-adult','hole',3375,point(.83,.79));
-  fixed('trial-south-adult','spike',5800,point(.135,.79));
   fixed('trial-thorn-mouth','spike',180,point(.415,.675));
   fixed('trial-thorn-tip','spike',136,point(.419,.745));
   fixed('trial-shoal-whirl','hole',238,point(.58,.24),-2,1,64);
   const r=m=>2*Math.sqrt(m);
-  const clear=(p,mass)=>{
+  const first=cfg.enemies.find(e=>e.id==='trial-first-blue');
+  const reachX=first.x-start.x,reachY=first.y-start.y;
+  const clear=(p,mass,keepAway=190,padding=22)=>{
     const rad=r(mass);
+    if(mass>=cfg.player.mass){
+      const t=Math.max(0,Math.min(1,((p.x-start.x)*reachX+(p.y-start.y)*reachY)/(reachX**2+reachY**2)));
+      if(Math.hypot(p.x-start.x-reachX*t,p.y-start.y-reachY*t)<rad+38)return false;
+    }
     return p.x>rad+14&&p.y>rad+14&&p.x<width-rad-14&&p.y<height-rad-14
-      &&Math.hypot(p.x-start.x,p.y-start.y)>rad+190
+      &&Math.hypot(p.x-start.x,p.y-start.y)>rad+keepAway
       &&cfg.leaves.every(l=>Math.hypot(l.x-p.x,l.y-p.y)>rad+l.r+12)
-      &&cfg.enemies.every(e=>Math.hypot(e.x-p.x,e.y-p.y)>r(e.mass)+rad+22);
+      &&cfg.enemies.every(e=>Math.hypot(e.x-p.x,e.y-p.y)>r(e.mass)+rad+padding)
+      &&cfg.items.every(i=>Math.hypot(i.x-p.x,i.y-p.y)>rad+25);
   };
+  // These small families hug the larger silhouettes, leaving winding channels
+  // through the opening. All sizes use the same physical clearance as the rest
+  // of the pond. The initial blue mote stays directly reachable from the drop.
+  const placeAround=(id,type,mass,x,y,spreadX,spreadY,keepAway,padding)=>{
+    for(let attempt=0;attempt<160;attempt++){
+      const p={x:x+(rng()-.5)*spreadX,y:y+(rng()-.5)*spreadY};
+      if(!clear(p,mass,keepAway,padding))continue;
+      const angle=rng()*Math.PI*2,v=(type==='hole'?1.4:3.3)+rng()*2.2;
+      fixed(id,type,mass,p,Math.cos(angle)*v,Math.sin(angle)*v,36+rng()*44);
+      return;
+    }
+  };
+  for(const [group,dx,dy] of [[0,-104,-60],[1,105,-110],[2,94,105],[3,-88,107],[4,-110,-264],[5,181,242]]){
+    const masses=[16,30,53,88,138];
+    for(let i=0;i<masses.length;i++){
+      placeAround('inlet-family-'+group+'-'+i,(group+i)%3===0?'hole':'spike',masses[i],
+        start.x+dx,start.y+dy,196,140,68,6);
+    }
+  }
   // The diagonal shore forms two feeding routes; a few large rivals occupy
   // the centre. Biggest bodies are placed first, leaving real navigable gaps.
   const banks=[
@@ -119,6 +129,20 @@ export function makeTrial(seed,rng){
     const angle=rng()*Math.PI*2,speed=(2+rng()*6)*(type==='hole'?.55:1);
     fixed('trial-school-'+c.bank+'-'+c.j,type,c.mass,pos,Math.cos(angle)*speed,Math.sin(angle)*speed,55+rng()*100);
   }
+  // Spread mixed-size shoals over the whole painting as well as the authored
+  // fork. Alternating large escorts and feeding motes make each crossing read
+  // as water the player can navigate, even away from the marked routes.
+  const escorts=[40,96,215,451,132,286,737,143,1210,270,1980,963,369];
+  for(let row=0;row<8;row++)for(let col=0;col<13;col++){
+    const x=(col+.5)*width/13,y=(row+.5)*height/8;
+    const index=row*13+col;
+    const mass=escorts[(col*3+row*5)%escorts.length];
+    placeAround('escort-'+index,(row+col)%2?'spike':'hole',mass,x,y,width/13*.95,height/8*.94,230,15);
+    if((row+col)%2===0){
+      const small=[25,46,63,93,129][(row+col*2)%5];
+      placeAround('shoal-'+index, row%3?'spike':'hole',small,x,y,width/13,height/8,165,9);
+    }
+  }
   // Sweeps of food visible at normal zoom lead from the fork to each item.
   // Slight bends and lateral jitter keep these trails distinct from geometry.
   for(const path of [
@@ -137,6 +161,22 @@ export function makeTrial(seed,rng){
       }
     }
   }
-  openCrossings(cfg);
+
+  // Preserve the first screen and spread the outer feeding grounds apart.
+  // A return to the opposite shore costs travel, providing a reason to store a
+  // shrimp or turtle for later. Food grain density follows the expanded paper.
+  function stretchAxis(origin,near,ratio) {
+    const excess=v=>Math.sign(v-origin)*Math.max(0,Math.abs(v-origin)-near)*(ratio-1);
+    const shift=excess(0);
+    return v=>v+excess(v)-shift;
+  }
+  const stretchX=stretchAxis(start.x,445,1.84),stretchY=stretchAxis(start.y,330,1.67);
+  for(const body of [cfg.player,...cfg.enemies,...cfg.items,...cfg.leaves,...cfg.drops]){
+    body.x=stretchX(body.x);
+    body.y=stretchY(body.y);
+  }
+  cfg.width=Math.round(stretchX(width));
+  cfg.height=Math.round(stretchY(height));
+  cfg.foodSpacing=Math.round(cfg.foodSpacing*Math.sqrt(cfg.width*cfg.height/(width*height)));
   return cfg;
 }

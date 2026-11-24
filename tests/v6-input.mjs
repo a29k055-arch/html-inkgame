@@ -9,7 +9,7 @@ class Surface extends EventTarget {
   style = {};
   classList = {add(){}, remove(){}};
   setPointerCapture(){}
-  getBoundingClientRect(){ return {width:90}; }
+  getBoundingClientRect(){ return {width:128}; }
 }
 globalThis.window = new EventTarget();
 globalThis.document = new EventTarget();
@@ -27,7 +27,15 @@ const finger = (id,x,y) => ({pointerType:'touch',pointerId:id,button:0,clientX:x
 const rest = {x:0,y:0,action:false};
 
 send(canvas,'pointerdown',finger(1,100,200));
-send(canvas,'pointermove',finger(1,175,200));
+send(canvas,'pointermove',finger(1,101,200));
+assert.deepEqual(input.read(),rest,'A resting thumb tolerates a pixel of drift');
+send(canvas,'pointermove',finger(1,116,200));
+assert.ok(input.read().x>.10 && input.read().x<.15,'A quarter drag should creep');
+send(canvas,'pointermove',finger(1,132,200));
+assert.ok(input.read().x>.34 && input.read().x<.39,'A half drag stays below half speed');
+send(canvas,'pointermove',finger(1,148,200));
+assert.ok(input.read().x>.61 && input.read().x<.69);
+send(canvas,'pointermove',finger(1,164,200));
 assert.equal(input.read().x,1);
 send(actionButton,'pointerdown',finger(2,350,500));
 assert.deepEqual(input.read(),{x:1,y:0,action:true});
@@ -64,7 +72,7 @@ assert.deepEqual(input.read(),rest);
 const mouse={pointerType:'mouse',pointerId:20,button:0,buttons:1,clientX:100,clientY:120};
 send(canvas,'pointerdown',mouse);
 send(canvas,'lostpointercapture',mouse);
-send(window,'pointermove',{...mouse,clientX:170});
+send(window,'pointermove',{...mouse,clientX:164});
 assert.equal(input.read().x,1);
 send(window,'pointerup',{...mouse,buttons:0});
 assert.deepEqual(input.read(),rest);
@@ -73,7 +81,8 @@ assert.deepEqual(input.read(),rest);
 for(const keys of [['KeyD','KeyS','KeyA','KeyW'],['ArrowRight','ArrowUp','ArrowLeft','ArrowDown']]){
   const world=createWorld(makeLevel('trial',343)),p=world.player,points=[];
   send(window,'keydown',{code:keys[0]});
-  for(let f=0;f<60;f++)stepWorld(world,input.read(),1/60);
+  // Steer in the opening water before reaching the newly populated crossing.
+  for(let f=0;f<25;f++)stepWorld(world,input.read(),1/60);
   const start={x:p.x,y:p.y};
   for(let quarter=0;quarter<4;quarter++){
     send(window,'keyup',{code:keys[quarter]});
@@ -112,7 +121,29 @@ for(const [width,height,barBottom] of [[1440,900,53],[390,844,43],[844,390,53]])
   assert.ok(Math.abs(screen.scale-base)<1e-7);
   camera.zoom(world,.001,width/2,height/2);
   screen=camera.inspect(world,0,0);
+  assert.equal(screen.scale,base,'Wheel and map clicks must not teleport the camera');
+  const startX=screen.x;
+  for(let i=0;i<8;i++)screen=camera.update(world,1/60);
+  assert.ok(screen.scale<base && screen.x!==startX);
+  for(let i=0;i<30;i++)screen=camera.update(world,1/60);
   const y0=height/2-screen.y*screen.scale;
   assert.ok(y0>=barBottom+10,'Map frame crosses the mass bar');
   assert.ok(y0+world.height*screen.scale<=height-8,'Bottom of the pond clipped');
+}
+
+{
+  const view={clientWidth:1200,clientHeight:800,getBoundingClientRect:()=>({left:0,top:0})};
+  const world={width:4000,height:2800,player:{x:1500,y:1100,r:18,vx:0,vy:0,form:'ink'}};
+  const camera=createCamera(view);
+  const base=camera.reset(world).scale;
+  world.player.form='dragon';
+  const first=camera.update(world,1/60).scale;
+  assert.ok(first<base && first>base*.99);
+  for(let i=0;i<60;i++)camera.update(world,1/60);
+  assert.ok(Math.abs(camera.update(world).scale/base-.74)<1e-6);
+  camera.zoom(world,1.2,600,400);
+  for(let i=0;i<20;i++)camera.update(world,1/60);
+  world.player.form='ink';
+  for(let i=0;i<60;i++)camera.update(world,1/60);
+  assert.ok(Math.abs(camera.update(world).scale/base-1.2)<1e-6,'Manual zoom is preserved on leaving dragon form');
 }

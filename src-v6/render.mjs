@@ -1,8 +1,8 @@
-import {HeadFirstPainter,captureForm} from './creature-painter.mjs';
+import {HeadFirstPainter,captureForm,prepareDragonGlide} from './creature-painter.mjs';
 import {LIVING_RIGS,preloadLivingCreatures} from '../src-v5/ink/living-painter.js';
 import {PondEffects} from '../src-v5/reveal/pond-effects.js';
-import {preloadPondPickups} from '../src-v5/reveal/pickups.js';
-import {canEat} from './sim.mjs';
+import {preloadPondPickups,drawPondPickup,pondPickupExtent} from '../src-v5/reveal/pickups.js';
+import {canEat,magnetReach} from './sim.mjs';
 import {createEnemyArt} from './enemy-art.mjs';
 import {createGround,createPondInk} from './pond-ink.mjs';
 import {visibleFood} from './food-field.mjs';
@@ -49,8 +49,6 @@ function drawPaperEdge(c,cam,w,h,world){
   c.lineWidth=1;c.strokeStyle='rgba(86,79,62,.47)';c.strokeRect(left,top,right-left,bottom-top);c.restore();
 }
 
-// Let the native V5 renderer sort animal rigs, the ink body and painted rivals
-// together. Only V6's two new species use an alternate material.
 class PondPainter extends HeadFirstPainter {
   constructor(assets,enemyArt) {
     super({assets});this.enemyArt=enemyArt;this.pond=null;this.miniature={id:'player-miniature'};
@@ -106,12 +104,33 @@ function flowToVortex(c,w,e,z) {
   c.restore();
 }
 
-function drawProjectiles(c,w,z) {
+function flowFromPrey(c,w,e,z){
+  const age=w.time-e.sipLastAt;
+  if(!Number.isFinite(age)||age>.19)return;
+  const p=w.player,dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy);
+  if(d<.5||d*z<4)return;
+  const nx=dx/d,ny=dy/d,bx=p.x-nx*p.r*.72,by=p.y-ny*p.r*.72;
+  const width=Math.min(e.r,p.r)*.19;
+  c.save();c.lineCap='round';c.globalAlpha=Math.max(0,1-age/.19);
+  for(let i=0;i<3;i++){
+    const side=(i-1)*width*.7,bend=Math.sin(w.time*6+i*2)*width;
+    const x=e.x-ny*side,y=e.y+nx*side;
+    const g=c.createLinearGradient(x,y,bx,by);
+    g.addColorStop(0,'rgba(42,97,111,0)');g.addColorStop(.28,'rgba(49,94,98,.35)');
+    g.addColorStop(.84,'rgba(39,56,56,.45)');g.addColorStop(1,'rgba(32,43,40,0)');
+    c.strokeStyle=g;c.lineWidth=Math.max(.62/z,width*(i===1?.48:.25));
+    c.beginPath();c.moveTo(x,y);
+    c.quadraticCurveTo((x+bx)*.5-ny*bend,(y+by)*.5+nx*bend,bx,by);c.stroke();
+  }
+  c.restore();
+}
+
+function drawProjectiles(c,w,z,art) {
   for(const s of w.shots){
-    c.save();c.translate(s.x,s.y);
     if(s.type==='bubble'){
-      pigmentRim(c,0,0,s.r,z,'55,61,60',.58,.18);
+      art.drawBubble(c,s,w.time,z);
     }else{
+      c.save();c.translate(s.x,s.y);
       c.rotate(s.angle||0);c.fillStyle='rgba(38,42,36,.73)';c.beginPath();
       if(!s.shape||s.shape==='circle')c.arc(0,0,s.r,0,TAU);
       else {
@@ -119,10 +138,69 @@ function drawProjectiles(c,w,z) {
         for(let i=0;i<sides;i++){const a=i*TAU/sides-Math.PI/2;c.lineTo(Math.cos(a)*s.r,Math.sin(a)*s.r);}
         c.closePath();
       }
-      c.fill();
+      c.fill();c.restore();
     }
-    c.restore();
   }
+}
+
+function drawMote(c,d){
+  c.save();c.translate(d.x,d.y);c.rotate(d.rot);c.fillStyle='rgba(39,35,27,'+d.alpha+')';c.beginPath();
+  if(d.shape==='circle')c.arc(0,0,d.r,0,TAU);
+  else{
+    const sides=d.shape==='triangle'?3:d.shape==='square'?4:5;
+    for(let i=0;i<sides;i++)c.lineTo(Math.sin(i*TAU/sides)*d.r,-Math.cos(i*TAU/sides)*d.r);
+    c.closePath();
+  }
+  c.fill();c.restore();
+}
+
+// The native fluid is a transparent image and must be composited in the
+// same stack as a painted animal. A global fluid overlay would leak through
+// the leaves, while a background-only fluid would disappear below blue prey.
+function drawPond(renderer,arena,w,npcs,effects,art){
+  const c=renderer.ctx,cam=renderer.camera,z=cam.scale,hero=arena.player;
+  const food=[],threats=[],dragons=[];
+  for(const e of arena.entities){
+    if(e===hero||e.morphGhost||e.dead||!renderer.visible(e,npcs.visualPadding(e)))continue;
+    if(e.species==='dragon')dragons.push(e);
+    else if(e.pickupArt||canEat(w.player,e))food.push(e);
+    else threats.push(e);
+  }
+  const byRadius=(a,b)=>a.r-b.r;
+  const paintCreature=e=>npcs.draw(c,e);
+  const showPlants=kind=>{
+    for(const item of arena.items){
+      if(item.kind===kind&&renderer.visible(item,pondPickupExtent(item)))drawPondPickup(c,item);
+    }
+  };
+  const drawHero=()=>{
+    if(hero.dead)return;
+    renderer.trail.draw(c,'ink',{...cam,width:renderer.viewW,height:renderer.viewH});
+    renderer.drawWorldInk(c);
+    if(hero.outgoingPaint)paintCreature(hero.outgoingPaint);
+    if(hero.form)npcs.drawPlayer(c,hero);
+    drawPlayerRim(c,w.player,z);
+  };
+  c.clearRect(0,0,renderer.viewW,renderer.viewH);c.fillStyle='#e7dfcc';
+  c.fillRect(0,0,renderer.viewW,renderer.viewH);
+  renderer.beginWorldClip();c.save();c.translate(-cam.x*z,-cam.y*z);c.scale(z,z);
+  if(renderer.ground.bounds?.pixelScale<.46)c.imageSmoothingQuality='medium';
+  renderer.ground.draw(c,arena);
+  for(const d of arena.foods)if(renderer.visible(d,d.r))drawMote(c,d);
+  showPlants('flower');
+  for(const e of food.sort(byRadius)){
+    paintCreature(e);
+    if(e.sipLastAt!==undefined)flowFromPrey(c,w,e,z);
+  }
+  effects.drawWorld(c,arena,z);drawProjectiles(c,w,z,art);
+  const dragon=hero.form?.species==='dragon';
+  if(!dragon)drawHero();
+  for(const e of threats.sort(byRadius))paintCreature(e);
+  for(const e of threats)if(e.type==='hole')flowToVortex(c,w,e,z);
+  showPlants('leaf');
+  dragons.forEach(paintCreature);
+  if(dragon)drawHero();
+  c.restore();renderer.endWorldClip();
 }
 
 function drawFocus(c,focus,cam,w,h,t) {
@@ -144,13 +222,14 @@ export function createRenderer(canvas) {
   let previousTime=-1,hero=null,proxies=new WeakMap(),preparation=null,forceFallback=false;
   const prepare=()=>{
     if(!preparation)preparation=Promise.all([preloadLivingCreatures(),preloadPondPickups(),enemyArt.ready])
-      .then(([loaded])=>{assets=loaded;if(npcs)npcs.assets=loaded;})
+      .then(async ([loaded])=>{await prepareDragonGlide(loaded);assets=loaded;if(npcs)npcs.assets=loaded;})
       .catch(e=>{preparation=null;throw e;});
     return preparation;
   };
   function enter(w,url) {
     world=w;previousTime=-1;proxies=new WeakMap();effects.clear();
-    hero={id:'human',controller:{type:'human'},effects:{},aim:{x:1,y:0},r:w.player.r,form:null};
+    hero={id:'human',controller:{type:'human'},effects:{},aim:{x:1,y:0},
+      x:w.player.x,y:w.player.y,r:w.player.r,form:null,painted:false};
     ground=createGround(w,url);
     if(!npcs){npcs=new PondPainter(assets,enemyArt);npcs.ready.then(a=>{if(npcs)npcs.assets=a;}).catch(console.error);}
     npcs.pond=w;npcs.quality=quality;
@@ -161,9 +240,9 @@ export function createRenderer(canvas) {
     const species=p.form==='ink'?null:p.form;
     const rig=species?(p.activeItem?.rigId||LIVING_RIGS[species]):null;
     if((hero.form?.rigId??null)!==rig){
-      const painted=captureForm(npcs,hero,ink.renderer);
+      const painted=hero.painted?captureForm(npcs,hero,ink.renderer):null;
       hero.outgoingPaint=painted?{id:'morph',morphGhost:painted,x:hero.x,y:hero.y,r:hero.r,opacity:1}:null;
-      hero.morphStarted=world.time;
+      hero.morphStarted=painted?world.time:undefined;
     }
     const t=clamp((world.time-(hero.morphStarted??-1))/.52,0,1);
     hero.formOpacity=t*t*(3-2*t);
@@ -199,24 +278,22 @@ export function createRenderer(canvas) {
       for(const f of l.flowers)plants.push({x:f.x,y:f.y,r:f.r,renderSize:f.r*2.45,kind:'flower',variant:f.slot%3});
     }
     const hw=canvas.clientWidth/(2*view.scale)+12,hh=canvas.clientHeight/(2*view.scale)+12;
-    const bounds={left:view.x-hw,top:view.y-hh,right:view.x+hw,bottom:view.y+hh};
+    const bounds={left:view.x-hw,top:view.y-hh,right:view.x+hw,bottom:view.y+hh,
+      pixelScale:view.scale*Math.min(devicePixelRatio||1,2)};
     ground.bounds=view.scale<.48?bounds:null;
     const foods=ground.bounds?[]:[...visibleFood(w.foodField,bounds.left,bounds.top,bounds.right,bounds.bottom)];
     for(const d of w.drops)foods.push({x:d.x,y:d.y,r:d.r,rot:d.angle||0,alpha:d.ready?.74:.28,shape:d.shape||'circle'});
     return {player:hero,entities:[hero,...animals,...w.enemies],items:plants,foods,
-      waves:[],speed:()=>w.speed,magnetField:{active:hero.effects.magnet,reach:135+hero.r}};
+      waves:[],speed:()=>w.speed,magnetField:{active:hero.effects.magnet,reach:w.player.r+magnetReach(w.player)}};
   }
   function render(w,view,options={}) {
     if(world!==w)enter(w,options.artwork);
     const renderer=ink.renderer;
     if(renderer.viewW!==innerWidth||renderer.viewH!==innerHeight)renderer.resize();
-    // On a view of the whole pond the dye field is subpixel. Use V5's smaller
-    // native simulation grid; keep the canvas, ink paintings and UI at full
-    // display resolution. Separate thresholds prevent churn during a pinch.
-    if(!renderer.fallback){
-      const pixelRadius=w.player.r*view.scale;
-      const next=quality==='performance'||pixelRadius<(fieldQuality==='performance'?9:6)?'performance':quality;
-      if(next!==fieldQuality){renderer.setQuality(next);fieldQuality=next;}
+    // The dye lives in the pond. Zooming changes how it is sampled on screen;
+    // rebuilding its simulation grid here would erase a still-wet trail.
+    if(!renderer.fallback&&fieldQuality!==quality){
+      renderer.setQuality(quality);fieldQuality=quality;
     }
     renderer.mobile=document.body.dataset.controls?document.body.classList.contains('mobile'):matchMedia('(pointer:coarse)').matches;
     const dt=previousTime<0?1/60:clamp(w.time-previousTime,0,.1);
@@ -230,20 +307,17 @@ export function createRenderer(canvas) {
       ground.update(dt,renderer,hero);
       effects.update(dt,arena,viewport);
     }
-    renderer.drawStone(arena);
+    drawPond(renderer,arena,w,npcs,effects,enemyArt);
+    hero.painted=true;
     const c=renderer.ctx;
-    renderer.beginWorldClip();c.save();c.translate(-cam.x*cam.scale,-cam.y*cam.scale);c.scale(cam.scale,cam.scale);
-    effects.drawWorld(c,arena,cam.scale);drawProjectiles(c,w,cam.scale);
-    if(!hero.dead)drawPlayerRim(c,w.player,cam.scale);
-    for(const e of w.enemies)if(e.type==='hole')flowToVortex(c,w,e,cam.scale);
-    c.restore();renderer.endWorldClip();renderer.drawTopItems(arena);drawPaperEdge(c,cam,width,height,w);
+    drawPaperEdge(c,cam,width,height,w);
     effects.drawScreen(c,hero,viewport,cam);
     drawFocus(c,options.focus,cam,width,height,w.time);
     const reveal=clamp(options.reveal||0,0,1),im=ground.image;
     if(reveal>0&&im.complete&&im.naturalWidth){
-      const fit=Math.min(width/im.naturalWidth,height/im.naturalHeight),iw=im.naturalWidth*fit,ih=im.naturalHeight*fit;
-      c.save();c.globalAlpha=reveal*(2-reveal);c.fillStyle='#eee5d1';c.fillRect(0,0,width,height);
-      c.drawImage(im,(width-iw)/2,(height-ih)/2,iw,ih);c.restore();
+      const alpha=reveal*reveal*(3-2*reveal);
+      c.save();c.globalAlpha=alpha;c.fillStyle='#e7dfcc';c.fillRect(0,0,width,height);
+      c.drawImage(im,-cam.x*cam.scale,-cam.y*cam.scale,w.width*cam.scale,w.height*cam.scale);c.restore();
     }
     Object.assign(window.bokuMetrics??={},{
       backend:renderer.fallback?'V5 Canvas':'V5 LivingInkFluid',heroPreset:renderer.trail.presetKey,

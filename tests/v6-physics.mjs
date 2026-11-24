@@ -12,16 +12,30 @@ const near=(a,b,tol=1e-7)=>assert.ok(Math.abs(a-b)<tol,`${a} differs from ${b}`)
 const activate=(w,type)=>{const item=spawnItem(w,{type,x:w.player.x,y:w.player.y});tick(w,{},1/60);assert.ok(useItem(w,0));assert.equal(w.player.activeItem,item);return item;};
 const counts={};
 function test(name,f){f();counts[name]='pass';}
-test('stalled growth brings one nearby collectible dragon without forcing a transformation',()=>{
+test('one stalemate dragon swims in from a bank, stays in the pond and is held or used just once',()=>{
   const w=base({tutorial:false,spawnItems:true,nextItem:999,enemies:[{id:'leader',type:'hole',mass:600,x:1300,y:680}]});
-  tick(w,{x:1,y:0},1);tick(w,{},40);
-  const rescues=w.items.filter(i=>i.rescue);
-  assert.equal(rescues.length,1);
-  assert.equal(rescues[0].type,'dragon');
-  assert.ok(Math.hypot(w.player.x-rescues[0].x,w.player.y-rescues[0].y)<250);
+  tick(w,{x:1,y:0},1);
+  while(!w.events.some(e=>e.type==='dragonArrived')&&w.time<45)tick(w,{},1/60);
+  const rescue=w.items.find(i=>i.rescue);assert.ok(rescue);
+  assert.ok(rescue.x<0||rescue.y<0||rescue.x>w.width||rescue.y>w.height);
   assert.equal(w.player.form,'ink');assert.equal(w.player.inventory.length,0);
-  w.player.x=rescues[0].x;w.player.y=rescues[0].y;tick(w,{},.1);
-  assert.equal(w.player.inventory[0],rescues[0]);assert.ok(useItem(w,0));
+  // Keep it out of the pack while it completes a whole crossing, including
+  // a later rescue check and several regular item rolls.
+  w.player.inventory.push(...['fish','shrimp','turtle'].map(type=>({type})));
+  w.nextItem=w.time+.2;w.itemInterval=1.5;
+  let entered=false;
+  for(let i=0;i<100*60;i++){
+    const x=rescue.x,y=rescue.y;tick(w,{},1/60);
+    assert.ok(Math.hypot(rescue.x-x,rescue.y-y)<1.5);
+    entered ||= !rescue.route.entering;
+    assert.equal(w.items.filter(i=>i.type==='dragon').length,1);
+    assert.ok(w.items.includes(rescue));
+  }
+  assert.ok(entered);w.player.inventory.length=0;w.player.x=rescue.x;w.player.y=rescue.y;
+  tick(w,{},1/60);assert.ok(w.player.inventory.includes(rescue));
+  assert.equal(spawnItem(w,{type:'dragon',x:20,y:30}),null);
+  assert.ok(useItem(w,w.player.inventory.indexOf(rescue)));
+  assert.equal(spawnItem(w,{type:'dragon',x:20,y:30}),null);
   assert.equal(w.player.form,'dragon');assert.equal(w.events.filter(e=>e.type==='dragonArrived').length,1);
 });
 test('all ten rigs turn the head before the body while the turtle shell holds its joints',()=>{
@@ -64,13 +78,35 @@ test('all ten rigs turn the head before the body while the turtle shell holds it
     }
   }
 });
+test('dragon straightens at speed and lets the tail follow a corner for both player detail and world rigs',()=>{
+  const rig=JSON.parse(readFileSync(new URL('../previews/creature-rig/dragon_04/rig.json',import.meta.url),'utf8'));
+  for(const detail of [false,true]){
+    const c=new InkCreature(rig,{length:100,speed:0}),actor={aim:{x:1,y:0}};
+    c.v5PlayerDetail=detail;steerCreature(c,actor);
+    function bounds(){
+      const xs=c.pose.map(v=>v[0]),ys=c.pose.map(v=>v[1]);
+      return {width:Math.max(...xs)-Math.min(...xs),height:Math.max(...ys)-Math.min(...ys)};
+    }
+    for(let i=0;i<145;i++){c.setInput(1,0);c.update(1/60);}
+    const straight=bounds();
+    assert.ok(straight.width>98&&straight.height<7,JSON.stringify(straight));
+    actor.aim={x:0,y:1};
+    for(let i=0;i<13;i++){c.setInput(0,1);c.update(1/60);}
+    const bend=bounds(),nose=c.pose[1],tip=c.pose.at(-1),tail=c.pose.at(-2);
+    assert.ok(Math.abs(nose[1]-c.y)>Math.abs(nose[0]-c.x));
+    assert.ok(Math.abs(tip[0]-tail[0])>Math.abs(tip[1]-tail[1]));
+    assert.ok(bend.width>40&&bend.height>18,JSON.stringify(bend));
+    for(let i=0;i<140;i++){c.setInput(0,1);c.update(1/60);}
+    const settled=bounds();assert.ok(settled.height>98&&settled.width<7,JSON.stringify(settled));
+  }
+});
 test('distant turning creatures keep their original animated frames while close turns use joints',()=>{
   const painter=Object.create(HeadFirstPainter.prototype);
   painter.clock=.54;painter.camera={scale:.28};
   const canvas={width:180,height:70},frames=Array.from({length:48},()=>({canvas}));
-  const q={species:'dragon',scale:1.6,visible:true,asset:{npcAtlas:{bounds:{w:320,h:90},seconds:2,frames}},
+  const q={species:'fish',scale:.64,visible:true,asset:{npcAtlas:{bounds:{w:320,h:90},seconds:2,frames}},
     creature:{time:.4,bentUntil:.9}};
-  const e={id:'distant-dragon'};
+  const e={id:'distant-fish'};
   const a=painter.atlasFrame(q,e);assert.ok(a&&a.fraction>0);
   painter.clock+=1/60;
   const b=painter.atlasFrame(q,e);assert.ok(b.index+b.fraction>a.index+a.fraction);
@@ -121,7 +157,7 @@ test('all ten V5 appearances persist from the swimming pickup into the active pl
   }
   const tutorial=base({seed:93});
   assert.equal(spawnItem(tutorial,{type}).rigId,rigs[0]);
-  assert.equal(spawnItem(w,{type,rigId:rigs.at(-1)}).rigId,rigs.at(-1));
+  assert.equal(spawnItem(base(),{type,rigId:rigs.at(-1)}).rigId,rigs.at(-1));
  }
  assert.equal(seen.size,10);assert.equal(w.rng,originalRng);
 });
@@ -135,19 +171,21 @@ test('red spike equal losses, black hole transfer, equality rules',()=>{
  const w=base({enemies:[{type:'hole',x:538,y:400,mass:100}]});
  assert.equal(canEat(w.player,w.enemies[0]),false);tick(w,{x:1});near(w.player.mass,100);
 });
-test('a touching black hole gains each lost unit, remains on the receding rim and stops on separation',()=>{
+test('a shrinking player loses contact with a stationary black hole and can steer back into it',()=>{
  for(const hz of [30,60,120]){
   const w=base({enemies:[{id:'drain',type:'hole',x:550,y:400,mass:225}]});
-  const p=w.player, hole=w.enemies[0];
+  const p=w.player,hole=w.enemies[0],startX=p.x;
   for(let i=0;i<2*hz;i++){
    const oldPlayer=p.mass,oldHole=hole.mass;
    stepWorld(w,{},1/hz);
-   near(oldPlayer-p.mass,hole.mass-oldHole);
-   near(p.mass+hole.mass,325);
+   near(oldPlayer-p.mass,hole.mass-oldHole);near(p.mass+hole.mass,325);
    near(p.r,radius(p.mass));near(hole.r,radius(hole.mass));
   }
-  near(p.mass,62);near(hole.mass,263);near(hole.absorption.amount,38);
-  near(hole.absorption.lastAt,w.time);
+  near(p.x,startX);assert.ok(p.mass<100 && p.mass>99);
+  assert.ok(Math.hypot(p.x-hole.x,p.y-hole.y)>p.r+hole.r);
+  const resting=hole.mass;tick(w,{},.8);near(hole.mass,resting);
+  tick(w,{x:1},1);assert.ok(hole.mass>resting+5);
+  near(100-p.mass,hole.mass-225);
   tick(w,{x:-1},.2);
   const afterRetreat=hole.mass,lastContact=hole.absorption.lastAt;
   tick(w,{},.75);near(hole.mass,afterRetreat);near(lastContact,hole.absorption.lastAt);
@@ -156,13 +194,63 @@ test('a touching black hole gains each lost unit, remains on the receding rim an
  const outside=base({enemies:[{type:'hole',x:550.2,y:400,mass:225}]});
  tick(outside,{},2);near(outside.player.mass,100);assert.equal(outside.enemies[0].absorption,undefined);
 });
-test('blue species eaten safely; final enemy ranking live',()=>{
- const w=base({tutorial:false,enemies:[{id:'food',type:'spike',x:480,y:400,mass:40},
- {id:'lead',type:'hole',x:900,y:400,mass:135}]});
- tick(w);assert.equal(w.player.mass,140);assert.equal(w.largest,135);assert.equal(w.status,'won');
+test('a blue rival transfers gradually, keeps partial losses and blooms only upon completion',()=>{
+ for(const type of ['spike','hole']){
+   const w=base({enemies:[{id:'food',type,x:510,y:400,mass:40}]});
+   const p=w.player,e=w.enemies[0];
+   tick(w,{},.10);
+   assert.ok(e.mass>0 && e.mass<40);near(p.mass+e.mass,140);
+   assert.ok(!w.events.some(x=>x.type==='eat'));
+   p.x=350;const partial=e.mass;
+   tick(w,{},1);near(e.mass,partial);near(p.mass+e.mass,140);
+   p.x=e.x;tick(w,{},2);
+   near(p.mass,140);assert.equal(w.enemies.length,0);
+   const meals=w.events.filter(x=>x.type==='eat');
+   assert.equal(meals.length,1);near(meals[0].mass,40);near(meals[0].r,radius(40));
+ }
+});
+test('winning requires live mass leadership, the major rivals and a broadly revealed painting',()=>{
+ const cfg={tutorial:false,player:{x:500,y:400,mass:100},enemies:[{id:'lead',type:'hole',x:900,y:400,mass:135}]};
+ const w=base(cfg);tick(w,{},.2);
+ assert.equal(w.status,'playing');
+ spawnDrop(w,{mass:50,x:500,y:400});tick(w,{},.2);
+ near(w.player.mass,150);assert.equal(w.status,'playing');assert.ok(w.painting.fraction<.85);
+ w.painting.fill(.78);tick(w,{},1/60);assert.equal(w.status,'playing');
+ w.painting.fill(.82);tick(w,{},1/60);assert.equal(w.status,'won');
  assert.equal(w.events.filter(e=>e.type==='win').length,1);
+ const second=base(cfg);second.painting.fill(.9);tick(second,{},.2);
+ assert.equal(second.status,'playing');
+ spawnDrop(second,{mass:50,x:500,y:400});tick(second,{},.2);
+ assert.equal(second.status,'won');
+ const gated=base({tutorial:false,enemies:[{id:'last',type:'spike',mass:40,x:650,y:400,cornerBoss:true,cornerSlot:'ne'},
+   {id:'small',type:'hole',mass:9,x:1200,y:400}]});
+ gated.painting.fill(.92);tick(gated,{},.2);
+ assert.equal(gated.majorRemaining,1);assert.equal(gated.status,'playing');
+ gated.player.x=650;tick(gated,{},.1);
+ assert.equal(gated.status,'playing');assert.ok(gated.enemies[0].absorbedByPlayer>0);
+ tick(gated,{},1);assert.equal(gated.majorRemaining,0);assert.equal(gated.status,'won');
+ assert.equal(gated.enemies[0].id,'small');
+ const finalMeal=gated.events.find(e=>e.type==='eat' && e.major);
+ assert.equal(finalMeal.cornerSlot,'ne');near(finalMeal.mass,40);
  const t=base({tutorial:false,enemies:[{type:'spike',x:900,y:400,mass:125},{type:'hole',x:1200,y:400,mass:120}]});
  spawnDrop(t,{mass:20,x:1200,y:400});tick(t,{},1/60);near(t.largest,140);
+});
+test('an enemy consuming the last marked rival inherits it until the player finishes the successor',()=>{
+ for(const type of ['spike','hole']){
+   const w=base({tutorial:false,enemies:[
+     {id:'corner',type:'spike',x:900,y:400,mass:10,cornerBoss:true,cornerSlot:'nw'},
+     {id:'successor',type,x:899,y:400,mass:60}]});
+   w.painting.fill(.92);
+   const [initial,successor]=w.enemies;
+   for(let i=0;i<900&&w.enemies.length>1;i++){
+     successor.vx=8*Math.sign(initial.x-successor.x);tick(w,{},1/60);
+   }
+   assert.deepEqual(w.enemies.map(e=>e.id),['successor']);
+   assert.equal(w.status,'playing');assert.equal(w.majorRemaining,1);
+   assert.equal(successor.cornerSlot,'nw');assert.ok(successor.major);
+   successor.vx=0;w.player.x=successor.x;w.player.y=successor.y;tick(w,{},2);
+   assert.equal(w.status,'won');assert.equal(w.majorRemaining,0);
+ }
 });
 test('same-type enemy loss, opposite-type transfer',()=>{
  for(const type of ['spike','hole']) {
@@ -172,12 +260,29 @@ test('same-type enemy loss, opposite-type transfer',()=>{
  const w=base({enemies:[{type:'hole',x:900,y:400,mass:200},{type:'spike',x:920,y:400,mass:100}]});tick(w);
  near(w.enemies[0].mass,219);near(w.enemies[1].mass,81);
 });
-test('normal motion free; jet consumes 8%/sec, transfers impulse and conserves all ink',()=>{
+test('normal motion free; jet meters small droplets, transfers impulse and conserves all ink',()=>{
  const w=base({enemies:[{type:'spike',x:436,y:400,mass:160}]});
  tick(w,{x:1},.3);near(w.player.mass,100);w.player.x=500;w.player.y=400;w.player.vx=0;
- tick(w,{action:true});near(w.player.mass,92);
+ tick(w,{action:true});assert.ok(w.player.mass>=95 && w.player.mass<=97);
  assert.ok(w.events.some(e=>e.type==='push'&&e.source==='spray'));
  tick(w,{},1);near(w.player.mass+w.enemies[0].mass+w.drops.reduce((n,d)=>n+d.mass,0),260);
+});
+test('larger bodies launch the same edible flakes at a gently higher rate',()=>{
+ function sample(mass){
+   const w=base({seed:19,width:12000,height:4000,player:{x:2500,y:2000,mass}});
+   const shots=new Map();
+   for(let i=0;i<180;i++){
+     tick(w,{x:1,action:true},1/60);
+     for(const shot of w.shots)shots.set(shot.id,{mass:shot.mass,r:shot.r});
+   }
+   const first=shots.values().next().value;
+   assert.ok(first && first.mass>0 && first.r>0);
+   for(const shot of shots.values()){near(shot.mass,first.mass);near(shot.r,first.r);}
+   return {first,count:shots.size};
+ }
+ const small=sample(100),large=sample(9000);
+ near(small.first.mass,large.first.mass);near(small.first.r,large.first.r);
+ assert.ok(large.count>small.count && large.count<1.55*small.count);
 });
 test('bubbles have zero mass and recoil; transformations release-gated',()=>{
  const w=base({enemies:[{type:'hole',x:590,y:400,mass:225}]});
@@ -194,15 +299,15 @@ test('shrimp and dragon pull blue enemies slowly, edible motes faster, ignore re
  if(form==='dragon'){tick(w,{},19.5);assert.equal(w.player.form,'dragon');tick(w,{},.4);assert.equal(w.player.form,'ink');}
  }
 });
-test('turtle/dragon protect both sides, keep original passage radius; turtle voluntary ink spends',()=>{
+test('turtle and larger dragon protect both sides; turtle voluntary ink spends',()=>{
  for(const form of ['turtle','dragon'])for(const type of ['spike','hole']) {
- const w=base();activate(w,form);near(w.player.r,radius(100));const e=spawnEnemy(w,{type,x:545,y:400,mass:225});
+ const w=base();activate(w,form);near(w.player.r,radius(100)*(form==='dragon'?1.16:1));const e=spawnEnemy(w,{type,x:545,y:400,mass:225});
  tick(w,{x:1});near(w.player.mass,100);near(e.mass,225);
  if(form==='turtle'){tick(w,{action:true},.3);assert.ok(w.player.mass<100);}
  }
 });
 test('one ink ledger on leaf, delayed droplets on water, natural bloom limit and harvesting',()=>{
- const w=base({leaves:[{id:'l',x:500,y:400,r:125,stored:24}]});
+ const w=base({leaves:[{id:'l',x:500,y:400,r:125,stored:26}]});
  tick(w,{action:true},1);tick(w,{},.1);
  assert.ok(w.events.some(e=>e.type==='store'));assert.ok(w.events.some(e=>e.type==='bloom'));
  assert.equal(w.drops.length,0);assert.equal(w.leaves[0].flowers.length,1);
@@ -216,16 +321,19 @@ test('all three blossoms grow outside the painted pad and can be reached even by
  for(const [x,y] of [[500,400],[85,85],[1515,815]]){
    const w=base({leaves:[{x,y,r:80,flowers:3}]}),leaf=w.leaves[0];
    assert.equal(leaf.flowers.length,3);
-   for(const f of [...leaf.flowers]){
-     const paintedRadius=f.r*1.225;
-     assert.ok(Math.hypot(f.x-x,f.y-y)-paintedRadius>=leaf.r*1.05);
-     assert.ok(f.x>=paintedRadius && w.width-f.x>=paintedRadius);
-     assert.ok(f.y>=paintedRadius && w.height-f.y>=paintedRadius);
+   for(const [i,f] of leaf.flowers.entries()){
+     const petalRadius=f.r*1.225,distance=Math.hypot(f.x-x,f.y-y);
+     assert.ok(distance>=leaf.r && distance<leaf.r+petalRadius*1.9);
+     assert.ok(f.x>=petalRadius && w.width-f.x>=petalRadius);
+     assert.ok(f.y>=petalRadius && w.height-f.y>=petalRadius);
+     for(const other of leaf.flowers.slice(i+1))assert.ok(Math.hypot(f.x-other.x,f.y-other.y)>=f.r);
+   }
+   while(leaf.flowers.length){
+     const f=leaf.flowers[0],old=w.player.mass,count=leaf.flowers.length;
      w.player.x=f.x;w.player.y=f.y;
-     const old=w.player.mass;
      tick(w,{},1/60);
-     near(w.player.mass,old+f.mass);
      assert.ok(!leaf.flowers.includes(f));
+     near(w.player.mass-old,(count-leaf.flowers.length)*f.mass);
    }
  }
 });
@@ -233,7 +341,8 @@ test('inventory bounded, edible ink cannot credit player and enemy twice',()=>{
  const w=base();for(const type of ['shrimp','fish','turtle','dragon'])spawnItem(w,{type,x:500,y:400});
  tick(w,{},1/60);assert.equal(w.player.inventory.length,3);assert.equal(w.items.length,1);
  const q=base();spawnEnemy(q,{type:'spike',mass:25,x:511,y:400});spawnDrop(q,{x:506,y:400,mass:3});
- tick(q,{},1/60);assert.equal(q.player.mass,128);assert.equal(q.drops.length,0);
+ tick(q,{},1/60);assert.ok(q.player.mass>103 && q.player.mass<128);assert.equal(q.drops.length,0);
+ near(q.player.mass+q.enemies[0].mass,128);tick(q,{},1);near(q.player.mass,128);
 });
 test('30, 60 and 120 Hz replays agree',()=>{
  function run(hz){const w=base();for(let i=0;i<3*hz;i++)stepWorld(w,{x:.1,y:.8,action:i<hz},1/hz);
@@ -244,8 +353,9 @@ test('fish reverts in a narrow passage without clipping the blockers',()=>{
  const w=base();activate(w,'fish');
  spawnEnemy(w,{type:'spike',mass:225,x:600,y:352.5});
  spawnEnemy(w,{type:'hole',mass:225,x:600,y:447.5});
- tick(w,{x:1},2/3);tick(w,{},.6);
- assert.ok(Math.abs(w.player.x-600)<1);near(w.player.r,17);
+ for(let i=0;i<120 && w.player.x+w.player.vx/15<599.5;i++)tick(w,{x:1},1/60);
+ tick(w,{},.6);
+ assert.ok(Math.abs(w.player.x-600)<2.5);near(w.player.r,17);
  tick(w,{},11);
  assert.equal(w.player.form,'ink');near(w.player.r,20);
  assert.ok(w.player.x<596);

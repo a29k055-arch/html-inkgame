@@ -18,6 +18,18 @@ function name(entry,lang) {
   return entry.title[lang];
 }
 
+function letterSlat(title,entry,lang){
+  const label=name(entry,lang);
+  if(title.dataset.language===lang && title.dataset.label===label)return;
+  title.dataset.language=lang;title.dataset.label=label;
+  const cells=lang!=='en' && (entry.kind==='tutorial'||entry.kind==='trial');
+  title.classList.toggle('slip-glyphs',cells);
+  if(!cells){title.textContent=label;return;}
+  title.replaceChildren(...Array.from(label,glyph=>{
+    const cell=document.createElement('span');cell.textContent=glyph;return cell;
+  }));
+}
+
 export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) {
   const $=id=>document.getElementById(id);
   const library=$('library'),slips=$('slips'),preview=$('catalog-preview'),slat=$('preview-slip');
@@ -62,7 +74,7 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
       const complete=entry.kind==='tutorial'?TUTORIALS.every(finished):!upcoming&&finished(entry);
       button.dataset.locked=String(locked);
       button.dataset.complete=String(complete);
-      title.textContent=label;
+      letterSlat(title,entry,lang);
       no.textContent=numberedEntry?numbered(entry):complete?c.done:'';
       if(upcoming){
         let pending=button.querySelector('.bamboo-future');
@@ -74,7 +86,7 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
     if(current==null)return;
     const entry=entries[current],locked=!unlocked(entry);
     slat.dataset.kind=entry.kind;slat.dataset.mirror=String(current%2===1);
-    $('hero-title').textContent=name(entry,lang);
+    letterSlat($('hero-title'),entry,lang);
     $('preview-number').textContent=entry.kind==='level'?numbered(entry):'';
     $('hero-desc').textContent=entry.kind==='tutorial'?c.tutorialInfo:entry.subtitle[lang];
     const artIndex=entry.artworkIndex??entry.index;

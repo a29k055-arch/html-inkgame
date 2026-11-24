@@ -1,6 +1,7 @@
 // Deterministic pond physics. All positions and radii use painting coordinates.
 import {resolveLivingRig} from '../src-v5/game/living-rigs.js';
 import {createFoodField,visibleFood,removeFood,regrowFood} from './food-field.mjs';
+import {createPaintingProgress,updatePaintingProgress} from './painting-progress.mjs';
 
 const TICK = 1 / 60;
 const EPSILON = 1e-8;
@@ -13,6 +14,11 @@ const touching = (a, b, tolerance = 0) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <=
 const shielded = p => p.form === 'turtle' || p.form === 'dragon';
 const bubbles = p => p.form === 'fish' || p.form === 'dragon';
 const flakeShapes=['circle','triangle','square','pentagon'];
+const jetMass=.55, jetRadius=2.65;
+// Opaque outer edge of the V5 lotus-leaf-v2 painting at 15-degree intervals.
+// The remainder of the source square is transparent padding.
+const lotusEdge=[.88,.86,.86,.81,.80,.75,.76,.80,.83,.86,.88,.89,.88,.86,.82,.79,.78,.79,.73,.78,.84,.79,.79,.86];
+export const isMajorEnemy = enemy => Boolean(enemy.cornerBoss || enemy.major);
 export const canEat = (player, enemy) => player.mass > enemy.mass && enemy.mass > EPSILON;
 
 function random(w) {
@@ -45,7 +51,7 @@ function bounded(w, entity, bounce = false) {
   entity.x = x; entity.y = y;
 }
 function syncPlayer(p) {
-  p.r = radius(p.mass) * (p.form === 'fish' ? .85 : 1);
+  p.r = radius(p.mass) * (p.form === 'fish' ? .85 : p.form === 'dragon' ? 1.16 : 1);
 }
 export function spawnEnemy(w, def) {
   const e = body(w, def, 'enemy');
@@ -55,9 +61,15 @@ export function spawnEnemy(w, def) {
   if(e.homeRadius){e.homeX=e.x;e.homeY=e.y;}
   e.kickX = 0; e.kickY = 0;
   w.enemies.push(e);
+  if(isMajorEnemy(e))w.majorRemaining++;
   return e;
 }
+function dragonPresent(w){
+  return w.player.form==='dragon'||w.player.inventory.some(item=>item.type==='dragon')||
+    w.items.some(item=>item.type==='dragon');
+}
 export function spawnItem(w, def) {
+  if(def.type==='dragon'&&dragonPresent(w))return null;
   const item = body(w, def, 'item');
   item.r = def.r ?? 13;
   item.angle = def.angle ?? Math.atan2(item.vy,item.vx);
@@ -86,21 +98,29 @@ export function spawnDrop(w, def) {
 }
 function flowerSites(w,leaf) {
   const r=Math.min(15,leaf.r*.18);
-  // The illustration extends a little beyond the contact discs. Keep the
-  // innermost petals outside the visible leaf and inside the painting.
-  const petalRadius=r*1.225, reach=leaf.r*1.05+petalRadius+1;
-  const sites=[];
-  for(const offset of [.15,2.35,4.37]){
-    for(let i=0;i<24;i++){
-      const angle=leaf.angle+offset+(i%2?1:-1)*Math.ceil(i/2)*TAU/24;
+  const petalRadius=r*1.225;
+  const centre=leaf.angle+(w.rigSeed%113)*.037+leaf.x*.013+leaf.y*.017;
+  const arc=2*Math.asin(petalRadius/(leaf.r+petalRadius));
+  let best=[];
+  // Move the cluster as a whole around the rim until all stems fit between
+  // the pad and the shore. This keeps a corner from splitting a flower bed.
+  for(let i=0;i<72;i++){
+    const base=centre+(i%2?1:-1)*Math.ceil(i/2)*TAU/72;
+    const sites=[];
+    for(const offset of [0,arc*1.16,-arc*1.36]){
+      const angle=base+offset;
+      const sector=((angle/TAU%1+1)%1)*lotusEdge.length,index=Math.floor(sector);
+      const edge=lotusEdge[index]+(lotusEdge[(index+1)%lotusEdge.length]-lotusEdge[index])*(sector-index);
+      const reach=Math.max(leaf.r+.5,leaf.r*1.05*edge+petalRadius*.94);
       const x=leaf.x+reach*Math.cos(angle),y=leaf.y+reach*Math.sin(angle);
       if(x<petalRadius||x>w.width-petalRadius||y<petalRadius||y>w.height-petalRadius)continue;
-      if(sites.some(other=>Math.hypot(other.x-x,other.y-y)<2*petalRadius+2))continue;
+      if(sites.some(other=>Math.hypot(other.x-x,other.y-y)<2*petalRadius*.91))continue;
       sites.push({x,y,r,slot:sites.length});
-      break;
     }
+    if(sites.length===3)return sites;
+    if(sites.length>best.length)best=sites;
   }
-  return sites;
+  return best;
 }
 function placeFlower(leaf) {
   const site=leaf.sites.find(s=>!leaf.flowers.some(f=>f.slot===s.slot));
@@ -123,24 +143,28 @@ export function createWorld(config = {}) {
   let rigSeed=typeof seed==='number'?seed>>>0:2166136261;
   if(typeof seed!=='number')for(const c of String(seed))rigSeed=Math.imul(rigSeed^c.charCodeAt(0),16777619)>>>0;
   const w = {width:config.width ?? 1800,height:config.height ?? 1100,
-    speed:config.speed ?? 150, seed, rng:seed>>>0, rigSeed, rigCounts:new Map(),
+    speed:(config.speed ?? 150)*.86, seed, rng:seed>>>0, rigSeed, rigCounts:new Map(),
     time:0, remainder:0, status:'playing', tutorial:!!config.tutorial,
     spawnItems:config.spawnItems ?? !config.tutorial, nextItem:config.nextItem ?? 9,
     itemInterval:config.itemInterval ?? 13, flowerMass:config.flowerMass ?? 30,
     idCounter:0,sequence:0,events:[],cueTimes:new Map(),contacts:new Map(),
-    enemies:[], drops:[], leaves:[], items:[], departingItems:[], shots:[], safePath:[],
-    largest:0, held:false, waitRelease:false, packet:0, packetTime:0, packetInterval:.12, bubbleDelay:0,
+    enemies:[], enemySweep:[], drops:[], leaves:[], items:[], departingItems:[], shots:[], safePath:[],
+    largest:0, majorRemaining:0, held:false, waitRelease:false, nextJet:0, bubbleDelay:0,
     emissionRng:(rigSeed^0x2ef54bc1)>>>0,
     travel:0, recordedMove:false};
   const p = w.player = body(w,{x:w.width/2,y:w.height/2,mass:100,...config.player},'player');
   p.form='ink'; p.formTime=0; p.activeItem=null; p.emitting=false; p.inventory=[];
   syncPlayer(p);
   if(!w.tutorial && config.spawnItems!==false) w.stalemate={milestone:p.mass,lastGain:0,checkAt:1,retryAt:0};
+  w.painting=createPaintingProgress(w.width,w.height);
   w.foodField=createFoodField(w.width,w.height,config.foodSpacing,rigSeed,config.foodMassScale);
   for (const def of config.enemies ?? []) spawnEnemy(w,def);
   for (const def of config.drops ?? []) spawnDrop(w,def);
   for (const def of config.leaves ?? []) spawnLeaf(w,def);
-  for (const def of config.items ?? []) spawnItem(w,def);
+  for(const def of config.items??[]){
+    if(def.type==='dragon'&&!w.tutorial)sendDragonFromBank(w,def,{id:def.id,rigId:def.rigId});
+    else spawnItem(w,def);
+  }
   w.largest = Math.max(0,...w.enemies.map(e=>e.mass));
   w.safePath.push({x:p.x,y:p.y});
   return w;
@@ -173,7 +197,7 @@ function shoot(w,type,mass=0) {
   const bearing=mid+(2*emissionRoll(w)-1)*spread;
   const dx=Math.cos(bearing),dy=Math.sin(bearing);
   const v=bubble?215+emissionRoll(w)*78:151+emissionRoll(w)*100;
-  const r=bubble?3.9+emissionRoll(w)*2.6:clamp(radius(mass)*1.25,1.9,9);
+  const r=bubble?3.9+emissionRoll(w)*2.6:jetRadius;
   const shot=body(w,{type,x:p.x+dx*(p.r+2),y:p.y+dy*(p.r+2),
     vx:dx*v,vy:dy*v,dx,dy,mass,r,angle:emissionRoll(w)*TAU,
     shape:bubble?'circle':flakeShapes[Math.floor(emissionRoll(w)*flakeShapes.length)],
@@ -183,13 +207,6 @@ function shoot(w,type,mass=0) {
     if(leaf){ deposit(w,leaf,shot); return; }
   }
   w.shots.push(shot);
-}
-function flush(w) {
-  if(w.packet>EPSILON) {
-    shoot(w,'spray',w.packet);
-    w.packetInterval=.076+emissionRoll(w)*.13;
-  }
-  w.packet=0;w.packetTime=0;
 }
 function restoreClearance(w) {
   const p=w.player;
@@ -204,7 +221,6 @@ function restoreClearance(w) {
 }
 function changeForm(w,item) {
   const p=w.player,prev=p.form;
-  flush(w);
   p.activeItem=item;
   p.form=item?.type ?? 'ink'; p.formTime=forms[p.form] ?? 0;
   syncPlayer(p);
@@ -218,6 +234,9 @@ export function useItem(w,index) {
   const item=w.player.inventory[index];
   if(!Object.hasOwn(forms,item.type)) return false;
   w.player.inventory.splice(index,1);
+  // If a dragon is awakened on its pickup frame, its only painted body is now
+  // the incoming player form. Retire the collected copy still fading in place.
+  if(item.type==='dragon')w.departingItems=w.departingItems.filter(other=>other!==item);
   changeForm(w,item);
   return true;
 }
@@ -231,7 +250,7 @@ function playerStep(w,input,dt) {
   }
   const ix=Number(input.x)||0,iy=Number(input.y)||0;
   const len=Math.hypot(ix,iy),strength=Math.min(1,len);
-  const requested=len>.015?Math.atan2(iy,ix):p.angle;
+  const requested=len>EPSILON?Math.atan2(iy,ix):p.angle;
   const currentSpeed=Math.hypot(p.vx,p.vy);
   if(input.keyboard && currentSpeed>2 && strength>.015){
     // A key changes the requested bearing instantly. Steer through the turn
@@ -241,16 +260,22 @@ function playerStep(w,input,dt) {
     p.angle=bearing+clamp(turn,-4.8*dt,4.8*dt);
   }else p.angle=requested;
   p.emitting=w.held&&!w.waitRelease;
-  let speed=w.speed*(p.form==='turtle'?.85:1)*strength;
+  const growth=clamp(Math.log2(Math.max(1,p.mass/100))/8,0,1);
+  const formSpeed=p.form==='dragon'?1.18:p.form==='turtle'?.85:1;
+  let speed=w.speed*(1+.065*growth)*formSpeed*strength;
   if(p.emitting && !bubbles(p)) {
-    const lost=p.mass*(1-Math.pow(.92,dt));
-    p.mass-=lost; w.packet+=lost; w.packetTime+=dt;
-    cue(w,'spray',{},'spray',.3);
-    if(w.packetTime>=w.packetInterval) flush(w);
-    speed+=w.speed*.12;
-    syncPlayer(p);
+    // Each visible flake is paid for once at launch. A larger body emits
+    // slightly more often; one stroke never sheds a percentage of its mass.
+    if(p.mass>jetMass+EPSILON){
+      if(w.time+EPSILON>=w.nextJet){
+        p.mass-=jetMass;syncPlayer(p);shoot(w,'spray',jetMass);
+        const rate=7+2.4*growth;
+        w.nextJet=w.time+(.72+.56*emissionRoll(w))/rate;
+        cue(w,'spray',{},'spray',.3);
+      }
+      speed+=w.speed*.16;
+    }else p.emitting=false;
   } else {
-    flush(w);
     if(p.emitting) {
       w.bubbleDelay-=dt;
       if(w.bubbleDelay<=0) {
@@ -295,7 +320,7 @@ function projectileStep(w,dt) {
     }
     const e=w.enemies.find(e=>e.mass>EPSILON&&touching(e,s));
     if(e) {
-      const strength=s.type==='bubble'?1200:s.mass*815;
+      const strength=s.type==='bubble'?1200:815;
       const impulse=Math.min(100,strength/Math.max(10,e.mass));
       e.kickX+=s.dx*impulse;e.kickY+=s.dy*impulse;
       event(w,'push',{id:e.id,target:e.type,source:s.type,form:w.player.form});
@@ -307,12 +332,13 @@ function projectileStep(w,dt) {
   }
   w.shots=w.shots.filter(s=>!s.done);
 }
+export function magnetReach(p){return p.form==='dragon'?260:158;}
 function magnet(w,obj,dt,kind) {
   const p=w.player;
   if((p.form!=='shrimp' && p.form!=='dragon') || obj.mass>=p.mass) return;
-  const d=distance(obj,p),reach=135+p.r;
+  const d=distance(obj,p),reach=p.r+magnetReach(p);
   if(!d || d>=reach) return;
-  const speed=(kind==='drop'?105:30) * (.4+.6*(1-d/reach));
+  const speed=(kind==='drop'?205:40)*(p.form==='dragon'?1.25:1) * (.5+.5*(1-d/reach));
   const travel=Math.min(speed*dt,d);
   obj.x+=(p.x-obj.x)*travel/d; obj.y+=(p.y-obj.y)*travel/d;
   cue(w,'magnet',{target:kind,id:obj.id,form:p.form},'magnet:'+kind,.5);
@@ -351,7 +377,7 @@ function foods(w) {
     field.time=w.time;
     const nibble=(b,player)=>{
       const attracts=player&&(p.form==='shrimp'||p.form==='dragon');
-      const reach=b.r+(attracts?135:5);
+      const reach=b.r+(attracts?magnetReach(p):5);
       for(const d of visibleFood(field,b.x-reach,b.y-reach,b.x+reach,b.y+reach)){
         const dist2=(d.x-b.x)**2+(d.y-b.y)**2;
         if((!player||d.mass<b.mass) && dist2<=(b.r+d.r)**2){
@@ -387,26 +413,51 @@ function foods(w) {
   }
 }
 function contact(w,a,b,next) {
-  const key=String(a.id)+'/'+String(b.id);
+  const key=a.id<b.id?a.id+'/'+b.id:b.id+'/'+a.id;
   let info=w.contacts.get(key);
   if(!info) info={base:Math.min(a.mass,b.mass)};
   next.set(key,info);
   return info;
 }
 function enemyContacts(w,dt,next) {
-  const es=w.enemies;
+  // Scan only pairs whose horizontal extents overlap. Keep the canonical
+  // gameplay list in its authored order for pickups, rendering and replays.
+  const es=w.enemySweep;
+  es.length=0;
+  for(const e of w.enemies){
+    e.sweepLeft=e.x-e.r;es.push(e);
+  }
+  es.sort((a,b)=>a.sweepLeft-b.sweepLeft);
   for(let i=0;i<es.length;i++) {
     const a=es[i];
     for(let j=i+1;j<es.length;j++){
-      const b=es[j]; if(a.mass<=EPSILON || b.mass<=EPSILON || !touching(a,b,.35)) continue;
+      const b=es[j];
+      if(a.mass<=EPSILON || b.sweepLeft>a.x+a.r+EPSILON)break;
+      if(b.mass<=EPSILON || !touching(a,b,EPSILON))continue;
       const c=contact(w,a,b,next);
       if(!c.noted){c.noted=true;event(w,'enemyContact',{a:a.type,b:b.type,aId:a.id,bId:b.id});}
-      const loss=Math.min(a.mass,b.mass,c.base*.10*dt);
-      if(a.type===b.type){a.mass-=loss;b.mass-=loss;}
-      else if(a.mass!==b.mass){
+      if(a.type===b.type){
+        let loss=Math.min(a.mass,b.mass,c.base*.10*dt);
+        // If both equal bodies would annihilate, keep one drawable remnant
+        // of each until the player can collect the last marked opponent.
+        if((isMajorEnemy(a)||isMajorEnemy(b)) && Math.abs(a.mass-b.mass)<=EPSILON){
+          loss=Math.min(loss,Math.max(0,Math.min(a.mass,b.mass)-1));
+        }
+        a.mass-=loss;b.mass-=loss;
+      }else if(a.mass!==b.mass){
         const transfer=Math.min(a.mass,b.mass,c.base*.19*dt);
         const sign=a.mass>b.mass?1:-1;
         a.mass+=sign*transfer;b.mass-=sign*transfer;
+      }
+      // If wildlife consumes a marked rival, its surviving opponent inherits
+      // the ink. Finishing that living successor fulfils the same objective.
+      const donor=a.mass<=EPSILON?a:b.mass<=EPSILON?b:null;
+      if(donor && isMajorEnemy(donor)){
+        const survivor=donor===a?b:a;
+        survivor.major=true;
+        if(donor.cornerBoss && !survivor.cornerBoss){
+          survivor.cornerBoss=true;survivor.cornerSlot=donor.cornerSlot;
+        }
       }
       a.r=radius(a.mass);b.r=radius(b.mass);
       // Bodies compress while exchanging ink, allowing a visible sustained contact.
@@ -426,16 +477,33 @@ function playerContacts(w,dt,next) {
   const p=w.player;
   const onLeaf=w.leaves.some(leaf=>distance(leaf,p)<=leaf.r);
   for(const e of w.enemies){
-    const redHole=e.type==='hole' && e.mass>p.mass;
-    if(e.mass<=EPSILON || p.mass<=EPSILON || !touching(e,p,redHole?EPSILON:.35)) continue;
-    if(canEat(p,e)){
-      const mass=e.mass;
-      p.mass+=mass;e.mass=0;e.r=0;syncPlayer(p);
-      event(w,'eat',{target:e.type,id:e.id,mass,x:e.x,y:e.y,r:radius(mass)});continue;
-    }
+    if(e.mass<=EPSILON || p.mass<=EPSILON || !touching(e,p,EPSILON)) continue;
     const c=contact(w,p,e,next);
-    const oldReach=p.r+e.r;
-    let absorbing=false;
+    if(canEat(p,e)){
+      // A little mote takes a few strokes to dissolve. A near-peer or large
+      // rival takes longer. Each transfer is paid exactly once by the donor.
+      if(!c.sipRate){
+        const seconds=.34+.24*Math.min(1,e.mass/p.mass)+.16*Math.log10(1+e.mass/40);
+        c.sipRate=e.mass/seconds;
+      }
+      const amount=Math.min(e.mass,c.sipRate*dt),previousR=e.r;
+      p.mass+=amount;e.mass-=amount;e.r=radius(e.mass);syncPlayer(p);
+      e.absorbedByPlayer=(e.absorbedByPlayer??0)+amount;e.sipLastAt=w.time;
+      if(e.mass<=EPSILON){
+        const mass=e.absorbedByPlayer;
+        event(w,'eat',{target:e.type,id:e.id,mass,x:e.x,y:e.y,r:radius(mass),
+          major:isMajorEnemy(e),cornerBoss:!!e.cornerBoss,cornerSlot:e.cornerSlot});
+      }else{
+        // The prey flows inward while touching. Swimming away still breaks
+        // contact; we never bridge an open gap to start or resume a meal.
+        const dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy);
+        if(d>EPSILON){
+          const shift=Math.min(d,previousR-e.r+previousR*.30*dt);
+          e.x+=dx/d*shift;e.y+=dy/d*shift;
+        }
+      }
+      continue;
+    }
     if(shielded(p)) {
       cue(w,'shield',{id:e.id,target:e.type,form:p.form},'shield:'+e.id,.6);
     } else if(!onLeaf && (e.type==='spike' || e.mass>p.mass)) {
@@ -443,7 +511,6 @@ function playerContacts(w,dt,next) {
       p.mass-=amount;e.mass+=amount*(e.type==='spike'?-1:1);
       syncPlayer(p);e.r=radius(e.mass);
       if(e.type==='hole'){
-        absorbing=true;
         if(!c.absorption || w.time-c.absorption.lastAt>dt*1.5){
           c.absorption={amount:0,startedAt:w.time,lastAt:w.time};
         }
@@ -456,19 +523,15 @@ function playerContacts(w,dt,next) {
     const overlap=p.r+e.r-d-.3;
     if(overlap>0){
       p.x+=(d?dx/d:1)*overlap;p.y+=(d?dy/d:0)*overlap;
-    }else if(absorbing && d>0 && (p.vx-e.vx-e.kickX)*dx+(p.vy-e.vy-e.kickY)*dy<=0){
-      // A shrinking donor would slip off a stationary rim through its own
-      // change of radius. Follow only this tick's retreating contact surface.
-      // Swimming away, enemy motion and open-water gaps remain unrestricted.
-      const follow=Math.max(0,Math.min(oldReach-p.r-e.r,d+.3-p.r-e.r));
-      p.x-=dx/d*follow;p.y-=dy/d*follow;
     }
   }
   bounded(w,p);
   w.enemies=w.enemies.filter(e=>e.mass>EPSILON);
 }
 function enterItem(w){
-  const typeRoll=random(w),type=typeRoll<.30?'fish':typeRoll<.60?'shrimp':typeRoll<.90?'turtle':'dragon';
+  const roll=random(w);
+  const type=roll<.33?'fish':roll<.63?'shrimp':roll<.94||dragonPresent(w)?'turtle':'dragon';
+  if(type==='dragon'){sendDragonFromBank(w,w.player);return;}
   const side=type==='shrimp'?(random(w)<.5?1:3):Math.floor(random(w)*4);
   const vertical=side%2===0;
   const target=w.player;
@@ -481,12 +544,48 @@ function enterItem(w){
     const pitch=clamp(Math.atan2(ty-y,Math.abs(tx-x)),-.27,.27);
     angle=side===1?pitch:Math.PI-pitch;
   }
-  const speed=type==='fish'?38:type==='shrimp'?30:type==='turtle'?23:46;
+  const speed=type==='fish'?38:type==='shrimp'?30:23;
   spawnItem(w,{x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,angle,type,arriving:true});
+}
+// The nose enters from the nearest shore. Initial travel starts entirely
+// beyond the painting, including the horns in front of the rig's head.
+export function sendDragonFromBank(w,target,options={}){
+  if(dragonPresent(w))return null;
+  const px=clamp(target.x,25,w.width-25),py=clamp(target.y,25,w.height-25);
+  const margins=[px,w.width-px,py,w.height-py];
+  const side=margins.indexOf(Math.min(...margins));
+  const outside=Math.max(60,w.player.r*3);
+  const x=side===0?-outside:side===1?w.width+outside:px;
+  const y=side===2?-outside:side===3?w.height+outside:py;
+  const angle=Math.atan2(py-y,px-x),speed=options.rescue?87:75;
+  return spawnItem(w,{type:'dragon',id:options.id,rigId:options.rigId,
+    x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,angle,arriving:true,rescue:!!options.rescue,
+    route:{x:px,y:py,speed,entering:true,follow:!!options.rescue}});
+}
+function swimDragon(w,item,dt){
+  const route=item.route;
+  if(route.entering && item.x>=0 && item.x<=w.width && item.y>=0 && item.y<=w.height)route.entering=false;
+  if(route.follow){
+    route.x=w.player.x;route.y=w.player.y;
+    if(distance(item,w.player)<Math.max(65,w.player.r+42))route.follow=false;
+  }
+  if(!route.entering&&distance(route,item)<35){
+    // Choose a distant interior waypoint so it swims back through the pond
+    // instead of despawning at a bank or turning in tiny circles.
+    const u=item.x/w.width<.5?.63+.22*random(w):.15+.22*random(w);
+    const v=item.y/w.height<.5?.60+.25*random(w):.15+.25*random(w);
+    route.x=w.width*u;route.y=w.height*v;
+  }
+  const heading=Math.atan2(route.y-item.y,route.x-item.x);
+  const difference=Math.atan2(Math.sin(heading-item.angle),Math.cos(heading-item.angle));
+  item.angle+=clamp(difference,-1.85*dt,1.85*dt);
+  item.vx=Math.cos(item.angle)*route.speed;item.vy=Math.sin(item.angle)*route.speed;
+  item.x+=item.vx*dt;item.y+=item.vy*dt;
 }
 // Resident fish patrol a small loop around their authored location. Shrimp
 // spend most of each cycle resting, then swim in a short, shallow side stroke.
 function swimItem(w,item,dt){
+  if(item.route){swimDragon(w,item,dt);return;}
   const m=item.swim;
   if(!m){item.x+=item.vx*dt;item.y+=item.vy*dt;return;}
   m.age+=dt;
@@ -524,13 +623,14 @@ function itemStep(w,dt) {
   for(const item of w.items) {
     swimItem(w,item,dt);
     if(Math.abs(item.vx)+Math.abs(item.vy)>.01) item.angle=Math.atan2(item.vy,item.vx);
-    if(distance(w.player,item)<=w.player.r && w.player.inventory.length<3){
+    if(!item.route?.entering && distance(w.player,item)<=w.player.r && w.player.inventory.length<3){
       w.player.inventory.push(item);item.picked=true;item.pickedAt=w.time;
       w.departingItems.push(item);
       event(w,'pickup',{id:item.id,form:item.type});
     }
   }
-  w.items=w.items.filter(i=>!i.picked && i.x>=-32 && i.y>=-32 && i.x<=w.width+32 && i.y<=w.height+32);
+  w.items=w.items.filter(i=>!i.picked && (i.type==='dragon'||
+    (i.x>=-32 && i.y>=-32 && i.x<=w.width+32 && i.y<=w.height+32)));
 }
 // Small drips of floating ink should not postpone help indefinitely. Measure
 // real growth from the previous high-water mark, never from a damage dip.
@@ -544,26 +644,8 @@ function offerStalemateDragon(w){
   }
   const retreated=p.mass<state.milestone*.68 && w.time-state.lastGain>=12;
   if((w.time-state.lastGain<38&&!retreated) || w.time<state.retryAt || w.travel<60)return;
-  if(p.form==='dragon'||p.inventory.some(item=>item.type==='dragon'))return;
-  // An ordinary dragon at the opposite end of the painting cannot resolve a
-  // local stalemate. A rescue already in this area remains the only offer.
-  if(w.items.some(item=>item.type==='dragon'&&distance(item,p)<p.r+560))return;
-  const lead=p.angle||0,reach=Math.max(220,p.r+110);
-  let x=p.x,y=p.y,clearance=-Infinity;
-  for(const offset of [.28,-.28,1.1,-1.1,2.1,-2.1,Math.PI]){
-    const tx=clamp(p.x+Math.cos(lead+offset)*reach,45,w.width-45);
-    const ty=clamp(p.y+Math.sin(lead+offset)*reach,45,w.height-45);
-    let gap=Math.hypot(tx-p.x,ty-p.y)-p.r;
-    for(const e of w.enemies){
-      if(e.mass>=p.mass)gap=Math.min(gap,Math.hypot(e.x-tx,e.y-ty)-e.r);
-    }
-    if(gap>clearance){x=tx;y=ty;clearance=gap;}
-    if(gap>38)break;
-  }
-  const targetX=clamp(p.x+Math.cos(lead)*25,30,w.width-30);
-  const targetY=clamp(p.y+Math.sin(lead)*25,30,w.height-30);
-  const angle=Math.atan2(targetY-y,targetX-x);
-  const item=spawnItem(w,{type:'dragon',x,y,angle,vx:Math.cos(angle)*21,vy:Math.sin(angle)*21,rescue:true});
+  const item=sendDragonFromBank(w,p,{rescue:true});
+  if(!item)return;
   state.retryAt=w.time+65;
   event(w,'dragonArrived',{id:item.id});
 }
@@ -575,15 +657,19 @@ function tick(w,input,dt) {
   offerStalemateDragon(w);
   const contacts=new Map();
   enemyContacts(w,dt,contacts);playerContacts(w,dt,contacts);w.contacts=contacts;
-  w.largest=0;
-  for(const e of w.enemies) if(e.mass>w.largest) w.largest=e.mass;
+  w.largest=0;w.majorRemaining=0;
+  for(const e of w.enemies){
+    w.largest=Math.max(w.largest,e.mass);
+    if(isMajorEnemy(e))w.majorRemaining++;
+  }
   const p=w.player;
   if(distance(p,w.safePath[w.safePath.length-1])>5) {
     w.safePath.push({x:p.x,y:p.y});
     if(w.safePath.length>120) w.safePath.shift();
   }
+  updatePaintingProgress(w,dt);
   if(p.mass<=EPSILON) {w.status='lost';event(w,'lose');}
-  else if(!w.tutorial && (p.mass>w.largest || !w.enemies.length)) {
+  else if(!w.tutorial && p.mass>w.largest && !w.majorRemaining && w.painting.nearlyComplete) {
     w.status='won';event(w,'win');
   }
 }

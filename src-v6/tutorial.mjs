@@ -1,4 +1,4 @@
-import {spawnEnemy, spawnItem, spawnDrop, spawnLeaf, radius} from './sim.mjs';
+import {spawnEnemy, spawnItem, spawnDrop, spawnLeaf, radius, sendDragonFromBank} from './sim.mjs';
 import {introductions,results,LESSON_INTRO,LESSON_HOLD,LESSON_DISSOLVE} from './lesson-scenes.mjs';
 
 const line=(zh,ja,en)=>({zh,ja,en});
@@ -65,20 +65,21 @@ function clearExercise(w){
   for(const key of ['enemies','items','departingItems','drops','leaves','shots','safePath']) w[key].length=0;
   w.contacts.clear();
   w.cueTimes.clear();
-  w.packet=0;w.packetTime=0;w.bubbleDelay=0;
+  w.nextJet=0;w.bubbleDelay=0;
   // The player's existing hold continues inside this lesson. A real change
   // of form still has the simulation's release latch.
   w.player.emitting=false;
 }
 function resetBody(w){
-  Object.assign(w.player,{x:405,y:330,angle:0,vx:0,vy:0,mass:100,r:radius(100)*(w.player.form==='fish'?.85:1)});
+  Object.assign(w.player,{x:405,y:330,angle:0,vx:0,vy:0,mass:100,r:radius(100)*(w.player.form==='fish'?.85:w.player.form==='dragon'?1.16:1)});
   w.safePath.push({x:w.player.x,y:w.player.y});
 }
 function putEnemy(w,id,type,x,y,mass,extra={}){
   return spawnEnemy(w,{id,type,x,y,mass,vx:0,vy:0,...extra});
 }
 function stock(w,form){
-  spawnItem(w,{id:'lesson-'+form,type:form,x:506,y:330,vx:-3,vy:0});
+  if(form==='dragon')sendDragonFromBank(w,{x:506,y:330},{id:'lesson-dragon'});
+  else spawnItem(w,{id:'lesson-'+form,type:form,x:506,y:330,vx:-3,vy:0});
 }
 function pair(w,key){
   const mixed=key==='mixedPair',a=key==='holePair'?'hole':'spike',b=mixed?'hole':a;

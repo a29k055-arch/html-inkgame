@@ -1,8 +1,6 @@
 import {createRevealRenderer} from '../src-v5/reveal/renderer.js';
 import {CometTrail} from '../src-v5/reveal/trail.js';
-import {RevealMask,consumeBloomRadius} from '../src-v5/reveal/mask.js';
 import {RevealPainter} from '../src-v5/reveal/painter.js';
-import {REVEAL_CONFIG} from '../src-v5/reveal/config.js';
 import {livingShapeEmitters} from '../src-v5/ink/living-fluid.js';
 import {createInkDrift} from './ink-drift.mjs';
 import {createFoodPainter} from './food-painter.mjs';
@@ -36,7 +34,7 @@ function createWetContact(world,drift){
     const changed=moved>.15||!last||Math.abs(p.r-last.r)>.06||p.form?.species!==last.form||w.player.emitting;
     if(changed)settled=0;else settled+=Math.max(0,w.time-last.time);
     previous={x:p.x,y:p.y,r:p.r,form:p.form?.species,time:w.time,
-      frame:p.form?renderer.npcs.playerFrame(p):null};
+      frame:p.form?(renderer.inkFrame??renderer.npcs.playerFrame(p)):null};
     if(settled>2.5)return;
     if(last&&moved>Math.max(140,p.r*4,w.speed*(w.time-last.time)*2))history.length=0;
     while(history.length&&w.time-history[0].time>2.2)history.shift();
@@ -60,7 +58,7 @@ function createWetContact(world,drift){
     c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cw,ch);
     c.save();c.beginPath();c.rect(0,0,cw,ch);c.clip();
     c.setTransform(scale,0,0,scale,-i0,-j0);
-    const cam=renderer.camera,sw=renderer.viewW,sh=renderer.viewH;
+    const cam=renderer.inkCamera,sw=renderer.viewW,sh=renderer.viewH;
     renderer.trail.draw(c,'ink',{...cam,width:sw,height:sh},true);
     const x=Math.max(i0/scale,cam.x),y=Math.max(j0/scale,cam.y);
     const xEnd=Math.min(i1/scale,cam.x+sw/cam.scale),yEnd=Math.min(j1/scale,cam.y+sh/cam.scale);
@@ -100,23 +98,46 @@ function createWetContact(world,drift){
   return {layer,stamp};
 }
 
+// Only rebuild the changed portion of the shared world mask. Wet pigment
+// finer than a coverage cell remains visible at the original painting resolution.
+class WetPaintingRenderer extends RevealPainter {
+  constructor(image,run,detail){
+    super(image,run);this.detail=detail;
+  }
+  update(){
+    const mask=this.run.mask;
+    if(this.last===mask.version)return;
+    const full={left:0,top:0,right:mask.cols,bottom:mask.rows};
+    const {left,top,right,bottom}=this.last<0?full:mask.dirty??full;
+    mask.dirty=null;this.last=mask.version;
+    const data=this.pixels.data,fog=this.run.config.fogImageOpacity;
+    for(let row=top;row<bottom;row++){
+      for(let col=left;col<right;col++){
+        const k=row*mask.cols+col;
+        data[k*4]=data[k*4+1]=data[k*4+2]=255;
+        data[k*4+3]=Math.round((fog+(1-fog)*mask.cells[k])*255);
+      }
+    }
+    this.maskCanvas.getContext('2d').putImageData(this.pixels,0,0,left,top,right-left,bottom-top);
+    const w=this.layer.width,h=this.layer.height,c=this.layer.getContext('2d');
+    const x=Math.floor(left*w/mask.cols),y=Math.floor(top*h/mask.rows);
+    c.save();c.beginPath();c.rect(x,y,Math.ceil(right*w/mask.cols)-x,Math.ceil(bottom*h/mask.rows)-y);c.clip();
+    c.clearRect(0,0,w,h);c.drawImage(this.image,0,0,w,h);
+    c.globalCompositeOperation='destination-in';c.drawImage(this.maskCanvas,0,0,w,h);
+    c.globalCompositeOperation='source-over';c.drawImage(this.detail,0,0,w,h);c.restore();
+  }
+}
+
 export function createGround(world,url) {
-  const config={...REVEAL_CONFIG,width:world.width,height:world.height};
-  const mask=new RevealMask(config),run={world,config,mask};
+  const mask=world.painting,config=mask.config,run={world,config,mask};
   const image=painting(url);
   const drift=createInkDrift();
   const drawFood=createFoodPainter(world.foodField);
   const contact=createWetContact(world,drift);
-  let painter,clock=0,seen=world.events.length;
+  let painter,clock=0;
   return {image,get layer(){return painter?.layer;},draw(ctx) {
     if(image.complete && image.naturalWidth) {
-      painter??=new RevealPainter(image,run);
-      // A bloom rebuilds the original V5 background. Restore all previously
-      // uncovered routes exactly once on top of the rebuilt layer.
-      if(painter.last!==mask.version){
-        painter.update();
-        painter.layer.getContext('2d').drawImage(contact.layer,0,0,painter.layer.width,painter.layer.height);
-      }
+      painter??=new WetPaintingRenderer(image,run,contact.layer);
       painter.draw(ctx);
     }else{
       ctx.fillStyle='#eee5d1';ctx.fillRect(0,0,world.width,world.height);
@@ -125,16 +146,10 @@ export function createGround(world,url) {
     drawFood(ctx,this.bounds);
   },update(dt,renderer,player) {
     drift.update(world,dt);
-    for(;seen<world.events.length;seen++){
-      const e=world.events[seen];
-      if(e.type==='eat'&&(e.target==='spike'||e.target==='hole')){
-        mask.reveal(e.x,e.y,consumeBloomRadius(e.r,config),{kind:'enemy'});
-      }
-    }
     clock+=dt;
     if(clock>=1/config.renderHz){
       contact.stamp(world,renderer,player,image,painter);
-      mask.update(clock);clock=0;
+      clock=0;
     }
   }};
 }
@@ -143,8 +158,33 @@ export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=fal
   const renderer=createRevealRenderer(canvas,quality,{world,ground,npcPainter:npcs,TrailClass:CometTrail,
     body:{smallHalo:2.15,largeHalo:1.35},collisionOutline:{enabled:false}},forceFallback);
   renderer.collisionOutline.enabled=false;
-  let camera=renderer.camera;
-  renderer.followCamera=()=>camera;
+  // The pool camera only projects the finished wet field. Its independent
+  // solver window follows the swimmer in world units, even while looking
+  // elsewhere on the minimap or zooming all the way into a single drop.
+  let solver=null;
+  const prepareSolver=p=>{
+    const width=renderer.viewW,height=renderer.viewH,shortSide=Math.min(width,height);
+    const frame=renderer.inkFrame=p.form?.species==='dragon'?npcs.playerFrame(p):null;
+    // Keep all articulated dragon emitters, including a tail longer than a
+    // viewport, inside the simulation regardless of its swimming direction.
+    const cx=frame?(frame.minX+frame.maxX)/2:p.x,cy=frame?(frame.minY+frame.maxY)/2:p.y;
+    const fullBody=frame?shortSide*Math.max((frame.maxX-frame.minX)/width,(frame.maxY-frame.minY)/height):0;
+    const span=Math.max(670,p.r*14,fullBody*1.42+p.r*4);
+    if(solver&&Math.abs(span-solver.span)<solver.span*.06
+        &&solver.w===width&&solver.h===height
+        &&Math.abs(cx-solver.cx)<span*.1&&Math.abs(cy-solver.cy)<span*.1)return;
+    const scale=shortSide/span;
+    const next={x:cx-width/(2*scale),y:cy-height/(2*scale),scale,cx,cy,span,w:width,h:height};
+    if(solver&&solver.w===next.w&&solver.h===next.h){
+      const ratio=solver.scale/next.scale;
+      renderer.fluid.reproject(ratio,[(next.x-solver.x)*solver.scale/next.w,
+        1-ratio-(next.y-solver.y)*solver.scale/next.h]);
+    }
+    renderer.inkCamera=solver=next;
+  };
+  renderer.drawWorldInk=c=>{
+    if(solver)c.drawImage(renderer.canvas,solver.x,solver.y,renderer.viewW/solver.scale,renderer.viewH/solver.scale);
+  };
   renderer.motionSpeedLimit=()=>world.speed;
   // The original V5 shader controls opacity, vorticity, relative motion and
   // size adaptation. Paid ink uses the same solver with longer dye retention.
@@ -159,24 +199,15 @@ export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=fal
     fluid.motionProfile=()=>{
       if(frameProfile)return frameProfile;
       const profile=inherited();
-      frameProfile=jetMix>.01&&!fluid.livingForm?{...profile,
-        decay:(profile.decay??.16)*(1-.16*jetMix),
-        tailFade:(profile.tailFade??0)*(1-.25*jetMix)}:profile;
+      // A released stick stops the source, not the evaporation clock of dye
+      // already on the water. V5 raised both decay and containment at rest.
+      frameProfile={...profile,decay:Math.min(profile.decay??.16,.42)*(1-.15*jetMix),
+        tailFade:Math.min(profile.tailFade??0,.31),wakeRetention:1};
       return frameProfile;
     };
   }
   const nativeTrail=renderer.trail.preset;
-  return {renderer,reset(next,nextGround) {
-    world=next;renderer.world=next;renderer.ground=nextGround;
-    renderer.cameraReady=false;renderer.clock=0;renderer.relativeSpeed=0;
-    renderer.clearTrails();fluid.clear();renderer.body.reset();lastJet=-Infinity;previousShrimp=[];jetMix=0;frameProfile=null;
-  },updateView(view) {
-    camera={x:view.x-renderer.viewW/(2*view.scale),y:view.y-renderer.viewH/(2*view.scale),scale:view.scale};
-    if(!renderer.cameraReady||camera.x!==renderer.camera.x||camera.y!==renderer.camera.y||camera.scale!==renderer.camera.scale){
-      renderer.updateCamera(world.player);return true;
-    }
-    return false;
-  },step(dt,p) {
+  function advanceInk(dt,p){
     const released=world.player.emitting && p.form?.species!=='fish' && p.form?.species!=='dragon';
     jetMix+=(Number(released)-jetMix)*(1-Math.exp(-dt*(released?10:2)));
     frameProfile=null;
@@ -211,5 +242,20 @@ export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=fal
         y:(p.y-dy*p.r*.83-cam.y)*s/renderer.viewH,vx:-dx*33,vy:-dy*33,
         radius:Math.max(.001,p.r*s/renderer.viewH*.50),intensity:.86});
     }
+  }
+  return {renderer,reset(next,nextGround) {
+    world=next;renderer.world=next;renderer.ground=nextGround;
+    renderer.cameraReady=false;renderer.clock=0;renderer.relativeSpeed=0;
+    renderer.clearTrails();fluid.clear();renderer.body.reset();lastJet=-Infinity;previousShrimp=[];jetMix=0;frameProfile=null;solver=null;
+  },updateView(view) {
+    const x=view.x-renderer.viewW/(2*view.scale),y=view.y-renderer.viewH/(2*view.scale);
+    const cam=renderer.camera;
+    if(renderer.cameraReady&&cam.x===x&&cam.y===y&&cam.scale===view.scale)return false;
+    Object.assign(cam,{x,y,scale:view.scale});renderer.cameraReady=true;return true;
+  },step(dt,p){
+    prepareSolver(p);
+    if(dt<=0)return;
+    const view=renderer.camera;renderer.camera=solver;
+    try{advanceInk(dt,p);}finally{renderer.camera=view;}
   }};
 }

@@ -1,7 +1,7 @@
 import {getRigIcon} from './rig-icons.mjs';
 import {createCatalogue} from './catalog.mjs';
 import {inkIcon} from '../src-v5/ui/ink-icons.js';
-import {PaintingView} from '../src-v5/reveal/painting-view.js';
+import {PondPaintingView} from './painting-view.mjs';
 import {LEVELS, TUTORIALS, TRIAL} from './levels.mjs';
 import {StartTransition, START_TRANSITIONS} from '../src-v5/ink/start-transitions.js';
 import {fadeLessonScene} from './lesson-scenes.mjs';
@@ -18,11 +18,11 @@ const translations = {
   primer:['教学','チュートリアル','Tutorial'],paintings:['画卷','画巻','Paintings'],
   settings:['设置','設定','Settings'],sound:['水声与墨声','水と墨の音','Pond sounds'],
   controls:['操作','操作','Controls'],language:['语言','言語','Language'],close:['关闭','閉じる','Close'],
-  goal:['淡蓝实圈可以吞食。让自己的墨量超过上方「最大敌人」的标记，即可揭画。','水色の実線は吸収できる相手の印。自分の墨量が上の「最大の敵」の印を超えると、絵が現れる。','Creatures with solid blue rings are edible. Pass the largest rival’s mark on the mass bar to reveal the painting.'],
-  previous:['向前翻阅','前へ送る','Scroll back'],next:['向后翻阅','次へ送る','Scroll forward'],
-  done:['成','済','✓'],mass:['墨量比较','墨量の比較','Mass comparison'],own:['自身','自分','You'],largest:['最大敌人','最大の敵','Largest rival'],
-  pause:['暂停','一時停止','Pause'],paused:['池上小憩','池のほとりで','Paused'],resume:['继续游动','続ける','Resume'],
-  return:['返回竹简','目録へ戻る','Return to scrolls'],map:['池塘小地图','池の地図','Pond map'],
+  goal:['持续接触蓝圈敌人可吸收墨量。成为池中最大，并吸尽靠近四角和池中的大敌，让画上只剩零星留白。','水色の敵に触れ続けて墨を吸収しよう。池でいちばん大きくなり、四隅と池の大きな敵を吸収して、絵全体に色を広げよう。','Stay in contact with blue rivals to absorb ink. Outgrow the pond and absorb the large rivals near its corners and across the water to uncover the painting.'],
+  painted:['显画','彩色','Painted'],majorCount:['剩余大敌 {n}','残りの大敵 {n}','Large rivals left: {n}'],previous:['向前翻阅','前へ送る','Scroll back'],next:['向后翻阅','次へ送る','Scroll forward'],
+  done:['成','済','✓'],mass:['墨量比较','墨量の比較','Mass comparison'],own:['自身','自分','You'],inLead:['已是最大','いま最大','In the lead'],largest:['最大敌人','最大の敵','Largest rival'],
+  pause:['暂停','一時停止','Pause'],paused:['暂停','一時停止','Paused'],resume:['继续游动','続ける','Resume'],
+  return:['返回目录','一覧に戻る','Back to level select'],map:['池塘小地图','池の地図','Pond map'],
   release:['放墨','墨を吐く','Jet ink'],bubble:['吐泡','泡を吐く','Bubbles'],
   fish:['鲤鱼','鯉','Carp'],shrimp:['虾','海老','Shrimp'],turtle:['乌龟','亀','Turtle'],dragon:['墨龙','墨の龍','Ink dragon'],
   slot:['道具格 {n}','道具枠 {n}','Item slot {n}'],empty:['空','空','Empty'],
@@ -87,7 +87,7 @@ export function createUI(actions={}) {
   let ended=null;
   const slots=[];
   let artGeneration=0;
-  const viewing=new PaintingView($('paintingView'),{
+  const viewing=new PondPaintingView($('paintingView'),{
     translate:text,frameDuration:reduced?0:1100,flashDuration:reduced?0:450,
     onDone(){if(ended&&!ending.open)ending.showModal();}
   });
@@ -156,6 +156,13 @@ export function createUI(actions={}) {
       actionIcon.innerHTML=bubbles?'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="20" r="8"/><circle cx="23" cy="9" r="4.5"/><circle cx="24" cy="24" r="2.2"/></svg>':inkIcon('surge');
     }
     $('timer').textContent=formatTime(data.elapsed);
+    const leading=activeKind!=='tutorial' && mass>maxMass;
+    $('own-label').textContent=text(leading?'inLead':'own');
+    $('paint-goal').dataset.done=String(Boolean(data.paintedEnough));
+    $('paint-goal').hidden=activeKind==='tutorial';
+    $('major-count').hidden=activeKind==='tutorial';
+    $('major-count').textContent=text('majorCount',{n:data.majors??0});
+    $('paint-value').textContent=Math.floor((data.painted||0)*100)+'%';
     $('action').dataset.held=String(Boolean(actionHeld));
     $('active-form').hidden=!icons[form]||formRemaining<=0;
     if(!$('active-form').hidden){$('form-name').textContent=text(form);$('form-time').textContent=Math.ceil(formRemaining)+' s';}

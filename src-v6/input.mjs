@@ -40,6 +40,7 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
       joystick.style.left = e.clientX+'px'; joystick.style.top = e.clientY+'px';
       joystick.hidden = false;
       joystick.classList.add('active');
+      origin.reach=Math.max(35,joystick.getBoundingClientRect().width/2 || 64);
     } else {
       hideStick(); pinching = true;
       pinchDistance = centerAndDistance().d;
@@ -60,10 +61,14 @@ export function createInput({canvas, actionButton, joystick, stick, active, zoom
     }
     if (origin?.id !== e.pointerId) return;
     const dx=e.clientX-origin.x, dy=e.clientY-origin.y, distance=Math.hypot(dx,dy);
-    const limit=Math.max(26, joystick.getBoundingClientRect().width*.42 || 38);
-    const scale=Math.max(limit,distance);
-    axisX=dx/scale; axisY=dy/scale;
-    stick.style.transform='translate(-50%,-50%) translate('+axisX*limit+'px,'+axisY*limit+'px)';
+    const reach=origin.reach;
+    const travel=clamp((distance-1.5)/(reach-1.5),0,1);
+    // A light drag meters speed; the outer part of the disc is a full stroke.
+    const throttle=travel*(.36+.64*travel**.75);
+    const nx=distance?dx/distance:0,ny=distance?dy/distance:0;
+    axisX=nx*throttle;axisY=ny*throttle;
+    const knobTravel=travel*(reach-17);
+    stick.style.transform='translate(-50%,-50%) translate('+nx*knobTravel+'px,'+ny*knobTravel+'px)';
   }
   canvas.addEventListener('pointermove',moveWorld);
   function releaseWorld(e) {

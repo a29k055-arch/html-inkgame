@@ -41,6 +41,8 @@ jobs:
           node tests/v5-publication-isolation.mjs
           node tests/v6-physics.mjs
           node tests/v6-input.mjs
+          node tests/v6-control-feel.mjs
+          node tests/v6-painting.mjs
           node tests/v6-seeds.mjs
           node tests/v6-tutorial-and-physics-budget.mjs
 
