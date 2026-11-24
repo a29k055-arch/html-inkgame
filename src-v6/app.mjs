@@ -94,13 +94,16 @@ function start(nextKind,nextIndex,{keepSeed=false,continuation=false,replaySeed}
   },nextKind==='tutorial'||Boolean(tutorial),continuation);
 }
 function advanceTutorial(completed){
-  if(switching||kind!=='tutorial'||!world)return;
+  if(switching||ending||kind!=='tutorial'||!world)return;
   if(completed){
     ui.complete('tutorial',index);
     if(index<TUTORIALS.length-1){
       start('tutorial',index+1,{continuation:true});
       return;
     }
+    ending=true;resultOpen=true;input.reset();
+    showLessonBeat(null);ui.result(true,world.time);
+    return;
   }
   start('trial',0,{continuation:true});
 }

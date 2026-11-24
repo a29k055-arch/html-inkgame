@@ -17,7 +17,7 @@ const DROP_REACH=Array.from({length:DROP_VARIANTS},(_,variant)=>{
   return reach;
 });
 export function enemyBloomRadius(mass){
-  // Radius in world units, measured to the furthest ink in the drop artwork.
+  // The enemy core has radius 2√mass. The drop reaches exactly one core diameter.
   return 4*Math.sqrt(Math.max(0,mass));
 }
 
@@ -52,6 +52,12 @@ class PondPainting extends RevealMask {
     this.regions={ink,area,owner,blank:new Uint8Array(n),queue:new Uint8Array(n)};
   }
   commit(k,value){
+    const drop=this.activeDrop;
+    if(drop){
+      const dx=((k%this.cols)+.5)*this.width/this.cols-drop.x;
+      const dy=(Math.floor(k/this.cols)+.5)*this.height/this.rows-drop.y;
+      if(dx*dx+dy*dy>drop.maxRadius**2)return false;
+    }
     const old=this.cells[k];
     const changed=super.commit(k,value);
     if(changed&&this.regions)this.regions.ink[this.regions.owner[k]]+=this.cells[k]-old;
@@ -143,7 +149,11 @@ class PondPainting extends RevealMask {
       // A connected tongue of ink expands into the dry side of the stroke.
       // Its centre moves less than its radius and remains joined to that stroke.
       const shift=Math.min(1,spread*.57/Math.max(1,distance));
-      candidates.push({...nearest,spread,toX:nearest.x+(x-nearest.x)*shift,toY:nearest.y+(y-nearest.y)*shift});
+      const toX=nearest.x+(x-nearest.x)*shift,toY=nearest.y+(y-nearest.y)*shift;
+      // A wash on an older trail must not merge with the finishing drop and
+      // make it look larger than the rival's diameter. Include the brush fringe.
+      if(!fromTravel && Math.hypot(toX-e.x,toY-e.y)<bloomRadius+spread*1.12)continue;
+      candidates.push({...nearest,spread,toX,toY});
     }
     for(const c of candidates){
       c.reach=tiles.map(tile=>Math.min(1,Math.max(0,(1-Math.hypot(tile.x-c.toX,tile.y-c.toY)/c.spread)/.35)));
@@ -193,7 +203,8 @@ class PondPainting extends RevealMask {
   }
   stampDrop(b){
     const version=this.version;
-    super.stampDrop(b);
+    this.activeDrop=b;
+    try{super.stampDrop(b);}finally{this.activeDrop=null;}
     if(version!==this.version)this.markDirty(b.x,b.y,b.r*1.42);
   }
 }
@@ -208,6 +219,7 @@ export function updatePaintingProgress(world,dt){
       const radius=enemyBloomRadius(e.mass??(e.r/2)**2);
       const bloom=mask.reveal(e.x,e.y,radius);
       bloom.r=radius/DROP_REACH[bloom.variant];
+      bloom.maxRadius=radius;
       if(e.major){
         if(world.majorRemaining===0)mask.soakFootprints(e,radius);
         else mask.largeWashes.push({x:e.x,y:e.y,r:radius});

@@ -1,9 +1,11 @@
 // Deterministic pond physics. All positions and radii use painting coordinates.
 import {resolveLivingRig} from '../src-v5/game/living-rigs.js';
-import {createFoodField,visibleFood,removeFood,regrowFood} from './food-field.mjs';
+import {START_MASS} from './levels-scale.mjs';
+import {createFoodField,visibleFood,removeFood,regrowFood,MAX_FIELD_RADIUS,looseFoodRadius} from './food-field.mjs';
 import {createPaintingProgress,updatePaintingProgress} from './painting-progress.mjs';
 
 const TICK = 1 / 60;
+const DRAGON_RESCUE_START = 4 * 60;
 const EPSILON = 1e-8;
 const TAU = Math.PI * 2;
 export const radius = mass => 2 * Math.sqrt(Math.max(0, mass));
@@ -17,7 +19,7 @@ const touching = (a, b, tolerance = 0) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <=
 const shielded = p => p.form === 'turtle' || p.form === 'dragon';
 const bubbles = p => p.form === 'fish' || p.form === 'dragon';
 const flakeShapes=['circle','triangle','square','pentagon'];
-const jetMass=.55, jetRadius=2.65;
+const jetMass=.76, jetRadius=5.3;
 // Opaque outer edge of the V5 lotus-leaf-v2 painting at 15-degree intervals.
 // The remainder of the source square is transparent padding.
 const lotusEdge=[.88,.86,.86,.81,.80,.75,.76,.80,.83,.86,.88,.89,.88,.86,.82,.79,.78,.79,.73,.78,.84,.79,.79,.86];
@@ -91,7 +93,7 @@ export function spawnItem(w, def) {
 export function spawnDrop(w, def) {
   const d = body(w, def, 'drop');
   d.mass = def.mass ?? 2;
-  d.r = def.r ?? clamp(radius(d.mass)*1.22,1.9,9);
+  d.r = def.r ?? looseFoodRadius(d.mass);
   d.shape=def.shape ?? flakeShapes[Math.floor(emissionRoll(w)*flakeShapes.length)];
   d.angle=def.angle ?? emissionRoll(w)*TAU;
   d.readyAt = w.time + (def.delay ?? (def.ready === false ? .45 : 0));
@@ -155,18 +157,17 @@ export function createWorld(config = {}) {
     largest:0, majorRemaining:0, held:false, waitRelease:false, nextJet:0, bubbleDelay:0,
     emissionRng:(rigSeed^0x2ef54bc1)>>>0,
     travel:0, recordedMove:false};
-  const p = w.player = body(w,{x:w.width/2,y:w.height/2,mass:100,...config.player},'player');
+  const p = w.player = body(w,{x:w.width/2,y:w.height/2,mass:START_MASS,...config.player},'player');
   p.form='ink'; p.formTime=0; p.activeItem=null; p.emitting=false; p.inventory=[];
   syncPlayer(p);
-  if(!w.tutorial && config.spawnItems!==false) w.stalemate={milestone:p.mass,lastGain:0,checkAt:1,retryAt:0};
+  if(!w.tutorial && config.spawnItems!==false) w.stalemate={milestone:p.mass,paintMilestone:0,lastGain:0,checkAt:1,retryAt:0};
   w.painting=createPaintingProgress(w.width,w.height);
   w.foodField=createFoodField(w.width,w.height,config.foodSpacing,rigSeed,config.foodMassScale);
   for (const def of config.enemies ?? []) spawnEnemy(w,def);
   for (const def of config.drops ?? []) spawnDrop(w,def);
   for (const def of config.leaves ?? []) spawnLeaf(w,def);
   for(const def of config.items??[]){
-    if(def.type==='dragon'&&!w.tutorial)sendDragonFromBank(w,def,{id:def.id,rigId:def.rigId});
-    else spawnItem(w,def);
+    if(def.type!=='dragon'||w.tutorial)spawnItem(w,def);
   }
   w.largest = Math.max(0,...w.enemies.map(e=>e.mass));
   w.safePath.push({x:p.x,y:p.y});
@@ -263,7 +264,7 @@ function playerStep(w,input,dt) {
     p.angle=bearing+clamp(turn,-4.8*dt,4.8*dt);
   }else p.angle=requested;
   p.emitting=w.held&&!w.waitRelease;
-  const growth=clamp(Math.log2(Math.max(1,p.mass/156))/7,0,1);
+  const growth=clamp(Math.log2(Math.max(1,p.mass/START_MASS))/7,0,1);
   const formSpeed=p.form==='fish'?1.60:p.form==='dragon'?1.18:p.form==='turtle'?.85:1;
   const cruise=w.speed*(.88+.78*growth)*formSpeed;
   let speed=cruise*strength;
@@ -386,7 +387,7 @@ function foods(w) {
     field.time=w.time;
     const nibble=(b,player)=>{
       const attracts=player&&(p.form==='shrimp'||p.form==='dragon');
-      const reach=b.r+(attracts?magnetReach(p):5);
+      const reach=b.r+(attracts?Math.max(MAX_FIELD_RADIUS,magnetReach(p)):MAX_FIELD_RADIUS);
       for(const d of visibleFood(field,b.x-reach,b.y-reach,b.x+reach,b.y+reach)){
         const dist2=(d.x-b.x)**2+(d.y-b.y)**2;
         if((!player||d.mass<b.mass) && dist2<=(b.r+d.r)**2){
@@ -540,8 +541,7 @@ function playerContacts(w,dt,next) {
 }
 function enterItem(w){
   const roll=random(w);
-  const type=roll<.33?'fish':roll<.63?'shrimp':roll<.94||dragonPresent(w)?'turtle':'dragon';
-  if(type==='dragon'){sendDragonFromBank(w,w.player);return;}
+  const type=roll<.35?'fish':roll<.67?'shrimp':'turtle';
   const side=type==='shrimp'?(random(w)<.5?1:3):Math.floor(random(w)*4);
   const vertical=side%2===0;
   const target=w.player;
@@ -652,6 +652,11 @@ function offerStalemateDragon(w){
   if(p.mass>=state.milestone*1.12){
     state.milestone=p.mass;state.lastGain=w.time;
   }
+  const painted=w.painting.fraction;
+  if(painted>=state.paintMilestone+.03){
+    state.paintMilestone=painted;state.lastGain=w.time;
+  }
+  if(w.time<DRAGON_RESCUE_START)return;
   const retreated=p.mass<state.milestone*.68 && w.time-state.lastGain>=12;
   if((w.time-state.lastGain<38&&!retreated) || w.time<state.retryAt || w.travel<60)return;
   const item=sendDragonFromBank(w,p,{rescue:true});
@@ -664,7 +669,6 @@ function tick(w,input,dt) {
   playerStep(w,input,dt);
   for(const l of w.leaves) bank(w,l,l.capacity*dt/30);
   projectileStep(w,dt);drift(w,dt);foods(w);itemStep(w,dt);
-  offerStalemateDragon(w);
   const contacts=new Map();
   enemyContacts(w,dt,contacts);playerContacts(w,dt,contacts);w.contacts=contacts;
   w.largest=0;w.majorRemaining=0;
@@ -681,7 +685,7 @@ function tick(w,input,dt) {
   if(p.mass<=EPSILON) {w.status='lost';event(w,'lose');}
   else if(!w.tutorial && p.mass>w.largest && !w.majorRemaining && w.painting.nearlyComplete) {
     w.status='won';event(w,'win');
-  }
+  }else if(!w.tutorial)offerStalemateDragon(w);
 }
 export function stepWorld(w,input={},dt=TICK) {
   if(w.status!=='playing' || !Number.isFinite(dt) || dt<=0) return w;

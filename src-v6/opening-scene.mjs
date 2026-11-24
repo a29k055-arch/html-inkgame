@@ -17,7 +17,7 @@ const art=galleryIDs.map(id=>{
   return titles?{...original,titles,title:titles.zh,label:titles.zh,titleKind:'catalogue'}:original;
 });
 const defaultPainting=art.find(entry=>entry.id==='ink-13');
-const cfg={bgmVolume:.28,volume:.3,bgmMuted:false,sfxMuted:false,bgmTrack:'shuffle',sfxStyle:'water',quality:'balanced',controls:'auto',homeVisual:'paper',backgroundPolicy:'fixed',...coverSettings()};
+const cfg={bgmVolume:.28,volume:.3,bgmMuted:false,sfxMuted:false,bgmTrack:'shuffle',sfxStyle:'water',quality:'high',controls:'auto',homeVisual:'paper',backgroundPolicy:'fixed',...coverSettings()};
 let state={phase:'start',loadedBytes:0,totalBytes:0,completed:0,total:0,preparation:0},visible=true;
 let bamboo=null,album=null,ink=null,picture=null,pointerTime=0,lastFrame=0,ending=false,done=false,host=false,settingsOnly=false;
 const action=(name,value)=>window.frameElement?.openingAction?.(name,value);

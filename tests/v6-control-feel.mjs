@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {START_MASS} from '../src-v6/levels-scale.mjs';
 import {createWorld,stepWorld,useItem} from '../src-v6/sim.mjs';
 
 function stroke(mass,emitting,form){
@@ -15,13 +16,13 @@ function stroke(mass,emitting,form){
   const paid=mass-w.player.mass;
   const inWater=[...w.shots,...w.drops].reduce((sum,flake)=>sum+flake.mass,0);
   assert.ok(Math.abs(paid-inWater)<1e-8);
-  if(emitting && !form){assert.deepEqual([...shotMasses],[.55]);assert.deepEqual([...shotRadii],[2.65]);}
+  if(emitting && !form){assert.deepEqual([...shotMasses],[.76]);assert.deepEqual([...shotRadii],[5.3]);}
   return {speed:w.player.vx,paid};
 }
 
-const small=stroke(156,false),large=stroke(25600,false);
-const smallJet=stroke(156,true),largeJet=stroke(25600,true);
-const fish=stroke(156,false,'fish'),fishBubble=stroke(156,true,'fish');
+const small=stroke(START_MASS,false),large=stroke(START_MASS*164,false);
+const smallJet=stroke(START_MASS,true),largeJet=stroke(START_MASS*164,true);
+const fish=stroke(START_MASS,false,'fish'),fishBubble=stroke(START_MASS,true,'fish');
 assert.equal(small.paid,0);assert.equal(large.paid,0);
 assert.ok(small.speed>99&&small.speed<101);
 assert.ok(smallJet.speed/small.speed>1.13&&smallJet.speed/small.speed<1.15);
@@ -29,8 +30,8 @@ assert.ok(large.speed/small.speed>1.85&&large.speed/small.speed<1.9);
 assert.ok(largeJet.speed/large.speed>1.54&&largeJet.speed/large.speed<1.57);
 assert.ok(Math.abs(fish.speed/small.speed-1.6)<1e-6);
 assert.equal(fishBubble.paid,0);assert.equal(fishBubble.speed,fish.speed);
-assert.ok(smallJet.paid>=12&&smallJet.paid<=16);
-assert.ok(largeJet.paid>=16&&largeJet.paid<=20);
+assert.ok(smallJet.paid>=17&&smallJet.paid<=22);
+assert.ok(largeJet.paid>=22&&largeJet.paid<=28);
 assert.ok(largeJet.paid>smallJet.paid&&largeJet.paid<smallJet.paid*1.5);
 
 const gap=[];

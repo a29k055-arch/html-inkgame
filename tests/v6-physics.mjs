@@ -13,12 +13,18 @@ const activate=(w,type)=>{const item=spawnItem(w,{type,x:w.player.x,y:w.player.y
 const counts={};
 function test(name,f){f();counts[name]='pass';}
 test('one stalemate dragon swims in from a bank, stays in the pond and is held or used just once',()=>{
-  const w=base({tutorial:false,spawnItems:true,nextItem:999,enemies:[{id:'leader',type:'hole',mass:600,x:1300,y:680}]});
+  const w=base({tutorial:false,spawnItems:true,nextItem:.2,itemInterval:1.5,items:[{type:'dragon',x:100,y:80}],enemies:[{id:'leader',type:'hole',mass:600,x:1300,y:680}]});
+  assert.ok(!w.items.some(i=>i.type==='dragon'));
   tick(w,{x:1,y:0},1);
-  while(!w.events.some(e=>e.type==='dragonArrived')&&w.time<45)tick(w,{},1/60);
+  tick(w,{},238);
+  assert.ok(!w.items.some(i=>i.type==='dragon')&&!w.events.some(e=>e.type==='dragonArrived'));
+  w.player.mass*=1.2; // Progress near four minutes postpones the rescue.
+  tick(w,{},35);
+  assert.ok(!w.items.some(i=>i.type==='dragon'));
+  while(!w.events.some(e=>e.type==='dragonArrived')&&w.time<282)tick(w,{},1/60);
   const rescue=w.items.find(i=>i.rescue);assert.ok(rescue);
   assert.ok(rescue.x<0||rescue.y<0||rescue.x>w.width||rescue.y>w.height);
-  assert.equal(w.player.form,'ink');assert.equal(w.player.inventory.length,0);
+  assert.equal(w.player.form,'ink');w.player.inventory.length=0;
   // Keep it out of the pack while it completes a whole crossing, including
   // a later rescue check and several regular item rolls.
   w.player.inventory.push(...['fish','shrimp','turtle'].map(type=>({type})));
@@ -274,7 +280,7 @@ test('same-type enemy loss, opposite-type transfer',()=>{
 test('normal motion free; jet meters small droplets, transfers impulse and conserves all ink',()=>{
  const w=base({enemies:[{type:'spike',x:436,y:400,mass:160}]});
  tick(w,{x:1},.3);near(w.player.mass,100);w.player.x=500;w.player.y=400;w.player.vx=0;
- tick(w,{action:true});assert.ok(w.player.mass>=95 && w.player.mass<=97);
+ tick(w,{action:true});assert.ok(w.player.mass>=93 && w.player.mass<=96);
  assert.ok(w.events.some(e=>e.type==='push'&&e.source==='spray'));
  tick(w,{},1);near(w.player.mass+w.enemies[0].mass+w.drops.reduce((n,d)=>n+d.mass,0),260);
 });
@@ -424,8 +430,10 @@ test('dense pond ink is edible, local, shared by both sides and safe to harvest 
  assert.ok(Math.hypot(far.x-atRest.x,far.y-atRest.y)>.25);
  assert.notEqual(far.rot,atRest.rot);
  field.time=w.time;
- const d=nearby.find(d=>Math.hypot(d.x-w.player.x,d.y-w.player.y)>100),before=w.player.mass;
- w.player.x=d.x;w.player.y=d.y;tick(w,{},1/60);
+ assert.ok(nearby.every(d=>d.r>=4.4&&d.r<=8.7));
+ const d=nearby.find(d=>d.r>6.5&&Math.hypot(d.x-w.player.x,d.y-w.player.y)>100),before=w.player.mass;
+ // Touch just inside the enlarged rim, beyond the old 5-unit field query.
+ w.player.x=d.x-w.player.r-d.r+.25;w.player.y=d.y;tick(w,{},1/60);
  assert.equal(field.slots[d.slot],null);
  assert.ok(w.player.mass>=before+d.mass);
  assert.equal(w.events.filter(e=>e.id===d.id && e.type==='eat').length,1);

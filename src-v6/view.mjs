@@ -58,14 +58,19 @@ export function createCamera(canvas,meter=null) {
   }
   function zoom(w,factor,x,y) {
     const {width,height,initial,overview}=ranges(w),box=canvas.getBoundingClientRect();
+    if(!Number.isFinite(factor)||factor<=0||factor===1)return;
     manualZoom=true;
     const formScale=growthScale*(dragon ? .74 : 1);
     // Accumulate wheel/pinch events even if they arrive before the next paint.
     const old=motion?.interactive?initial*zoomRatio*formScale:camera.scale;
     const scale=clamp(old*factor,overview,initial*3.5);
-    const aim=inspected||w.player,u=x-box.left-width/2,v=y-box.top-height/2;
-    offsetX=camera.x-aim.x+u*(1/camera.scale-1/scale);
-    offsetY=camera.y-aim.y+v*(1/camera.scale-1/scale);
+    if(factor>1){
+      inspected=null;offsetX=offsetY=0;
+    }else{
+      const aim=inspected||w.player,u=x-box.left-width/2,v=y-box.top-height/2;
+      offsetX=camera.x-aim.x+u*(1/camera.scale-1/scale);
+      offsetY=camera.y-aim.y+v*(1/camera.scale-1/scale);
+    }
     zoomRatio=scale/(initial*formScale);
     if(!motion?.interactive){travel(.22);motion.interactive=true;}
   }

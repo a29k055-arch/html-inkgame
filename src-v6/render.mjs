@@ -10,23 +10,20 @@ import {visibleFood} from './food-field.mjs';
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
-// The highest-opacity part of each wash sits on the logical contact radius.
-// Feather inward and outward separately. There is no second debug outline.
-function pigmentRim(c,x,y,r,scale,rgb,opacity,width){
+function drawPlayerRim(c,{x,y,r,form},scale){
   if(!(r>0))return;
-  const half=Math.min(r*.42,Math.max(1.55/scale,r*width));
+  // Keep the brightest part on the physical radius and the wash hairline-thin
+  // even when the camera is close enough for the body to fill the screen.
+  const half=Math.min(r*.24,clamp(r*scale*.06,1.25,2.8)/scale);
   const inner=r-half,outer=r+half;
   const wash=c.createRadialGradient(x,y,inner,x,y,outer);
-  for(const [stop,a] of [[0,0],[.23,.12],[.41,.52],[.5,1],[.60,.63],[.77,.21],[1,0]]){
-    wash.addColorStop(stop,'rgba('+rgb+','+opacity*a+')');
-  }
-  c.fillStyle=wash;c.fillRect(x-outer,y-outer,outer*2,outer*2);
-}
-function drawPlayerRim(c,p,scale){
-  c.save();if(p.form!=='ink')c.globalAlpha*=.52;
-  // Layer wet graphite and a narrower, feathered rim on the exact same centre.
-  pigmentRim(c,p.x,p.y,p.r,scale,'53,62,56',.24,.20);
-  pigmentRim(c,p.x,p.y,p.r,scale,'112,120,110',.48,.084);c.restore();
+  wash.addColorStop(0,'rgba(218,186,121,0)');
+  wash.addColorStop(.34,'rgba(227,199,145,.13)');
+  wash.addColorStop(.50,'rgba(245,221,166,.52)');
+  wash.addColorStop(.67,'rgba(182,147,88,.18)');
+  wash.addColorStop(1,'rgba(182,147,88,0)');
+  c.save();if(form!=='ink')c.globalAlpha*=.52;
+  c.fillStyle=wash;c.fillRect(x-outer,y-outer,outer*2,outer*2);c.restore();
 }
 
 function drawPaperEdge(c,cam,w,h,world){
@@ -218,7 +215,7 @@ function drawFocus(c,focus,cam,w,h,t) {
 
 export function createRenderer(canvas) {
   const enemyArt=createEnemyArt(),effects=new PondEffects();
-  let quality='balanced',fieldQuality=quality,ink=null,npcs=null,assets=null,world=null,ground=null;
+  let quality='high',fieldQuality=quality,ink=null,npcs=null,assets=null,world=null,ground=null;
   let previousTime=-1,hero=null,proxies=new WeakMap(),preparation=null,forceFallback=false;
   const prepare=()=>{
     if(!preparation)preparation=Promise.all([preloadLivingCreatures(),preloadPondPickups(),enemyArt.ready])

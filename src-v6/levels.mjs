@@ -1,6 +1,7 @@
 import {TRIAL,makeTrial} from './trial-level.mjs';
 import {paintingSize} from './artworks.mjs';
-import {START_MASS,rivalMass} from './levels-scale.mjs';
+import {looseFoodRadius} from './food-field.mjs';
+import {START_MASS,rivalMass,inkBudgetScale} from './levels-scale.mjs';
 export {TRIAL};
 // World units are independent of screen size. Each painting fixes its shores and
 // teaching encounter; a seed moves secondary creatures within their home bays.
@@ -43,6 +44,19 @@ function randomFor(seed) {
   };
 }
 
+// Increase ink yields with the new starting mass. A placed fleck's appearance
+// uses its authored size, independent of the experience level's food budget.
+function scaleFood(cfg){
+  cfg.foodMassScale=(cfg.foodMassScale??1)*inkBudgetScale;
+  cfg.flowerMass*=inkBudgetScale;
+  for(const d of cfg.drops){
+    d.r=looseFoodRadius(d.mass);
+    d.mass*=inkBudgetScale;
+  }
+  for(const leaf of cfg.leaves)leaf.stored=(leaf.stored??0)*inkBudgetScale;
+  return cfg;
+}
+
 function lessonWorld(meta,seed) {
   const cfg = {id:meta.id,kind:meta.kind,index:meta.index,seed,...paintingSize(0,1000*1542.5),speed:129,flowerMass:30,
     player:{x:405,y:330,mass:START_MASS,angle:0}, enemies:[],leaves:[],drops:[],items:[],tutorial:true,spawnItems:false};
@@ -71,8 +85,8 @@ const bankRoutes = [
 export function makeLevel(id, seed=1) {
   const meta=typeof id==='object' ? id : [TRIAL,...LEVELS,...TUTORIALS].find(entry=>entry.id===id);
   if (!meta) throw new RangeError('Unknown pond: '+id);
-  if (meta.kind==='trial') return makeTrial(seed,randomFor(seed));
-  if (meta.kind==='tutorial') return lessonWorld(meta,seed);
+  if (meta.kind==='trial') return scaleFood(makeTrial(seed,randomFor(seed)));
+  if (meta.kind==='tutorial') return scaleFood(lessonWorld(meta,seed));
   const {index}=meta, rng=randomFor(seed);
   const [planWidth,planHeight,count,driftFraction,speed]=plans[index];
   const {width,height}=paintingSize(index,planWidth*planHeight);
@@ -92,7 +106,7 @@ export function makeLevel(id, seed=1) {
   add('second-blue','hole',35,atOffset(cfg.player,255,-78),{vx:-3,vy:5});
   leaf('near-leaf',.18,.59,72,15);
   if(index===1) leaf('crossing-leaf',.43+165/width,.50,77,14);
-  else if(index>=2) leaf('crossing-leaf',.56,index===3?.71:.39,86,9);
+  else if(index>=2) leaf('crossing-leaf',index>=4?.545:.56,index===3?.71:.39,86,9);
   if(index>=4) leaf('outer-leaf',.77,.60,78,11);
 
   // Every gate admits the starting body by a long detour. The short way is
@@ -207,7 +221,7 @@ export function makeLevel(id, seed=1) {
   }
   // Black whirls cross a bank more slowly than the lighter thorn seeds.
   for(const e of enemies)if(e.type==='hole'){e.vx*=.60;e.vy*=.60;}
-  const forms=['fish','shrimp','turtle','dragon'];
+  const forms=['fish','shrimp','turtle'];
   cfg.items.push({id:'near-form',type:forms[index%3],...atOffset(first,85,70),vx:0,vy:0});
   cfg.items.push({id:'far-form',type:forms[(index+1)%forms.length],...point(.67,.69),vx:-4,vy:1});
   cfg.items.push({id:'crossing-form',type:index===2?'fish':index===3?'shrimp':'turtle',...point(.48,.50),vx:0,vy:2});
@@ -238,5 +252,5 @@ export function makeLevel(id, seed=1) {
   trail([[.24,.48],[.31,.59],[.35,.69]]);
   trail([[.67,.32],[.76,.32],[.83,.24]]);
   trail([[.67,.68],[.75,.74],[.84,.73]]);
-  return cfg;
+  return scaleFood(cfg);
 }

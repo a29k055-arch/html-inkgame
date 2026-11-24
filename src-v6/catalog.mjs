@@ -42,6 +42,7 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
     if(entry.kind==='future')button.dataset.upcoming='true';
     else button.dataset.kind=entry.kind;
     button.dataset.index=entry.index;
+    const badge=document.createElement('span');badge.className='slip-completion';badge.hidden=true;button.append(badge);
   });
   // Touch browsers occasionally swallow a compatibility click just after a
   // scrolling gesture. Recover only a motionless single-finger tap on the
@@ -75,7 +76,9 @@ export function createCatalogue({progress,paintings,unlocked,finished,onEnter}) 
       button.dataset.locked=String(locked);
       button.dataset.complete=String(complete);
       letterSlat(title,entry,lang);
-      no.textContent=numberedEntry?numbered(entry):complete?c.done:'';
+      no.textContent=numberedEntry?numbered(entry):'';
+      const badge=button.querySelector('.slip-completion');
+      badge.hidden=!complete;badge.textContent=c.done;
       if(upcoming){
         let pending=button.querySelector('.bamboo-future');
         if(!pending){pending=document.createElement('span');pending.className='bamboo-future';button.append(pending);}

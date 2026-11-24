@@ -47,7 +47,9 @@ html:not([lang=en]) .slip-glyphs {display:flex;flex-direction:row;align-items:ce
   position:absolute;bottom:16%;left:50%;transform:translateX(-50%);font:clamp(13px,1.9dvh,25px)/1 Georgia,serif;letter-spacing:.06em;
   color:inherit;
 }
-#slips [data-complete=true] .bamboo-level-no {border-bottom:2px solid #913e2e;padding-bottom:.3em;}
+#slips .slip-completion {position:absolute;bottom:10%;left:50%;transform:translateX(-50%);width:94%;text-align:center;writing-mode:horizontal-tb;white-space:nowrap;letter-spacing:0;line-height:1.12;color:#783d2d;font-size:clamp(9px,min(1.65dvh,2.5vw),15px);}
+html[lang=ja] #slips .slip-completion {width:3em;white-space:normal;word-break:normal;line-break:strict;}
+html[lang=en] #slips .slip-completion {font-size:clamp(7px,1.35dvh,13px);}
 #slips [data-locked=true] .bamboo-level-name,#slips [data-locked=true] .bamboo-level-no {color:#54432e;opacity:.72;}
 #slips .bamboo-level[data-locked=true] .bamboo-level-no::after {display:none;}
 #slips [data-upcoming] {opacity:1;pointer-events:none;}

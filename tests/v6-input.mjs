@@ -141,8 +141,14 @@ for(const [width,height,barBottom] of [[1440,900,53],[390,844,43],[844,390,53]])
   assert.ok(first<base && first>base*.99);
   for(let i=0;i<60;i++)camera.update(world,1/60);
   assert.ok(Math.abs(camera.update(world).scale/base-.74)<1e-6);
-  camera.zoom(world,1.2,600,400);
+  camera.inspect(world,2800,1900);
+  for(let i=0;i<30;i++)camera.update(world,1/60);
+  assert.equal(camera.update(world).x,2800);
+  camera.zoom(world,1.2,1180,740);
   for(let i=0;i<20;i++)camera.update(world,1/60);
+  assert.equal(camera.update(world).x,world.player.x,'Zooming in from an inspected point follows the player');
+  world.player.y+=100;
+  assert.equal(camera.update(world).y,world.player.y);
   world.player.form='ink';
   for(let i=0;i<60;i++)camera.update(world,1/60);
   assert.ok(Math.abs(camera.update(world).scale/base-1.2)<1e-6,'Manual zoom is preserved on leaving dragon form');

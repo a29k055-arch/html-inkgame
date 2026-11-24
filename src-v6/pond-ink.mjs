@@ -156,8 +156,7 @@ export function createGround(world,url) {
 
 export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=false) {
   const renderer=createRevealRenderer(canvas,quality,{world,ground,npcPainter:npcs,TrailClass:CometTrail,
-    body:{smallHalo:2.15,largeHalo:1.35},collisionOutline:{enabled:false}},forceFallback);
-  renderer.collisionOutline.enabled=false;
+    collisionOutline:{enabled:false}},forceFallback);
   // The pool camera only projects the finished wet field. Its independent
   // solver window follows the swimmer in world units, even while looking
   // elsewhere on the minimap or zooming all the way into a single drop.
@@ -215,10 +214,8 @@ export function createPondInk(canvas,world,ground,npcs,quality,forceFallback=fal
   const fluid=renderer.fluid;
   let lastJet=-Infinity,previousShrimp=[],jetMix=0,frameProfile;
   if(!renderer.fallback){
-    // Keep the published V5 advection, vorticity and natural mottling. Its
-    // material also ships a physical-core display pass, originally optional.
-    // Always anchor that pass to the current simulation centre during zoom.
-    fluid.preset={...fluid.preset,solidBody:true};
+    // V5's restored material paints the ink ball from the evolving density
+    // field. The collision cue is drawn separately, after the fluid.
     const inherited=fluid.motionProfile.bind(fluid);
     fluid.motionProfile=()=>{
       if(frameProfile)return frameProfile;

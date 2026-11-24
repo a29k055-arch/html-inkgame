@@ -32,11 +32,12 @@ const translations = {
   touch:['在水面拖动来游动，双指捏合缩放。按住右下按钮放墨或吐泡，轻点右侧圆格使用道具。','水面をドラッグして移動、2本の指で拡大・縮小します。右下のボタンを長押しすると墨や泡が出ます。アイテムは右のアイコンをタップして使います。','Drag on the water to swim and pinch to zoom. Hold the lower-right button to jet ink or blow bubbles. Tap a circle on the right to use an item.'],
   won:['画卷已揭','絵が完成しました','Painting revealed'],lost:['墨量已尽','墨が尽きました','Ink depleted'],studied:['习墨完成','チュートリアル完了','Lesson complete'],
   nextPond:['进入下一幅','次のステージへ','Next painting'],firstPond:['进入第一幅画','最初の絵に入る','Enter the first painting'],
+  enterTrial:['进入体验关卡','体験ステージへ','Enter trial pond'],
   restart:['重新开始','最初からやり直す','Restart'],
   retry:['重试此局','同じ配置で再挑戦','Try this layout again'],
   elapsed:['用时 {time}','プレイ時間 {time}','Time {time}'],
   tryNote:['再走一次这段水路，试试另一种选择。','同じ水路で、別の進み方を試しましょう。','Return to the same pond and try another route.'],
-  studyNote:['可以进入第一幅画了。','最初の絵で遊んでみましょう。','You’re ready for the first painting.']
+  studyNote:['可以进入体验关卡，或从第一幅画开始。','体験ステージか、最初の絵に進みましょう。','Explore the trial pond or start the first painting.']
 };
 const languages=['zh','ja','en'];
 const saveKey='boku.v6.pond.progress.1';
@@ -202,10 +203,13 @@ export function createUI(actions={}) {
   }
   function putResult(){
     const meta=stageList(activeKind)[activeIndex],{won,seconds}=ended,lesson=activeKind==='tutorial';
-    $('end-kicker').textContent=text(lesson?'studied':won?'won':'lost');$('end-title').textContent=meta.title[progress.lang];
+    $('end-kicker').hidden=lesson;
+    $('end-kicker').textContent=text(won?'won':'lost');
+    $('end-title').textContent=lesson?text('studied'):meta.title[progress.lang];
     $('end-note').textContent=lesson?text('studyNote'):won?text('elapsed',{time:formatTime(seconds)}):text('tryNote');
     const btn=$('end-main');
-    if(lesson){btn.textContent=text('firstPond');btn.onclick=()=>go('level',0);}
+    $('end-first').hidden=!lesson;
+    if(lesson){btn.textContent=text('enterTrial');btn.onclick=()=>go('trial',0);}
     else if(!won){btn.textContent=text('retry');btn.onclick=()=>actions.onRetry?.();}
     else if(activeKind==='trial'){btn.textContent=text('firstPond');btn.onclick=()=>go('level',0);}
     else if(activeIndex<5){btn.textContent=text('nextPond');btn.onclick=()=>go('level',activeIndex+1);}
@@ -252,6 +256,7 @@ export function createUI(actions={}) {
     });
   }
   $('back-cover').onclick=()=>actions.onCover?.();
+  $('end-first').onclick=()=>go('level',0);
   $('restart').onclick=()=>actions.onRestart?.();
   $('resume').onclick=dismissSettings;$('pause-settings').onclick=openSettings;
   $('pause').onclick=()=>pausedState(true);$('exit-run').onclick=()=>actions.onLeave?.();$('end-home').onclick=()=>actions.onLeave?.();

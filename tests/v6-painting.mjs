@@ -40,6 +40,7 @@ function bloom(mass){
   for(let row=0;row<mask.rows;row++)for(let col=0;col<mask.cols;col++){
     const x=(col+.5)*mask.width/mask.cols,y=(row+.5)*mask.height/mask.rows;
     if(x<100&&y<100)continue;
+    if(mask.cells[row*mask.cols+col]>0)assert.ok(Math.hypot(x-750,y-550)<=target,'The drop must stop at one prey diameter');
     if(mask.cells[row*mask.cols+col]>.03)reach=Math.max(reach,Math.hypot(x-750,y-550));
   }
   assert.ok(Math.abs(reach-target)<=Math.max(8,target*.04),`expected radius near ${target}, measured ${reach}`);
